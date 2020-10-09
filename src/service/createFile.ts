@@ -16,12 +16,13 @@ export async function createFile(uri: Uri) {
     }
     if (fileType === 'structure') {
         window.showErrorMessage('Structure files are not supported.')
+        return
     }
     // window.showInformationMessage(fileType)
 
     const fileExtension = fileType === 'function' ? '.mcfunction' : '.json'
 
-    window.showInputBox({
+    const fileName = await window.showInputBox({
         value: '',
         placeHolder: '',
         prompt: 'Function name?',
@@ -31,12 +32,12 @@ export async function createFile(uri: Uri) {
             if (await file.pathAccessible(path.join(uri.fsPath, value + fileExtension)))
                 return 'This ' + fileType + ' already exists.'
         }
-    }).then(async (fileName) => {
-        if (!fileName) return
-        const filePath = path.join(uri.fsPath, fileName)
-        const resourcePath = await common.getResourcePath(filePath, datapackRoot)
-        const fileTemplate = await common.getFileTemplate(fileType, resourcePath)
+    }).then(value => value)
 
-        await file.create(filePath + fileExtension, fileTemplate)
-    })
+    if (!fileName) return
+    const filePath = path.join(uri.fsPath, fileName)
+    const resourcePath = await common.getResourcePath(filePath, datapackRoot)
+    const fileTemplate = await common.getFileTemplate(fileType, resourcePath)
+
+    file.create(filePath + fileExtension, fileTemplate)
 }
