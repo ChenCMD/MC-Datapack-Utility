@@ -1,0 +1,88 @@
+import * as path from 'path'
+import * as file from './file'
+import minimatch from 'minimatch'
+
+export type fileType =
+    | 'advancement'
+    | 'dimension'
+    | 'dimension_type'
+    | 'function'
+    | 'loot_table'
+    | 'predicate'
+    | 'recipe'
+    | 'structure'
+    | 'tag/block'
+    | 'tag/entity_type'
+    | 'tag/fluid'
+    | 'tag/function'
+    | 'tag/item'
+    | 'worldgen/biome'
+    | 'worldgen/configured_carver'
+    | 'worldgen/configured_decorator'
+    | 'worldgen/configured_feature'
+    | 'worldgen/configured_structure_feature'
+    | 'worldgen/configured_surface_builder'
+    | 'worldgen/noise_settings'
+    | 'worldgen/processor_list'
+    | 'worldgen/template_pool'
+
+const fileTypePaths: Record<fileType, string> = {
+    // common
+    advancement: 'data/*/advancements/**',
+    dimension: 'data/*/dimension/**',
+    dimension_type: 'data/*/dimension_type/**',
+    function: 'data/*/functions/**',
+    loot_table: 'data/*/loot_tables/**',
+    predicate: 'data/*/predicates/**',
+    recipe: 'data/*/recipes/**',
+    structure: 'data/*/structures/**/*.nbt',
+    // tag
+    'tag/block': 'data/*/tags/blocks/**',
+    'tag/entity_type': 'data/*/tags/entity_types/**',
+    'tag/fluid': 'data/*/tags/fluids/**',
+    'tag/function': 'data/*/tags/functions/**',
+    'tag/item': 'data/*/tags/items/**',
+    // worldgen
+    'worldgen/biome': 'data/*/worldgen/biome/**',
+    'worldgen/configured_carver': 'data/*/worldgen/configured_carver/**',
+    'worldgen/configured_decorator': 'data/*/worldgen/configured_decorator/**',
+    'worldgen/configured_feature': 'data/*/worldgen/configured_feature/**',
+    'worldgen/configured_structure_feature': 'data/*/worldgen/configured_structure_feature/**',
+    'worldgen/configured_surface_builder': 'data/*/worldgen/configured_surface_builder/**',
+    'worldgen/noise_settings': 'data/*/worldgen/noise_settings/**',
+    'worldgen/processor_list': 'data/*/worldgen/processor_list/**',
+    'worldgen/template_pool': 'data/*/worldgen/template_pool/**'
+}
+
+export async function getFileType(filePath: string, datapackRoot: string) {
+    const dir = path.relative(datapackRoot, filePath).replace(/(\\|$)/g, '/')
+    for (const type of Object.keys(fileTypePaths) as fileType[]) {
+        if (minimatch(dir, fileTypePaths[type])) {
+            return type
+        }
+    }
+    return null
+}
+
+export async function getResourcePath(filePath: string, datapackRoot: string) {
+    return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(/^data\/([^\/]*)\/[^\/]*\/(.*)$/, '$1:$2')
+}
+
+export async function getFileTemplate(fileType: fileType, fileName: string): Promise<Uint8Array> {
+    switch (fileType) {
+        // TODO load config template
+        default:
+            return new Uint8Array()
+    }
+}
+
+export async function getFileRoot(filePath: string): Promise<string | undefined> {
+    const testPath = path.dirname(filePath)
+    if (testPath === '.') {
+        return undefined
+    }
+    if (await file.pathAccessible(path.join(testPath, 'pack.mcmeta')) && await file.pathAccessible(path.join(testPath, 'data'))) {
+        return testPath
+    }
+    return await getFileRoot(testPath)
+}
