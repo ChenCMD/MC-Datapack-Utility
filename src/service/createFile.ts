@@ -12,7 +12,7 @@ export async function createFile(uri: Uri) {
     }
 
     // ファイルの種類を取得
-    const fileType = await common.getFileType(uri.fsPath, datapackRoot)
+    const fileType = common.getFileType(uri.fsPath, datapackRoot)
     if (!fileType) {
         // 取得できない時の処理
         window.showErrorMessage('You can\'t create a file here.')
@@ -43,7 +43,7 @@ export async function createFile(uri: Uri) {
 
     // リソースパスの生成とファイルテンプレートの取得
     const filePath = path.join(uri.fsPath, fileName)
-    const resourcePath = await common.getResourcePath(filePath, datapackRoot)
+    const resourcePath = common.getResourcePath(filePath, datapackRoot)
     const fileTemplate = await common.getFileTemplate(fileType, resourcePath)
 
     // 生成

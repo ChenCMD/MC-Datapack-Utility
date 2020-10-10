@@ -59,7 +59,7 @@ const fileTypePaths: Record<fileType, string> = {
  * @param filePath 取得したいファイルのファイルパス
  * @param datapackRoot データパックのルートパス
  */
-export async function getFileType(filePath: string, datapackRoot: string) {
+export function getFileType(filePath: string, datapackRoot: string) {
     const dir = path.relative(datapackRoot, filePath).replace(/(\\|$)/g, '/')
     for (const type of Object.keys(fileTypePaths) as fileType[]) {
         if (minimatch(dir, fileTypePaths[type])) {
@@ -74,7 +74,7 @@ export async function getFileType(filePath: string, datapackRoot: string) {
  * @param filePath 取得したいファイルのファイルパス
  * @param datapackRoot データパックのルートパス
  */
-export async function getResourcePath(filePath: string, datapackRoot: string) {
+export function getResourcePath(filePath: string, datapackRoot: string) {
     return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(/^data\/([^\/]*)\/[^\/]*\/(.*)$/, '$1:$2')
 }
 
@@ -104,5 +104,5 @@ export async function getDatapackRoot(filePath: string): Promise<string | undefi
     if (await file.pathAccessible(path.join(filePath, 'pack.mcmeta')) && await file.pathAccessible(path.join(filePath, 'data'))) {
         return filePath
     }
-    return await getDatapackRoot(path.dirname(filePath))
+    return getDatapackRoot(path.dirname(filePath))
 }
