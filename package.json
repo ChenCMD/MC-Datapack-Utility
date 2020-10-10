@@ -10,11 +10,16 @@
 		"Other"
 	],
 	"activationEvents": [
+		"onCommand:mccutil.createDatapackTemplate",
 		"onCommand:mccutil.createFile"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
+			{
+				"command": "mccutil.createDatapackTemplate",
+				"title": "Create DatapackTemplate"
+			},
 			{
 				"command": "mccutil.createFile",
 				"title": "Create Datapack File"

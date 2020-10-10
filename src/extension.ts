@@ -8,6 +8,7 @@ exports.activate = function activate(context: vscode.ExtensionContext) {
 
     const disposable = []
 
+    disposable.push(vscode.commands.registerCommand('mccutil.createDatapackTemplate', commands.createDatapack))
     disposable.push(vscode.commands.registerCommand('mccutil.createFile', commands.createFile))
 
     context.subscriptions.push(...disposable)
