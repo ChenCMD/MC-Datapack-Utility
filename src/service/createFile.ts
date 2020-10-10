@@ -37,7 +37,7 @@ export async function createFile(uri: Uri) {
             if (await file.pathAccessible(path.join(uri.fsPath, value + fileExtension)))
                 return 'This ' + fileType + ' already exists.'
         }
-    }).then(value => value)
+    })
 
     if (!fileName) return
 

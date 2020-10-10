@@ -13,7 +13,7 @@ export async function createDatapack(args: any[]) {
         filters: undefined,
         openLabel: 'Select',
         title: 'Select Datapack'
-    }).then(async value => value?.[0])
+    }).then(v => v?.[0])
 
     if (!dir) return
 
@@ -23,7 +23,7 @@ export async function createDatapack(args: any[]) {
     if (datapackRoot) {
         // 内部なら確認
         const warningMessage = 'The selected directory is inside Datapack ' + path.basename(datapackRoot) + '. Would you like to create a Datapack here?'
-        const result = await window.showWarningMessage(warningMessage, 'Yes', 'Reselect', 'No').then(value => value)
+        const result = await window.showWarningMessage(warningMessage, 'Yes', 'Reselect', 'No')
         if (result === 'No') return
         if (result === 'Reselect') {
             createDatapack(args)
