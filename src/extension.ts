@@ -10,6 +10,7 @@ exports.activate = function activate(context: vscode.ExtensionContext) {
 
     disposable.push(vscode.commands.registerCommand('mccutil.createDatapackTemplate', commands.createDatapack))
     disposable.push(vscode.commands.registerCommand('mccutil.createFile', commands.createFile))
+    disposable.push(vscode.commands.registerCommand('mccutil.scoreOperation', commands.scoreOperation))
 
     context.subscriptions.push(...disposable)
 }
