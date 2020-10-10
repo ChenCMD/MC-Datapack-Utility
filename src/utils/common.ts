@@ -98,12 +98,11 @@ export async function getFileTemplate(fileType: fileType, fileName: string): Pro
  * @returns データパック内ではなかった場合undefinedを返します
  */
 export async function getDatapackRoot(filePath: string): Promise<string | undefined> {
-    const testPath = path.dirname(filePath)
-    if (testPath === '.') {
+    if (filePath === path.dirname(filePath)) {
         return undefined
     }
-    if (await file.pathAccessible(path.join(testPath, 'pack.mcmeta')) && await file.pathAccessible(path.join(testPath, 'data'))) {
-        return testPath
+    if (await file.pathAccessible(path.join(filePath, 'pack.mcmeta')) && await file.pathAccessible(path.join(filePath, 'data'))) {
+        return filePath
     }
-    return await getDatapackRoot(testPath)
+    return await getDatapackRoot(path.dirname(filePath))
 }
