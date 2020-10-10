@@ -16,6 +16,14 @@ export async function create(filePath: string | Uri, content: Uint8Array) {
 }
 
 /**
+ * ディレクトリを作成します
+ * @param dirPath ディレクトリパス
+ */
+export async function createDir(dirPath: string | Uri) {
+    workspace.fs.createDirectory(dirPath instanceof Uri ? dirPath : Uri.file(dirPath))
+}
+
+/**
  * パスが存在するか、アクセス可能かを判別します
  * @param testPath 確認するパス
  */

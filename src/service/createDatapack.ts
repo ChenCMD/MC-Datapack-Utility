@@ -1,6 +1,10 @@
-import { workspace, window, Uri } from 'vscode'
+import { workspace, window, Uri, QuickPickItem } from 'vscode'
 import * as common from '../utils/common'
 import path from 'path'
+import { fileData, QuickPickFiles } from '../utils/QuickPickFiles'
+import * as file from '../utils/file'
+import { TextEncoder } from 'util'
+import '../utils/methodExtensions'
 
 export async function createDatapack(args: any[]) {
 
@@ -14,7 +18,6 @@ export async function createDatapack(args: any[]) {
         openLabel: 'Select',
         title: 'Select Datapack'
     }).then(v => v?.[0])
-
     if (!dir) return
 
     // Datapack内部かチェック
@@ -31,5 +34,202 @@ export async function createDatapack(args: any[]) {
         }
     }
 
+    // データパック名入力
+    const datapackName = await window.showInputBox({
+        value: '',
+        placeHolder: '',
+        prompt: 'datapack name?',
+        ignoreFocusOut: true,
+        validateInput: value => {
+            if (value.match(/[\\\/:*?"<>|]/))
+                return '[\\/:*?"<>|] Cannot be used in the name'
+        }
+    })
+    if (!datapackName) return
 
+    // 名前空間入力
+    const namespace = await window.showInputBox({
+        value: '',
+        placeHolder: '',
+        prompt: 'namespace name?',
+        ignoreFocusOut: true,
+        validateInput: value => {
+            if (!value.match(/^[a-z0-9\.\/\_\-]*$/))
+                return 'Characters other than [a-z0-9./_-] exist.'
+        }
+    })
+    if (!namespace) return
+
+    // 生成するファイル/フォルダを選択
+    const createItems = await window.showQuickPick(getItems(namespace, dir, datapackName), {
+        canPickMany: true,
+        ignoreFocusOut: false,
+        matchOnDescription: false,
+        matchOnDetail: false,
+        placeHolder: 'Select files/folders to generate'
+    })
+    if (!createItems) return
+
+    const enconder = new TextEncoder();
+    createItems.flat(v => v.changes).forEach(async v => {
+        if (v.type === 'file')
+            await file.create(v.fileUri, enconder.encode(v.content?.join('\r\n') ?? ''))
+        if (v.type === 'folder')
+            await file.createDir(v.fileUri)
+    })
+}
+
+function getItems(namespace: string, dir: Uri, datapackName: string): QuickPickFiles[] {
+    dir = Uri.joinPath(dir, datapackName, 'data')
+    return [
+        {
+            label: `vanilla tags`,
+            changes: [
+                // TODO
+            ]
+        },
+        {
+            label: `#load.json & ${namespace}:load.mcfunction`,
+            picked: true,
+            changes: [
+                {
+                    type: 'file',
+                    fileUri: Uri.joinPath(dir, `minecraft/tags/functions/load.json`),
+                    content: [
+                        `{`,
+                        `    "value": [`,
+                        `        "${namespace}:load"`,
+                        `    ]`,
+                        `}`
+                    ]
+                },
+                {
+                    type: 'file',
+                    fileUri: Uri.joinPath(dir, `${namespace}/functions/load.mcfunction`),
+                    content: ['']
+                }
+            ]
+        },
+        {
+            label: `#tick.json & ${namespace}:tick.mcfunction`,
+            picked: true,
+            changes: [
+                {
+                    type: 'file',
+                    fileUri: Uri.joinPath(dir, `minecraft/tags/functions/tick.json`),
+                    content: [
+                        `{`,
+                        `    "value": [`,
+                        `        "${namespace}:tick"`,
+                        `    ]`,
+                        `}`
+                    ]
+                },
+                {
+                    type: 'file',
+                    fileUri: Uri.joinPath(dir, `${namespace}/functions/tick.mcfunction`),
+                    content: ['']
+                }
+            ]
+        },
+        {
+            label: `data/${namespace}/advancements/`,
+            changes: [
+                {
+                    type: 'folder',
+                    fileUri: Uri.joinPath(dir, `${namespace}/advancements/`)
+                }
+            ]
+        },
+        {
+            label: `data/${namespace}/dimensions/`,
+            changes: [
+                {
+                    type: 'folder',
+                    fileUri: Uri.joinPath(dir, `${namespace}/dimensions/`)
+                }
+            ]
+        },
+        {
+            label: `data/${namespace}/dimension_types/`,
+            changes: [
+                {
+                    type: 'folder',
+                    fileUri: Uri.joinPath(dir, `${namespace}/dimension_types/`)
+                }
+            ]
+        },
+        {
+            label: `data/${namespace}/loot_tables/`,
+            changes: [
+                {
+                    type: 'folder',
+                    fileUri: Uri.joinPath(dir, `${namespace}/loot_tables/`)
+                }
+            ]
+        },
+        {
+            label: `data/${namespace}/predicates/`,
+            changes: [
+                {
+                    type: 'folder',
+                    fileUri: Uri.joinPath(dir, `${namespace}/predicates/`)
+                }
+            ]
+        },
+        {
+            label: `data/${namespace}/recipes/`,
+            changes: [
+                {
+                    type: 'folder',
+                    fileUri: Uri.joinPath(dir, `${namespace}/recipes/`)
+                }
+            ]
+        },
+        {
+            label: `data/${namespace}/tags/blocks/`,
+            changes: [
+                {
+                    type: 'folder',
+                    fileUri: Uri.joinPath(dir, `${namespace}/tags/blocks/`)
+                }
+            ]
+        },
+        {
+            label: `data/${namespace}/tags/entity_types/`,
+            changes: [
+                {
+                    type: 'folder',
+                    fileUri: Uri.joinPath(dir, `${namespace}/tags/entity_types/`)
+                }
+            ]
+        },
+        {
+            label: `data/${namespace}/tags/fluids/`,
+            changes: [
+                {
+                    type: 'folder',
+                    fileUri: Uri.joinPath(dir, `${namespace}/tags/fluids/`)
+                }
+            ]
+        },
+        {
+            label: `data/${namespace}/tags/functions/`,
+            changes: [
+                {
+                    type: 'folder',
+                    fileUri: Uri.joinPath(dir, `${namespace}/tags/functions/`)
+                }
+            ]
+        },
+        {
+            label: `data/${namespace}/tags/items/`,
+            changes: [
+                {
+                    type: 'folder',
+                    fileUri: Uri.joinPath(dir, `${namespace}/tags/items/`)
+                }
+            ]
+        }
+    ]
 }
