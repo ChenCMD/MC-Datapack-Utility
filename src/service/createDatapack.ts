@@ -82,12 +82,10 @@ export async function createDatapack(args: any[]) {
 function getItems(namespace: string, dir: Uri, datapackName: string): QuickPickFiles[] {
     dir = Uri.joinPath(dir, datapackName, 'data')
     return [
-        {
-            label: `vanilla tags`,
-            changes: [
-                // TODO
-            ]
-        },
+        // {// TODO
+        //     label: `vanilla tags`,
+        //     changes: []
+        // },
         {
             label: `#load.json & ${namespace}:load.mcfunction`,
             picked: true,
