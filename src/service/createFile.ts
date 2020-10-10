@@ -4,24 +4,29 @@ import * as common from '../utils/common'
 import path = require('path')
 
 export async function createFile(uri: Uri) {
-    const datapackRoot = await common.getFileRoot(uri.fsPath)
+    // Datapack内か確認
+    const datapackRoot = await common.getDatapackRoot(uri.fsPath)
     if (!datapackRoot) {
         window.showErrorMessage('Cannot create file because it is not a datapack.')
         return
     }
+
+    // ファイルの種類を取得
     const fileType = await common.getFileType(uri.fsPath, datapackRoot)
     if (!fileType) {
+        // 取得できない時の処理
         window.showErrorMessage('You can\'t create a file here.')
         return
     }
     if (fileType === 'structure') {
+        // ストラクチャはサポートしない
         window.showErrorMessage('Structure files are not supported.')
         return
     }
-    // window.showInformationMessage(fileType)
-
+    // 拡張子確定
     const fileExtension = fileType === 'function' ? '.mcfunction' : '.json'
 
+    // ファイル名入力
     const fileName = await window.showInputBox({
         value: '',
         placeHolder: '',
@@ -35,9 +40,12 @@ export async function createFile(uri: Uri) {
     }).then(value => value)
 
     if (!fileName) return
+
+    // リソースパスの生成とファイルテンプレートの取得
     const filePath = path.join(uri.fsPath, fileName)
     const resourcePath = await common.getResourcePath(filePath, datapackRoot)
     const fileTemplate = await common.getFileTemplate(fileType, resourcePath)
 
+    // 生成
     file.create(filePath + fileExtension, fileTemplate)
 }

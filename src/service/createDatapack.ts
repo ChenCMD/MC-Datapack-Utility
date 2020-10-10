@@ -3,6 +3,8 @@ import * as common from '../utils/common'
 import path from 'path'
 
 export async function createDatapack(args: any[]) {
+
+    // フォルダ選択
     const dir = await window.showOpenDialog({
         canSelectFiles: false,
         canSelectFolders: true,
@@ -15,9 +17,11 @@ export async function createDatapack(args: any[]) {
 
     if (!dir) return
 
-    const datapackRoot = await common.getFileRoot(dir.fsPath)
+    // Datapack内部かチェック
+    const datapackRoot = await common.getDatapackRoot(dir.fsPath)
 
     if (datapackRoot) {
+        // 内部なら確認
         const warningMessage = 'The selected directory is inside Datapack ' + path.basename(datapackRoot) + '. Would you like to create a Datapack here?'
         const result = await window.showWarningMessage(warningMessage, 'Yes', 'Reselect', 'No').then(value => value)
         if (result === 'No') return
@@ -27,5 +31,5 @@ export async function createDatapack(args: any[]) {
         }
     }
 
-    // TODO
+
 }

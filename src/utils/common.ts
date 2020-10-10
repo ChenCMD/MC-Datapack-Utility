@@ -54,6 +54,11 @@ const fileTypePaths: Record<fileType, string> = {
     'worldgen/template_pool': 'data/*/worldgen/template_pool/**'
 }
 
+/**
+ * ファイルの種類を取得します
+ * @param filePath 取得したいファイルのファイルパス
+ * @param datapackRoot データパックのルートパス
+ */
 export async function getFileType(filePath: string, datapackRoot: string) {
     const dir = path.relative(datapackRoot, filePath).replace(/(\\|$)/g, '/')
     for (const type of Object.keys(fileTypePaths) as fileType[]) {
@@ -64,10 +69,21 @@ export async function getFileType(filePath: string, datapackRoot: string) {
     return null
 }
 
+/**
+ * リソースパスを取得します
+ * @param filePath 取得したいファイルのファイルパス
+ * @param datapackRoot データパックのルートパス
+ */
 export async function getResourcePath(filePath: string, datapackRoot: string) {
     return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(/^data\/([^\/]*)\/[^\/]*\/(.*)$/, '$1:$2')
 }
 
+/**
+ * ファイルのテンプレートを取得します
+ * @param fileType ファイルの種類
+ * @param fileName ファイル名
+ * @deprecated 開発段階のため実装が大幅に変わる可能性があります
+ */
 export async function getFileTemplate(fileType: fileType, fileName: string): Promise<Uint8Array> {
     switch (fileType) {
         // TODO load config template
@@ -76,7 +92,12 @@ export async function getFileTemplate(fileType: fileType, fileName: string): Pro
     }
 }
 
-export async function getFileRoot(filePath: string): Promise<string | undefined> {
+/**
+ * データパックのルートパスを取得します
+ * @param filePath 取得したいファイルのファイルパス
+ * @returns データパック内ではなかった場合undefinedを返します
+ */
+export async function getDatapackRoot(filePath: string): Promise<string | undefined> {
     const testPath = path.dirname(filePath)
     if (testPath === '.') {
         return undefined
@@ -84,5 +105,5 @@ export async function getFileRoot(filePath: string): Promise<string | undefined>
     if (await file.pathAccessible(path.join(testPath, 'pack.mcmeta')) && await file.pathAccessible(path.join(testPath, 'data'))) {
         return testPath
     }
-    return await getFileRoot(testPath)
+    return await getDatapackRoot(testPath)
 }
