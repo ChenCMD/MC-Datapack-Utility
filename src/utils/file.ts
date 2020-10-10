@@ -7,11 +7,11 @@ import { promises as fsp } from 'fs'
  * @param content 内容
  * @throws FileSystemError ファイルが既に存在する場合
  */
-export async function create(filePath: string, content: Uint8Array) {
+export async function create(filePath: string | Uri, content: Uint8Array) {
     if (await pathAccessible(filePath)) {
         throw FileSystemError.FileExists(filePath)
     } else {
-        workspace.fs.writeFile(Uri.file(filePath), content)
+        workspace.fs.writeFile(filePath instanceof Uri ? filePath : Uri.file(filePath), content)
     }
 }
 
@@ -19,8 +19,8 @@ export async function create(filePath: string, content: Uint8Array) {
  * パスが存在するか、アクセス可能かを判別します
  * @param testPath 確認するパス
  */
-export async function pathAccessible(testPath: string) {
-    return fsp.access(testPath)
+export async function pathAccessible(testPath: string | Uri) {
+    return fsp.access(testPath instanceof Uri ? testPath.fsPath : testPath)
         .then(() => true)
         .catch(() => false)
 }
