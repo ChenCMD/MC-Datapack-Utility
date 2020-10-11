@@ -6,37 +6,31 @@ const scoreTable: IScoreTable = JSON.parse('\
     "table": [\
         {\
             "identifier": "*",\
-            "order": 14,\
             "type": "op",\
             "axiom": "scoreboard players operation arg[0] _ *= arg[1] _"\
         },\
         {\
             "identifier": "/",\
-            "order": 14,\
             "type": "op",\
             "axiom": "scoreboard players operation arg[0] _ /= arg[1] _"\
         },\
         {\
             "identifier": "%",\
-            "order": 14,\
             "type": "op",\
             "axiom": "scoreboard players operation arg[0] _ %= arg[1] _"\
         },\
         {\
             "identifier": "+",\
-            "order": 13,\
             "type": "op",\
             "axiom": "scoreboard players operation arg[0] _ += arg[1] _"\
         },\
         {\
             "identifier": "-",\
-            "order": 13,\
             "type": "op",\
             "axiom": "scoreboard players operation arg[0] _ -= arg[1] _"\
         },\
         {\
             "identifier": "=",\
-            "order": 3,\
             "type": "op",\
             "axiom": "scoreboard players operation arg[0] _ = arg[1] _"\
         }\
@@ -44,10 +38,9 @@ const scoreTable: IScoreTable = JSON.parse('\
     "identifiers": [ "*", "/", "%", "+", "-", "=" ]\
 }');
 interface IScoreElement {
-    identifier: string;
-    order: number;
-    type: string;
-    axiom: string;
+    identifier: '*' | '/' | '%' | '+' | '-' | '='
+    type: "op" | "state"
+    axiom: string
 }
 
 interface IScoreTable {
@@ -55,19 +48,19 @@ interface IScoreTable {
     identifiers: Array<string>
 }
 interface ITable {
-    identifier: string  //演算子
-    order: number       //優先度
-    type: string        //種類
+    //演算子
+    identifier: '*' | '/' | '%' | '+' | '-' | '='
+    type: "op" | "state"//種類
     axiom: string       //Operationの式
 }
 
 interface IStack {
     value: string
-    type: string
+    type: "op" | "state" | "num" | "str" | "fn"
 }
 
 export async function scoreOperation() {
-    const prefix = '$MCCUTIL_';
+    const prefix = '$MCCUTIL';
 
     const table: ITable[] = scoreTable.table;
 
@@ -89,7 +82,7 @@ export async function scoreOperation() {
     function fnSplitOperator(_val: string, _table: ITable[], _stack: IStack[]) {
         if (!_val) { return; }
 
-        if (rpn.ssft(_val, scoreTable) !== -1 && isNaN(Number(_val.toString()))) {
+        if (rpn.ssft(_val, scoreTable) !== -1 && Number.prototype.isValue(_val)) {
             _stack.push({
                 value: _val,
                 type: _table[rpn.ssft(_val, scoreTable)].type
@@ -107,7 +100,7 @@ export async function scoreOperation() {
             }
         }
 
-        if (Number(_val).isValue()) {
+        if (Number.prototype.isValue(_val)) {
             _stack.push({ value: _val, type: "num" });
         }
         else {
@@ -121,7 +114,7 @@ export async function scoreOperation() {
     }
 
     let calcStack: (number | string)[] = [];
-    let resValues = [''];
+    const resValues = new Set();
     let resFormulas = '';
 
     while (rpnStack.length > 0) {
@@ -132,8 +125,7 @@ export async function scoreOperation() {
                 // 16進数の場合は10進数へ
                 const put = elem.value.indexOf("0x") !== -1 ? parseInt(elem.value, 16) : parseFloat(elem.value);
                 calcStack.push(put);
-                // 仮でCMDUTILという名前に
-                resValues.push(`scoreboard players set ${prefix}${elem.value} _ ${put}`);
+                resValues.add(`scoreboard players set ${prefix}_${elem.value} _ ${put}`);
                 break;
 
             case "str":
@@ -149,7 +141,7 @@ export async function scoreOperation() {
                     if (str.indexOf(`arg[${i}]`) !== -1) {
                         const lastStackElement = calcStack.pop();
                         if (!lastStackElement) { return; }
-                        const ARG = `${prefix}${lastStackElement.toString()}`;
+                        const ARG = `${prefix}_${lastStackElement.toString()}`;
                         str = str.substring(0, str.indexOf(`arg[${i}]`)) + ARG
                             + str.substring(str.indexOf(`arg[${i}]`) + `arg[${i}]`.length);
 
@@ -167,9 +159,8 @@ export async function scoreOperation() {
         edit.replace(editor.selection, [
             `# ${text}`,
             '#if u wish, u can change both <Holder>s\' NAME and the OBJECT _',
-            resValues.filter(function (value, index, self) {
-                return self.indexOf(value) === index;
-            }).join('\r\n'),
+            'scoreboard objectives add _ dummy',
+            Array.from(resValues).join('\r\n'),
             '',
             resFormulas
         ].join('\r\n'));

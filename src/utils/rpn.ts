@@ -146,17 +146,32 @@ const opTable: IOperateTable = JSON.parse('\
     ]\
 }');
 export interface IOperateElement {
-    identifier: string;
+    identifier: '(' | ')' | '#' | '_' | '~' | '**' | '*' | '/' | '%' | '+' | '-' | '<<' | '>>' | '&' | '^' | '|' | '=';
     order: number;
-    type: string;
+    type: "op" | "state";
     arity: number;
-    assocLow: string;
+    assocLow: '' | 'L' | 'R';
     fn: Function;
 }
 
 export interface IOperateTable {
     table: Array<IOperateElement>;
     identifiers: Array<string>;
+}
+
+interface IStack {
+    value: string
+    type: "op" | "state" | "num" | "str" | "fn"
+}
+
+interface ITable {
+    //演算子
+    identifier: '(' | ')' | '#' | '_' | '~' | '**' | '*' | '/' | '%' | '+' | '-' | '<<' | '>>' | '&' | '^' | '|' | '='
+    order: number           //優先度
+    type: "op" | "state"    //種類
+    arity: number           //引数の数
+    assocLow: '' | 'L' | 'R'//結合の向き
+    fn: Function            //関数
 }
 
 /**
@@ -195,49 +210,41 @@ export function ssft(_str: string, _table: { table: Array<any>, identifiers: Arr
  * @param {string} rpnExp 計算式
  */
 export function rpnCalculation(rpnExp: string) {
-    ///引数エラー判定
-    if (!rpnExp || typeof rpnExp !== 'string') { throw new Error("illegal arg type"); }
-
     //演算子と演算項を切り分けて配列化する。再起するので関数化。
-    function fnSplitOperator(_val: string) {
-        if (_val === "") { return; }
+    function fnSplitOperator(_val: string, _table: ITable[], _stack: IStack[]) {
+        if (!_val) { return; }
 
-        //演算子判定
-        if (ssft(_val, opTable) !== -1 && isNaN(Number(_val.toString()))) {
-            rpnStack.push({
+        if (ssft(_val, opTable) !== -1 && Number.prototype.isValue(_val)) {
+            _stack.push({
                 value: _val,
-                type: table[ssft(_val, opTable)].type
+                type: _table[ssft(_val, opTable)].type
             });
             return;
         }
 
-        //演算子を含む文字列かどうか判定
-        for (let i = 0; i < opTable.identifiers.length; i++) {
-            const piv = _val.indexOf(table[i].identifier);
+        for (let i in opTable.identifiers) {
+            const piv = _val.indexOf(_table[i].identifier);
             if (piv !== -1) {
-                fnSplitOperator(_val.substring(0, piv));
-                fnSplitOperator(_val.substring(piv, piv + opTable.identifiers[i].length));
-                fnSplitOperator(_val.substring(piv + opTable.identifiers[i].length));
+                fnSplitOperator(_val.substring(0, piv), _table, _stack);
+                fnSplitOperator(_val.substring(piv, piv + opTable.identifiers[i].length), _table, _stack);
+                fnSplitOperator(_val.substring(piv + opTable.identifiers[i].length), _table, _stack);
                 return;
             }
         }
 
-        //数値
-        if (!isNaN(parseFloat(_val))) {
-            rpnStack.push({ value: _val, type: "num" });
+        if (Number.prototype.isValue(_val)) {
+            _stack.push({ value: _val, type: "num" });
         }
-        //文字列
         else {
-            rpnStack.push({ value: _val, type: "str" });
+            _stack.push({ value: _val, type: "str" });
         }
     }
 
     //切り分け実行
     //式を空白文字かカンマでセパレートして配列化＆これらデリミタを式から消す副作用
-    let rpnStack: { value: string, type: string }[] = [];
-    const rpnArray = rpnExp.split(/\s+|,/);
-    for (let i = 0; i < rpnArray.length; i++) {
-        fnSplitOperator(rpnArray[i]);
+    let rpnStack: IStack[] = [];
+    for (const elem of rpnExp.split(/\s+|,/)) {
+        fnSplitOperator(elem, table, rpnStack);
     }
 
     ///演算開始
