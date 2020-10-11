@@ -1,8 +1,9 @@
-import * as path from 'path'
-import * as file from './file'
-import minimatch from 'minimatch'
+/* eslint-disable @typescript-eslint/naming-convention */
+import * as path from 'path';
+import * as file from './file';
+import minimatch from 'minimatch';
 
-export type fileType =
+export type FileType =
     | 'advancement'
     | 'dimension'
     | 'dimension_type'
@@ -24,9 +25,9 @@ export type fileType =
     | 'worldgen/configured_surface_builder'
     | 'worldgen/noise_settings'
     | 'worldgen/processor_list'
-    | 'worldgen/template_pool'
+    | 'worldgen/template_pool';
 
-const fileTypePaths: Record<fileType, string> = {
+const fileTypePaths: Record<FileType, string> = {
     // common
     advancement: 'data/*/advancements/**',
     dimension: 'data/*/dimension/**',
@@ -52,21 +53,21 @@ const fileTypePaths: Record<fileType, string> = {
     'worldgen/noise_settings': 'data/*/worldgen/noise_settings/**',
     'worldgen/processor_list': 'data/*/worldgen/processor_list/**',
     'worldgen/template_pool': 'data/*/worldgen/template_pool/**'
-}
+};
 
 /**
  * ファイルの種類を取得します
  * @param filePath 取得したいファイルのファイルパス
  * @param datapackRoot データパックのルートパス
  */
-export function getFileType(filePath: string, datapackRoot: string) {
-    const dir = path.relative(datapackRoot, filePath).replace(/(\\|$)/g, '/')
-    for (const type of Object.keys(fileTypePaths) as fileType[]) {
+export function getFileType(filePath: string, datapackRoot: string): FileType | null {
+    const dir = path.relative(datapackRoot, filePath).replace(/(\\|$)/g, '/');
+    for (const type of Object.keys(fileTypePaths) as FileType[]) {
         if (minimatch(dir, fileTypePaths[type])) {
-            return type
+            return type;
         }
     }
-    return null
+    return null;
 }
 
 /**
@@ -74,8 +75,8 @@ export function getFileType(filePath: string, datapackRoot: string) {
  * @param filePath 取得したいファイルのファイルパス
  * @param datapackRoot データパックのルートパス
  */
-export function getResourcePath(filePath: string, datapackRoot: string) {
-    return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(/^data\/([^\/]*)\/[^\/]*\/(.*)$/, '$1:$2')
+export function getResourcePath(filePath: string, datapackRoot: string): string {
+    return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(/^data\/([^/]*)\/[^/]*\/(.*)$/, '$1:$2');
 }
 
 /**
@@ -84,11 +85,12 @@ export function getResourcePath(filePath: string, datapackRoot: string) {
  * @param fileName ファイル名
  * @deprecated 開発段階のため実装が大幅に変わる可能性があります
  */
-export async function getFileTemplate(fileType: fileType, fileName: string): Promise<Uint8Array> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function getFileTemplate(fileType: FileType, fileName: string): Promise<Uint8Array> {
     switch (fileType) {
         // TODO load config template
         default:
-            return new Uint8Array()
+            return new Uint8Array();
     }
 }
 
@@ -99,10 +101,10 @@ export async function getFileTemplate(fileType: fileType, fileName: string): Pro
  */
 export async function getDatapackRoot(filePath: string): Promise<string | undefined> {
     if (filePath === path.dirname(filePath)) {
-        return undefined
+        return undefined;
     }
     if (await file.pathAccessible(path.join(filePath, 'pack.mcmeta')) && await file.pathAccessible(path.join(filePath, 'data'))) {
-        return filePath
+        return filePath;
     }
-    return getDatapackRoot(path.dirname(filePath))
+    return getDatapackRoot(path.dirname(filePath));
 }

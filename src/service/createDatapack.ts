@@ -1,12 +1,11 @@
-import { workspace, window, Uri, QuickPickItem } from 'vscode'
-import * as common from '../utils/common'
-import path from 'path'
-import { fileData, QuickPickFiles } from '../utils/interfaces'
-import * as file from '../utils/file'
-import { TextEncoder } from 'util'
-import '../utils/methodExtensions'
+import { workspace, window, Uri, QuickPickItem } from 'vscode';
+import * as common from '../utils/common';
+import path from 'path';
+import * as file from '../utils/file';
+import { TextEncoder } from 'util';
+import '../utils/methodExtensions';
 
-export async function createDatapack(args: any[]) {
+export async function createDatapack(): Promise<void> {
 
     // フォルダ選択
     const dir = await window.showOpenDialog({
@@ -17,20 +16,24 @@ export async function createDatapack(args: any[]) {
         filters: undefined,
         openLabel: 'Select',
         title: 'Select Datapack'
-    }).then(v => v?.[0])
-    if (!dir) return
+    }).then(v => v?.[0]);
+    if (!dir) {
+        return;
+    }
 
     // Datapack内部かチェック
-    const datapackRoot = await common.getDatapackRoot(dir.fsPath)
+    const datapackRoot = await common.getDatapackRoot(dir.fsPath);
 
     if (datapackRoot) {
         // 内部なら確認
-        const warningMessage = 'The selected directory is inside Datapack ' + path.basename(datapackRoot) + '. Would you like to create a Datapack here?'
-        const result = await window.showWarningMessage(warningMessage, 'Yes', 'Reselect', 'No')
-        if (result === 'No') return
+        const warningMessage = `The selected directory is inside Datapack ${path.basename(datapackRoot)}. Would you like to create a Datapack here?`;
+        const result = await window.showWarningMessage(warningMessage, 'Yes', 'Reselect', 'No');
+        if (result === 'No') {
+            return;
+        }
         if (result === 'Reselect') {
-            createDatapack(args)
-            return
+            createDatapack();
+            return;
         }
     }
 
@@ -41,11 +44,14 @@ export async function createDatapack(args: any[]) {
         prompt: 'datapack name?',
         ignoreFocusOut: true,
         validateInput: value => {
-            if (value.match(/[\\\/:*?"<>|]/))
-                return '[\\/:*?"<>|] Cannot be used in the name'
+            if (value.match(/[\\/:*?"<>|]/)) {
+                return '[\\/:*?"<>|] Cannot be used in the name';
+            }
         }
-    })
-    if (!datapackName) return
+    });
+    if (!datapackName) {
+        return;
+    }
 
     // 名前空間入力
     const namespace = await window.showInputBox({
@@ -54,11 +60,14 @@ export async function createDatapack(args: any[]) {
         prompt: 'namespace name?',
         ignoreFocusOut: true,
         validateInput: value => {
-            if (!value.match(/^[a-z0-9\.\/\_\-]*$/))
-                return 'Characters other than [a-z0-9./_-] exist.'
+            if (!value.match(/^[a-z0-9./_-]*$/)) {
+                return 'Characters other than [a-z0-9./_-] exist.';
+            }
         }
-    })
-    if (!namespace) return
+    });
+    if (!namespace) {
+        return;
+    }
 
     // 生成するファイル/フォルダを選択
     const createItems = await window.showQuickPick(getItems(namespace, dir, datapackName), {
@@ -67,20 +76,32 @@ export async function createDatapack(args: any[]) {
         matchOnDescription: false,
         matchOnDetail: false,
         placeHolder: 'Select files/folders to generate'
-    })
-    if (!createItems) return
+    });
+    if (!createItems) {
+        return;
+    }
 
     const enconder = new TextEncoder();
     createItems.flat(v => v.changes).forEach(async v => {
-        if (v.type === 'file')
-            await file.create(v.fileUri, enconder.encode(v.content?.join('\r\n') ?? ''))
-        if (v.type === 'folder')
-            await file.createDir(v.fileUri)
-    })
+        if (v.type === 'file') {
+            await file.create(v.fileUri, enconder.encode(v.content?.join('\r\n') ?? ''));
+        }
+        if (v.type === 'folder') {
+            await file.createDir(v.fileUri);
+        }
+    });
+}
+
+interface QuickPickFiles extends QuickPickItem {
+    changes: {
+        type: 'file' | 'folder'
+        fileUri: Uri
+        content?: string[]
+    }[]
 }
 
 function getItems(namespace: string, dir: Uri, datapackName: string): QuickPickFiles[] {
-    dir = Uri.joinPath(dir, datapackName, 'data')
+    dir = Uri.joinPath(dir, datapackName, 'data');
     return [
         // {// TODO
         //     label: `vanilla tags`,
@@ -92,13 +113,13 @@ function getItems(namespace: string, dir: Uri, datapackName: string): QuickPickF
             changes: [
                 {
                     type: 'file',
-                    fileUri: Uri.joinPath(dir, `minecraft/tags/functions/load.json`),
+                    fileUri: Uri.joinPath(dir, 'minecraft/tags/functions/load.json'),
                     content: [
-                        `{`,
-                        `    "value": [`,
+                        '{',
+                        '    "value": [',
                         `        "${namespace}:load"`,
-                        `    ]`,
-                        `}`
+                        '    ]',
+                        '}'
                     ]
                 },
                 {
@@ -114,13 +135,13 @@ function getItems(namespace: string, dir: Uri, datapackName: string): QuickPickF
             changes: [
                 {
                     type: 'file',
-                    fileUri: Uri.joinPath(dir, `minecraft/tags/functions/tick.json`),
+                    fileUri: Uri.joinPath(dir, 'minecraft/tags/functions/tick.json'),
                     content: [
-                        `{`,
-                        `    "value": [`,
+                        '{',
+                        '    "value": [',
                         `        "${namespace}:tick"`,
-                        `    ]`,
-                        `}`
+                        '    ]',
+                        '}'
                     ]
                 },
                 {
@@ -229,5 +250,5 @@ function getItems(namespace: string, dir: Uri, datapackName: string): QuickPickF
                 }
             ]
         }
-    ]
+    ];
 }

@@ -1,4 +1,4 @@
-export { }
+export { };
 // 拡張メソッドの定義
 declare global {
     interface Array<T> {
@@ -7,5 +7,5 @@ declare global {
 }
 
 Array.prototype.flat = function <T, U>(func: (x: T) => Array<U>): Array<U> {
-    return (<Array<U>>[]).concat(...(this as T[]).map(v => func(v)))
-}
+    return (<Array<U>>[]).concat(...(this as T[]).map(v => func(v)));
+};
