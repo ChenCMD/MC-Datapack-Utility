@@ -1,7 +1,7 @@
 import { workspace, window, Uri, QuickPickItem } from 'vscode'
 import * as common from '../utils/common'
 import path from 'path'
-import { fileData, QuickPickFiles } from '../utils/QuickPickFiles'
+import { fileData, QuickPickFiles } from '../utils/interfaces'
 import * as file from '../utils/file'
 import { TextEncoder } from 'util'
 import '../utils/methodExtensions'
