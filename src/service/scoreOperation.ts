@@ -1,6 +1,7 @@
-import vscode = require('vscode');
-import rpn = require('../utils/rpn');
-const scoreTable = JSON.parse('\
+import { window } from 'vscode';
+import * as rpn from '../utils/rpn';
+import '../utils/methodExtensions';
+const scoreTable: IScoreTable = JSON.parse('\
 {\
     "table": [\
         {\
@@ -42,92 +43,97 @@ const scoreTable = JSON.parse('\
     ],\
     "identifiers": [ "*", "/", "%", "+", "-", "=" ]\
 }');
+interface IScoreElement {
+    identifier: string;
+    order: number;
+    type: string;
+    axiom: string;
+}
+
+interface IScoreTable {
+    table: Array<IScoreElement>
+    identifiers: Array<string>
+}
+interface ITable {
+    identifier: string  //演算子
+    order: number       //優先度
+    type: string        //種類
+    axiom: string       //Operationの式
+}
+
+interface IStack {
+    value: string
+    type: string
+}
 
 export async function scoreOperation() {
-    const table: {
-        identifier: string; //演算子
-        order: number;      //優先度
-        type: string;       //種類
-        axiom: string;      //Operationの式
-    }[] = [];
-    for (let i = 0; i < scoreTable.table.length; i++) {
-        let t = scoreTable.table[i];
-        table.push({
-            identifier: t.identifier,
-            order: t.order,
-            type: t.type,
-            axiom: t.axiom
-        });
-    }
+    const prefix = '$MCCUTIL_';
 
-    function ssft(_str: string) { return scoreTable.identifiers.indexOf(_str); }; // Search String From operateTable
+    const table: ITable[] = scoreTable.table;
 
-    const editor = vscode.window.activeTextEditor!;
+    const editor = window.activeTextEditor;
+    if (!editor) { return; }
+
     let text = editor.document.getText(editor.selection);
 
-    let formula: string;
+    let formula = '';
     //セレクトされていないならInputBoxを表示
     if (text === '') {
-        let res = await vscode.window.showInputBox({ prompt: 'formula?' });
-        text = res!;
-        if (res !== '') {
-            formula = rpn.rpnGenerate(res!);
-        } else {
-            //セレクトもInputBoxの結果もない場合はエラーを吐いて終わり
-            vscode.window.showErrorMessage('Formula NOT SELECTED');
-            return;
-        }
-    } else {
-        formula = rpn.rpnGenerate(text);
+        let res = await window.showInputBox({ prompt: 'formula?' });
+        if (!res || res === '') { return; }
+        text = res;
     }
+    formula = rpn.rpnGenerate(text);
 
-    function fnSplitOperator(_val: string) {
-        if (_val === "") { return; }
 
-        if (ssft(_val) !== -1 && isNaN(Number(_val.toString()))) {
-            rpnStack.push({
+    function fnSplitOperator(_val: string, _table: ITable[], _stack: IStack[]) {
+        if (!_val) { return; }
+
+        if (rpn.ssft(_val, scoreTable) !== -1 && isNaN(Number(_val.toString()))) {
+            _stack.push({
                 value: _val,
-                type: table[ssft(_val)].type
+                type: _table[rpn.ssft(_val, scoreTable)].type
             });
             return;
         }
 
-        for (let i = 0; i < scoreTable.identifiers.length; i++) {
-            var piv = _val.indexOf(table[i].identifier);
+        for (let i in scoreTable.identifiers) {
+            const piv = _val.indexOf(_table[i].identifier);
             if (piv !== -1) {
-                fnSplitOperator(_val.substring(0, piv));
-                fnSplitOperator(_val.substring(piv, piv + scoreTable.identifiers[i].length));
-                fnSplitOperator(_val.substring(piv + scoreTable.identifiers[i].length));
+                fnSplitOperator(_val.substring(0, piv), _table, _stack);
+                fnSplitOperator(_val.substring(piv, piv + scoreTable.identifiers[i].length), _table, _stack);
+                fnSplitOperator(_val.substring(piv + scoreTable.identifiers[i].length), _table, _stack);
                 return;
             }
         }
 
-        if (!isNaN(Number(_val))) {
-            rpnStack.push({ value: _val, type: "num" });
+        if (Number(_val).isValue()) {
+            _stack.push({ value: _val, type: "num" });
         }
         else {
-            rpnStack.push({ value: _val, type: "str" });
+            _stack.push({ value: _val, type: "str" });
         }
-    };
-
-    var rpnStack: { value: string, type: string }[] = [];
-    var rpnArray = formula.split(/\s+|,/);
-    for (var i = 0; i < rpnArray.length; i++) {
-        fnSplitOperator(rpnArray[i]);
     }
 
-    var calcStack: (number | string)[] = [];
-    let resValues = '';
+    let rpnStack: IStack[] = [];
+    for (const elem of formula.split(/\s+|,/)) {
+        fnSplitOperator(elem, table, rpnStack);
+    }
+
+    let calcStack: (number | string)[] = [];
+    let resValues = [''];
     let resFormulas = '';
+
     while (rpnStack.length > 0) {
-        var elem = rpnStack.shift()!;
+        const elem = rpnStack.shift();
+        if (!elem) { return; }
         switch (elem.type) {
             case "num":
                 // 16進数の場合は10進数へ
-                let put = elem.value.indexOf("0x") !== -1 ? parseInt(elem.value, 16) : parseFloat(elem.value);
+                const put = elem.value.indexOf("0x") !== -1 ? parseInt(elem.value, 16) : parseFloat(elem.value);
                 calcStack.push(put);
                 // 仮でCMDUTILという名前に
-                resValues += `scoreboard players set $MCCUTIL_${elem.value} _ ${put}\n`;
+                resValues.push(`scoreboard players set ${prefix}${elem.value} _ ${put}`);
                 break;
 
             case "str":
@@ -135,21 +141,24 @@ export async function scoreOperation() {
                 break;
 
             case "op": case "fn":
-                var operate = table[ssft(elem.value)];
+                const operate = table[rpn.ssft(elem.value, scoreTable)];
 
-                let str = operate.axiom!;
-                for (var i = 1; i >= 0; i--) {
+                let str = operate.axiom;
+                if (!str) { return; }
+                for (let i = 1; i >= 0; i--) {
                     if (str.indexOf(`arg[${i}]`) !== -1) {
-                        let t = `$CMDUTIL_${calcStack.pop()!.toString()}`;
-                        str = str.substring(0, str.indexOf(`arg[${i}]`)) + t
+                        const lastStackElement = calcStack.pop();
+                        if (!lastStackElement) { return; }
+                        const ARG = `${prefix}${lastStackElement.toString()}`;
+                        str = str.substring(0, str.indexOf(`arg[${i}]`)) + ARG
                             + str.substring(str.indexOf(`arg[${i}]`) + `arg[${i}]`.length);
 
                         // 計算結果をどう格納するか模索中...
-                        if (i === 0) { calcStack.push(t.slice('$MCCUTIL_'.length)); }
+                        if (i === 0) { calcStack.push(ARG.slice(prefix.length)); }
                     }
                 }
 
-                resFormulas += `${str}\n`;
+                resFormulas += `${str}\r\n`;
                 break;
         }
     }
@@ -158,9 +167,11 @@ export async function scoreOperation() {
         edit.replace(editor.selection, [
             `# ${text}`,
             '#if u wish, u can change both <Holder>s\' NAME and the OBJECT _',
+            resValues.filter(function (value, index, self) {
+                return self.indexOf(value) === index;
+            }).join('\r\n'),
             '',
-            resValues,
             resFormulas
-        ].join('\n'));
+        ].join('\r\n'));
     });
 }
