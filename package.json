@@ -11,7 +11,8 @@
 	],
 	"activationEvents": [
 		"onCommand:mccutil.commands.createDatapackTemplate",
-		"onCommand:mccutil.commands.createFile"
+		"onCommand:mccutil.commands.createFile",
+		"onCommand:mccutil.scoreOperation"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -25,6 +26,10 @@
 				"command": "mccutil.commands.createFile",
 				"title": "%mccutil.commands.createFile.title%",
 				"category": "Datapack"
+			},
+			{
+				"command": "mccutil.scoreOperation",
+				"title": "Formula to Score Operation"
 			}
 		],
 		"menus": {
