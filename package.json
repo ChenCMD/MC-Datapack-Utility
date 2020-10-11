@@ -10,37 +10,39 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:mccutil.createDatapackTemplate",
-		"onCommand:mccutil.createFile",
+		"onCommand:mccutil.commands.createDatapackTemplate",
+		"onCommand:mccutil.commands.createFile",
 		"onCommand:mccutil.scoreOperation"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "mccutil.createDatapackTemplate",
-				"title": "Create DatapackTemplate"
+				"command": "mccutil.commands.createDatapackTemplate",
+				"title": "%mccutil.commands.createDatapackTemplate.title%",
+				"category": "Datapack"
 			},
-			{
-				"command": "mccutil.createFile",
-				"title": "Create Datapack File"
+      {
+				"command": "mccutil.commands.createFile",
+				"title": "%mccutil.commands.createFile.title%",
+				"category": "Datapack"
 			},
 			{
 				"command": "mccutil.scoreOperation",
 				"title": "Formula to Score Operation"
-			}
+      }
 		],
 		"menus": {
 			"explorer/context": [
 				{
-					"command": "mccutil.createFile",
+					"command": "mccutil.commands.createFile",
 					"when": "explorerResourceIsFolder == true",
 					"group": "navigation@4"
 				}
 			],
 			"commandPalette": [
 				{
-					"command": "mccutil.createFile",
+					"command": "mccutil.commands.createFile",
 					"when": "false"
 				}
 			]
