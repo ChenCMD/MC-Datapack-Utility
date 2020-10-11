@@ -3,6 +3,10 @@
 	"displayName": "MCCommanderUtil",
 	"description": "",
 	"version": "1.0.0",
+	"author": "ChenCMD",
+	"contributors": [
+		"t5ugu"
+	],
 	"engines": {
 		"vscode": "^1.48.0"
 	},
