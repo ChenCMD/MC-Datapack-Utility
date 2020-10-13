@@ -15,6 +15,7 @@
     "rules": {
         "@typescript-eslint/naming-convention": "warn",
         "@typescript-eslint/semi": "warn",
+        "no-case-declarations": "off",
         "curly": "warn",
         "eqeqeq": "warn",
         "no-floating-decimal": "warn",
@@ -99,6 +100,8 @@
         "template-curly-spacing": [
             "warn",
             "never"
-        ]
+        ],
+        "no-empty-function": "off",
+        "@typescript-eslint/no-empty-function": "off"
     }
 }
