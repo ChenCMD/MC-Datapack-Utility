@@ -347,8 +347,7 @@ export function rpnCalculation(rpnExp: string): string | number | undefined {
         }
     }
 
-    // 失敗の判定
-    // ・演算子の不足(項が余ってしまう)時に投げられる
+    // 演算子の不足(項が余ってしまう)時に投げられる
     if (calcStack.length !== 1) {
         throw new CalculateUnfinishedError('too enough term');
     }
