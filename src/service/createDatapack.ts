@@ -16,9 +16,8 @@ export async function createDatapack(): Promise<void> {
         openLabel: 'Select',
         title: 'Select Datapack'
     }).then(v => v?.[0]);
-    if (!dir) {
+    if (!dir)
         return;
-    }
 
     const datapackName = path.basename(dir.fsPath);
 
@@ -28,9 +27,8 @@ export async function createDatapack(): Promise<void> {
         // 内部なら確認
         const warningMessage = `The selected directory is inside Datapack ${path.basename(datapackRoot)}. Would you like to create a Datapack here?`;
         const result = await window.showWarningMessage(warningMessage, 'Yes', 'Reselect', 'No');
-        if (result === 'No') {
+        if (result === 'No')
             return;
-        }
         if (result === 'Reselect') {
             createDatapack();
             return;
@@ -39,15 +37,13 @@ export async function createDatapack(): Promise<void> {
 
     // 説明入力
     const datapackDiscription = await showInputBox('datapack Discription?');
-    if (!datapackDiscription) {
+    if (!datapackDiscription)
         return;
-    }
 
     // 名前空間入力
     const namespace = await showInputBox('namespace name?', v => !v.match(/^[a-z0-9./_-]*$/) ? 'Characters other than [a-z0-9./_-] exist.' : undefined);
-    if (!namespace) {
+    if (!namespace)
         return;
-    }
 
     // 生成するファイル/フォルダを選択
     const createItems = await window.showQuickPick(getItems(namespace, dir, datapackName), {
@@ -57,20 +53,17 @@ export async function createDatapack(): Promise<void> {
         matchOnDetail: false,
         placeHolder: 'Select files/folders to generate'
     });
-    if (!createItems) {
+    if (!createItems)
         return;
-    }
 
     createItems.push(getPackMcmeta(dir, datapackDiscription));
     const enconder = new TextEncoder();
     try {
         createItems.flat(v => v.changes).forEach(async v => {
-            if (v.type === 'file') {
+            if (v.type === 'file')
                 await file.create(v.fileUri, enconder.encode(v.content?.join('\r\n') ?? ''));
-            }
-            if (v.type === 'folder') {
+            if (v.type === 'folder')
                 await file.createDir(v.fileUri);
-            }
         });
     } catch (error) {
         window.showErrorMessage('File already exists.');

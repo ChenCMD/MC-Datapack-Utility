@@ -7,26 +7,24 @@ import { showInputBox } from '../utils/common';
 export async function scoreOperation(): Promise<void> {
     const prefix = '$MCCUTIL_';
     const editor = window.activeTextEditor;
-    if (!editor) {
+    if (!editor)
         return;
-    }
 
     let text = editor.document.getText(editor.selection);
     // セレクトされていないならInputBoxを表示
     if (text === '') {
         const res = await showInputBox('formula?');
-        if (!res || res === '') {
+        if (!res || res === '')
             return;
-        }
         text = res;
     }
 
     try {
         const formula = rpnGenerate(text);
         const result = mcConvert(formula, prefix);
-        if (!result) {
+        if (!result)
             return;
-        }
+
         editor.edit(edit => {
             edit.replace(editor.selection, [
                 `# ${text}`,

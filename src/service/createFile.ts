@@ -28,17 +28,14 @@ export async function createFile(uri: Uri): Promise<void> {
 
     // ファイル名入力
     const fileName = await showInputBox('Function name?', async value => {
-        if (!value.match(/^[a-z0-9./_-]*$/)) {
+        if (!value.match(/^[a-z0-9./_-]*$/))
             return 'Characters other than [a-z0-9./_-] exist.';
-        }
-        if (await file.pathAccessible(path.join(uri.fsPath, value + fileExtension))) {
+        if (await file.pathAccessible(path.join(uri.fsPath, value + fileExtension)))
             return `This ${fileType} already exists.`;
-        }
     });
 
-    if (!fileName) {
+    if (!fileName)
         return;
-    }
 
     // リソースパスの生成とファイルテンプレートの取得
     const filePath = path.join(uri.fsPath, fileName);

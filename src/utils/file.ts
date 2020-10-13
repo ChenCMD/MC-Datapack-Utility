@@ -8,11 +8,10 @@ import { promises as fsp } from 'fs';
  * @throws FileSystemError ファイルが既に存在する場合
  */
 export async function create(filePath: string | Uri, content: Uint8Array): Promise<void> {
-    if (await pathAccessible(filePath)) {
+    if (await pathAccessible(filePath))
         throw FileSystemError.FileExists(filePath);
-    } else {
+     else
         workspace.fs.writeFile(filePath instanceof Uri ? filePath : Uri.file(filePath), content);
-    }
 }
 
 /**

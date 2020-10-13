@@ -239,17 +239,17 @@ interface IQueueElement {
 
 export function mcConvert(formula: string, prefix: string): { resValues: Set<string>, resFormulas: string[] } | undefined {
     let rpnQueue = new Deque<IQueueElement>();
-    for (const elem of formula.split(/\s+|,/)) {
+    for (const elem of formula.split(/\s+|,/))
         rpnQueue = fnSplitOperator(elem, rpnQueue, scoreTable.table, scoreTable);
-    }
+
     const calcStack: (number | string)[] = [];
     const resValues = new Set<string>();
     const resFormulas: string[] = [];
     while (rpnQueue.size() > 0) {
         const elem = rpnQueue.removeFirst();
-        if (!elem) {
+        if (!elem)
             throw Error('element');
-        }
+
         switch (elem.type) {
             case 'num':
                 const put = elem.value.indexOf('0x') !== -1 ? parseInt(elem.value, 16) : parseFloat(elem.value);
@@ -266,9 +266,8 @@ export function mcConvert(formula: string, prefix: string): { resValues: Set<str
                 const arg1 = calcStack.pop();
                 const arg2 = calcStack.pop();
 
-                if (!arg1 || !arg2) {
+                if (!arg1 || !arg2)
                     return undefined;
-                }
 
                 calcStack.push(arg2.toString());
                 resFormulas.push(`scoreboard players operation ${arg2.toString()} _ ${op} ${arg1.toString()} _`);
@@ -291,17 +290,15 @@ export function rpnCalculation(rpnExp: string): string | number | undefined {
     // 切り分け実行
     // 式を空白文字かカンマでセパレートして配列化＆これらデリミタを式から消す副作用
     const rpnQueue = new Deque<IQueueElement>();
-    for (const elem of rpnExp.split(/\s+|,/)) {
+    for (const elem of rpnExp.split(/\s+|,/))
         fnSplitOperator(elem, rpnQueue, table, opTable);
-    }
 
     // 演算開始
     const calcStack: (number | string)[] = []; // 演算結果スタック
     while (rpnQueue.size() > 0) {
         const elem = rpnQueue.removeFirst();
-        if (!elem) {
+        if (!elem)
             return;
-        }
         switch (elem.type) {
             // 演算項(数値のparse)
             case 'num':
@@ -323,43 +320,38 @@ export function rpnCalculation(rpnExp: string): string | number | undefined {
             // 演算子・計算機能
             case 'op': case 'fn': {
                 const operate = table[ssft(elem.value, opTable)];
-                if (!operate) {
+                if (!operate)
                     throw new CalculateUnfinishedError(`not exist operate:${elem.value}`);
-                }
 
                 // 演算に必要な数だけ演算項を抽出
                 const args: (string | number | undefined)[] = [];
                 for (let i = 0; i < operate.arity; i++) {
-                    if (calcStack.length > 0) {
+                    if (calcStack.length > 0)
                         args.unshift(calcStack.pop());
-                    } else {
+                     else
                         throw new CalculateUnfinishedError('not enough operand');
-                    }
                 }
 
                 // 演算を実行して結果をスタックへ戻す
                 const res = operate.fn?.apply(null, args);
-                if (res) {
+                if (res)
                     calcStack.push(res);
-                }
                 break;
             }
         }
     }
 
     // 演算子の不足(項が余ってしまう)時に投げられる
-    if (calcStack.length !== 1) {
+    if (calcStack.length !== 1)
         throw new CalculateUnfinishedError('too enough term');
-    }
 
     // 計算結果を戻す
     return calcStack[0];
 }
 
 function fnSplitOperator(_val: string, _stack: Deque<IQueueElement>, _table: IElementBase[], _opTable: ITableBase): Deque<IQueueElement> {
-    if (_val === '') {
+    if (_val === '')
         return _stack;
-    }
     if (ssft(_val, _opTable) !== -1 && !Number.prototype.isValue(_val)) {
         _stack.addLast({ value: _val, type: _table[ssft(_val, _opTable)].type });
         return _stack;
@@ -389,9 +381,8 @@ export function rpnGenerate(exp: string): string {
     do {
         // 先頭の空白文字とカンマを消去
         exp = exp.replace(/^(\s|,)+/, '');
-        if (exp.length === 0) {
+        if (exp.length === 0)
             break;
-        }
 
         // 演算子スタック
         opeStack[depth] = opeStack[depth] || new Deque();
@@ -449,11 +440,10 @@ export function rpnGenerate(exp: string): string {
             default:
                 // +符号を#に、-符号を_に置換
                 if (unary) {
-                    if (op === '+') {
+                    if (op === '+')
                         op = '#';
-                    } else if (op === '-') {
+                     else if (op === '-')
                         op = '_';
-                    }
                 }
 
                 // 演算子スタックの先頭に格納
@@ -477,9 +467,8 @@ export function rpnGenerate(exp: string): string {
                         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                         const ope = opeStack[depth].removeFirst()!;
                         polish.push(ope);
-                        if (table[ssft(ope, opTable)].order < opData.order) {
+                        if (table[ssft(ope, opTable)].order < opData.order)
                             break;
-                        }
                     }
                     opeStack[depth].addFirst(op);
                 }
@@ -488,16 +477,12 @@ export function rpnGenerate(exp: string): string {
         }
     } while (exp.length > 0);
 
-    if (depth > 0) {
+    if (depth > 0)
         throw new ExpectedTokenError('too much \'(\'');
-    }
-
-    while (opeStack[depth].size() > 0) {
+    while (opeStack[depth].size() > 0)
         polish.push(opeStack[depth].removeFirst());
-    }
     return polish.join(' ');
 }
 
 export class CalculateUnfinishedError extends ErrorTemplate {}
-export class GenerateUnfinishedError extends ErrorTemplate { }
 export class ExpectedTokenError extends ErrorTemplate {}
