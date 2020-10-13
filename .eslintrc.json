@@ -16,7 +16,11 @@
         "@typescript-eslint/naming-convention": "warn",
         "@typescript-eslint/semi": "warn",
         "no-case-declarations": "off",
-        "curly": "warn",
+        "curly": [
+            "warn",
+            "multi-or-nest",
+            "consistent"
+        ],
         "eqeqeq": "warn",
         "no-floating-decimal": "warn",
         "no-multi-spaces": "warn",
