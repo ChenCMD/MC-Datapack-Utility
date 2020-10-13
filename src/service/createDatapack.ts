@@ -1,19 +1,18 @@
 import { workspace, window, Uri, QuickPickItem } from 'vscode';
-import * as common from '../utils/common';
+import { getDatapackRoot, showInputBox } from '../utils/common';
 import path from 'path';
 import * as file from '../utils/file';
 import { TextEncoder } from 'util';
 import '../utils/methodExtensions';
+import { codeConsole } from '../extension';
 
 export async function createDatapack(): Promise<void> {
-
     // フォルダ選択
     const dir = await window.showOpenDialog({
         canSelectFiles: false,
         canSelectFolders: true,
         canSelectMany: false,
         defaultUri: workspace.workspaceFolders?.[0].uri,
-        filters: undefined,
         openLabel: 'Select',
         title: 'Select Datapack'
     }).then(v => v?.[0]);
@@ -21,9 +20,10 @@ export async function createDatapack(): Promise<void> {
         return;
     }
 
-    // Datapack内部かチェック
-    const datapackRoot = await common.getDatapackRoot(dir.fsPath);
+    const datapackName = path.basename(dir.fsPath);
 
+    // Datapack内部かチェック
+    const datapackRoot = await getDatapackRoot(dir.fsPath);
     if (datapackRoot) {
         // 内部なら確認
         const warningMessage = `The selected directory is inside Datapack ${path.basename(datapackRoot)}. Would you like to create a Datapack here?`;
@@ -37,34 +37,14 @@ export async function createDatapack(): Promise<void> {
         }
     }
 
-    // データパック名入力
-    const datapackName = await window.showInputBox({
-        value: '',
-        placeHolder: '',
-        prompt: 'datapack name?',
-        ignoreFocusOut: true,
-        validateInput: value => {
-            if (value.match(/[\\/:*?"<>|]/)) {
-                return '[\\/:*?"<>|] Cannot be used in the name';
-            }
-        }
-    });
-    if (!datapackName) {
+    // 説明入力
+    const datapackDiscription = await showInputBox('datapack Discription?');
+    if (!datapackDiscription) {
         return;
     }
 
     // 名前空間入力
-    const namespace = await window.showInputBox({
-        value: '',
-        placeHolder: '',
-        prompt: 'namespace name?',
-        ignoreFocusOut: true,
-        validateInput: value => {
-            if (!value.match(/^[a-z0-9./_-]*$/)) {
-                return 'Characters other than [a-z0-9./_-] exist.';
-            }
-        }
-    });
+    const namespace = await showInputBox('namespace name?', v => !v.match(/^[a-z0-9./_-]*$/) ? 'Characters other than [a-z0-9./_-] exist.' : undefined);
     if (!namespace) {
         return;
     }
@@ -72,7 +52,7 @@ export async function createDatapack(): Promise<void> {
     // 生成するファイル/フォルダを選択
     const createItems = await window.showQuickPick(getItems(namespace, dir, datapackName), {
         canPickMany: true,
-        ignoreFocusOut: false,
+        ignoreFocusOut: true,
         matchOnDescription: false,
         matchOnDetail: false,
         placeHolder: 'Select files/folders to generate'

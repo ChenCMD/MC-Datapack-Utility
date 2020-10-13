@@ -1,8 +1,8 @@
 import { window } from 'vscode';
 import { rpnGenerate, mcConvert } from '../utils/rpn';
 import '../utils/methodExtensions';
-import { ErrorTemplate } from '../utils/interfaces';
 import { codeConsole } from '../extension';
+import { showInputBox } from '../utils/common';
 
 export async function scoreOperation(): Promise<void> {
     const prefix = '$MCCUTIL_';
@@ -14,7 +14,7 @@ export async function scoreOperation(): Promise<void> {
     let text = editor.document.getText(editor.selection);
     // セレクトされていないならInputBoxを表示
     if (text === '') {
-        const res = await window.showInputBox({ prompt: 'formula?' });
+        const res = await showInputBox('formula?');
         if (!res || res === '') {
             return;
         }
@@ -38,7 +38,7 @@ export async function scoreOperation(): Promise<void> {
             ].join('\r\n'));
         });
     } catch (error) {
-        window.showErrorMessage((error as ErrorTemplate).toString());
-        codeConsole.appendLine((error as ErrorTemplate).stack ?? (error as ErrorTemplate).toString());
+        window.showErrorMessage(error.toString());
+        codeConsole.appendLine(error.stack ?? error.toString());
     }
 }

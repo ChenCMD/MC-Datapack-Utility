@@ -2,6 +2,7 @@
 import * as path from 'path';
 import * as file from './file';
 import minimatch from 'minimatch';
+import { window } from 'vscode';
 
 export type FileType =
     | 'advancement'
@@ -55,6 +56,16 @@ const fileTypePaths: Record<FileType, string> = {
     'worldgen/template_pool': 'data/*/worldgen/template_pool/**'
 };
 
+export async function showInputBox(prompt?: string, validateInput?: (value: string) => string | Thenable<string | null | undefined> | null | undefined): Promise<string | undefined> {
+    return await window.showInputBox({
+        value: '',
+        placeHolder: '',
+        prompt: prompt,
+        ignoreFocusOut: true,
+        validateInput: validateInput
+    });
+}
+
 /**
  * ファイルの種類を取得します
  * @param filePath 取得したいファイルのファイルパス
@@ -103,8 +114,12 @@ export async function getDatapackRoot(filePath: string): Promise<string | undefi
     if (filePath === path.dirname(filePath)) {
         return undefined;
     }
-    if (await file.pathAccessible(path.join(filePath, 'pack.mcmeta')) && await file.pathAccessible(path.join(filePath, 'data'))) {
+    if (isDatapackRoot(filePath)) {
         return filePath;
     }
     return getDatapackRoot(path.dirname(filePath));
+}
+
+export async function isDatapackRoot(testPath: string): Promise<boolean> {
+    return await file.pathAccessible(path.join(testPath, 'pack.mcmeta')) && await file.pathAccessible(path.join(testPath, 'data'));
 }
