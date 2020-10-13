@@ -273,7 +273,6 @@ export class Deque<E> implements IterableIterator<E> {
     }
 
     private reSize(newSize: number): void {
-        console.log('reSize')
         const newData = new Array<E>(newSize + 1);
         for (let i = 0; i < this.size(); i++) {
             newData[i] = (this.data[(this.front + i).mod(this.capacity)]);
