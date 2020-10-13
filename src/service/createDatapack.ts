@@ -61,6 +61,7 @@ export async function createDatapack(): Promise<void> {
         return;
     }
 
+    createItems.push(getPackMcmeta(dir, datapackDiscription));
     const enconder = new TextEncoder();
     try {
         createItems.flat(v => v.changes).forEach(async v => {
@@ -83,6 +84,26 @@ interface QuickPickFiles extends QuickPickItem {
         fileUri: Uri
         content?: string[]
     }[]
+}
+
+function getPackMcmeta(dir: Uri, datapackDiscription: string): QuickPickFiles {
+    return {
+        label: 'create pack.mcmeta',
+        changes: [
+            {
+                type: 'file',
+                fileUri: Uri.joinPath(dir, 'pack.mcmeta'),
+                content: [
+                    '{',
+                    '    "pack": {',
+                    '        "pack_format": 6,',
+                    `        "description": "${datapackDiscription}"`,
+                    '    }',
+                    '}'
+                ]
+            }
+        ]
+    };
 }
 
 function getItems(namespace: string, dir: Uri, datapackName: string): QuickPickFiles[] {
