@@ -295,7 +295,7 @@ export function rpnCalculation(rpnExp: string): string | number | undefined {
         fnSplitOperator(elem, rpnQueue, table, opTable);
     }
 
-    // /演算開始
+    // 演算開始
     const calcStack: (number | string)[] = []; // 演算結果スタック
     while (rpnQueue.size() > 0) {
         const elem = rpnQueue.removeFirst();
@@ -303,14 +303,14 @@ export function rpnCalculation(rpnExp: string): string | number | undefined {
             return;
         }
         switch (elem.type) {
-            // 演算項（数値のparse）
+            // 演算項(数値のparse)
             case 'num':
                 calcStack.push(
                     elem.value.indexOf('0x') !== -1 ? parseInt(elem.value, 16) : parseFloat(elem.value)
                 );
                 break;
 
-            // 演算項（文字列）※数値以外のリテラルを扱うような機能は未サポート
+            // 演算項(文字列)※数値以外のリテラルを扱うような機能は未サポート
             case 'str':
                 calcStack.push(elem.value);
                 break;
@@ -347,12 +347,12 @@ export function rpnCalculation(rpnExp: string): string | number | undefined {
         }
     }
 
-    // /途中失敗の判定
-    if (rpnQueue.size() > 0 || calcStack.length !== 1) {
-        throw new CalculateUnfinishedError();
+    // 演算子の不足(項が余ってしまう)時に投げられる
+    if (calcStack.length !== 1) {
+        throw new CalculateUnfinishedError('too enough term');
     }
 
-    // /計算結果を戻す
+    // 計算結果を戻す
     return calcStack[0];
 }
 
@@ -380,11 +380,11 @@ function fnSplitOperator(_val: string, _stack: Deque<IQueueElement>, _table: IEl
 }
 
 export function rpnGenerate(exp: string): string {
-    const polish = []; // /parse結果格納用
+    const polish = []; // parse結果格納用
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const opeStack = [new Deque<string | undefined>()]; // /演算子スタック
-    let depth = 0; // /括弧のネスト深度
-    let unary = true; // 単項演算子チェック（正負符号等）
+    const opeStack = [new Deque<string | undefined>()]; // 演算子スタック
+    let depth = 0; // 括弧のネスト深度
+    let unary = true; // 単項演算子チェック(正負符号等)
 
     do {
         // 先頭の空白文字とカンマを消去
@@ -396,7 +396,7 @@ export function rpnGenerate(exp: string): string {
         // 演算子スタック
         opeStack[depth] = opeStack[depth] || new Deque();
 
-        // /数値抽出（整数・小数・16進数）
+        // 数値抽出(整数・小数・16進数)
         const numberLiteral = exp.match(/(^0x[0-9a-f]+)|(^[0-9]+(\.[0-9]+)?)/i)?.[0];
         if (numberLiteral) {
             polish.push(numberLiteral.indexOf('0x') === 0 ? parseInt(numberLiteral, 16) : parseFloat(numberLiteral));
@@ -426,9 +426,9 @@ export function rpnGenerate(exp: string): string {
             throw new ExpectedTokenError(`illegal expression: ${exp.slice(0, 10)} ...`);
         }
 
-        // /スタック構築
-        // /・各演算子の優先順位
-        // /・符合の単項演算子化
+        // スタック構築
+        // ・各演算子の優先順位
+        // ・符合の単項演算子化
         switch (op) {
             // 括弧はネストにするので特別
             case '(':
@@ -436,7 +436,7 @@ export function rpnGenerate(exp: string): string {
                 unary = true;
                 break;
             case ')':
-                for (const stackOp of opeStack[depth]) { // /演算子スタックを全て処理
+                for (const stackOp of opeStack[depth]) { // 演算子スタックを全て処理
                     polish.push(stackOp);
                 }
                 opeStack[depth].clear();
@@ -444,10 +444,10 @@ export function rpnGenerate(exp: string): string {
                     // 括弧閉じ多すぎてエラー
                     throw new ExpectedTokenError('too much \')\'');
                 }
-                unary = false; // /括弧を閉じた直後は符号（単項演算子）ではない
+                unary = false; // 括弧を閉じた直後は符号(単項演算子)ではない
                 break;
             default:
-                // /+符号を#に、-符号を_に置換
+                // +符号を#に、-符号を_に置換
                 if (unary) {
                     if (op === '+') {
                         op = '#';
@@ -490,8 +490,6 @@ export function rpnGenerate(exp: string): string {
 
     if (depth > 0) {
         throw new ExpectedTokenError('too much \'(\'');
-    } else if (exp.length > 0) {
-        throw new GenerateUnfinishedError();
     }
 
     while (opeStack[depth].size() > 0) {
