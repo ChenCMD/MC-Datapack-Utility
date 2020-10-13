@@ -62,14 +62,19 @@ export async function createDatapack(): Promise<void> {
     }
 
     const enconder = new TextEncoder();
-    createItems.flat(v => v.changes).forEach(async v => {
-        if (v.type === 'file') {
-            await file.create(v.fileUri, enconder.encode(v.content?.join('\r\n') ?? ''));
-        }
-        if (v.type === 'folder') {
-            await file.createDir(v.fileUri);
-        }
-    });
+    try {
+        createItems.flat(v => v.changes).forEach(async v => {
+            if (v.type === 'file') {
+                await file.create(v.fileUri, enconder.encode(v.content?.join('\r\n') ?? ''));
+            }
+            if (v.type === 'folder') {
+                await file.createDir(v.fileUri);
+            }
+        });
+    } catch (error) {
+        window.showErrorMessage('File already exists.');
+        codeConsole.appendLine(error.stack ?? error.message ? `${error.name}: ${error.message}` : `${error.name}`);
+    }
 }
 
 interface QuickPickFiles extends QuickPickItem {
