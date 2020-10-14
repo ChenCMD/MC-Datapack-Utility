@@ -27,7 +27,7 @@ export async function createFile(uri: Uri): Promise<void> {
     const fileExtension = fileType === 'function' ? '.mcfunction' : '.json';
 
     // ファイル名入力
-    const fileName = await showInputBox('Function name?', async value => {
+    const fileName = await showInputBox('Function name', async value => {
         if (!value.match(/^[a-z0-9./_-]*$/))
             return 'Characters other than [a-z0-9./_-] exist.';
         if (await file.pathAccessible(path.join(uri.fsPath, value + fileExtension)))
