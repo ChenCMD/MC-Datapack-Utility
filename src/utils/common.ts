@@ -112,7 +112,7 @@ export async function getFileTemplate(fileType: FileType, fileName: string): Pro
 export async function getDatapackRoot(filePath: string): Promise<string | undefined> {
     if (filePath === path.dirname(filePath))
         return undefined;
-    if (isDatapackRoot(filePath))
+    if (await isDatapackRoot(filePath))
         return filePath;
     return getDatapackRoot(path.dirname(filePath));
 }
