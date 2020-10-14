@@ -7,7 +7,7 @@ import { promises as fsp } from 'fs';
  * @param content 内容
  * @throws FileSystemError ファイルが既に存在する場合
  */
-export async function create(filePath: string | Uri, content: Uint8Array): Promise<void> {
+export async function createFile(filePath: string | Uri, content: Uint8Array): Promise<void> {
     if (await pathAccessible(filePath))
         throw FileSystemError.FileExists(filePath);
      else

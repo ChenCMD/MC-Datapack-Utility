@@ -56,11 +56,11 @@ const fileTypePaths: Record<FileType, string> = {
     'worldgen/template_pool': 'data/*/worldgen/template_pool/**'
 };
 
-export async function showInputBox(prompt?: string, validateInput?: (value: string) => string | Thenable<string | null | undefined> | null | undefined): Promise<string | undefined> {
+export async function showInputBox(message?: string, validateInput?: (value: string) => string | Thenable<string | null | undefined> | null | undefined): Promise<string | undefined> {
     return await window.showInputBox({
-        value: '',
+        value: message ? `${message} here` : '',
         placeHolder: '',
-        prompt: prompt,
+        prompt: message ? `${message}?` : '',
         ignoreFocusOut: true,
         validateInput: validateInput
     });

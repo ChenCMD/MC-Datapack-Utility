@@ -43,5 +43,5 @@ export async function createFile(uri: Uri): Promise<void> {
     const fileTemplate = await getFileTemplate(fileType, resourcePath);
 
     // 生成
-    file.create(filePath + fileExtension, fileTemplate);
+    file.createFile(filePath + fileExtension, fileTemplate);
 }

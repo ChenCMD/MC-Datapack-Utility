@@ -14,7 +14,7 @@ export async function scoreOperation(): Promise<void> {
     let text = editor.document.getText(editor.selection);
     // セレクトされていないならInputBoxを表示
     if (text === '') {
-        const res = await showInputBox('formula?');
+        const res = await showInputBox('formula');
         if (!res || res === '')
             return;
         text = res;
