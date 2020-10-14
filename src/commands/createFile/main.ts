@@ -1,6 +1,6 @@
 import { Uri, window } from 'vscode';
-import * as file from '../utils/file';
-import { getDatapackRoot, getFileTemplate, getFileType, getResourcePath, showInputBox } from '../utils/common';
+import * as file from '../../utils/file';
+import { getDatapackRoot, getFileTemplate, getFileType, getResourcePath, showInputBox } from '../../utils/common';
 import path = require('path');
 
 export async function createFile(uri: Uri): Promise<void> {

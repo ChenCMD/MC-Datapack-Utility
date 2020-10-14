@@ -1,8 +1,9 @@
 import { window } from 'vscode';
-import { rpnGenerate, mcConvert } from '../utils/rpn';
-import '../utils/methodExtensions';
-import { codeConsole } from '../extension';
-import { showInputBox } from '../utils/common';
+import '../../utils/methodExtensions';
+import { codeConsole } from '../../extension';
+import { showInputBox } from '../../utils/common';
+import { rpnToScoreOperation } from './utils/converter';
+import { rpnParse } from './parser';
 
 export async function scoreOperation(): Promise<void> {
     const prefix = '$MCCUTIL_';
@@ -20,8 +21,8 @@ export async function scoreOperation(): Promise<void> {
     }
 
     try {
-        const formula = rpnGenerate(text);
-        const result = mcConvert(formula, prefix);
+        const formula = rpnParse(text);
+        const result = rpnToScoreOperation(formula, prefix);
         if (!result)
             return;
 

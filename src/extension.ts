@@ -1,5 +1,5 @@
 import { ExtensionContext, commands, window } from 'vscode';
-import * as services from './service/index';
+import { createDatapack, createFile, scoreOperation } from './commands';
 
 export const codeConsole = window.createOutputChannel('MC Commander Util');
 /**
@@ -10,9 +10,9 @@ exports.activate = function activate(context: ExtensionContext) {
 
     const disposable = [];
 
-    disposable.push(commands.registerCommand('mccutil.commands.createDatapackTemplate', services.createDatapack));
-    disposable.push(commands.registerCommand('mccutil.commands.createFile', services.createFile));
-    disposable.push(commands.registerCommand('mccutil.commands.scoreOperation', services.scoreOperation));
+    disposable.push(commands.registerCommand('mccutil.commands.createDatapackTemplate', createDatapack));
+    disposable.push(commands.registerCommand('mccutil.commands.createFile', createFile));
+    disposable.push(commands.registerCommand('mccutil.commands.scoreOperation', scoreOperation));
 
     context.subscriptions.push(...disposable);
 };
