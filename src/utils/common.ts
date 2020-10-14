@@ -74,9 +74,8 @@ export async function showInputBox(prompt?: string, validateInput?: (value: stri
 export function getFileType(filePath: string, datapackRoot: string): FileType | null {
     const dir = path.relative(datapackRoot, filePath).replace(/(\\|$)/g, '/');
     for (const type of Object.keys(fileTypePaths) as FileType[]) {
-        if (minimatch(dir, fileTypePaths[type])) {
+        if (minimatch(dir, fileTypePaths[type]))
             return type;
-        }
     }
     return null;
 }
@@ -111,12 +110,10 @@ export async function getFileTemplate(fileType: FileType, fileName: string): Pro
  * @returns データパック内ではなかった場合undefinedを返します
  */
 export async function getDatapackRoot(filePath: string): Promise<string | undefined> {
-    if (filePath === path.dirname(filePath)) {
+    if (filePath === path.dirname(filePath))
         return undefined;
-    }
-    if (isDatapackRoot(filePath)) {
+    if (isDatapackRoot(filePath))
         return filePath;
-    }
     return getDatapackRoot(path.dirname(filePath));
 }
 
