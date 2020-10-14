@@ -3,7 +3,7 @@ import '../../utils/methodExtensions';
 import { codeConsole } from '../../extension';
 import { showInputBox } from '../../utils/common';
 import { rpnToScoreOperation } from './utils/converter';
-import { rpnParse } from './parser';
+import { rpnParse } from './utils/parser';
 
 export async function scoreOperation(): Promise<void> {
     const prefix = '$MCCUTIL_';
