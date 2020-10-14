@@ -40,13 +40,14 @@ export class Deque<E> implements IterableIterator<E> {
         return result;
     }
 
-    map(func: (element: E, index: number, array: E[]) => E): void {
-        const array: E[] = new Array(5);
+    map(func: (element: E, index: number, array: E[]) => E): E[] {
+        const array = new Array(this.length);
+        const returnArray = new Array<E>(this.length);
         for (let i = 0; i < this.size(); i++)
             array[i] = this.data[(this.front + i - 1).mod(this.capacity)];
         for (let i = this.size(); i > 0; i--)
-            this.data[(this.front + i - 1).mod(this.capacity)] = func(this.data[(this.front + i - 1).mod(this.capacity)], i, array);
-
+            returnArray.push(func(this.data[(this.front + i - 1).mod(this.capacity)], i, array));
+        return returnArray;
     }
 
     add(...elements: E[]): void {
@@ -274,4 +275,4 @@ export class Deque<E> implements IterableIterator<E> {
     }
 }
 
-export class NoSuchElementError extends ErrorTemplate {}
+export class NoSuchElementError extends ErrorTemplate { }
