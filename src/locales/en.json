@@ -1,0 +1,34 @@
+{
+    "create-file.not-datapack": "Cannot create file because it is not a datapack.",
+    "create-file.unknown-filetype": "You can't create a file here.",
+    "create-file.structure": "Structure files are not supported.",
+    "create-file.already-exists": "This %0% already exists.",
+    "create-file.function-name": "Function name",
+
+    "create-datapack-template.inside-datapack": "The selected directory is inside Datapack \"%0%\".\nWould you like to create a Datapack here?",
+    "create-datapack-template.duplicate-datapack": "Duplicate datapack name.\nWould you like to create a Datapack here?",
+    "create-datapack-template.name-blank": "The datapack name cannot be blank.",
+    "create-datapack-template.namespace-blank": "The namespace cannot be blank.",
+    "create-datapack-template.dialog-title": "Select Datapack",
+    "create-datapack-template.dialog-label": "Select",
+    "create-datapack-template.datapack-name": "Datapack name",
+    "create-datapack-template.datapack-discription": "Datapack discription",
+    "create-datapack-template.namespace-name": "Namespace name",
+    "create-datapack-template.quickpick-placeholder": "Select files/folders to generate",
+    "create-datapack-template.complete": "Datapack template generation is complete.",
+
+    "formula-to-score-operation.illegal-expression": "illegal expression: %0% ...",
+    "formula-to-score-operation.not-exist-operate": "not exist operate: %0%",
+    "formula-to-score-operation.not-enough-operand": "not enough operand",
+    "formula-to-score-operation.too-enough-term": "too enough term",
+    "formula-to-score-operation.formula": "formula",
+    "formula-to-score-operation.complate-text": "if u wish, u can change both <Holder>s' NAME and the OBJECT _",
+
+    "too-much": "too much %0%",
+    "input-here": "Please enter %0%",
+    "error.unexpected-character": "%0% cannot be used.",
+    "yes": "Yes",
+    "no": "No",
+    "reselect": "Reselect",
+    "rename": "Rename"
+}

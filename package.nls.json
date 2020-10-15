@@ -1,4 +1,6 @@
 {
     "mccutil.commands.createDatapackTemplate.title": "Create Datapack Template",
-    "mccutil.commands.createFile.title": "Create Datapack File"
+    "mccutil.commands.createFile.title": "Create Datapack File",
+    "mccutil.commands.scoreOperation.title": "Formula to Score Operation",
+    "mccutil.config.language": "Languages ​​displayed by MCCUtil"
 }

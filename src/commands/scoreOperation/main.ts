@@ -4,6 +4,7 @@ import { codeConsole } from '../../extension';
 import { showInputBox } from '../../utils/common';
 import { rpnToScoreOperation } from './utils/converter';
 import { rpnParse } from './utils/parser';
+import { locale } from '../../locales';
 
 export async function scoreOperation(): Promise<void> {
     const prefix = '$MCCUTIL_';
@@ -14,7 +15,7 @@ export async function scoreOperation(): Promise<void> {
     let text = editor.document.getText(editor.selection);
     // セレクトされていないならInputBoxを表示
     if (text === '') {
-        const res = await showInputBox('formula');
+        const res = await showInputBox(locale('formula-to-score-operation.formula'));
         if (!res || res === '')
             return;
         text = res;
@@ -29,7 +30,7 @@ export async function scoreOperation(): Promise<void> {
         editor.edit(edit => {
             edit.replace(editor.selection, [
                 `# ${text}`,
-                '#if u wish, u can change both <Holder>s\' NAME and the OBJECT _',
+                `# ${locale('formula-to-score-operation.complate-text')}`,
                 'scoreboard objectives add _ dummy',
                 Array.from(result.resValues).join('\r\n'),
                 '',

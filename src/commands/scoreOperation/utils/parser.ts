@@ -29,6 +29,7 @@ import { Deque } from '../../../utils/Deque';
 import { ExpectedTokenError } from '../types/Errors';
 import { opTable } from '../types/OperateTable';
 import { ssft } from '.';
+import { locale } from '../../../locales';
 
 export function rpnParse(exp: string): string {
     const polish = []; // parse結果格納用
@@ -73,7 +74,7 @@ export function rpnParse(exp: string): string {
                 unary = false;
                 continue;
             }
-            throw new ExpectedTokenError(`illegal expression: ${exp.slice(0, 10)} ...`);
+            throw new ExpectedTokenError(locale('formula-to-score-operation.illegal-expression', exp.slice(0, 10)));
         }
 
         // スタック構築
@@ -92,7 +93,7 @@ export function rpnParse(exp: string): string {
                 opeStack[depth].clear();
                 if (--depth < 0) {
                     // 括弧閉じ多すぎてエラー
-                    throw new ExpectedTokenError('too much \')\'');
+                    throw new ExpectedTokenError(locale('too-much', '\')\''));
                 }
                 unary = false; // 括弧を閉じた直後は符号(単項演算子)ではない
                 break;
@@ -137,7 +138,7 @@ export function rpnParse(exp: string): string {
     } while (exp.length > 0);
 
     if (depth > 0)
-        throw new ExpectedTokenError('too much \'(\'');
+        throw new ExpectedTokenError(locale('too-much', '\'(\''));
     while (opeStack[depth].size() > 0)
         polish.push(opeStack[depth].removeFirst());
     return polish.join(' ');

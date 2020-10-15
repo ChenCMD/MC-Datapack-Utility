@@ -1,5 +1,6 @@
-import { ExtensionContext, commands, window } from 'vscode';
+import { ExtensionContext, commands, window, workspace } from 'vscode';
 import { createDatapack, createFile, scoreOperation } from './commands';
+import { loadLocale } from './locales';
 
 export const codeConsole = window.createOutputChannel('MC Commander Util');
 /**
@@ -7,6 +8,9 @@ export const codeConsole = window.createOutputChannel('MC Commander Util');
  */
 exports.activate = function activate(context: ExtensionContext) {
 
+    const config = workspace.getConfiguration('mccutil');
+
+    loadLocale(config.language, 'en');
 
     const disposable = [];
 

@@ -1,4 +1,6 @@
 {
     "mccutil.commands.createDatapackTemplate.title": "データパックテンプレートを作成する",
-    "mccutil.commands.createFile.title": "データパックファイルを作成する"
+    "mccutil.commands.createFile.title": "データパックファイルを作成する",
+    "mccutil.commands.scoreOperation.title": "計算式をscore opearationに変換する",
+    "mccutil.config.language": "MCCUtilが表示する言語"
 }

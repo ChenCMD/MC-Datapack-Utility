@@ -31,6 +31,7 @@ import { opTable } from '../types/OperateTable';
 import { IQueueElement } from '../types/QueueElement';
 import { scoreTable } from '../types/ScoreTable';
 import { fnSplitOperator, ssft } from '.';
+import { locale } from '../../../locales';
 
 export function rpnToScoreOperation(formula: string, prefix: string): { resValues: Set<string>, resFormulas: string[] } | undefined {
     let rpnQueue = new Deque<IQueueElement>();
@@ -107,7 +108,7 @@ export function rpnCalculate(rpnExp: string): string | number | undefined {
             case 'op': case 'fn': {
                 const operate = opTable.table[ssft(elem.value, opTable)];
                 if (!operate)
-                    throw new CalculateUnfinishedError(`not exist operate:${elem.value}`);
+                    throw new CalculateUnfinishedError(locale('formula-to-score-operation.not-exist-operate', elem.value));
 
                 // 演算に必要な数だけ演算項を抽出
                 const args: (string | number | undefined)[] = [];
@@ -115,7 +116,7 @@ export function rpnCalculate(rpnExp: string): string | number | undefined {
                     if (calcStack.length > 0)
                         args.unshift(calcStack.pop());
                     else
-                        throw new CalculateUnfinishedError('not enough operand');
+                        throw new CalculateUnfinishedError(locale('formula-to-score-operation.not-enough-operand'));
                 }
 
                 // 演算を実行して結果をスタックへ戻す
@@ -129,7 +130,7 @@ export function rpnCalculate(rpnExp: string): string | number | undefined {
 
     // 演算子の不足(項が余ってしまう)時に投げられる
     if (calcStack.length !== 1)
-        throw new CalculateUnfinishedError('too enough term');
+        throw new CalculateUnfinishedError(locale('formula-to-score-operation.too-enough-term'));
 
     // 計算結果を戻す
     return calcStack[0];

@@ -3,6 +3,7 @@ import * as path from 'path';
 import * as file from './file';
 import minimatch from 'minimatch';
 import { window } from 'vscode';
+import { locale } from '../locales';
 
 export type FileType =
     | 'advancement'
@@ -58,9 +59,9 @@ const fileTypePaths: Record<FileType, string> = {
 
 export async function showInputBox(message?: string, validateInput?: (value: string) => string | Thenable<string | null | undefined> | null | undefined): Promise<string | undefined> {
     return await window.showInputBox({
-        value: message ? `${message} here` : '',
+        value: message ? locale('input-here', message) : '',
         placeHolder: '',
-        prompt: message ? `${message}?` : '',
+        prompt: message ? locale('input-here', message) : '',
         ignoreFocusOut: true,
         validateInput: validateInput
     });
