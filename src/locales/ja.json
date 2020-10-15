@@ -20,15 +20,9 @@
     "formula-to-score-operation.illegal-expression": "文字列を解析できませんでした: %0% ...",
     "formula-to-score-operation.not-exist-operate": "次の演算子は存在しません: %0%",
     "formula-to-score-operation.not-enough-operand": "演算子が不足しています。",
-<<<<<<< HEAD
     "formula-to-score-operation.too-enough-term": "項が多すぎます。",
     "formula-to-score-operation.formula": "計算式",
     "formula-to-score-operation.complate-text": "必要に応じて、スコアホルダー名とスコアオブジェクト\"_\"を変更することができます。",
-=======
-    "formula-to-score-operation.too-enough-term": "演算子が不足しています。",
-    "formula-to-score-operation.formula": "計算式",
-    "formula-to-score-operation.complate-text": "必要に応じて、<Holder>sのNAMEとOBJECT _の両方を変更することができます。",
->>>>>>> root_branch/master
 
     "too-much": "%0%が多すぎます。",
     "input-here": "%0%を入力",
