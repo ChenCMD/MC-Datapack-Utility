@@ -6,7 +6,7 @@ import '../../utils/methodExtensions';
 import { defaultItems, resolveVars, packMcMetaFileData, resolveNamespace } from './utils';
 import * as file from '../../utils/file';
 import { locale } from '../../locales';
-import { MessageItemHasId } from './types/MessageItems';
+import { createMessageItemsHasId, MessageItemHasId } from './types/MessageItems';
 
 export async function createDatapack(): Promise<void> {
     // フォルダ選択
@@ -27,18 +27,10 @@ export async function createDatapack(): Promise<void> {
         // 内部なら確認
         const warningMessage = locale('create-datapack-template.inside-datapack', path.basename(datapackRoot));
         const result = await window.showWarningMessage<MessageItemHasId>(warningMessage,
-            {
-                title: locale('yes'),
-                id: 'yes'
-            },
-            {
-                title: locale('reselect'),
-                id: 'reselect'
-            },
-            {
-                title: locale('no'),
-                id: 'no'
-            });
+            createMessageItemsHasId('yes'),
+            createMessageItemsHasId('reselect'),
+            createMessageItemsHasId('no')
+        );
         if (result === undefined || result.id === 'no')
             return;
         if (result.id === 'reselect') {
@@ -68,18 +60,10 @@ async function create(dir: Uri) {
         // 内部なら確認
         const warningMessage = locale('create-datapack-template.duplicate-datapack');
         const result = await window.showWarningMessage<MessageItemHasId>(warningMessage,
-            {
-                title: locale('yes'),
-                id: 'yes'
-            },
-            {
-                title: locale('rename'),
-                id: 'rename'
-            },
-            {
-                title: locale('no'),
-                id: 'no'
-            });
+            createMessageItemsHasId('yes'),
+            createMessageItemsHasId('rename'),
+            createMessageItemsHasId('no')
+        );
         if (result === undefined || result.id === 'no')
             return;
         if (result.id === 'rename') {
