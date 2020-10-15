@@ -47,7 +47,6 @@ export async function createDatapack(): Promise<void> {
         }
     }
     await create(dir);
-    window.showInformationMessage(locale('create-datapack-template.complete'));
 }
 
 async function create(dir: Uri) {
@@ -131,4 +130,6 @@ async function create(dir: Uri) {
         if (v.type === 'folder')
             await file.createDir(v.relativeFilePath);
     });
+
+    window.showInformationMessage(locale('create-datapack-template.complete'));
 }
