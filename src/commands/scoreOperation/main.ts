@@ -1,36 +1,36 @@
 import { window } from 'vscode';
-import { rpnGenerate, mcConvert } from '../utils/rpn';
-import '../utils/methodExtensions';
-import { ErrorTemplate } from '../utils/interfaces';
-import { codeConsole } from '../extension';
+import '../../utils/methodExtensions';
+import { codeConsole } from '../../extension';
+import { showInputBox } from '../../utils/common';
+import { rpnToScoreOperation } from './utils/converter';
+import { rpnParse } from './utils/parser';
+import { locale } from '../../locales';
 
 export async function scoreOperation(): Promise<void> {
     const prefix = '$MCCUTIL_';
     const editor = window.activeTextEditor;
-    if (!editor) {
+    if (!editor)
         return;
-    }
 
     let text = editor.document.getText(editor.selection);
     // セレクトされていないならInputBoxを表示
     if (text === '') {
-        const res = await window.showInputBox({ prompt: 'formula?' });
-        if (!res || res === '') {
+        const res = await showInputBox(locale('formula-to-score-operation.formula'));
+        if (!res || res === '')
             return;
-        }
         text = res;
     }
 
     try {
-        const formula = rpnGenerate(text);
-        const result = mcConvert(formula, prefix);
-        if (!result) {
+        const formula = rpnParse(text);
+        const result = rpnToScoreOperation(formula, prefix);
+        if (!result)
             return;
-        }
+
         editor.edit(edit => {
             edit.replace(editor.selection, [
                 `# ${text}`,
-                '#if u wish, u can change both <Holder>s\' NAME and the OBJECT _',
+                `# ${locale('formula-to-score-operation.complate-text')}`,
                 'scoreboard objectives add _ dummy',
                 Array.from(result.resValues).join('\r\n'),
                 '',
@@ -38,7 +38,7 @@ export async function scoreOperation(): Promise<void> {
             ].join('\r\n'));
         });
     } catch (error) {
-        window.showErrorMessage((error as ErrorTemplate).toString());
-        codeConsole.appendLine((error as ErrorTemplate).stack ?? (error as ErrorTemplate).toString());
+        window.showErrorMessage(error.toString());
+        codeConsole.appendLine(error.stack ?? error.toString());
     }
 }

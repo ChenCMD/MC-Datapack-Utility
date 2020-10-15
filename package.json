@@ -1,6 +1,6 @@
 {
 	"name": "mc-commander-util",
-	"displayName": "MCCommanderUtil",
+	"displayName": "Minecraft Commander Utilility",
 	"description": "",
 	"version": "1.0.0",
 	"author": "ChenCMD",
@@ -33,7 +33,7 @@
 			},
 			{
 				"command": "mccutil.commands.scoreOperation",
-				"title": "Formula to Score Operation",
+				"title": "%mccutil.commands.scoreOperation.title%",
 				"category": "Datapack"
 			}
 		],
@@ -51,6 +51,21 @@
 					"when": "false"
 				}
 			]
+		},
+		"configuration": {
+			"title": "Minecraft Commander Utilility",
+			"properties": {
+				"mccutil.language": {
+					"type": "string",
+					"enum": [
+						"Default",
+						"en",
+						"ja"
+					],
+					"markdownDescription": "%mccutil.config.language%",
+					"default": "Default"
+				}
+			}
 		}
 	},
 	"scripts": {

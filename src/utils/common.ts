@@ -2,6 +2,8 @@
 import * as path from 'path';
 import * as file from './file';
 import minimatch from 'minimatch';
+import { window } from 'vscode';
+import { locale } from '../locales';
 
 export type FileType =
     | 'advancement'
@@ -55,6 +57,16 @@ const fileTypePaths: Record<FileType, string> = {
     'worldgen/template_pool': 'data/*/worldgen/template_pool/**'
 };
 
+export async function showInputBox(message?: string, validateInput?: (value: string) => string | Thenable<string | null | undefined> | null | undefined): Promise<string | undefined> {
+    return await window.showInputBox({
+        value: message ? locale('input-here', message) : '',
+        placeHolder: '',
+        prompt: message ? locale('input-here', message) : '',
+        ignoreFocusOut: true,
+        validateInput: validateInput
+    });
+}
+
 /**
  * ファイルの種類を取得します
  * @param filePath 取得したいファイルのファイルパス
@@ -63,9 +75,8 @@ const fileTypePaths: Record<FileType, string> = {
 export function getFileType(filePath: string, datapackRoot: string): FileType | null {
     const dir = path.relative(datapackRoot, filePath).replace(/(\\|$)/g, '/');
     for (const type of Object.keys(fileTypePaths) as FileType[]) {
-        if (minimatch(dir, fileTypePaths[type])) {
+        if (minimatch(dir, fileTypePaths[type]))
             return type;
-        }
     }
     return null;
 }
@@ -100,11 +111,13 @@ export async function getFileTemplate(fileType: FileType, fileName: string): Pro
  * @returns データパック内ではなかった場合undefinedを返します
  */
 export async function getDatapackRoot(filePath: string): Promise<string | undefined> {
-    if (filePath === path.dirname(filePath)) {
+    if (filePath === path.dirname(filePath))
         return undefined;
-    }
-    if (await file.pathAccessible(path.join(filePath, 'pack.mcmeta')) && await file.pathAccessible(path.join(filePath, 'data'))) {
+    if (await isDatapackRoot(filePath))
         return filePath;
-    }
     return getDatapackRoot(path.dirname(filePath));
+}
+
+export async function isDatapackRoot(testPath: string): Promise<boolean> {
+    return await file.pathAccessible(path.join(testPath, 'pack.mcmeta')) && await file.pathAccessible(path.join(testPath, 'data'));
 }

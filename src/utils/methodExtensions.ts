@@ -17,9 +17,8 @@ Array.prototype.flat = function <T, U>(func: (x: T) => U[]): U[] {
 };
 
 Array.prototype.clear = function(): void {
-    while (this.length > 0) {
+    while (this.length > 0)
         this.pop();
-    }
 };
 
 Number.prototype.isValue = function(testVar) {
