@@ -40,7 +40,7 @@ export async function createDatapack(): Promise<void> {
             return;
         }
     }
-    await create(dir);
+    create(dir);
 }
 
 async function create(dir: Uri): Promise<void> {
@@ -68,8 +68,10 @@ async function create(dir: Uri): Promise<void> {
         );
         if (result === undefined || result.id === 'no')
             return;
-        if (result.id === 'rename')
-            return await create(dir);
+        if (result.id === 'rename') {
+            create(dir);
+            return;
+        }
     }
 
     // 説明入力
@@ -91,9 +93,9 @@ async function create(dir: Uri): Promise<void> {
     }
 
     const variableContainer: VariableContainer = {
-        'datapackName': datapackName,
-        'datapackDescription': datapackDescription,
-        'namespace': namespace
+        datapackName: datapackName,
+        datapackDescription: datapackDescription,
+        namespace: namespace
     };
 
     // 生成するファイル/フォルダを選択
