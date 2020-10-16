@@ -12,7 +12,7 @@ export const packMcMetaFileData: GenerateFileData = {
         '{',
         '    "pack": {',
         '        "pack_format": 6,',
-        '        "description": "%datapackDiscription%"',
+        '        "description": "%datapackDescription%"',
         '    }',
         '}'
     ]

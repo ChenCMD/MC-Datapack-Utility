@@ -12,7 +12,7 @@
     "create-datapack-template.dialog-title": "生成ディレクトリを選択",
     "create-datapack-template.dialog-label": "選択",
     "create-datapack-template.datapack-name": "データパック名",
-    "create-datapack-template.datapack-discription": "データパックの説明",
+    "create-datapack-template.datapack-description": "データパックの説明",
     "create-datapack-template.namespace-name": "データパックが使用する名前空間",
     "create-datapack-template.quickpick-placeholder": "生成するファイル/フォルダを選択",
     "create-datapack-template.complete": "データパックテンプレートの生成が完了しました。",

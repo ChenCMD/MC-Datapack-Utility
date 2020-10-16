@@ -12,7 +12,7 @@
     "create-datapack-template.dialog-title": "Select Datapack",
     "create-datapack-template.dialog-label": "Select",
     "create-datapack-template.datapack-name": "Datapack name",
-    "create-datapack-template.datapack-discription": "Datapack discription",
+    "create-datapack-template.datapack-description": "Datapack description",
     "create-datapack-template.namespace-name": "Namespace name",
     "create-datapack-template.quickpick-placeholder": "Select files/folders to generate",
     "create-datapack-template.complete": "Datapack template generation is complete.",

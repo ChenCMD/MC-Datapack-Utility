@@ -73,8 +73,8 @@ async function create(dir: Uri): Promise<void> {
     }
 
     // 説明入力
-    const datapackDiscription = await showInputBox(locale('create-datapack-template.datapack-discription'));
-    if (datapackDiscription === undefined) // Escで終了
+    const datapackDescription = await showInputBox(locale('create-datapack-template.datapack-description'));
+    if (datapackDescription === undefined) // Escで終了
         return;
 
     // 名前空間入力
