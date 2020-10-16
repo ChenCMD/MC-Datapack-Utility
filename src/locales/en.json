@@ -6,7 +6,7 @@
     "create-file.function-name": "Function name",
 
     "create-datapack-template.inside-datapack": "The selected directory is inside Datapack \"%0%\".\nWould you like to create a Datapack here?",
-    "create-datapack-template.duplicate-datapack": "Duplicate datapack name.\nWould you like to create a Datapack here?",
+    "create-datapack-template.duplicate-datapack": "Duplicate datapack name.\nWould you like to add a template to your Datapack?",
     "create-datapack-template.name-blank": "The datapack name cannot be blank.",
     "create-datapack-template.namespace-blank": "The namespace cannot be blank.",
     "create-datapack-template.dialog-title": "Select Datapack",
