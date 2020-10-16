@@ -17,6 +17,7 @@
     "create-datapack-template.quickpick-placeholder": "生成するファイル/フォルダを選択",
     "create-datapack-template.complete": "データパックテンプレートの生成が完了しました。",
 
+    "formula-to-score-operation.not-selection": "選択範囲が存在しません。",
     "formula-to-score-operation.illegal-expression": "文字列を解析できませんでした: %0% ...",
     "formula-to-score-operation.not-exist-operate": "次の演算子は存在しません: %0%",
     "formula-to-score-operation.not-enough-operand": "演算子が不足しています。",

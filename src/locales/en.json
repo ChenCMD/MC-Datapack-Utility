@@ -17,6 +17,7 @@
     "create-datapack-template.quickpick-placeholder": "Select files/folders to generate",
     "create-datapack-template.complete": "Datapack template generation is complete.",
 
+    "formula-to-score-operation.not-selection": "The selection does not exist.",
     "formula-to-score-operation.illegal-expression": "illegal expression: %0% ...",
     "formula-to-score-operation.not-exist-operate": "not exist operate: %0%",
     "formula-to-score-operation.not-enough-operand": "not enough operand",

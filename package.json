@@ -69,6 +69,21 @@
 					"type": "string",
 					"markdownDescription": "%mccutil.config.scoreOperation.prefix%",
 					"default": "$MCCUTIL_"
+				},
+				"mccutil.scoreOperation.forceInputType": {
+					"type": "string",
+					"enum": [
+						"Default",
+						"Always Selection",
+						"Always InputBox"
+					],
+					"markdownEnumDescriptions": [
+						"%mccutil.scoreOperation.forceInputType.default%",
+						"%mccutil.scoreOperation.forceInputType.alwaysSelection%",
+						"%mccutil.scoreOperation.forceInputType.alwaysInputBox%"
+					],
+					"markdownDescription": "%mccutil.scoreOperation.forceInputType%",
+					"default": "Default"
 				}
 			}
 		}

@@ -12,9 +12,15 @@ export async function scoreOperation(): Promise<void> {
     if (!editor)
         return;
 
-    let text = editor.document.getText(editor.selection);
+    let text = '';
+    if (config.scoreOperation.forceInputType !== 'Always InputBox')
+        text = editor.document.getText(editor.selection);
     // セレクトされていないならInputBoxを表示
     if (text === '') {
+        if (config.scoreOperation.forceInputType === 'Always Selection') {
+            window.showErrorMessage(locale('formula-to-score-operation.not-selection'));
+            return;
+        }
         const res = await showInputBox(locale('formula-to-score-operation.formula'));
         if (!res || res === '')
             return;

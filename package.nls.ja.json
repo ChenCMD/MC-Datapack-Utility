@@ -4,5 +4,8 @@
     "mccutil.commands.scoreOperation.title": "計算式をscore opearationに変換",
     "mccutil.config.language": "MCCUtilが表示する言語",
     "mccutil.config.scoreOperation.prefix": "**計算式をscore operationに変更** のスコアホルダーの接頭辞",
-    "mccutil.scoreOperation.forceInputType": "**計算式をscore operationに変更** の式の入力方法"
+    "mccutil.scoreOperation.forceInputType": "**計算式をscore operationに変更** の式の入力方法",
+    "mccutil.scoreOperation.forceInputType.default": "選択範囲がない場合入力ボックスを使用する",
+    "mccutil.scoreOperation.forceInputType.alwaysSelection": "常に選択範囲のみを使用する",
+    "mccutil.scoreOperation.forceInputType.alwaysInputBox": "常に入力ボックスを使用する"
 }
