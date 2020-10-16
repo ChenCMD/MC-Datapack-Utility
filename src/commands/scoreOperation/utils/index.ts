@@ -32,7 +32,7 @@ import { ITableBase, IElementBase } from '../types/TableBase';
 /**
  * Search String From Table
  * @param {string} _str -**_table**内からこのパラメータを探す
- * @param {ReqSSFT} _table このテーブル内から**_str**を探す
+ * @param {ITablebase} _table このテーブル内から**_str**を探す
  */
 export function ssft(_str: string, _table: ITableBase): number {
     return _table.identifiers.indexOf(_str);
