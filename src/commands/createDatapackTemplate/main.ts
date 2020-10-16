@@ -109,7 +109,7 @@ async function create(dir: Uri) {
 
     createItems.forEach(async v => {
         v.relativeFilePath = path.join(dir.fsPath, datapackName, resolveNamespace(v.relativeFilePath, namespace));
-        if (v.type === 'file' && await file.pathAccessible(v.relativeFilePath))
+        if (v.type === 'file' && !await file.pathAccessible(v.relativeFilePath))
             await file.createFile(v.relativeFilePath, enconder.encode(v.content?.map(v2 => resolveVars(v2, namespace, getResourcePath(v.relativeFilePath, datapackRoot))).join('\r\n') ?? ''));
         if (v.type === 'folder')
             await file.createDir(v.relativeFilePath);
