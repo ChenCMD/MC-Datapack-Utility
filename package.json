@@ -78,11 +78,11 @@
 						"Always InputBox"
 					],
 					"markdownEnumDescriptions": [
-						"%mccutil.scoreOperation.forceInputType.default%",
-						"%mccutil.scoreOperation.forceInputType.alwaysSelection%",
-						"%mccutil.scoreOperation.forceInputType.alwaysInputBox%"
+						"%mccutil.config.scoreOperation.forceInputType.default%",
+						"%mccutil.config.scoreOperation.forceInputType.alwaysSelection%",
+						"%mccutil.config.scoreOperation.forceInputType.alwaysInputBox%"
 					],
-					"markdownDescription": "%mccutil.scoreOperation.forceInputType%",
+					"markdownDescription": "%mccutil.config.scoreOperation.forceInputType%",
 					"default": "Default"
 				}
 			}

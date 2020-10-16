@@ -2,5 +2,10 @@
     "mccutil.commands.createDatapackTemplate.title": "Create Datapack Template",
     "mccutil.commands.createFile.title": "Create Datapack File",
     "mccutil.commands.scoreOperation.title": "Formula to Score Operation",
-    "mccutil.config.language": "Languages ​​displayed by MCCUtil"
+    "mccutil.config.language": "Languages ​​displayed by MCCUtil",
+    "mccutil.config.scoreOperation.prefix": "**Formula to Score Operation**: Scoreholder prefix",
+    "mccutil.config.scoreOperation.forceInputType": "**Formula to Score Operation**: How to enter formula",
+    "mccutil.config.scoreOperation.forceInputType.default": "Use InputBox if there is no Selection",
+    "mccutil.config.scoreOperation.forceInputType.alwaysSelection": "Always use only Selection",
+    "mccutil.config.scoreOperation.forceInputType.alwaysInputBox": "Always use the InputBox"
 }
