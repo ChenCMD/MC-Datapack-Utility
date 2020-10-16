@@ -6,7 +6,7 @@ export const codeConsole = window.createOutputChannel('MC Commander Util');
 /**
  * @param {vscode.ExtensionContext} context
  */
-exports.activate = function activate(context: ExtensionContext) {
+export function activate(context: ExtensionContext): void {
 
     const config = workspace.getConfiguration('mccutil');
 
@@ -19,7 +19,7 @@ exports.activate = function activate(context: ExtensionContext) {
     disposable.push(commands.registerCommand('mccutil.commands.scoreOperation', scoreOperation));
 
     context.subscriptions.push(...disposable);
-};
+}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-exports.deactivete = function deactivate() { };
+export function deactivate(): void { }
