@@ -87,7 +87,7 @@ export function getFileType(filePath: string, datapackRoot: string): FileType | 
  * @param datapackRoot データパックのルートパス
  */
 export function getResourcePath(filePath: string, datapackRoot: string): string {
-    return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(/^data\/([^/]*)\/[^/]*\/(.*)$/, '$1:$2');
+    return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(/^data\/([^/]*)\/[^/]*\/(.*)\.(?:mcfunction|json)$/, '$1:$2');
 }
 
 /**

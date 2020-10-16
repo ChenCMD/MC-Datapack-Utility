@@ -1,21 +1,8 @@
 import { GenerateFileData, QuickPickFiles } from '../types/QuickPickFiles';
+import { VariableContainer } from '../types/VariableContainer';
 
-export function resolveVars(str: string, namespace: string, resourcePath: string): string {
-    str = resolveNamespace(str, namespace);
-    str = resolveResourcePath(str, resourcePath);
-    return str;
-}
-
-export function resolveNamespace(str: string, namespace: string): string {
-    return str.replace(/%namespace%/ig, namespace);
-}
-
-export function resolveResourcePath(str: string, resourcePath: string): string {
-    return str.replace(/%resourcePath%/ig, resourcePath);
-}
-
-export function resolveDatapackDiscription(str: string, datapackDiscription: string): string {
-    return str.replace(/%datapackDiscription%/ig, datapackDiscription);
+export function resolveVars(str: string, variables: VariableContainer): string {
+    return str.replace(/%.+%/g, match => variables[match.slice(1, -1)] ?? match);
 }
 
 export const packMcMetaFileData: GenerateFileData = {
@@ -39,7 +26,7 @@ export const defaultItems: QuickPickFiles[] = [
     {
         label: '#load.json & %namespace%:load.mcfunction',
         picked: true,
-        changes: [
+        generates: [
             {
                 type: 'file',
                 relativeFilePath: 'data/minecraft/tags/functions/load.json',
@@ -54,14 +41,14 @@ export const defaultItems: QuickPickFiles[] = [
             {
                 type: 'file',
                 relativeFilePath: 'data/%namespace%/functions/load.mcfunction',
-                content: ['']
+                content: []
             }
         ]
     },
     {
         label: '#tick.json & %namespace%:tick.mcfunction',
         picked: true,
-        changes: [
+        generates: [
             {
                 type: 'file',
                 relativeFilePath: 'data/minecraft/tags/functions/tick.json',
@@ -76,13 +63,13 @@ export const defaultItems: QuickPickFiles[] = [
             {
                 type: 'file',
                 relativeFilePath: 'data/%namespace%/functions/tick.mcfunction',
-                content: ['']
+                content: []
             }
         ]
     },
     {
         label: 'data/%namespace%/advancements/',
-        changes: [
+        generates: [
             {
                 type: 'folder',
                 relativeFilePath: 'data/%namespace%/advancements/'
@@ -91,7 +78,7 @@ export const defaultItems: QuickPickFiles[] = [
     },
     {
         label: 'data/%namespace%/dimensions/',
-        changes: [
+        generates: [
             {
                 type: 'folder',
                 relativeFilePath: 'data/%namespace%/dimensions/'
@@ -100,7 +87,7 @@ export const defaultItems: QuickPickFiles[] = [
     },
     {
         label: 'data/%namespace%/dimension_types/',
-        changes: [
+        generates: [
             {
                 type: 'folder',
                 relativeFilePath: 'data/%namespace%/dimension_types/'
@@ -109,7 +96,7 @@ export const defaultItems: QuickPickFiles[] = [
     },
     {
         label: 'data/%namespace%/loot_tables/',
-        changes: [
+        generates: [
             {
                 type: 'folder',
                 relativeFilePath: 'data/%namespace%/loot_tables/'
@@ -118,7 +105,7 @@ export const defaultItems: QuickPickFiles[] = [
     },
     {
         label: 'data/%namespace%/predicates/',
-        changes: [
+        generates: [
             {
                 type: 'folder',
                 relativeFilePath: 'data/%namespace%/predicates/'
@@ -127,7 +114,7 @@ export const defaultItems: QuickPickFiles[] = [
     },
     {
         label: 'data/%namespace%/recipes/',
-        changes: [
+        generates: [
             {
                 type: 'folder',
                 relativeFilePath: 'data/%namespace%/recipes/'
@@ -136,7 +123,7 @@ export const defaultItems: QuickPickFiles[] = [
     },
     {
         label: 'data/%namespace%/tags/blocks/',
-        changes: [
+        generates: [
             {
                 type: 'folder',
                 relativeFilePath: 'data/%namespace%/tags/blocks/'
@@ -145,7 +132,7 @@ export const defaultItems: QuickPickFiles[] = [
     },
     {
         label: 'data/%namespace%/tags/entity_types/',
-        changes: [
+        generates: [
             {
                 type: 'folder',
                 relativeFilePath: 'data/%namespace%/tags/entity_types/'
@@ -154,7 +141,7 @@ export const defaultItems: QuickPickFiles[] = [
     },
     {
         label: 'data/%namespace%/tags/fluids/',
-        changes: [
+        generates: [
             {
                 type: 'folder',
                 relativeFilePath: 'data/%namespace%/tags/fluids/'
@@ -163,7 +150,7 @@ export const defaultItems: QuickPickFiles[] = [
     },
     {
         label: 'data/%namespace%/tags/functions/',
-        changes: [
+        generates: [
             {
                 type: 'folder',
                 relativeFilePath: 'data/%namespace%/tags/functions/'
@@ -172,7 +159,7 @@ export const defaultItems: QuickPickFiles[] = [
     },
     {
         label: 'data/%namespace%/tags/items/',
-        changes: [
+        generates: [
             {
                 type: 'folder',
                 relativeFilePath: 'data/%namespace%/tags/items/'
