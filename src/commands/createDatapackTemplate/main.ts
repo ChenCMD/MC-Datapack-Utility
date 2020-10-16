@@ -78,7 +78,7 @@ async function create(dir: Uri): Promise<void> {
         return;
 
     // 名前空間入力
-    const namespace = await showInputBox('Namespace name', v => {
+    const namespace = await showInputBox(locale('create-datapack-template.namespace-name'), v => {
         const invalidChar = v.match(/[^a-z0-9./_-]/g);
         if (invalidChar)
             return locale('error.unexpected-character', invalidChar.join(', '));
