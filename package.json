@@ -64,6 +64,11 @@
 					],
 					"markdownDescription": "%mccutil.config.language%",
 					"default": "Default"
+				},
+				"mccutil.scoreOperation.prefix": {
+					"type": "string",
+					"markdownDescription": "%mccutil.config.scoreOperation.prefix%",
+					"default": "$MCCUTIL_"
 				}
 			}
 		}

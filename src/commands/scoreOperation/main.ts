@@ -1,13 +1,13 @@
 import { window } from 'vscode';
 import '../../utils/methodExtensions';
-import { codeConsole } from '../../extension';
+import { codeConsole, config } from '../../extension';
 import { showInputBox } from '../../utils/common';
 import { rpnToScoreOperation } from './utils/converter';
 import { rpnParse } from './utils/parser';
 import { locale } from '../../locales';
 
 export async function scoreOperation(): Promise<void> {
-    const prefix = '$MCCUTIL_';
+    const prefix = config.scoreOperation.prefix;
     const editor = window.activeTextEditor;
     if (!editor)
         return;
