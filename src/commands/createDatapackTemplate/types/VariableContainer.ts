@@ -1,3 +1,6 @@
 export interface VariableContainer {
-    [key: string]: string
+    datapackName? : string
+    datapackDescription? : string
+    namespace? : string
+    resourcePath? : string
 }
