@@ -8,6 +8,7 @@ import { locale } from '../../locales';
 
 export async function scoreOperation(): Promise<void> {
     const prefix = config.scoreOperation.prefix;
+    const objective = config.scoreOperation.objective;
     const editor = window.activeTextEditor;
     if (!editor)
         return;
@@ -29,7 +30,7 @@ export async function scoreOperation(): Promise<void> {
 
     try {
         const formula = rpnParse(text);
-        const result = rpnToScoreOperation(formula, prefix);
+        const result = rpnToScoreOperation(formula, prefix, objective);
         if (!result)
             return;
 
@@ -37,7 +38,7 @@ export async function scoreOperation(): Promise<void> {
             edit.replace(editor.selection, [
                 `# ${text}`,
                 `# ${locale('formula-to-score-operation.complate-text')}`,
-                'scoreboard objectives add _ dummy',
+                `scoreboard objectives add ${objective} dummy`,
                 Array.from(result.resValues).join('\r\n'),
                 '',
                 result.resFormulas.join('\r\n')

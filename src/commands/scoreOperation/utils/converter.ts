@@ -33,7 +33,7 @@ import { scoreTable } from '../types/ScoreTable';
 import { fnSplitOperator, ssft } from '.';
 import { locale } from '../../../locales';
 
-export function rpnToScoreOperation(formula: string, prefix: string): { resValues: Set<string>, resFormulas: string[] } | undefined {
+export function rpnToScoreOperation(formula: string, prefix: string, objective: string): { resValues: Set<string>, resFormulas: string[] } | undefined {
     let rpnQueue = new Deque<IQueueElement>();
     for (const elem of formula.split(/\s+|,/))
         rpnQueue = fnSplitOperator(elem, rpnQueue, scoreTable.table, scoreTable);
@@ -50,7 +50,7 @@ export function rpnToScoreOperation(formula: string, prefix: string): { resValue
             case 'num':
                 const put = elem.value.indexOf('0x') !== -1 ? parseInt(elem.value, 16) : parseFloat(elem.value);
                 calcStack.push(put);
-                resValues.add(`scoreboard players set ${prefix}${elem.value} _ ${put}`);
+                resValues.add(`scoreboard players set ${prefix}${elem.value} ${objective} ${put}`);
                 break;
             case 'str':
                 calcStack.push(elem.value);
@@ -66,7 +66,7 @@ export function rpnToScoreOperation(formula: string, prefix: string): { resValue
                     return undefined;
 
                 calcStack.push(arg2.toString());
-                resFormulas.push(`scoreboard players operation ${arg2.toString()} _ ${op} ${arg1.toString()} _`);
+                resFormulas.push(`scoreboard players operation ${arg2.toString()} ${objective} ${op} ${arg1.toString()} ${objective}`);
                 break;
         }
     }
