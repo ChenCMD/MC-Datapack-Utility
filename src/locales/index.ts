@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 
+import { codeConsole } from '../extension';
 import enLocale from './en.json';
 
 const locales: {
@@ -41,7 +42,7 @@ let language = '';
 export function locale(key: string, ...params: string[]): string {
     const value: string | undefined = locales[language][key] ?? locales.en[key];
 
-    return resolveLocalePlaceholders(value, params) ?? (console.error(new Error(`Unknown locale key “${key}”`)), '');
+    return resolveLocalePlaceholders(value, params) ?? (codeConsole.appendLine(`Unknown locale key “${key}”`), '');
 }
 
 export function resolveLocalePlaceholders(val: string | undefined, params?: string[]): string | undefined {
@@ -54,18 +55,11 @@ export function resolveLocalePlaceholders(val: string | undefined, params?: stri
 async function setupLanguage(code: string) {
     locales[code] = await import(`./${code}.json`);
     language = code;
-    console.log(`loading ${code}`);
+    codeConsole.appendLine(`loading ${code}`);
 }
 
 export async function loadLocale(setting: string, defaultLocaleCode: string): Promise<void> {
-    if (setting.toLowerCase() === 'default') {
-        if (!language) {
-            await setupLanguage(defaultLocaleCode);
-        } else if (language !== defaultLocaleCode) {
-            language = defaultLocaleCode;
-            await setupLanguage(defaultLocaleCode);
-        }
-    } else if (language !== setting) {
-        await setupLanguage(setting);
-    }
+    const specifiedLanguage = setting.toLowerCase() === 'default' ? defaultLocaleCode : setting;
+    if (language !== specifiedLanguage)
+        return setupLanguage(specifiedLanguage);
 }

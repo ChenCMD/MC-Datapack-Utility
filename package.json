@@ -64,6 +64,82 @@
 					],
 					"markdownDescription": "%mccutil.config.language%",
 					"default": "Default"
+				},
+				"mccutil.scoreOperation.prefix": {
+					"type": "string",
+					"markdownDescription": "%mccutil.config.scoreOperation.prefix%",
+					"default": "$MCCUTIL_"
+				},
+				"mccutil.scoreOperation.forceInputType": {
+					"type": "string",
+					"enum": [
+						"Default",
+						"Always Selection",
+						"Always InputBox"
+					],
+					"markdownEnumDescriptions": [
+						"%mccutil.config.scoreOperation.forceInputType.default%",
+						"%mccutil.config.scoreOperation.forceInputType.alwaysSelection%",
+						"%mccutil.config.scoreOperation.forceInputType.alwaysInputBox%"
+					],
+					"markdownDescription": "%mccutil.config.scoreOperation.forceInputType%",
+					"default": "Default"
+				},
+				"mccutil.createDatapackTemplate.customTemplate": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"additionalProperties": false,
+						"required": [
+							"label",
+							"generates"
+						],
+						"properties": {
+							"label": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.label%"
+							},
+							"generates": {
+								"type": "array",
+								"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.generates%",
+								"minItems": 1,
+								"items": {
+									"type": "object",
+									"additionalProperties": false,
+									"required": [
+										"type",
+										"relativeFilePath"
+									],
+									"properties": {
+										"type": {
+											"type":"string",
+											"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.generates.type%",
+											"enum": [
+												"file",
+												"folder"
+											]
+										},
+										"relativeFilePath": {
+											"type": "string",
+											"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath%",
+											"pattern": "^[^\\\\:*?\"<>|]+$",
+											"patternErrorMessage": "%mccutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath.error%"
+										},
+										"content": {
+											"type": "array",
+											"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.generates.content%",
+											"items": {
+												"type": "string",
+												"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.generates.content%"
+											}
+										}
+									}
+								}
+							}
+						}
+					},
+					"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate%",
+					"default": []
 				}
 			}
 		}
