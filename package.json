@@ -70,6 +70,11 @@
 					"markdownDescription": "%mccutil.config.scoreOperation.prefix%",
 					"default": "$MCCUTIL_"
 				},
+				"mccutil.scoreOperation.objective": {
+					"type": "string",
+					"markdownDescription": "%mccutil.config.scoreOperation.objective%",
+					"default": "_"
+				},
 				"mccutil.scoreOperation.forceInputType": {
 					"type": "string",
 					"enum": [
@@ -112,7 +117,7 @@
 									],
 									"properties": {
 										"type": {
-											"type":"string",
+											"type": "string",
 											"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.generates.type%",
 											"enum": [
 												"file",
