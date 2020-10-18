@@ -101,38 +101,33 @@ async function create(dir: Uri): Promise<void> {
     // 生成するファイル/フォルダを選択
     const quickPickItems = defaultItems;
     quickPickItems.push(...config.createDatapackTemplate.customTemplate);
-    const createItems = (await window.showQuickPick(quickPickItems.map(v => {
-        v.label = resolveVars(v.label, variableContainer);
-        return v;
-    }), {
+    quickPickItems.forEach(v => v.label = resolveVars(v.label, variableContainer));
+    const createItems = await window.showQuickPick(quickPickItems, {
         canPickMany: true,
         ignoreFocusOut: true,
         matchOnDescription: false,
         matchOnDetail: false,
         placeHolder: locale('create-datapack-template.quickpick-placeholder')
-    }))?.flat(v => v.generates);
+    }).then(v => v?.flat(v2 => v2.generates));
     if (!createItems)
         return;
 
     createItems.push(packMcMetaFileData);
     const enconder = new TextEncoder();
 
-    createItems.filter(v => v.type === 'file').forEach(async v => {
-        v.relativeFilePath = path.join(dir.fsPath, datapackName, resolveVars(v.relativeFilePath, variableContainer));
-        if (!await file.pathAccessible(v.relativeFilePath)) {
-            await file.createFile(v.relativeFilePath, enconder.encode(v.content?.map(v2 => {
-                const containerHasResourcePath: VariableContainer = {
-                    resourcePath: getResourcePath(v.relativeFilePath, datapackRoot)
-                };
-                Object.assign(containerHasResourcePath, variableContainer);
-                return resolveVars(v2, containerHasResourcePath);
-            }).join('\r\n') ?? ''));
-        }
-    });
-    createItems.filter(v => v.type === 'folder').forEach(async v => {
-        v.relativeFilePath = path.join(dir.fsPath, datapackName, resolveVars(v.relativeFilePath, variableContainer));
-        await file.createDir(v.relativeFilePath);
-    });
+    for (const item of createItems.filter(v => v.type === 'file')) {
+        item.relativeFilePath = path.join(dir.fsPath, datapackName, resolveVars(item.relativeFilePath, variableContainer));
+        if (await file.pathAccessible(item.relativeFilePath)) continue;
+
+        const containerHasResourcePath = Object.assign({ resourcePath: getResourcePath(item.relativeFilePath, datapackRoot) }, variableContainer);
+
+        const str = item.content?.map(v => resolveVars(v, containerHasResourcePath)).join('\r\n');
+        await file.createFile(item.relativeFilePath, enconder.encode(str ?? ''));
+    }
+    for (const item of createItems.filter(v => v.type === 'folder')) {
+        item.relativeFilePath = path.join(dir.fsPath, datapackName, resolveVars(item.relativeFilePath, variableContainer));
+        await file.createDir(item.relativeFilePath);
+    }
 
     window.showInformationMessage(locale('create-datapack-template.complete'));
 }
