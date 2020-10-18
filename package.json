@@ -104,6 +104,18 @@
 								"type": "string",
 								"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.label%"
 							},
+							"picked": {
+								"type": "boolean",
+								"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.picked%"
+							},
+							"description": {
+								"type": "string",
+								"markdownDesicription": "%mccutil.config.createDatapackTemplate.customTemplate.description%"
+							},
+							"detail": {
+								"type": "string",
+								"markdownDesicription": "%mccutil.config.createDatapackTemplate.customTemplate.detail%"
+							},
 							"generates": {
 								"type": "array",
 								"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.generates%",
