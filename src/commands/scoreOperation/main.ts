@@ -9,6 +9,7 @@ import { locale } from '../../locales';
 export async function scoreOperation(): Promise<void> {
     const prefix = config.scoreOperation.prefix;
     const objective = config.scoreOperation.objective;
+    const responce = config.scoreOperation.responce;
     const editor = window.activeTextEditor;
     if (!editor)
         return;
@@ -29,8 +30,8 @@ export async function scoreOperation(): Promise<void> {
     }
 
     try {
-        const formula = rpnParse(text);
-        const result = rpnToScoreOperation(formula, prefix, objective);
+        const formula = rpnParse(text.split('=').reverse().join('='));
+        const result = rpnToScoreOperation(formula, prefix, objective, responce);
         if (!result)
             return;
 
