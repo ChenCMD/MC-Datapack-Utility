@@ -5,7 +5,7 @@
     "mccutil.config.language": "Languages ​​displayed by MCCUtil",
     "mccutil.config.scoreOperation.prefix": "**Formula to Score Operation**: Scoreholder prefix",
     "mccutil.config.scoreOperation.objective": "**Formula to Score Operation**: Score Objective name",
-    "mccutil.config.scoreOperation.responce": "**Formula to Score Operation**: Score Objective name",
+    "mccutil.config.scoreOperation.responce": "**Formula to Score Operation**: This variable is assigned to the right side",
     "mccutil.config.scoreOperation.forceInputType": "**Formula to Score Operation**: How to enter formula",
     "mccutil.config.scoreOperation.forceInputType.default": "Use InputBox if there is no Selection",
     "mccutil.config.scoreOperation.forceInputType.alwaysSelection": "Always use only Selection",
