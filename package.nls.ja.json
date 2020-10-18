@@ -5,6 +5,7 @@
     "mccutil.config.language": "MCCUtilが表示する言語",
     "mccutil.config.scoreOperation.prefix": "**計算式をscore opearationに変換**: スコアホルダーの接頭辞",
     "mccutil.config.scoreOperation.objective": "**計算式をscore opearationに変換**: スコアオブジェクトの名前",
+    "mccutil.config.scoreOperation.responce": "**計算式をscore opearationに変換**: 最終的に右辺に代入される変数",
     "mccutil.config.scoreOperation.forceInputType": "**計算式をscore opearationに変換**: 式の入力方法",
     "mccutil.config.scoreOperation.forceInputType.default": "選択範囲がない場合入力ボックスを使用する",
     "mccutil.config.scoreOperation.forceInputType.alwaysSelection": "常に選択範囲のみを使用する",
