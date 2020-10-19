@@ -75,6 +75,11 @@
 					"markdownDescription": "%mccutil.config.scoreOperation.objective%",
 					"default": "_"
 				},
+				"mccutil.scoreOperation.responce": {
+					"type": "string",
+					"markdownDescription": "%mccutil.config.scoreOperation.responce%",
+					"default": "Return"
+				},
 				"mccutil.scoreOperation.forceInputType": {
 					"type": "string",
 					"enum": [
