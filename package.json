@@ -4,6 +4,7 @@
 	"description": "%mcdutil.description%",
 	"version": "1.0.0-beta.1",
 	"publisher": "ChenCMD",
+	"license": "MIT",
 	"author": "ChenCMD",
 	"contributors": [
 		"t5ugu"
