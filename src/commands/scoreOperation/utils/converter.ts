@@ -25,7 +25,7 @@
  * @version 1.0.0
 */
 
-import { Deque } from '../../../utils/Deque';
+import { Deque } from '../../../types/Deque';
 import { CalculateUnfinishedError } from '../types/Errors';
 import { opTable } from '../types/OperateTable';
 import { IQueueElement } from '../types/QueueElement';
@@ -33,10 +33,12 @@ import { scoreTable } from '../types/ScoreTable';
 import { fnSplitOperator, ssft } from '.';
 import { locale } from '../../../locales';
 
-export function rpnToScoreOperation(formula: string, prefix: string, objective: string): { resValues: Set<string>, resFormulas: string[] } | undefined {
+export function rpnToScoreOperation(formula: string, prefix: string, objective: string, responce: string): { resValues: Set<string>, resFormulas: string[] } | undefined {
     let rpnQueue = new Deque<IQueueElement>();
     for (const elem of formula.split(/\s+|,/))
         rpnQueue = fnSplitOperator(elem, rpnQueue, scoreTable.table, scoreTable);
+
+    rpnQueue.addFirst({ value: '=', type: 'op' }, rpnQueue.removeFirst(), { value: `${prefix}${responce}`, type: 'str' });
 
     const calcStack: (number | string)[] = [];
     const resValues = new Set<string>();
@@ -49,7 +51,7 @@ export function rpnToScoreOperation(formula: string, prefix: string, objective: 
         switch (elem.type) {
             case 'num':
                 const put = elem.value.indexOf('0x') !== -1 ? parseInt(elem.value, 16) : parseFloat(elem.value);
-                calcStack.push(put);
+                calcStack.push(`${prefix}${put}`);
                 resValues.add(`scoreboard players set ${prefix}${elem.value} ${objective} ${put}`);
                 break;
             case 'str':
@@ -66,7 +68,8 @@ export function rpnToScoreOperation(formula: string, prefix: string, objective: 
                     return undefined;
 
                 calcStack.push(arg2.toString());
-                resFormulas.push(`scoreboard players operation ${arg2.toString()} ${objective} ${op} ${arg1.toString()} ${objective}`);
+                if (rpnQueue.size() === 0 && op === '=') resFormulas.push(`scoreboard players operation ${arg1.toString()} ${objective} ${op} ${arg2.toString()} ${objective}`);
+                else /*           見やすさ            */ resFormulas.push(`scoreboard players operation ${arg2.toString()} ${objective} ${op} ${arg1.toString()} ${objective}`);
                 break;
         }
     }

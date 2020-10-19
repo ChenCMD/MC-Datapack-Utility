@@ -11,7 +11,7 @@ export async function createFile(filePath: string | Uri, content: Uint8Array): P
     if (await pathAccessible(filePath))
         throw FileSystemError.FileExists(filePath);
      else
-        workspace.fs.writeFile(filePath instanceof Uri ? filePath : Uri.file(filePath), content);
+        await workspace.fs.writeFile(filePath instanceof Uri ? filePath : Uri.file(filePath), content);
 }
 
 /**
@@ -19,7 +19,7 @@ export async function createFile(filePath: string | Uri, content: Uint8Array): P
  * @param dirPath ディレクトリパス
  */
 export async function createDir(dirPath: string | Uri): Promise<void> {
-    workspace.fs.createDirectory(dirPath instanceof Uri ? dirPath : Uri.file(dirPath));
+    await workspace.fs.createDirectory(dirPath instanceof Uri ? dirPath : Uri.file(dirPath));
 }
 
 /**
@@ -49,7 +49,7 @@ export async function createDir(dirPath: string | Uri): Promise<void> {
  * SOFTWARE.
  */
 export async function pathAccessible(testPath: string | Uri): Promise<boolean> {
-    return fsp.access(testPath instanceof Uri ? testPath.fsPath : testPath)
+    return await fsp.access(testPath instanceof Uri ? testPath.fsPath : testPath)
         .then(() => true)
         .catch(() => false);
 }

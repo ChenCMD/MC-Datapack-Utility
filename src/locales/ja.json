@@ -1,12 +1,12 @@
 {
-    "create-file.not-datapack": "datapack内ではないのでファイルを作成できません。",
+    "create-file.not-datapack": "datapack内ではないためファイルを作成できません。",
     "create-file.unknown-filetype": "ここにファイルを作成することはできません。",
     "create-file.structure": "ストラクチャーファイルは未サポートです。",
     "create-file.already-exists": "%0%は既に存在します。",
-    "create-file.function-name": "Function名",
+    "create-file.file-name": "%0%名",
 
     "create-datapack-template.inside-datapack": "選択したディレクトリはDatapack \"%0%\"の内部です。\n本当にここにDatapackを作成しますか？",
-    "create-datapack-template.duplicate-datapack": "データパック名が重複しています。\nDatapackにテンプレートを追加しますか？",
+    "create-datapack-template.duplicate-datapack": "データパック名が重複しています。\nDatapack \"%0%\"にテンプレートを追加しますか？",
     "create-datapack-template.name-blank": "データパック名を空欄にすることは出来ません。",
     "create-datapack-template.namespace-blank": "名前空間を空欄にすることは出来ません。",
     "create-datapack-template.dialog-title": "生成ディレクトリを選択",
@@ -23,7 +23,7 @@
     "formula-to-score-operation.not-enough-operand": "演算子が不足しています。",
     "formula-to-score-operation.too-enough-term": "項が多すぎます。",
     "formula-to-score-operation.formula": "計算式",
-    "formula-to-score-operation.complate-text": "必要に応じて、スコアホルダー名とスコアオブジェクト\"_\"を変更することができます。",
+    "formula-to-score-operation.complate-text": "必要に応じて、スコアホルダー名とスコアオブジェクトを変更することができます。",
 
     "too-much": "%0%が多すぎます。",
     "input-here": "%0%を入力",

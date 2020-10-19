@@ -25,7 +25,7 @@
  * @version 1.0.0
  */
 
-import { Deque } from '../../../utils/Deque';
+import { Deque } from '../../../types/Deque';
 import { ExpectedTokenError } from '../types/Errors';
 import { opTable } from '../types/OperateTable';
 import { ssft } from '.';
