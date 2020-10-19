@@ -1,6 +1,6 @@
 {
-	"name": "mc-commander-util",
-	"displayName": "Minecraft Commander Utilility",
+	"name": "mc-datapack-utility",
+	"displayName": "MC Datapack Utility",
 	"description": "",
 	"version": "1.0.0",
 	"author": "ChenCMD",
@@ -14,40 +14,40 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:mccutil.commands.createDatapackTemplate",
-		"onCommand:mccutil.commands.createFile",
-		"onCommand:mccutil.commands.scoreOperation"
+		"onCommand:mcdutil.commands.createDatapackTemplate",
+		"onCommand:mcdutil.commands.createFile",
+		"onCommand:mcdutil.commands.scoreOperation"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "mccutil.commands.createDatapackTemplate",
-				"title": "%mccutil.commands.createDatapackTemplate.title%",
+				"command": "mcdutil.commands.createDatapackTemplate",
+				"title": "%mcdutil.commands.createDatapackTemplate.title%",
 				"category": "Datapack"
 			},
 			{
-				"command": "mccutil.commands.createFile",
-				"title": "%mccutil.commands.createFile.title%",
+				"command": "mcdutil.commands.createFile",
+				"title": "%mcdutil.commands.createFile.title%",
 				"category": "Datapack"
 			},
 			{
-				"command": "mccutil.commands.scoreOperation",
-				"title": "%mccutil.commands.scoreOperation.title%",
+				"command": "mcdutil.commands.scoreOperation",
+				"title": "%mcdutil.commands.scoreOperation.title%",
 				"category": "Datapack"
 			}
 		],
 		"menus": {
 			"explorer/context": [
 				{
-					"command": "mccutil.commands.createFile",
+					"command": "mcdutil.commands.createFile",
 					"when": "explorerResourceIsFolder == true",
 					"group": "navigation@4"
 				}
 			],
 			"commandPalette": [
 				{
-					"command": "mccutil.commands.createFile",
+					"command": "mcdutil.commands.createFile",
 					"when": "false"
 				}
 			]
@@ -55,32 +55,32 @@
 		"configuration": {
 			"title": "Minecraft Commander Utilility",
 			"properties": {
-				"mccutil.language": {
+				"mcdutil.language": {
 					"type": "string",
 					"enum": [
 						"Default",
 						"en",
 						"ja"
 					],
-					"markdownDescription": "%mccutil.config.language%",
+					"markdownDescription": "%mcdutil.config.language%",
 					"default": "Default"
 				},
-				"mccutil.scoreOperation.prefix": {
+				"mcdutil.scoreOperation.prefix": {
 					"type": "string",
-					"markdownDescription": "%mccutil.config.scoreOperation.prefix%",
-					"default": "$MCCUTIL_"
+					"markdownDescription": "%mcdutil.config.scoreOperation.prefix%",
+					"default": "$MCDUtil_"
 				},
-				"mccutil.scoreOperation.objective": {
+				"mcdutil.scoreOperation.objective": {
 					"type": "string",
-					"markdownDescription": "%mccutil.config.scoreOperation.objective%",
+					"markdownDescription": "%mcdutil.config.scoreOperation.objective%",
 					"default": "_"
 				},
-				"mccutil.scoreOperation.responce": {
+				"mcdutil.scoreOperation.responce": {
 					"type": "string",
-					"markdownDescription": "%mccutil.config.scoreOperation.responce%",
+					"markdownDescription": "%mcdutil.config.scoreOperation.responce%",
 					"default": "Return"
 				},
-				"mccutil.scoreOperation.forceInputType": {
+				"mcdutil.scoreOperation.forceInputType": {
 					"type": "string",
 					"enum": [
 						"Default",
@@ -88,14 +88,14 @@
 						"Always InputBox"
 					],
 					"markdownEnumDescriptions": [
-						"%mccutil.config.scoreOperation.forceInputType.default%",
-						"%mccutil.config.scoreOperation.forceInputType.alwaysSelection%",
-						"%mccutil.config.scoreOperation.forceInputType.alwaysInputBox%"
+						"%mcdutil.config.scoreOperation.forceInputType.default%",
+						"%mcdutil.config.scoreOperation.forceInputType.alwaysSelection%",
+						"%mcdutil.config.scoreOperation.forceInputType.alwaysInputBox%"
 					],
-					"markdownDescription": "%mccutil.config.scoreOperation.forceInputType%",
+					"markdownDescription": "%mcdutil.config.scoreOperation.forceInputType%",
 					"default": "Default"
 				},
-				"mccutil.createDatapackTemplate.customTemplate": {
+				"mcdutil.createDatapackTemplate.customTemplate": {
 					"type": "array",
 					"items": {
 						"type": "object",
@@ -107,23 +107,23 @@
 						"properties": {
 							"label": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.label%"
+								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.label%"
 							},
 							"picked": {
 								"type": "boolean",
-								"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.picked%"
+								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.picked%"
 							},
 							"description": {
 								"type": "string",
-								"markdownDesicription": "%mccutil.config.createDatapackTemplate.customTemplate.description%"
+								"markdownDesicription": "%mcdutil.config.createDatapackTemplate.customTemplate.description%"
 							},
 							"detail": {
 								"type": "string",
-								"markdownDesicription": "%mccutil.config.createDatapackTemplate.customTemplate.detail%"
+								"markdownDesicription": "%mcdutil.config.createDatapackTemplate.customTemplate.detail%"
 							},
 							"generates": {
 								"type": "array",
-								"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.generates%",
+								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates%",
 								"minItems": 1,
 								"items": {
 									"type": "object",
@@ -135,7 +135,7 @@
 									"properties": {
 										"type": {
 											"type": "string",
-											"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.generates.type%",
+											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.type%",
 											"enum": [
 												"file",
 												"folder"
@@ -143,16 +143,16 @@
 										},
 										"relativeFilePath": {
 											"type": "string",
-											"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath%",
+											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath%",
 											"pattern": "^[^\\\\:*?\"<>|]+$",
-											"patternErrorMessage": "%mccutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath.error%"
+											"patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath.error%"
 										},
 										"content": {
 											"type": "array",
-											"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.generates.content%",
+											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content%",
 											"items": {
 												"type": "string",
-												"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate.generates.content%"
+												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content%"
 											}
 										}
 									}
@@ -160,183 +160,183 @@
 							}
 						}
 					},
-					"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate%",
+					"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate%",
 					"default": []
 				},
-				"mccutil.createFile.fileTemplate": {
+				"mcdutil.createFile.fileTemplate": {
 					"type": "object",
 					"additionalProperties": false,
 					"properties": {
 						"advancement": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"dimension": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"dimension_type": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"function": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"loot_table": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"predicate": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"recipe": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"tag/block": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"tag/entity_type": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"tag/fluid": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"tag/function": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"tag/item": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"worldgen/biome": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"worldgen/configured_carver": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"worldgen/configured_decorator": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"worldgen/configured_feature": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"worldgen/configured_structure_feature": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"worldgen/configured_surface_builder": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"worldgen/noise_settings": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"worldgen/processor_list": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
 						"worldgen/template_pool": {
 							"type": "array",
-							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
 								"type": "string",
-								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						}
 					},
-					"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+					"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 					"default": {}
 				}
 			}

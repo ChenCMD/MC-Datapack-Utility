@@ -3,7 +3,7 @@ import { createDatapack, createFile, scoreOperation } from './commands';
 import { loadLocale } from './locales';
 
 export const codeConsole = window.createOutputChannel('MC Commander Util');
-export let config = workspace.getConfiguration('mccutil');
+export let config = workspace.getConfiguration('mcdutil');
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -14,13 +14,13 @@ export function activate(context: ExtensionContext): void {
 
     const disposable = [];
 
-    disposable.push(commands.registerCommand('mccutil.commands.createDatapackTemplate', createDatapack));
-    disposable.push(commands.registerCommand('mccutil.commands.createFile', createFile));
-    disposable.push(commands.registerCommand('mccutil.commands.scoreOperation', scoreOperation));
+    disposable.push(commands.registerCommand('mcdutil.commands.createDatapackTemplate', createDatapack));
+    disposable.push(commands.registerCommand('mcdutil.commands.createFile', createFile));
+    disposable.push(commands.registerCommand('mcdutil.commands.scoreOperation', scoreOperation));
 
     disposable.push(workspace.onDidChangeConfiguration(e => {
-        if (e.affectsConfiguration('mccutil'))
-            config = workspace.getConfiguration('mccutil');
+        if (e.affectsConfiguration('mcdutil'))
+            config = workspace.getConfiguration('mcdutil');
     }));
 
     context.subscriptions.push(...disposable);
