@@ -118,10 +118,15 @@
 					"markdownDescription": "%mcdutil.config.scoreOperation.objective%",
 					"default": "_"
 				},
-				"mcdutil.scoreOperation.responce": {
+				"mcdutil.scoreOperation.response": {
 					"type": "string",
-					"markdownDescription": "%mcdutil.config.scoreOperation.responce%",
+					"markdownDescription": "%mcdutil.config.scoreOperation.response%",
 					"default": "Return"
+				},
+				"mcdutil.scoreOperation.temp": {
+					"type": "string",
+					"markdownDescription": "%mcdutil.config.scoreOperation.temp%",
+					"default": "Temp_"
 				},
 				"mcdutil.scoreOperation.forceInputType": {
 					"type": "string",
