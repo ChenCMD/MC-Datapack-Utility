@@ -16,4 +16,58 @@ This extension provides several useful features for Datapack development.
 - [Recommendations](#Recommendations)
 - [Special Thanks](#Special-Thanks)
 
+# Disclaimer
+
+> [MIT license](https://github.com/ChenCMD/mc-commander-util/blob/master/LICENCE)
+
+While we do our best to prevent damage to our files, it is possible that under rare, unforeseeable circumstances files may become corrupted.
+We cannot be held responsible when this happens.
+
+Please back up your important working data at all times. This is very important even if you are not using the MC Datapack Utility.
+
+# How to Install
+
 Writing in progress...
+
+# Features
+## Creating a datapack template
+
+Want to make the creation of a data pack easier?
+
+Open the command palette (default: `Ctrl + Shift + P`) and use `Create Datapack Template`.
+This feature makes creating a Datapack easy by simply answering a few questions in a flow.
+
+You can also create your own datapack template from config.
+
+![gif](https://raw.githubusercontent.com/ChenCMD/MC-Datapack-Utility/master/images/createDatapackTemplate.gif)
+
+## Quick file creation
+
+Is it too much trouble to write a .mcfunction or .json file every time?
+
+Right-click on the folder of the directory you want to create and use the `Create datapack file`.
+This feature allows you to create a file by just typing in the file name and automatically completing the extension.
+
+You can also set the default file contents for each file type from config.
+You can create a file with the contents described by describing it.
+
+![gif](https://raw.githubusercontent.com/ChenCMD/MC-Datapack-Utility/master/images/createFile.gif)
+
+## Converting formulas to score operation
+
+Too much trouble creating a formula in the scoreboard players operation?
+
+Open the command palette (default: `Ctrl + Shift + P`) and use `convert the formula to score opearation`.
+If you have a selection, the selection is converted to a `scoreboard players operation`, if not, the expression is converted to a `scoreboard players operation`.
+
+You can also use config to force the default Object and Prefix of the scoreholder and input method of the expression.
+
+![gif](https://raw.githubusercontent.com/ChenCMD/MC-Datapack-Utility/master/images/scoreOperation.gif)
+
+# Recommendations
+
+We recommend using [Datapack Helper Plus](https://marketplace.visualstudio.com/items?itemName=SPGoding.datapack-language-server) when creating Datapack in VSCode.
+
+This extension provides comprehensive support for Datapack and is very useful.
+
+# Special Thanks
