@@ -1,8 +1,12 @@
 import { Uri, window } from 'vscode';
 import * as file from '../../utils/file';
-import { getDatapackRoot, getFileTemplate, getFileType, getResourcePath, showInputBox } from '../../utils/common';
+import { getDatapackRoot, getNamespace, getResourcePath, showInputBox } from '../../utils/common';
 import path = require('path');
 import { locale } from '../../locales';
+import { getFileTemplate } from './utils';
+import { TextEncoder } from 'util';
+import { getFileType } from '../../types/FileTypes';
+import { resolveVars, VariableContainer } from '../../types/VariableContainer';
 
 export async function createFile(uri: Uri): Promise<void> {
     // Datapack内か確認
@@ -39,10 +43,15 @@ export async function createFile(uri: Uri): Promise<void> {
         return;
 
     // リソースパスの生成とファイルテンプレートの取得
-    const filePath = path.join(uri.fsPath, fileName);
-    const resourcePath = getResourcePath(filePath, datapackRoot);
-    const fileTemplate = await getFileTemplate(fileType, resourcePath);
+    const filePath = path.join(uri.fsPath, fileName + fileExtension);
+
+    const variableContainer: VariableContainer = {
+        datapackName: path.basename(datapackRoot),
+        namespace: getNamespace(filePath, datapackRoot),
+        resourcePath: getResourcePath(filePath, datapackRoot)
+    };
+    const fileTemplate = getFileTemplate(fileType).map(v => resolveVars(v, variableContainer));
 
     // 生成
-    file.createFile(filePath + fileExtension, fileTemplate);
+    await file.createFile(filePath, new TextEncoder().encode(fileTemplate.join('\r\n')));
 }

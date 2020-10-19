@@ -18,5 +18,6 @@
     "mccutil.config.createDatapackTemplate.customTemplate.generates.type": "file or folder",
     "mccutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath": "Relative file path under DatapackName (In case of file, extension is required)",
     "mccutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath.error": "\\\\ : * ? \" < > | cannot be used for file/folder names",
-    "mccutil.config.createDatapackTemplate.customTemplate.generates.content": "File contents (Basically one item is interpreted as one line)"
+    "mccutil.config.createDatapackTemplate.customTemplate.generates.content": "File contents (Basically one item is interpreted as one line)",
+    "mccutil.config.createFile.fileTemplate": "Contents described when the file is generated (can be set for each file type)"
 }

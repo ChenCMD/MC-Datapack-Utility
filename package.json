@@ -157,6 +157,182 @@
 					},
 					"markdownDescription": "%mccutil.config.createDatapackTemplate.customTemplate%",
 					"default": []
+				},
+				"mccutil.createFile.fileTemplate": {
+					"type": "object",
+					"additionalProperties": false,
+					"properties": {
+						"advancement": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"dimension": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"dimension_type": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"function": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"loot_table": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"predicate": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"recipe": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/block": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/entity_type": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/fluid": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/function": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/item": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"worldgen/biome": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"worldgen/configured_carver": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"worldgen/configured_decorator": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"worldgen/configured_feature": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"worldgen/configured_structure_feature": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"worldgen/configured_surface_builder": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"worldgen/noise_settings": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"worldgen/processor_list": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						},
+						"worldgen/template_pool": {
+							"type": "array",
+							"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mccutil.config.createFile.fileTemplate%"
+							}
+						}
+					},
+					"markdownDescription": "%mccutil.config.createFile.fileTemplate%",
+					"default": {}
 				}
 			}
 		}
