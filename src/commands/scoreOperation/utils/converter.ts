@@ -68,13 +68,12 @@ export function rpnToScoreOperation(formula: string, prefix: string, objective: 
                 if (!arg1 || !arg2)
                     return undefined;
 
-                if (rpnQueue.size() === 0 && op === '=') resFormulas.push(`scoreboard players operation ${arg1.toString()} ${objective} ${op} ${arg2.toString()} ${objective}`);
-                if (arg2.toString() !== `${prefix}${response}`) {
+                if (arg2.toString() !== `${prefix}${response}` && arg2.toString().indexOf(`${prefix}${temp}`) === -1) {
                     resFormulas.push(`scoreboard players operation ${prefix}${temp}${++tempCount} ${objective} = ${arg2} ${objective}`);
                     arg2 = `${prefix}Temp_${tempCount}`;
                 }
-
-                resFormulas.push(`scoreboard players operation ${arg2.toString()} ${objective} ${op} ${arg1.toString()} ${objective}`);
+                if (rpnQueue.size() === 0 && op === '=') resFormulas.push(`scoreboard players operation ${arg1.toString()} ${objective} ${op} ${arg2.toString()} ${objective}`);
+                else resFormulas.push(`scoreboard players operation ${arg2.toString()} ${objective} ${op} ${arg1.toString()} ${objective}`);
 
                 calcStack.push(arg2.toString());
                 break;
