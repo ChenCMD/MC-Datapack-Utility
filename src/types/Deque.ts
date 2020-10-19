@@ -1,4 +1,4 @@
-import { ErrorTemplate } from './interfaces';
+import { ErrorTemplate } from '../utils/interfaces';
 
 export class Deque<E> implements IterableIterator<E> {
     private data: Array<E>;

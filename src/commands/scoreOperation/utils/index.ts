@@ -25,7 +25,7 @@
  * @version 1.0.0
  */
 
-import { Deque } from '../../../utils/Deque';
+import { Deque } from '../../../types/Deque';
 import { IQueueElement } from '../types/QueueElement';
 import { ITableBase, IElementBase } from '../types/TableBase';
 
