@@ -116,17 +116,17 @@ async function create(dir: Uri): Promise<void> {
     const enconder = new TextEncoder();
 
     for (const item of createItems.filter(v => v.type === 'file')) {
-        item.relativeFilePath = path.join(dir.fsPath, datapackName, resolveVars(item.relativeFilePath, variableContainer));
-        if (await file.pathAccessible(item.relativeFilePath)) continue;
+        const filePath = path.join(dir.fsPath, datapackName, resolveVars(item.relativeFilePath, variableContainer));
+        if (await file.pathAccessible(filePath)) continue;
 
-        const containerHasResourcePath = Object.assign({ resourcePath: getResourcePath(item.relativeFilePath, datapackRoot) }, variableContainer);
+        const containerHasResourcePath = Object.assign({ resourcePath: getResourcePath(filePath, datapackRoot) } as VariableContainer, variableContainer);
 
         const str = item.content?.map(v => resolveVars(v, containerHasResourcePath)).join('\r\n');
-        await file.createFile(item.relativeFilePath, enconder.encode(str ?? ''));
+        await file.createFile(filePath, enconder.encode(str ?? ''));
     }
     for (const item of createItems.filter(v => v.type === 'folder')) {
-        item.relativeFilePath = path.join(dir.fsPath, datapackName, resolveVars(item.relativeFilePath, variableContainer));
-        await file.createDir(item.relativeFilePath);
+        const filePath = path.join(dir.fsPath, datapackName, resolveVars(item.relativeFilePath, variableContainer));
+        await file.createDir(filePath);
     }
 
     window.showInformationMessage(locale('create-datapack-template.complete'));
