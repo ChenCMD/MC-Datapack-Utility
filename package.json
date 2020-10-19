@@ -70,6 +70,16 @@
 				"category": "Datapack"
 			}
 		],
+		"keybindings": [
+			{
+				"command": "mcdutil.commands.createDatapackTemplate",
+				"key": "Alt+Shift+D Alt+Shift+T"
+			},
+			{
+				"command": "mcdutil.commands.scoreOperation",
+				"key": "Alt+Shift+D Alt+Shift+S"
+			}
+		],
 		"menus": {
 			"explorer/context": [
 				{
