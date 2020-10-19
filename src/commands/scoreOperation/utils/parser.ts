@@ -67,7 +67,7 @@ export function rpnParse(exp: string): string {
         }
 
         if (!op) {
-            const variableLiteral = exp.match(/^([a-z]+)/i)?.[0];
+            const variableLiteral = exp.match(/^(\S+)/i)?.[0];
             if (variableLiteral) {
                 polish.push(variableLiteral);
                 exp = exp.slice(variableLiteral.length);
