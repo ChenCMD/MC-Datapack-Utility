@@ -1,5 +1,5 @@
 {
-    "create-file.not-datapack": "datapack内ではないのでファイルを作成できません。",
+    "create-file.not-datapack": "datapack内ではないためファイルを作成できません。",
     "create-file.unknown-filetype": "ここにファイルを作成することはできません。",
     "create-file.structure": "ストラクチャーファイルは未サポートです。",
     "create-file.already-exists": "%0%は既に存在します。",
