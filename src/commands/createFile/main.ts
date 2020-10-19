@@ -28,7 +28,7 @@ export async function createFile(uri: Uri): Promise<void> {
     const fileExtension = fileType === 'function' ? '.mcfunction' : '.json';
 
     // ファイル名入力
-    const fileName = await showInputBox(locale('create-file.function-name'), async v => {
+    const fileName = await showInputBox(locale('create-file.file-name', fileType), async v => {
         const invalidChar = v.match(/[^a-z0-9./_-]/g);
         if (invalidChar)
             return locale('error.unexpected-character', invalidChar.join(', '));

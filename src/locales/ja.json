@@ -3,7 +3,7 @@
     "create-file.unknown-filetype": "ここにファイルを作成することはできません。",
     "create-file.structure": "ストラクチャーファイルは未サポートです。",
     "create-file.already-exists": "%0%は既に存在します。",
-    "create-file.function-name": "Function名",
+    "create-file.file-name": "%0%名",
 
     "create-datapack-template.inside-datapack": "選択したディレクトリはDatapack \"%0%\"の内部です。\n本当にここにDatapackを作成しますか？",
     "create-datapack-template.duplicate-datapack": "データパック名が重複しています。\nDatapackにテンプレートを追加しますか？",

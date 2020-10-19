@@ -3,7 +3,7 @@
     "create-file.unknown-filetype": "You can't create a file here.",
     "create-file.structure": "Structure files are not supported.",
     "create-file.already-exists": "This %0% already exists.",
-    "create-file.function-name": "Function name",
+    "create-file.file-name": "%0% name",
 
     "create-datapack-template.inside-datapack": "The selected directory is inside Datapack \"%0%\".\nWould you like to create a Datapack here?",
     "create-datapack-template.duplicate-datapack": "Duplicate datapack name.\nWould you like to add a template to your Datapack?",
