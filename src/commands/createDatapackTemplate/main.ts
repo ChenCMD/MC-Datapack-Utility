@@ -3,12 +3,12 @@ import { getDatapackRoot, getResourcePath, isDatapackRoot, showInputBox } from '
 import path from 'path';
 import { TextEncoder } from 'util';
 import '../../utils/methodExtensions';
-import { defaultItems, resolveVars, packMcMetaFileData } from './utils';
+import { defaultItems, packMcMetaFileData } from './types/Items';
 import * as file from '../../utils/file';
 import { locale } from '../../locales';
 import { createMessageItemsHasId, MessageItemHasId } from './types/MessageItems';
 import { config } from '../../extension';
-import { VariableContainer } from './types/VariableContainer';
+import { resolveVars, VariableContainer } from '../../types/VariableContainer';
 
 export async function createDatapack(): Promise<void> {
     // フォルダ選択
