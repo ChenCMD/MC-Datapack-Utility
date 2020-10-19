@@ -61,5 +61,5 @@ async function setupLanguage(code: string) {
 export async function loadLocale(setting: string, defaultLocaleCode: string): Promise<void> {
     const specifiedLanguage = setting.toLowerCase() === 'default' ? defaultLocaleCode : setting;
     if (language !== specifiedLanguage)
-        return setupLanguage(specifiedLanguage);
+        await setupLanguage(specifiedLanguage);
 }
