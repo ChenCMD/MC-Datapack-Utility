@@ -60,7 +60,7 @@ async function create(dir: Uri): Promise<void> {
     // データパック名の被りをチェック
     if (await isDatapackRoot(datapackRoot)) {
         // 内部なら確認
-        const warningMessage = locale('create-datapack-template.duplicate-datapack');
+        const warningMessage = locale('create-datapack-template.duplicate-datapack', path.basename(datapackRoot));
         const result = await window.showWarningMessage<MessageItemHasId>(warningMessage,
             createMessageItemsHasId('yes'),
             createMessageItemsHasId('rename'),

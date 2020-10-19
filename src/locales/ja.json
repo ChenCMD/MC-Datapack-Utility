@@ -6,7 +6,7 @@
     "create-file.file-name": "%0%名",
 
     "create-datapack-template.inside-datapack": "選択したディレクトリはDatapack \"%0%\"の内部です。\n本当にここにDatapackを作成しますか？",
-    "create-datapack-template.duplicate-datapack": "データパック名が重複しています。\nDatapackにテンプレートを追加しますか？",
+    "create-datapack-template.duplicate-datapack": "データパック名が重複しています。\nDatapack \"%0%\"にテンプレートを追加しますか？",
     "create-datapack-template.name-blank": "データパック名を空欄にすることは出来ません。",
     "create-datapack-template.namespace-blank": "名前空間を空欄にすることは出来ません。",
     "create-datapack-template.dialog-title": "生成ディレクトリを選択",
