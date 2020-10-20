@@ -34,7 +34,7 @@ Writing in progress...
 
 Want to make the creation of a data pack easier?
 
-Open the command palette (default: `Ctrl + Shift + P`) and use `Create Datapack Template`.
+Press `Alt + Shift + D -> Alt + Shift + T`.
 This feature makes creating a Datapack easy by simply answering a few questions in a flow.
 
 You can also create your own datapack template from config.
@@ -57,7 +57,7 @@ You can create a file with the contents described by describing it.
 
 Too much trouble creating a formula in the scoreboard players operation?
 
-Open the command palette (default: `Ctrl + Shift + P`) and use `convert the formula to score opearation`.
+Press `Alt + Shift + D -> Alt + Shift + S`.
 If you have a selection, the selection is converted to a `scoreboard players operation`, if not, the expression is converted to a `scoreboard players operation`.
 
 You can also use config to force the default Object and Prefix of the scoreholder and input method of the expression.
