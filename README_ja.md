@@ -71,3 +71,6 @@ VSCodeでDatapackを作成する際は[Datapack Helper Plus](https://marketplace
 この拡張機能はDatapackに関する包括的なサポートを行っており、非常に便利です。
 
 # Special Thanks
+
+[藪](https://twitter.com/Yavu_Minecraft)氏にMC Datapack Utilityのアイコンを作成していただきました。
+この場をお借りしてお礼申し上げます。

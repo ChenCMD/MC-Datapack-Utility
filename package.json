@@ -6,6 +6,7 @@
 	"publisher": "ChenCMD",
 	"license": "MIT",
 	"author": "ChenCMD",
+	"icon": "icon.png",
 	"contributors": [
 		"t5ugu"
 	],
