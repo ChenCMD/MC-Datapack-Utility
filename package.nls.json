@@ -1,17 +1,17 @@
 {
     "mcdutil.description": "Extensions that provide multiple features that are useful for developing Datapack",
-    "mcdutil.commands.createDatapackTemplate.title": "Create Datapack Template",
-    "mcdutil.commands.createFile.title": "Create Datapack File",
-    "mcdutil.commands.scoreOperation.title": "Formula to Score Operation",
+    "mcdutil.commands.createDatapackTemplate.title": "Create Datapack template",
+    "mcdutil.commands.createFile.title": "Create Datapack file",
+    "mcdutil.commands.scoreOperation.title": "Convert Formula to Score Operation",
     "mcdutil.config.language": "Languages ​​displayed by MC Datapack Utility",
-    "mcdutil.config.scoreOperation.prefix": "**Formula to Score Operation**: Scoreholder prefix",
-    "mcdutil.config.scoreOperation.objective": "**Formula to Score Operation**: Score Objective name",
-    "mcdutil.config.scoreOperation.responce": "**Formula to Score Operation**: This variable is assigned to the right side",
-    "mcdutil.config.scoreOperation.forceInputType": "**Formula to Score Operation**: How to enter formula",
+    "mcdutil.config.scoreOperation.prefix": "**Convert Formula to Score Operation**: Scoreholder prefix",
+    "mcdutil.config.scoreOperation.objective": "**Convert Formula to Score Operation**: Score Objective name",
+    "mcdutil.config.scoreOperation.responce": "**Convert Formula to Score Operation**: This variable is assigned to the right side",
+    "mcdutil.config.scoreOperation.forceInputType": "**Convert Formula to Score Operation**: How to enter formula",
     "mcdutil.config.scoreOperation.forceInputType.default": "Use InputBox if there is no Selection",
     "mcdutil.config.scoreOperation.forceInputType.alwaysSelection": "Always use only Selection",
     "mcdutil.config.scoreOperation.forceInputType.alwaysInputBox": "Always use the InputBox",
-    "mcdutil.config.createDatapackTemplate.customTemplate": "**Create Datapack Template**: Custom template",
+    "mcdutil.config.createDatapackTemplate.customTemplate": "**Create Datapack template**: Custom template",
     "mcdutil.config.createDatapackTemplate.customTemplate.label": "The name displayed in the selection field",
     "mcdutil.config.createDatapackTemplate.customTemplate.picked": "Whether it is selected by default (default: false)",
     "mcdutil.config.createDatapackTemplate.customTemplate.description": "Explanatory text",
@@ -21,5 +21,5 @@
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath": "Relative file path under DatapackName (In case of file, extension is required)",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath.error": "\\\\ : * ? \" < > | cannot be used for file/folder names",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.content": "File contents (Basically one item is interpreted as one line)",
-    "mcdutil.config.createFile.fileTemplate": "Contents described when the file is generated (can be set for each file type)"
+    "mcdutil.config.createFile.fileTemplate": "**Add template to Datapack**: Contents described when the file is generated (can be set for each file type)"
 }
