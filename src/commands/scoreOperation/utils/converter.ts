@@ -33,16 +33,17 @@ import { scoreTable } from '../types/ScoreTable';
 import { fnSplitOperator, ssft } from '.';
 import { locale } from '../../../locales';
 
-export function rpnToScoreOperation(formula: string, prefix: string, objective: string, responce: string): { resValues: Set<string>, resFormulas: string[] } | undefined {
+export function rpnToScoreOperation(formula: string, prefix: string, objective: string, response: string, temp: string): { resValues: Set<string>, resFormulas: string[] } | undefined {
     let rpnQueue = new Deque<IQueueElement>();
     for (const elem of formula.split(/\s+|,/))
         rpnQueue = fnSplitOperator(elem, rpnQueue, scoreTable.table, scoreTable);
 
-    rpnQueue.addFirst({ value: '=', type: 'op' }, rpnQueue.removeFirst(), { value: `${prefix}${responce}`, type: 'str' });
+    rpnQueue.addFirst({ value: '=', type: 'op' }, rpnQueue.removeFirst(), { value: `${prefix}${response}`, type: 'str' });
 
     const calcStack: (number | string)[] = [];
     const resValues = new Set<string>();
     const resFormulas: string[] = [];
+    let tempCount = 0;
     while (rpnQueue.size() > 0) {
         const elem = rpnQueue.removeFirst();
         if (!elem)
@@ -62,14 +63,19 @@ export function rpnToScoreOperation(formula: string, prefix: string, objective: 
                 const operate = scoreTable.table[ssft(elem.value, scoreTable)];
                 const op = operate.axiom;
                 const arg1 = calcStack.pop();
-                const arg2 = calcStack.pop();
+                let arg2 = calcStack.pop();
 
                 if (!arg1 || !arg2)
                     return undefined;
 
-                calcStack.push(arg2.toString());
+                if (arg2.toString() !== `${prefix}${response}` && arg2.toString().indexOf(`${prefix}${temp}`) === -1) {
+                    resFormulas.push(`scoreboard players operation ${prefix}${temp}${++tempCount} ${objective} = ${arg2} ${objective}`);
+                    arg2 = `${prefix}Temp_${tempCount}`;
+                }
                 if (rpnQueue.size() === 0 && op === '=') resFormulas.push(`scoreboard players operation ${arg1.toString()} ${objective} ${op} ${arg2.toString()} ${objective}`);
-                else /*           見やすさ            */ resFormulas.push(`scoreboard players operation ${arg2.toString()} ${objective} ${op} ${arg1.toString()} ${objective}`);
+                else resFormulas.push(`scoreboard players operation ${arg2.toString()} ${objective} ${op} ${arg1.toString()} ${objective}`);
+
+                calcStack.push(arg2.toString());
                 break;
         }
     }
