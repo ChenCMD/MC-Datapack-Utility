@@ -6,7 +6,7 @@ import '../../utils/methodExtensions';
 import { defaultItems, packMcMetaFileData } from './types/Items';
 import * as file from '../../utils/file';
 import { locale } from '../../locales';
-import { createMessageItemsHasId, MessageItemHasId } from './types/MessageItems';
+import { createMessageItemsHasId } from './types/MessageItems';
 import { config } from '../../extension';
 import { resolveVars, VariableContainer } from '../../types/VariableContainer';
 
@@ -20,25 +20,20 @@ export async function createDatapack(): Promise<void> {
         openLabel: locale('create-datapack-template.dialog-label'),
         title: locale('create-datapack-template.dialog-title')
     }).then(v => v?.[0]);
-    if (!dir) // Escで終了
-        return;
+    if (!dir) return;
 
     // Datapack内部かチェック
     const datapackRoot = await getDatapackRoot(dir.fsPath);
     if (datapackRoot) {
         // 内部なら確認
         const warningMessage = locale('create-datapack-template.inside-datapack', path.basename(datapackRoot));
-        const result = await window.showWarningMessage<MessageItemHasId>(warningMessage,
+        const result = await window.showWarningMessage(warningMessage,
             createMessageItemsHasId('yes'),
             createMessageItemsHasId('reselect'),
             createMessageItemsHasId('no')
         );
-        if (result === undefined || result.id === 'no')
-            return;
-        if (result.id === 'reselect') {
-            createDatapack();
-            return;
-        }
+        if (result === undefined || result.id === 'no') return;
+        if (result.id === 'reselect') return await createDatapack();
     }
     create(dir);
 }
@@ -47,46 +42,38 @@ async function create(dir: Uri): Promise<void> {
     // データパック名入力
     const datapackName = await showInputBox(locale('create-datapack-template.datapack-name'), v => {
         const invalidChar = v.match(/[\\/:*?"<>|]/g);
-        if (invalidChar)
-            return locale('error.unexpected-character', invalidChar.join(', '));
+        if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '));
     });
-    if (datapackName === undefined) // Escで終了
-        return;
+    if (datapackName === undefined) return;
     if (datapackName === '') {
         window.showErrorMessage(locale('create-datapack-template.name-blank'));
         return;
     }
-    const datapackRoot = path.join(dir.fsPath, datapackName);
+
     // データパック名の被りをチェック
+    const datapackRoot = path.join(dir.fsPath, datapackName);
     if (await isDatapackRoot(datapackRoot)) {
         // 内部なら確認
         const warningMessage = locale('create-datapack-template.duplicate-datapack', path.basename(datapackRoot));
-        const result = await window.showWarningMessage<MessageItemHasId>(warningMessage,
+        const result = await window.showWarningMessage(warningMessage,
             createMessageItemsHasId('yes'),
             createMessageItemsHasId('rename'),
             createMessageItemsHasId('no')
         );
-        if (result === undefined || result.id === 'no')
-            return;
-        if (result.id === 'rename') {
-            create(dir);
-            return;
-        }
+        if (result === undefined || result.id === 'no') return;
+        if (result.id === 'rename') return create(dir);
     }
 
     // 説明入力
     const datapackDescription = await showInputBox(locale('create-datapack-template.datapack-description'));
-    if (datapackDescription === undefined) // Escで終了
-        return;
+    if (datapackDescription === undefined) return;
 
     // 名前空間入力
     const namespace = await showInputBox(locale('create-datapack-template.namespace-name'), v => {
         const invalidChar = v.match(/[^a-z0-9./_-]/g);
-        if (invalidChar)
-            return locale('error.unexpected-character', invalidChar.join(', '));
+        if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '));
     });
-    if (namespace === undefined) // Escで終了
-        return;
+    if (namespace === undefined) return;
     if (namespace === '') {
         window.showErrorMessage(locale('create-datapack-template.namespace-blank'));
         return;
@@ -109,8 +96,7 @@ async function create(dir: Uri): Promise<void> {
         matchOnDetail: false,
         placeHolder: locale('create-datapack-template.quickpick-placeholder')
     }).then(v => v?.flat(v2 => v2.generates));
-    if (!createItems)
-        return;
+    if (!createItems) return;
 
     createItems.push(packMcMetaFileData);
     const enconder = new TextEncoder();
@@ -120,7 +106,6 @@ async function create(dir: Uri): Promise<void> {
         if (await file.pathAccessible(filePath)) continue;
 
         const containerHasResourcePath = Object.assign({ resourcePath: getResourcePath(filePath, datapackRoot) } as VariableContainer, variableContainer);
-
         const str = item.content?.map(v => resolveVars(v, containerHasResourcePath)).join('\r\n');
         await file.createFile(filePath, enconder.encode(str ?? ''));
     }
@@ -128,6 +113,5 @@ async function create(dir: Uri): Promise<void> {
         const filePath = path.join(dir.fsPath, datapackName, resolveVars(item.relativeFilePath, variableContainer));
         await file.createDir(filePath);
     }
-
     window.showInformationMessage(locale('create-datapack-template.complete'));
 }
