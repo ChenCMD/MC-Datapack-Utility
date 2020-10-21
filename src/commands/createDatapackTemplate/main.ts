@@ -3,11 +3,10 @@ import { getDatapackRoot, getResourcePath, isDatapackRoot, showInputBox } from '
 import path from 'path';
 import { TextEncoder } from 'util';
 import '../../utils/methodExtensions';
-import { defaultItems, packMcMetaFileData } from './types/Items';
+import { getPackMcMetaData, getPickItems } from './types/Items';
 import * as file from '../../utils/file';
 import { locale } from '../../locales';
 import { createMessageItemsHasId } from './types/MessageItems';
-import { config } from '../../extension';
 import { resolveVars, VariableContainer } from '../../types/VariableContainer';
 
 export async function createDatapack(): Promise<void> {
@@ -86,8 +85,7 @@ async function create(dir: Uri): Promise<void> {
     };
 
     // 生成するファイル/フォルダを選択
-    const quickPickItems = defaultItems;
-    quickPickItems.push(...config.createDatapackTemplate.customTemplate);
+    const quickPickItems = getPickItems();
     quickPickItems.forEach(v => v.label = resolveVars(v.label, variableContainer));
     const createItems = await window.showQuickPick(quickPickItems, {
         canPickMany: true,
@@ -98,7 +96,7 @@ async function create(dir: Uri): Promise<void> {
     }).then(v => v?.flat(v2 => v2.generates));
     if (!createItems) return;
 
-    createItems.push(packMcMetaFileData);
+    createItems.push(getPackMcMetaData());
     const enconder = new TextEncoder();
 
     for (const item of createItems.filter(v => v.type === 'file')) {
