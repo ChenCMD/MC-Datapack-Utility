@@ -1,5 +1,5 @@
 import { Range, Uri, window } from 'vscode';
-import * as file from '../../utils/file';
+import { pathAccessible, createFile as create } from '../../utils/file';
 import { getDatapackRoot, getNamespace, getResourcePath, showInputBox } from '../../utils/common';
 import path = require('path');
 import { locale } from '../../locales';
@@ -29,27 +29,48 @@ export async function createFile(uri: Uri): Promise<void> {
         return;
     }
     // 拡張子確定
-    const fileExtension = fileType === 'function' ? '.mcfunction' : '.json';
+    const fileExtension = fileType === 'function' ? 'mcfunction' : 'json';
 
     // ファイル名入力
     const fileName = await showInputBox(locale('create-file.file-name', fileType), async v => {
         const invalidChar = v.match(/[^a-z0-9./_-]/g);
         if (invalidChar)
             return locale('error.unexpected-character', invalidChar.join(', '));
-        if (await file.pathAccessible(path.join(uri.fsPath, v + fileExtension)))
-            return locale('create-file.already-exists', v + fileExtension);
+        if (await pathAccessible(path.join(uri.fsPath, `${v}.${fileExtension}`)))
+            return locale('create-file.already-exists', `${v}.${fileExtension}`);
     });
     if (!fileName)
         return;
 
     // リソースパスの生成とファイルテンプレートの取得
-    const filePath = path.join(uri.fsPath, fileName + fileExtension);
+    const filePath = path.join(uri.fsPath, `${fileName}.${fileExtension}`);
+
+    const openFilePath = window.activeTextEditor?.document.uri.fsPath;
+    let openFileResourcePath = '';
+    let openFileName = '';
+    let openFileType = '';
+    let openFileExtname = '';
+    if (openFilePath) {
+        openFileType = getFileType(openFilePath, datapackRoot) ?? '';
+        openFileResourcePath = openFileType ? getResourcePath(openFilePath, datapackRoot) : '';
+        openFileName = path.parse(openFilePath).name;
+        openFileExtname = path.extname(openFilePath).slice(1);
+    }
 
     const variableContainer: VariableContainer = {
         datapackName: path.basename(datapackRoot),
         namespace: getNamespace(filePath, datapackRoot),
-        resourcePath: getResourcePath(filePath, datapackRoot),
-        openFile: window.activeTextEditor?.document.uri.fsPath ? getResourcePath(window.activeTextEditor.document.uri.fsPath, datapackRoot) : '',
+
+        fileResourcePath: getResourcePath(filePath, datapackRoot),
+        fileName: fileName,
+        fileType: fileType,
+        fileExtname: fileExtension,
+
+        nowOpenFileResourcePath: openFileResourcePath,
+        nowOpenFileName: openFileName,
+        nowOpenFileType: openFileType,
+        nowOpenFileExtname: openFileExtname,
+
         cursor: ''
     };
     const fileTemplate = getFileTemplate(fileType);
@@ -60,7 +81,7 @@ export async function createFile(uri: Uri): Promise<void> {
     });
 
     // 生成
-    await file.createFile(filePath, new TextEncoder().encode(resolveVars(fileTemplate.join('\r\n'), variableContainer)));
+    await create(filePath, new TextEncoder().encode(resolveVars(fileTemplate.join('\r\n'), variableContainer)));
     // ファイルを開く
-    await window.showTextDocument(Uri.file(filePath), { selection: cursor});
+    await window.showTextDocument(Uri.file(filePath), { selection: cursor });
 }
