@@ -48,7 +48,8 @@ export async function createFile(uri: Uri): Promise<void> {
     const variableContainer: VariableContainer = {
         datapackName: path.basename(datapackRoot),
         namespace: getNamespace(filePath, datapackRoot),
-        resourcePath: getResourcePath(filePath, datapackRoot)
+        resourcePath: getResourcePath(filePath, datapackRoot),
+        openFile: window.activeTextEditor?.document.uri.fsPath ? getResourcePath(window.activeTextEditor.document.uri.fsPath, datapackRoot) : ''
     };
     const fileTemplate = getFileTemplate(fileType).map(v => resolveVars(v, variableContainer));
 
