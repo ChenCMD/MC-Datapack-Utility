@@ -2,7 +2,7 @@
 	"name": "mc-datapack-utility",
 	"displayName": "MC Datapack Utility",
 	"description": "%mcdutil.description%",
-	"version": "1.0.0-beta.2",
+	"version": "1.0.0-beta.3",
 	"publisher": "ChenCMD",
 	"license": "MIT",
 	"author": "ChenCMD",
