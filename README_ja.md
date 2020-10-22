@@ -34,7 +34,7 @@
 
 データパックの作成を簡単にしたい？
 
-コマンドパレット(デフォルト: `Ctrl + Shift + P`)を開いて`データパックテンプレートを作成する`を使用しましょう。
+`Alt + Shift + D -> Alt + Shift + T`を押しましょう。
 この機能を使うと、Datapackの作成をいくつかの質問に流れで答えるだけで簡単に作ることができます。
 
 また、configからオリジナルのデータパックテンプレートを作成することが可能です。
@@ -57,7 +57,7 @@
 
 scoreboard players operationで計算式を作るのが面倒？
 
-コマンドパレット(デフォルト: `Ctrl + Shift + P`)を開いて`計算式をscore opearationに変換`を使用しましょう。
+`Alt + Shift + D -> Alt + Shift + S`を押しましょう。
 選択範囲がある場合はその選択範囲を、ない場合は入力した式を`scoreboard players operation`に変換します。
 
 また、configからデフォルトで使用するObjectやスコアホルダーのPrefix、式のInput方法の強制が可能です。
@@ -71,3 +71,6 @@ VSCodeでDatapackを作成する際は[Datapack Helper Plus](https://marketplace
 この拡張機能はDatapackに関する包括的なサポートを行っており、非常に便利です。
 
 # Special Thanks
+
+[藪](https://twitter.com/Yavu_Minecraft)氏にMC Datapack Utilityのアイコンを作成していただきました。
+この場をお借りしてお礼申し上げます。

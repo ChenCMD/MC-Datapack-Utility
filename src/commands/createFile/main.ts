@@ -1,4 +1,4 @@
-import { Uri, window } from 'vscode';
+import { Range, Uri, window } from 'vscode';
 import * as file from '../../utils/file';
 import { getDatapackRoot, getNamespace, getResourcePath, showInputBox } from '../../utils/common';
 import path = require('path');
@@ -48,10 +48,19 @@ export async function createFile(uri: Uri): Promise<void> {
     const variableContainer: VariableContainer = {
         datapackName: path.basename(datapackRoot),
         namespace: getNamespace(filePath, datapackRoot),
-        resourcePath: getResourcePath(filePath, datapackRoot)
+        resourcePath: getResourcePath(filePath, datapackRoot),
+        openFile: window.activeTextEditor?.document.uri.fsPath ? getResourcePath(window.activeTextEditor.document.uri.fsPath, datapackRoot) : '',
+        cursor: ''
     };
-    const fileTemplate = getFileTemplate(fileType).map(v => resolveVars(v, variableContainer));
+    const fileTemplate = getFileTemplate(fileType);
+    let cursor = undefined;
+    fileTemplate.forEach((v, i) => {
+        const res = v.search(/%cursor%/i);
+        if (res !== -1) cursor = new Range(i, res, i, res);
+    });
 
     // 生成
-    await file.createFile(filePath, new TextEncoder().encode(fileTemplate.join('\r\n')));
+    await file.createFile(filePath, new TextEncoder().encode(resolveVars(fileTemplate.join('\r\n'), variableContainer)));
+    // ファイルを開く
+    await window.showTextDocument(Uri.file(filePath), { selection: cursor});
 }
