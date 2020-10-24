@@ -97,7 +97,7 @@
 			]
 		},
 		"configuration": {
-			"title": "Minecraft Commander Utilility",
+			"title": "MC Datapack Utilility",
 			"properties": {
 				"mcdutil.language": {
 					"type": "string",
