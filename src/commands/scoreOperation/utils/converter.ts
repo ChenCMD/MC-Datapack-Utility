@@ -40,7 +40,7 @@ export function rpnToScoreOperation(formula: string, prefix: string, objective: 
 
     rpnQueue.addFirst({ value: '=', type: 'op' }, rpnQueue.removeFirst(), { value: `${prefix}${response}`, type: 'str' });
 
-    const calcStack: (number | string)[] = [];
+    const calcStack: string[] = [];
     const resValues = new Set<string>();
     const resFormulas: string[] = [];
     let tempCount = 0;
@@ -68,14 +68,14 @@ export function rpnToScoreOperation(formula: string, prefix: string, objective: 
                 if (!arg1 || !arg2)
                     return undefined;
 
-                if (arg2.toString() !== `${prefix}${response}` && arg2.toString().indexOf(`${prefix}${temp}`) === -1) {
+                if (arg2 !== `${prefix}${response}` && arg2.indexOf(`${prefix}${temp}`) === -1) {
                     resFormulas.push(`scoreboard players operation ${prefix}${temp}${++tempCount} ${objective} = ${arg2} ${objective}`);
                     arg2 = `${prefix}Temp_${tempCount}`;
                 }
-                if (rpnQueue.size() === 0 && op === '=') resFormulas.push(`scoreboard players operation ${arg1.toString()} ${objective} ${op} ${arg2.toString()} ${objective}`);
-                else resFormulas.push(`scoreboard players operation ${arg2.toString()} ${objective} ${op} ${arg1.toString()} ${objective}`);
+                if (rpnQueue.size() === 0 && op === '=') resFormulas.push(`scoreboard players operation ${arg1} ${objective} ${op} ${arg2.toString()} ${objective}`);
+                else resFormulas.push(`scoreboard players operation ${arg2} ${objective} ${op} ${arg1} ${objective}`);
 
-                calcStack.push(arg2.toString());
+                calcStack.push(arg2);
                 break;
         }
     }
