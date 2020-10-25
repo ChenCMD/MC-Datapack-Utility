@@ -1,5 +1,5 @@
 import { workspace, window, Uri } from 'vscode';
-import { getDatapackRoot, getResourcePath, isDatapackRoot, showInputBox } from '../../utils/common';
+import { getDatapackRoot, getDate, getResourcePath, isDatapackRoot, showInputBox } from '../../utils/common';
 import path from 'path';
 import { TextEncoder } from 'util';
 import '../../utils/methodExtensions';
@@ -81,7 +81,8 @@ async function create(dir: Uri): Promise<void> {
     const variableContainer: VariableContainer = {
         datapackName: datapackName,
         datapackDescription: datapackDescription,
-        namespace: namespace
+        namespace: namespace,
+        date: getDate()
     };
 
     // 生成するファイル/フォルダを選択

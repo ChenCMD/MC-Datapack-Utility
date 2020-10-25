@@ -23,6 +23,7 @@
  * SOFTWARE.
  */
 
+import dateFormat from 'dateformat';
 import { codeConsole } from '../extension';
 import enLocale from './en.json';
 
@@ -55,6 +56,7 @@ export function resolveLocalePlaceholders(val: string | undefined, params?: stri
 async function setupLanguage(code: string) {
     locales[code] = await import(`./${code}.json`);
     language = code;
+    setupDateLocate();
     codeConsole.appendLine(`loading ${code}`);
 }
 
@@ -62,4 +64,12 @@ export async function loadLocale(setting: string, defaultLocaleCode: string): Pr
     const specifiedLanguage = setting.toLowerCase() === 'default' ? defaultLocaleCode : setting;
     if (language !== specifiedLanguage)
         await setupLanguage(specifiedLanguage);
+}
+
+function setupDateLocate() {
+    dateFormat.i18n = {
+        dayNames: [...locale('dayNames').split(', '), ...locale('dayNamesAdridge')],
+        monthNames: [...locale('monthNames').split(', '), ...locale('monthNamesAdridge').split(', ')],
+        timeNames: locale('timeNames').split(', ')
+    };
 }

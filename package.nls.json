@@ -4,6 +4,7 @@
     "mcdutil.commands.createFile.title": "Create Datapack file",
     "mcdutil.commands.scoreOperation.title": "Convert Formula to Score Operation",
     "mcdutil.config.language": "Languages ​​displayed by MC Datapack Utility",
+    "mcdutil.config.dateFormat": "Format of the date and time assigned by Date of the generation variable (Format See [here](https://github.com/felixge/node-dateformat#mask-options) for the format)",
     "mcdutil.config.scoreOperation.prefix": "**Formula to Score Operation**: Scoreholder prefix",
     "mcdutil.config.scoreOperation.objective": "**Convert formula to Score Operation**: Score Objective name",
     "mcdutil.config.scoreOperation.response": "**Convert formula to Score Operation**: This variable is assigned to the right side",

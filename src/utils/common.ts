@@ -2,6 +2,8 @@ import * as path from 'path';
 import * as file from './file';
 import { window } from 'vscode';
 import { locale } from '../locales';
+import dateFormat from 'dateformat';
+import { config } from '../extension';
 
 export async function showInputBox(message?: string, validateInput?: (value: string) => string | Thenable<string | null | undefined> | null | undefined): Promise<string | undefined> {
     return await window.showInputBox({
@@ -11,6 +13,10 @@ export async function showInputBox(message?: string, validateInput?: (value: str
         ignoreFocusOut: true,
         validateInput: validateInput
     });
+}
+
+export function getDate(): string {
+    return dateFormat(Date.now(), config.dateFormat);
 }
 
 /**

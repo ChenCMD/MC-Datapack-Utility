@@ -1,6 +1,6 @@
 import { Range, Uri, window } from 'vscode';
 import { pathAccessible, createFile as create } from '../../utils/file';
-import { getDatapackRoot, getNamespace, getResourcePath, showInputBox } from '../../utils/common';
+import { getDatapackRoot, getDate, getNamespace, getResourcePath, showInputBox } from '../../utils/common';
 import path = require('path');
 import { locale } from '../../locales';
 import { getFileTemplate } from './utils';
@@ -71,6 +71,7 @@ export async function createFile(uri: Uri): Promise<void> {
         nowOpenFileType: openFileType,
         nowOpenFileExtname: openFileExtname,
 
+        date: getDate(),
         cursor: ''
     };
     const fileTemplate = getFileTemplate(fileType);
