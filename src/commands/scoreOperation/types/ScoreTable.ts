@@ -1,15 +1,15 @@
-import { ITableBase, IElementBase } from './TableBase';
+import { TableBase, ElementBase } from './TableBase';
 
-export interface IScoreTable extends ITableBase {
-    table: IScoreElement[]
+export interface ScoreTable extends TableBase {
+    table: ScoreElement[]
 }
 
-export interface IScoreElement extends IElementBase {
+export interface ScoreElement extends ElementBase {
     identifier: '*' | '/' | '%' | '+' | '-' | '='
     axiom: string
 }
 
-export const scoreTable: IScoreTable = {
+export const scoreTable: ScoreTable = {
     table: [
         {
             identifier: '*',

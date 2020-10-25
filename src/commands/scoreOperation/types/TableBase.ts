@@ -1,9 +1,9 @@
-export interface ITableBase {
-    table: IElementBase[]
+export interface TableBase {
+    table: ElementBase[]
     identifiers: string[]
 }
 
-export interface IElementBase {
+export interface ElementBase {
     identifier: string
     type: 'op' | 'state'
 }

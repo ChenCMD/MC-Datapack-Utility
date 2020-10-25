@@ -28,13 +28,13 @@
 import { Deque } from '../../../types/Deque';
 import { CalculateUnfinishedError } from '../types/Errors';
 import { opTable } from '../types/OperateTable';
-import { IQueueElement } from '../types/QueueElement';
+import { QueueElement } from '../types/QueueElement';
 import { scoreTable } from '../types/ScoreTable';
 import { fnSplitOperator, ssft } from '.';
 import { locale } from '../../../locales';
 
 export function rpnToScoreOperation(formula: string, prefix: string, objective: string, response: string, temp: string): { resValues: Set<string>, resFormulas: string[] } | undefined {
-    let rpnQueue = new Deque<IQueueElement>();
+    let rpnQueue = new Deque<QueueElement>();
     for (const elem of formula.split(/\s+|,/))
         rpnQueue = fnSplitOperator(elem, rpnQueue, scoreTable.table, scoreTable);
 
@@ -85,7 +85,7 @@ export function rpnToScoreOperation(formula: string, prefix: string, objective: 
 export function rpnCalculate(rpnExp: string): string | number | undefined {
     // 切り分け実行
     // 式を空白文字かカンマでセパレートして配列化＆これらデリミタを式から消す副作用
-    const rpnQueue = new Deque<IQueueElement>();
+    const rpnQueue = new Deque<QueueElement>();
     for (const elem of rpnExp.split(/\s+|,/))
         fnSplitOperator(elem, rpnQueue, opTable.table, opTable);
 

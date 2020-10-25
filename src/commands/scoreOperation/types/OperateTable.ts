@@ -1,6 +1,6 @@
-import { IElementBase, ITableBase } from './TableBase';
+import { ElementBase, TableBase } from './TableBase';
 
-export interface IOperateElement extends IElementBase {
+export interface OperateElement extends ElementBase {
     identifier: '(' | ')' | '#' | '_' | '~' | '**' | '*' | '/' | '%' | '+' | '-' | '<<' | '>>' | '&' | '^' | '|' | '='
     order: number
     arity: number
@@ -9,8 +9,8 @@ export interface IOperateElement extends IElementBase {
     fn?: Function
 }
 
-export interface IOperateTable extends ITableBase {
-    table: IOperateElement[]
+export interface OperateTable extends TableBase {
+    table: OperateElement[]
 }
 
 /**
@@ -39,7 +39,7 @@ export interface IOperateTable extends ITableBase {
  *
  * @version 1.0.0
  */
-export const opTable: IOperateTable = {
+export const opTable: OperateTable = {
     table: [
         {
             identifier: '(',
