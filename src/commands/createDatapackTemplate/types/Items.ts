@@ -68,7 +68,7 @@ export function getPickItems(): QuickPickFiles[] {
         {
             label: 'All Vanilla tags/blocks',
             generates: [],
-            func: getVanillaData
+            func: getVanillaBlockTags
         },
         {
             label: 'data/%namespace%/advancements/',
@@ -173,7 +173,7 @@ export function getPickItems(): QuickPickFiles[] {
     ];
 }
 
-export async function getVanillaData(): Promise<GenerateFileData[]> {
+export async function getVanillaBlockTags(): Promise<GenerateFileData[]> {
     const octokit = new Octokit();
     const files = await octokit.repos.getContent({
         owner: 'SPGoding',
