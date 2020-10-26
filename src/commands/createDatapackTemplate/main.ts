@@ -94,7 +94,7 @@ async function create(dir: Uri): Promise<void> {
         matchOnDescription: false,
         matchOnDetail: false,
         placeHolder: locale('create-datapack-template.quickpick-placeholder')
-    }).then(v => v?.flat(v2 => v2.generates));
+    }).then(v => v?.flatPromise(async v2 => [...v2.generates, ...await v2.func?.() ?? []]));
     if (!createItems) return;
 
     createItems.push(getPackMcMetaData());

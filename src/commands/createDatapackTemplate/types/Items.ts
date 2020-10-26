@@ -1,4 +1,7 @@
+import { Octokit } from '@octokit/rest';
+import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
 import { config } from '../../../extension';
+import { download } from '../../../utils/downloader';
 import { GenerateFileData, QuickPickFiles } from './QuickPickFiles';
 
 export function getPackMcMetaData(): GenerateFileData {
@@ -18,10 +21,6 @@ export function getPackMcMetaData(): GenerateFileData {
 
 export function getPickItems(): QuickPickFiles[] {
     return [
-        // {// TODO
-        //     label: `vanilla tags`,
-        //     changes: []
-        // },
         {
             label: '#load.json & %namespace%:load.mcfunction',
             picked: true,
@@ -65,6 +64,11 @@ export function getPickItems(): QuickPickFiles[] {
                     content: []
                 }
             ]
+        },
+        {
+            label: 'All Vanilla tags/blocks',
+            generates: [],
+            func: getVanillaData
         },
         {
             label: 'data/%namespace%/advancements/',
@@ -167,4 +171,24 @@ export function getPickItems(): QuickPickFiles[] {
         },
         ...config.createDatapackTemplate.customTemplate
     ];
+}
+
+export async function getVanillaData(): Promise<GenerateFileData[]> {
+    const octokit = new Octokit();
+    const files = await octokit.repos.getContent({
+        owner: 'SPGoding',
+        repo: 'vanilla-datapack',
+        ref: 'data',
+        path: 'data/minecraft/tags/blocks'
+    });
+    const result: GenerateFileData[] = [];
+    // コンパイラが雑魚
+    for (const data of files.data as unknown as ReposGetContentResponseData[]) {
+        result.push({
+            type: 'file',
+            relativeFilePath: data.path,
+            content: (await download(data.download_url)).split('\n')
+        });
+    }
+    return result;
 }

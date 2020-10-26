@@ -38,8 +38,9 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"dependencies": {
-		"minimatch": "^3.0.4",
-		"dateformat": "^3.0.3"
+		"@octokit/rest": "^18.0.6",
+		"dateformat": "^3.0.3",
+		"minimatch": "^3.0.4"
 	},
 	"devDependencies": {
 		"@types/dateformat": "^3.0.1",

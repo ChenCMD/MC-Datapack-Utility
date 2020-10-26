@@ -1,7 +1,8 @@
 import { QuickPickItem } from 'vscode';
 
 export interface QuickPickFiles extends QuickPickItem {
-    generates: GenerateFileData[]
+    generates: GenerateFileData[],
+    func?: () => Promise<GenerateFileData[]>
 }
 
 export interface GenerateFileData {
