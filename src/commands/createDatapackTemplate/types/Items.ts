@@ -1,8 +1,9 @@
 import { Octokit } from '@octokit/rest';
 import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
+import { OctokitResponse } from '@octokit/types/dist-types/OctokitResponse';
 import { config } from '../../../extension';
 import { download } from '../../../utils/downloader';
-import { GenerateFileData, QuickPickFiles } from './QuickPickFiles';
+import { GenerateFileData, GetGitHubDataFunc, QuickPickFiles } from './QuickPickFiles';
 
 export function getPackMcMetaData(): GenerateFileData {
     return {
@@ -68,7 +69,28 @@ export function getPickItems(): QuickPickFiles[] {
         {
             label: 'All Vanilla tags/blocks',
             generates: [],
-            func: getVanillaBlockTags
+            func: [
+                {
+                    owner: 'SPGoding',
+                    repo: 'vanilla-datapack',
+                    ref: 'data',
+                    path: 'data/minecraft/tags/blocks',
+                    relativeFilePath: data => data.path
+                }
+            ]
+        },
+        {
+            label: 'All Vanilla tags/items',
+            generates: [],
+            func: [
+                {
+                    owner: 'SPGoding',
+                    repo: 'vanilla-datapack',
+                    ref: 'data',
+                    path: 'data/minecraft/tags/items',
+                    relativeFilePath: data => data.path
+                }
+            ]
         },
         {
             label: 'data/%namespace%/advancements/',
@@ -173,22 +195,30 @@ export function getPickItems(): QuickPickFiles[] {
     ];
 }
 
-export async function getVanillaBlockTags(): Promise<GenerateFileData[]> {
+export async function getGitHubData(data: GetGitHubDataFunc, elementFunc: (index: number, max: number) => void): Promise<GenerateFileData[]> {
     const octokit = new Octokit();
-    const files = await octokit.repos.getContent({
-        owner: 'SPGoding',
-        repo: 'vanilla-datapack',
-        ref: 'data',
-        path: 'data/minecraft/tags/blocks'
-    });
-    const result: GenerateFileData[] = [];
+    const files = await Promise.race([
+        octokit.repos.getContent({
+            owner: data.owner,
+            repo: data.repo,
+            ref: data.ref,
+            path: data.path
+        }) as unknown as OctokitResponse<ReposGetContentResponseData[]>,
+        new Promise<OctokitResponse<ReposGetContentResponseData[]>>((_, reject) => setTimeout(() => reject(new Error('Time out')), 7_000))
+    ]);
     // コンパイラが雑魚
-    for (const data of files.data as unknown as ReposGetContentResponseData[]) {
+    const result: GenerateFileData[] = [];
+    for (const file of files.data.map((v, i) => ({index: i, value: v}))) {
+        const content = await Promise.race([
+            download(file.value.download_url),
+            new Promise<string>((_, reject) => setTimeout(() => reject(new Error('Time out')), 7_000))
+        ]);
         result.push({
             type: 'file',
-            relativeFilePath: data.path,
-            content: (await download(data.download_url)).split('\n')
+            relativeFilePath: data.relativeFilePath(file.value),
+            content: content.split('\n')
         });
+        elementFunc(file.index, files.data.length);
     }
     return result;
 }

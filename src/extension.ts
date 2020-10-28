@@ -9,7 +9,6 @@ export let config = workspace.getConfiguration('mcdutil');
  */
 export function activate(context: ExtensionContext): void {
 
-
     loadLocale(config.language, getVSCodeLanguage());
 
     const disposable = [];
