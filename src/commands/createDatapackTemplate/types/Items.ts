@@ -191,7 +191,7 @@ export function getPickItems(): QuickPickFiles[] {
                 }
             ]
         },
-        ...config.createDatapackTemplate.customTemplate
+        ...config.get<QuickPickFiles[]>('createDatapackTemplate.customTemplate', [])
     ];
 }
 

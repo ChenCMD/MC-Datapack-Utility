@@ -7,20 +7,21 @@ import { rpnParse } from './utils/parser';
 import { locale } from '../../locales';
 
 export async function scoreOperation(): Promise<void> {
-    const prefix = config.scoreOperation.prefix;
-    const objective = config.scoreOperation.objective;
-    const response = config.scoreOperation.response;
-    const temp = config.scoreOperation.temp;
+    const prefix = config.get<string>('scoreOperation.prefix', '$MCDUtil_');
+    const objective = config.get<string>('scoreOperation.objective', '_');
+    const response = config.get<string>('scoreOperation.response', 'Return');
+    const temp = config.get<string>('scoreOperation.temp', 'Temp_');
+    const inputType = config.get<string>('scoreOperation.forceInputType', 'Default');
     const editor = window.activeTextEditor;
     if (!editor)
         return;
 
     let text = '';
-    if (config.scoreOperation.forceInputType !== 'Always InputBox')
+    if (inputType !== 'Always InputBox')
         text = editor.document.getText(editor.selection);
     // セレクトされていないならInputBoxを表示
     if (text === '') {
-        if (config.scoreOperation.forceInputType === 'Always Selection') {
+        if (inputType === 'Always Selection') {
             window.showErrorMessage(locale('formula-to-score-operation.not-selection'));
             return;
         }
