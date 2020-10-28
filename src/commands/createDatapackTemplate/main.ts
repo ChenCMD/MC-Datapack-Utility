@@ -8,6 +8,7 @@ import * as file from '../../utils/file';
 import { locale } from '../../locales';
 import { createMessageItemsHasId } from './types/MessageItems';
 import { resolveVars, VariableContainer } from '../../types/VariableContainer';
+import { getFileType } from '../../types/FileTypes';
 
 export async function createDatapack(): Promise<void> {
     // フォルダ選択
@@ -103,8 +104,8 @@ async function create(dir: Uri): Promise<void> {
     for (const item of createItems.filter(v => v.type === 'file')) {
         const filePath = path.join(dir.fsPath, datapackName, resolveVars(item.relativeFilePath, variableContainer));
         if (await file.pathAccessible(filePath)) continue;
-
-        const containerHasResourcePath = Object.assign({ resourcePath: getResourcePath(filePath, datapackRoot) } as VariableContainer, variableContainer);
+        const resourcePath = getResourcePath(filePath, datapackRoot, getFileType(filePath, datapackRoot));
+        const containerHasResourcePath = Object.assign({ resourcePath: resourcePath } as VariableContainer, variableContainer);
         const str = item.content?.map(v => resolveVars(v, containerHasResourcePath)).join('\r\n');
         await file.createFile(filePath, enconder.encode(str ?? ''));
     }

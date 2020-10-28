@@ -26,6 +26,7 @@
 
 import * as path from 'path';
 import minimatch from 'minimatch';
+import { VariableContainer } from './VariableContainer';
 
 export type FileType =
     | 'advancement'
@@ -50,6 +51,34 @@ export type FileType =
     | 'worldgen/noise_settings'
     | 'worldgen/processor_list'
     | 'worldgen/template_pool';
+
+export const fileTypeFolderName: VariableContainer = {
+    // common
+    advancement: 'advancements',
+    dimension: 'dimension',
+    dimension_type: 'dimension_type',
+    function: 'functions',
+    loot_table: 'loot_tables',
+    predicate: 'predicates',
+    recipe: 'recipes',
+    structure: 'structures',
+    // tag
+    'tag/block': 'tags/blocks',
+    'tag/entity_type': 'tags/entity_types',
+    'tag/fluid': 'tags/fluids',
+    'tag/function': 'tags/functions',
+    'tag/item': 'tags/items',
+    // worldgen
+    'worldgen/biome': 'worldgen/biome',
+    'worldgen/configured_carver': 'worldgen/configured_carver',
+    'worldgen/configured_decorator': 'worldgen/configured_decorator',
+    'worldgen/configured_feature': 'worldgen/configured_feature',
+    'worldgen/configured_structure_feature': 'worldgen/configured_structure_feature',
+    'worldgen/configured_surface_builder': 'worldgen/configured_surface_builder',
+    'worldgen/noise_settings': 'worldgen/noise_settings',
+    'worldgen/processor_list': 'worldgen/processor_list',
+    'worldgen/template_pool': 'worldgen/template_pool'
+};
 
 export const fileTypePaths: Record<FileType, string> = {
     // common
