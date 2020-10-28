@@ -2,6 +2,9 @@ import * as path from 'path';
 import * as file from './file';
 import { window } from 'vscode';
 import { locale } from '../locales';
+import dateFormat from 'dateformat';
+import { config } from '../extension';
+import { FileType, fileTypeFolderName } from '../types/FileTypes';
 
 export async function showInputBox(message?: string, validateInput?: (value: string) => string | Thenable<string | null | undefined> | null | undefined): Promise<string | undefined> {
     return await window.showInputBox({
@@ -13,13 +16,17 @@ export async function showInputBox(message?: string, validateInput?: (value: str
     });
 }
 
+export function getDate(): string {
+    return dateFormat(Date.now(), config.get<string>('dateFormat', 'm/dd HH:MM'));
+}
+
 /**
  * リソースパスを取得します
  * @param filePath 取得したいファイルのファイルパス
  * @param datapackRoot データパックのルートパス
  */
-export function getResourcePath(filePath: string, datapackRoot: string): string {
-    return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(/^data\/([^/]+)\/[^/]+\/(.*)\.(?:mcfunction|json)$/, '$1:$2');
+export function getResourcePath(filePath: string, datapackRoot: string, fileType: FileType | undefined): string {
+    return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(RegExp(`^data/([^/]+)/${fileType ? fileTypeFolderName[fileType] : '[^/]+'}/(.*)\\.(?:mcfunction|json)$`), '$1:$2');
 }
 
 /**

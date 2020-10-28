@@ -31,5 +31,10 @@
     "yes": "Yes",
     "no": "No",
     "reselect": "Reselect",
-    "rename": "Rename"
+    "rename": "Rename",
+    "dayNamesAdridge": "Sun, Mon, Tue, Wed, Thu, Fri, Sat",
+    "dayNames": "Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday",
+    "monthNamesAdridge": "Jan, Feb, Mar, Apr, May, Jun, Jul, Aug, Sep, Oct, Nov, Dec",
+    "monthNames": "January, February, March, April, May, June, July, August, September, October, November, December",
+    "timeNames": "a, p, am, pm, A, P, AM, PM"
 }

@@ -28,19 +28,19 @@
 import { Deque } from '../../../types/Deque';
 import { CalculateUnfinishedError } from '../types/Errors';
 import { opTable } from '../types/OperateTable';
-import { IQueueElement } from '../types/QueueElement';
+import { QueueElement } from '../types/QueueElement';
 import { scoreTable } from '../types/ScoreTable';
 import { fnSplitOperator, ssft } from '.';
 import { locale } from '../../../locales';
 
 export function rpnToScoreOperation(formula: string, prefix: string, objective: string, response: string, temp: string): { resValues: Set<string>, resFormulas: string[] } | undefined {
-    let rpnQueue = new Deque<IQueueElement>();
+    let rpnQueue = new Deque<QueueElement>();
     for (const elem of formula.split(/\s+|,/))
         rpnQueue = fnSplitOperator(elem, rpnQueue, scoreTable.table, scoreTable);
 
     rpnQueue.addFirst({ value: '=', type: 'op' }, rpnQueue.removeFirst(), { value: `${prefix}${response}`, type: 'str' });
 
-    const calcStack: (number | string)[] = [];
+    const calcStack: string[] = [];
     const resValues = new Set<string>();
     const resFormulas: string[] = [];
     let tempCount = 0;
@@ -68,14 +68,14 @@ export function rpnToScoreOperation(formula: string, prefix: string, objective: 
                 if (!arg1 || !arg2)
                     return undefined;
 
-                if (arg2.toString() !== `${prefix}${response}` && arg2.toString().indexOf(`${prefix}${temp}`) === -1) {
+                if (arg2 !== `${prefix}${response}` && arg2.indexOf(`${prefix}${temp}`) === -1) {
                     resFormulas.push(`scoreboard players operation ${prefix}${temp}${++tempCount} ${objective} = ${arg2} ${objective}`);
                     arg2 = `${prefix}Temp_${tempCount}`;
                 }
-                if (rpnQueue.size() === 0 && op === '=') resFormulas.push(`scoreboard players operation ${arg1.toString()} ${objective} ${op} ${arg2.toString()} ${objective}`);
-                else resFormulas.push(`scoreboard players operation ${arg2.toString()} ${objective} ${op} ${arg1.toString()} ${objective}`);
+                if (rpnQueue.size() === 0 && op === '=') resFormulas.push(`scoreboard players operation ${arg1} ${objective} ${op} ${arg2} ${objective}`);
+                else resFormulas.push(`scoreboard players operation ${arg2} ${objective} ${op} ${arg1} ${objective}`);
 
-                calcStack.push(arg2.toString());
+                calcStack.push(arg2);
                 break;
         }
     }
@@ -85,7 +85,7 @@ export function rpnToScoreOperation(formula: string, prefix: string, objective: 
 export function rpnCalculate(rpnExp: string): string | number | undefined {
     // 切り分け実行
     // 式を空白文字かカンマでセパレートして配列化＆これらデリミタを式から消す副作用
-    const rpnQueue = new Deque<IQueueElement>();
+    const rpnQueue = new Deque<QueueElement>();
     for (const elem of rpnExp.split(/\s+|,/))
         fnSplitOperator(elem, rpnQueue, opTable.table, opTable);
 

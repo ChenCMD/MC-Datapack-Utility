@@ -26,19 +26,19 @@
  */
 
 import { Deque } from '../../../types/Deque';
-import { IQueueElement } from '../types/QueueElement';
-import { ITableBase, IElementBase } from '../types/TableBase';
+import { QueueElement } from '../types/QueueElement';
+import { TableBase, ElementBase } from '../types/TableBase';
 
 /**
  * Search String From Table
  * @param {string} _str -**_table**内からこのパラメータを探す
  * @param {ITablebase} _table このテーブル内から**_str**を探す
  */
-export function ssft(_str: string, _table: ITableBase): number {
+export function ssft(_str: string, _table: TableBase): number {
     return _table.identifiers.indexOf(_str);
 }
 
-export function fnSplitOperator(_val: string, _stack: Deque<IQueueElement>, _table: IElementBase[], _opTable: ITableBase): Deque<IQueueElement> {
+export function fnSplitOperator(_val: string, _stack: Deque<QueueElement>, _table: ElementBase[], _opTable: TableBase): Deque<QueueElement> {
     if (_val === '')
         return _stack;
     if (ssft(_val, _opTable) !== -1 && !Number.prototype.isValue(_val)) {

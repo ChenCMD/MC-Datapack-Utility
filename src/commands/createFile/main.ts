@@ -1,11 +1,11 @@
 import { Range, Uri, window } from 'vscode';
 import { pathAccessible, createFile as create } from '../../utils/file';
-import { getDatapackRoot, getNamespace, getResourcePath, showInputBox } from '../../utils/common';
+import { getDatapackRoot, getDate, getNamespace, getResourcePath, showInputBox } from '../../utils/common';
 import path = require('path');
 import { locale } from '../../locales';
 import { getFileTemplate } from './utils';
 import { TextEncoder } from 'util';
-import { getFileType } from '../../types/FileTypes';
+import { FileType, getFileType } from '../../types/FileTypes';
 import { resolveVars, VariableContainer } from '../../types/VariableContainer';
 
 export async function createFile(uri: Uri): Promise<void> {
@@ -46,13 +46,13 @@ export async function createFile(uri: Uri): Promise<void> {
     const filePath = path.join(uri.fsPath, `${fileName}.${fileExtension}`);
 
     const openFilePath = window.activeTextEditor?.document.uri.fsPath;
+    let openFileType = '';
     let openFileResourcePath = '';
     let openFileName = '';
-    let openFileType = '';
     let openFileExtname = '';
     if (openFilePath) {
         openFileType = getFileType(openFilePath, datapackRoot) ?? '';
-        openFileResourcePath = openFileType ? getResourcePath(openFilePath, datapackRoot) : '';
+        openFileResourcePath = openFileType !== '' ? getResourcePath(openFilePath, datapackRoot, openFileType as FileType) : '';
         openFileName = path.parse(openFilePath).name;
         openFileExtname = path.extname(openFilePath).slice(1);
     }
@@ -61,7 +61,7 @@ export async function createFile(uri: Uri): Promise<void> {
         datapackName: path.basename(datapackRoot),
         namespace: getNamespace(filePath, datapackRoot),
 
-        fileResourcePath: getResourcePath(filePath, datapackRoot),
+        fileResourcePath: getResourcePath(filePath, datapackRoot, fileType),
         fileName: fileName,
         fileType: fileType,
         fileExtname: fileExtension,
@@ -71,6 +71,7 @@ export async function createFile(uri: Uri): Promise<void> {
         nowOpenFileType: openFileType,
         nowOpenFileExtname: openFileExtname,
 
+        date: getDate(),
         cursor: ''
     };
     const fileTemplate = getFileTemplate(fileType);

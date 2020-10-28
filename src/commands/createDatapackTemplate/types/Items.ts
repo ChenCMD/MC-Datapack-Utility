@@ -1,5 +1,9 @@
+import { Octokit } from '@octokit/rest';
+import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
+import { OctokitResponse } from '@octokit/types/dist-types/OctokitResponse';
 import { config } from '../../../extension';
-import { GenerateFileData, QuickPickFiles } from './QuickPickFiles';
+import { download } from '../../../utils/downloader';
+import { GenerateFileData, GetGitHubDataFunc, QuickPickFiles } from './QuickPickFiles';
 
 export function getPackMcMetaData(): GenerateFileData {
     return {
@@ -18,10 +22,6 @@ export function getPackMcMetaData(): GenerateFileData {
 
 export function getPickItems(): QuickPickFiles[] {
     return [
-        // {// TODO
-        //     label: `vanilla tags`,
-        //     changes: []
-        // },
         {
             label: '#load.json & %namespace%:load.mcfunction',
             picked: true,
@@ -63,6 +63,32 @@ export function getPickItems(): QuickPickFiles[] {
                     type: 'file',
                     relativeFilePath: 'data/%namespace%/functions/tick.mcfunction',
                     content: []
+                }
+            ]
+        },
+        {
+            label: 'All Vanilla tags/blocks',
+            generates: [],
+            func: [
+                {
+                    owner: 'SPGoding',
+                    repo: 'vanilla-datapack',
+                    ref: 'data',
+                    path: 'data/minecraft/tags/blocks',
+                    relativeFilePath: data => data.path
+                }
+            ]
+        },
+        {
+            label: 'All Vanilla tags/items',
+            generates: [],
+            func: [
+                {
+                    owner: 'SPGoding',
+                    repo: 'vanilla-datapack',
+                    ref: 'data',
+                    path: 'data/minecraft/tags/items',
+                    relativeFilePath: data => data.path
                 }
             ]
         },
@@ -165,6 +191,34 @@ export function getPickItems(): QuickPickFiles[] {
                 }
             ]
         },
-        ...config.createDatapackTemplate.customTemplate
+        ...config.get<QuickPickFiles[]>('createDatapackTemplate.customTemplate', [])
     ];
+}
+
+export async function getGitHubData(data: GetGitHubDataFunc, elementFunc: (index: number, max: number) => void): Promise<GenerateFileData[]> {
+    const octokit = new Octokit();
+    const files = await Promise.race([
+        octokit.repos.getContent({
+            owner: data.owner,
+            repo: data.repo,
+            ref: data.ref,
+            path: data.path
+        }) as unknown as OctokitResponse<ReposGetContentResponseData[]>,
+        new Promise<OctokitResponse<ReposGetContentResponseData[]>>((_, reject) => setTimeout(() => reject(new Error('Time out')), 7_000))
+    ]);
+    // コンパイラが雑魚
+    const result: GenerateFileData[] = [];
+    for (const file of files.data.map((v, i) => ({index: i, value: v}))) {
+        const content = await Promise.race([
+            download(file.value.download_url),
+            new Promise<string>((_, reject) => setTimeout(() => reject(new Error('Time out')), 7_000))
+        ]);
+        result.push({
+            type: 'file',
+            relativeFilePath: data.relativeFilePath(file.value),
+            content: content.split('\n')
+        });
+        elementFunc(file.index, files.data.length);
+    }
+    return result;
 }

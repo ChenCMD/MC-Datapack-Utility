@@ -4,6 +4,7 @@
     "mcdutil.commands.createFile.title": "データパックファイルを作成する",
     "mcdutil.commands.scoreOperation.title": "計算式をscore opearationに変換",
     "mcdutil.config.language": "MC Datapack Utilityが表示する言語",
+    "mcdutil.config.dateFormat": "生成時代入変数のDateで代入される日時のフォーマット (フォーマット形式は[ここ](https://github.com/felixge/node-dateformat#mask-options)を参照してください)",
     "mcdutil.config.scoreOperation.prefix": "**計算式をscore opearationに変換**: スコアホルダーの接頭辞",
     "mcdutil.config.scoreOperation.objective": "**計算式をscore opearationに変換**: スコアオブジェクトの名前",
     "mcdutil.config.scoreOperation.response": "**計算式をscore opearationに変換**: 最終的に右辺に代入される変数",

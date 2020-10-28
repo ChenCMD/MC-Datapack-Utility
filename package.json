@@ -2,7 +2,7 @@
 	"name": "mc-datapack-utility",
 	"displayName": "MC Datapack Utility",
 	"description": "%mcdutil.description%",
-	"version": "1.0.0-beta.4",
+	"version": "1.0.0-beta.5",
 	"publisher": "ChenCMD",
 	"license": "MIT",
 	"author": "ChenCMD",
@@ -38,16 +38,19 @@
 		"test": "node ./out/test/runTest.js"
 	},
 	"dependencies": {
+		"@octokit/rest": "^18.0.6",
+		"dateformat": "^3.0.3",
 		"minimatch": "^3.0.4"
 	},
 	"devDependencies": {
-		"@types/vscode": "^1.48.0",
+		"@types/dateformat": "^3.0.1",
 		"@types/glob": "^7.1.3",
 		"@types/mocha": "^8.0.0",
 		"@types/node": "^14.0.27",
-		"eslint": "^7.6.0",
+		"@types/vscode": "^1.48.0",
 		"@typescript-eslint/eslint-plugin": "^3.8.0",
 		"@typescript-eslint/parser": "^3.8.0",
+		"eslint": "^7.6.0",
 		"glob": "^7.1.6",
 		"mocha": "^8.0.1",
 		"typescript": "^3.8.3",
@@ -97,7 +100,7 @@
 			]
 		},
 		"configuration": {
-			"title": "Minecraft Commander Utilility",
+			"title": "MC Datapack Utilility",
 			"properties": {
 				"mcdutil.language": {
 					"type": "string",
@@ -108,6 +111,11 @@
 					],
 					"markdownDescription": "%mcdutil.config.language%",
 					"default": "Default"
+				},
+				"mcdutil.dateFormat": {
+					"type": "string",
+					"markdownDescription": "%mcdutil.config.dateFormat%",
+					"default": "m/dd HH:MM"
 				},
 				"mcdutil.scoreOperation.prefix": {
 					"type": "string",
