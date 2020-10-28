@@ -60,7 +60,7 @@
         "space-before-function-paren": [
             "warn",
             {
-                "anonymous": "never",
+                "anonymous": "ignore",
                 "named": "never",
                 "asyncArrow": "always"
             }
