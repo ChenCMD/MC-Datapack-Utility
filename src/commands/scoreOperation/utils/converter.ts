@@ -36,7 +36,7 @@ import { locale } from '../../../locales';
 export async function rpnToScoreOperation(formula: string, prefix: string, objective: string, temp: string): Promise<{ resValues: Set<string>, resFormulas: string[] } | undefined> {
     let rpnQueue = new Deque<QueueElement>();
     for (const elem of formula.split(/\s+|,/))
-        await fnSplitOperator(elem, rpnQueue, scoreTable, objective).then(queue => (rpnQueue = queue));
+        rpnQueue = await fnSplitOperator(elem, rpnQueue, scoreTable, objective);
 
     const calcStack: QueueElement[] = [];
     const resValues = new Set<string>();
@@ -83,12 +83,12 @@ export async function rpnToScoreOperation(formula: string, prefix: string, objec
     return { resValues, resFormulas };
 }
 
-export function rpnCalculate(rpnExp: string): string | number | undefined {
+export async function rpnCalculate(rpnExp: string): Promise<string | number | undefined> {
     // 切り分け実行
     // 式を空白文字かカンマでセパレートして配列化＆これらデリミタを式から消す副作用
     const rpnQueue = new Deque<QueueElement>();
     for (const elem of rpnExp.split(/\s+|,/))
-        fnSplitOperator(elem, rpnQueue, opTable, '');
+        await fnSplitOperator(elem, rpnQueue, opTable, '');
 
     // 演算開始
     const calcStack: (number | string)[] = []; // 演算結果スタック

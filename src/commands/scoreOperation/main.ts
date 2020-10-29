@@ -32,9 +32,8 @@ export async function scoreOperation(): Promise<void> {
 
     try {
         const formula = rpnParse(text.split(' = ').reverse().join(' = '));
-        let result: { resValues: Set<string>, resFormulas: string[] } = {resValues: new Set<string>(), resFormulas: []};
-        await rpnToScoreOperation(formula, prefix, objective, temp).then(res => (result = res ?? result));
-        if (result === {resValues: new Set<string>(), resFormulas: []})
+        const result = await rpnToScoreOperation(formula, prefix, objective, temp);
+        if (!result)
             return;
 
         editor.edit(edit => {

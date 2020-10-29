@@ -56,9 +56,9 @@ export async function fnSplitOperator(_val: string, _stack: Deque<QueueElement>,
     for (const i in _opTable.identifiers) {
         const piv = _val.indexOf(_opTable.table[i].identifier);
         if (piv !== -1) {
-            await fnSplitOperator(_val.substring(0, piv), _stack, _opTable, _objective).then(v => (_stack = v));
-            await fnSplitOperator(_val.substring(piv, piv + _opTable.identifiers[i].length), _stack, _opTable, _objective).then(v => (_stack = v));
-            await fnSplitOperator(_val.substring(piv + _opTable.identifiers[i].length), _stack, _opTable, _objective).then(v => (_stack = v));
+            _stack = await fnSplitOperator(_val.substring(0, piv), _stack, _opTable, _objective);
+            _stack = await fnSplitOperator(_val.substring(piv, piv + _opTable.identifiers[i].length), _stack, _opTable, _objective);
+            _stack = await fnSplitOperator(_val.substring(piv + _opTable.identifiers[i].length), _stack, _opTable, _objective);
             return _stack;
         }
     }
@@ -68,9 +68,9 @@ export async function fnSplitOperator(_val: string, _stack: Deque<QueueElement>,
     } else {
         let obj = _objective;
         if (workspace.getConfiguration('mcdutil').get<boolean>('scoreOperation.isAlwaysSpecifyObject', true))
-            await showInputBox(`${_val}${locale('formula-to-score-operation.specifying-object')}`).then(res => (obj = res ?? _objective));
+            obj = await showInputBox(locale('formula-to-score-operation.specifying-object', _val)) ?? _objective;
 
-        _stack.addLast({value: _val, objective: obj, type: 'str' });
+        _stack.addLast({ value: _val, objective: obj, type: 'str' });
     }
-        return _stack;
+    return _stack;
 }
