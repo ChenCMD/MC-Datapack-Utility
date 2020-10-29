@@ -1,5 +1,5 @@
 import { ExtensionContext, commands, window, workspace } from 'vscode';
-import { createDatapack, createFile, scoreOperation } from './commands';
+import { copyResourcePath, createDatapack, createFile, scoreOperation } from './commands';
 import { loadLocale } from './locales';
 
 export const codeConsole = window.createOutputChannel('MC Commander Util');
@@ -16,6 +16,7 @@ export function activate(context: ExtensionContext): void {
     disposable.push(commands.registerCommand('mcdutil.commands.createDatapackTemplate', createDatapack));
     disposable.push(commands.registerCommand('mcdutil.commands.createFile', createFile));
     disposable.push(commands.registerCommand('mcdutil.commands.scoreOperation', scoreOperation));
+    disposable.push(commands.registerCommand('mcdutil.commands.copyResourcePath', copyResourcePath));
 
     disposable.push(workspace.onDidChangeConfiguration(e => {
         if (e.affectsConfiguration('mcdutil'))

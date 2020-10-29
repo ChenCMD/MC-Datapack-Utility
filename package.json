@@ -2,19 +2,16 @@
 	"name": "mc-datapack-utility",
 	"displayName": "MC Datapack Utility",
 	"description": "%mcdutil.description%",
-	"version": "1.0.0-beta.5",
-	"publisher": "ChenCMD",
-	"license": "MIT",
-	"author": "ChenCMD",
+	"version": "1.0.0-beta.6",
 	"icon": "icon.png",
-	"contributors": [
-		"t5ugu"
-	],
-	"engines": {
-		"vscode": "^1.48.0"
-	},
 	"categories": [
 		"Other"
+	],
+	"license": "MIT",
+	"publisher": "ChenCMD",
+	"author": "ChenCMD",
+	"contributors": [
+		"t5ugu"
 	],
 	"repository": {
 		"type": "git",
@@ -23,12 +20,9 @@
 	"bugs": {
 		"url": "https://github.com/ChenCMD/MC-Datapack-Utility/issues"
 	},
-	"main": "out/extension.js",
-	"activationEvents": [
-		"onCommand:mcdutil.commands.createDatapackTemplate",
-		"onCommand:mcdutil.commands.createFile",
-		"onCommand:mcdutil.commands.scoreOperation"
-	],
+	"engines": {
+		"vscode": "^1.48.0"
+	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile && npm run lint",
 		"compile": "tsc -p ./",
@@ -37,25 +31,18 @@
 		"pretest": "npm run compile && npm run lint",
 		"test": "node ./out/test/runTest.js"
 	},
+	"main": "out/extension.js",
 	"dependencies": {
 		"@octokit/rest": "^18.0.6",
 		"dateformat": "^3.0.3",
 		"minimatch": "^3.0.4"
 	},
-	"devDependencies": {
-		"@types/dateformat": "^3.0.1",
-		"@types/glob": "^7.1.3",
-		"@types/mocha": "^8.0.0",
-		"@types/node": "^14.0.27",
-		"@types/vscode": "^1.48.0",
-		"@typescript-eslint/eslint-plugin": "^3.8.0",
-		"@typescript-eslint/parser": "^3.8.0",
-		"eslint": "^7.6.0",
-		"glob": "^7.1.6",
-		"mocha": "^8.0.1",
-		"typescript": "^3.8.3",
-		"vscode-test": "^1.4.0"
-	},
+	"activationEvents": [
+		"onCommand:mcdutil.commands.createDatapackTemplate",
+		"onCommand:mcdutil.commands.createFile",
+		"onCommand:mcdutil.commands.scoreOperation",
+		"onCommand:mcdutil.commands.copyResourcePath"
+	],
 	"contributes": {
 		"commands": [
 			{
@@ -71,6 +58,11 @@
 			{
 				"command": "mcdutil.commands.scoreOperation",
 				"title": "%mcdutil.commands.scoreOperation.title%",
+				"category": "Datapack"
+			},
+			{
+				"command": "mcdutil.commands.copyResourcePath",
+				"title": "%mcdutil.commands.copyResourcePath.title%",
 				"category": "Datapack"
 			}
 		],
@@ -90,11 +82,20 @@
 					"command": "mcdutil.commands.createFile",
 					"when": "explorerResourceIsFolder == true",
 					"group": "navigation@4"
+				},
+				{
+					"command": "mcdutil.commands.copyResourcePath",
+					"when": "explorerResourceIsFolder == false",
+					"group": "6_copypath@31"
 				}
 			],
 			"commandPalette": [
 				{
 					"command": "mcdutil.commands.createFile",
+					"when": "false"
+				},
+				{
+					"command": "mcdutil.commands.copyResourcePath",
 					"when": "false"
 				}
 			]
@@ -127,11 +128,6 @@
 					"markdownDescription": "%mcdutil.config.scoreOperation.objective%",
 					"default": "_"
 				},
-				"mcdutil.scoreOperation.response": {
-					"type": "string",
-					"markdownDescription": "%mcdutil.config.scoreOperation.response%",
-					"default": "Return"
-				},
 				"mcdutil.scoreOperation.temp": {
 					"type": "string",
 					"markdownDescription": "%mcdutil.config.scoreOperation.temp%",
@@ -151,6 +147,11 @@
 					],
 					"markdownDescription": "%mcdutil.config.scoreOperation.forceInputType%",
 					"default": "Default"
+				},
+				"mcdutil.scoreOperation.isAlwaysSpecifyObject": {
+					"type": "boolean",
+					"markdownDescription": "%mcdutil.config.scoreOperation.isAlwaysSpecifyObject%",
+					"default": true
 				},
 				"mcdutil.createDatapackTemplate.customTemplate": {
 					"type": "array",
@@ -398,5 +399,19 @@
 				}
 			}
 		}
+	},
+	"devDependencies": {
+		"@types/dateformat": "^3.0.1",
+		"@types/glob": "^7.1.3",
+		"@types/mocha": "^8.0.0",
+		"@types/node": "^14.0.27",
+		"@types/vscode": "^1.48.0",
+		"@typescript-eslint/eslint-plugin": "^3.8.0",
+		"@typescript-eslint/parser": "^3.8.0",
+		"eslint": "^7.6.0",
+		"glob": "^7.1.6",
+		"mocha": "^8.0.1",
+		"typescript": "^3.8.3",
+		"vscode-test": "^1.4.0"
 	}
 }

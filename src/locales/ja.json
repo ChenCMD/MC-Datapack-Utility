@@ -1,4 +1,8 @@
 {
+    "copy-resource-path.not-datapack": "datapack内では無いためリソースパスを取得できません。",
+    "copy-resource-path.unknown-filetype": "このファイルのリソースパスを取得できません。",
+    "copy-resource-path.success": "リソースパスをクリップボードにコピーしました。",
+
     "create-file.not-datapack": "datapack内ではないためファイルを作成できません。",
     "create-file.unknown-filetype": "ここにファイルを作成することはできません。",
     "create-file.structure": "ストラクチャーファイルは未サポートです。",
@@ -24,6 +28,7 @@
     "formula-to-score-operation.too-enough-term": "項が多すぎます。",
     "formula-to-score-operation.formula": "計算式",
     "formula-to-score-operation.complate-text": "必要に応じて、スコアホルダー名とスコアオブジェクトを変更することができます。",
+    "formula-to-score-operation.specifying-object": "%0%のスコアオブジェクト",
 
     "too-much": "%0%が多すぎます。",
     "input-here": "%0%を入力",
