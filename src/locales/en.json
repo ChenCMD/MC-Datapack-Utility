@@ -1,4 +1,8 @@
 {
+    "copy-resource-path.not-datapack": "The resource path cannot be obtained because it is not in the datapack.",
+    "copy-resource-path.unknown-filetype": "Unable to get the resource path for this file.",
+    "copy-resource-path.success": "Copied the resource path to the clipboard.",
+
     "create-file.not-datapack": "Cannot create file because it is not a datapack.",
     "create-file.unknown-filetype": "You can't create a file here.",
     "create-file.structure": "Structure files are not supported.",

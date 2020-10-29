@@ -11,6 +11,7 @@ This extension provides several useful features for Datapack development.
 - [How to Install](#How-to-Install)
 - [Features](#Features)
   - [Creating a datapack template](#Creating-a-datapack-template)
+  - [Copy resourcePath](#Copy-resourcePath)
   - [Quick file creation](#Quick-file-creation)
   - [Converting formulas to score operation](#Converting-formulas-to-score-operation)
 - [Recommendations](#Recommendations)
@@ -40,6 +41,14 @@ This feature makes creating a Datapack easy by simply answering a few questions 
 You can also create your own datapack template from config.
 
 ![gif](https://raw.githubusercontent.com/ChenCMD/MC-Datapack-Utility/master/images/createDatapackTemplate.gif)
+
+## Copy resourcePath
+
+Want to get the resourcePath of a file easily?
+
+Right-click on the file you want to get in Explorer and use `Copy ResourcePath`.
+
+![image](https://raw.githubusercontent.com/ChenCMD/MC-Datapack-Utility/master/images/copyResourcePath_en.png)
 
 ## Quick file creation
 

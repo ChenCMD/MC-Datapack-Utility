@@ -1,4 +1,8 @@
 {
+    "copy-resource-path.not-datapack": "datapack内では無いためリソースパスを取得できません。",
+    "copy-resource-path.unknown-filetype": "このファイルのリソースパスを取得できません。",
+    "copy-resource-path.success": "リソースパスをクリップボードにコピーしました。",
+
     "create-file.not-datapack": "datapack内ではないためファイルを作成できません。",
     "create-file.unknown-filetype": "ここにファイルを作成することはできません。",
     "create-file.structure": "ストラクチャーファイルは未サポートです。",
