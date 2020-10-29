@@ -128,11 +128,6 @@
 					"markdownDescription": "%mcdutil.config.scoreOperation.objective%",
 					"default": "_"
 				},
-				"mcdutil.scoreOperation.response": {
-					"type": "string",
-					"markdownDescription": "%mcdutil.config.scoreOperation.response%",
-					"default": "Return"
-				},
 				"mcdutil.scoreOperation.temp": {
 					"type": "string",
 					"markdownDescription": "%mcdutil.config.scoreOperation.temp%",
@@ -152,6 +147,11 @@
 					],
 					"markdownDescription": "%mcdutil.config.scoreOperation.forceInputType%",
 					"default": "Default"
+				},
+				"mcdutil.scoreOperation.isAlwaysSpecifyObject": {
+					"type": "boolean",
+					"markdownDescription": "%mcdutil.config.scoreOperation.isAlwaysSpecifyObject%",
+					"default": true
 				},
 				"mcdutil.createDatapackTemplate.customTemplate": {
 					"type": "array",

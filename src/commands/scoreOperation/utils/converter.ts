@@ -33,14 +33,12 @@ import { scoreTable } from '../types/ScoreTable';
 import { fnSplitOperator, ssft } from '.';
 import { locale } from '../../../locales';
 
-export function rpnToScoreOperation(formula: string, prefix: string, objective: string, response: string, temp: string): { resValues: Set<string>, resFormulas: string[] } | undefined {
+export async function rpnToScoreOperation(formula: string, prefix: string, objective: string, temp: string): Promise<{ resValues: Set<string>, resFormulas: string[] } | undefined> {
     let rpnQueue = new Deque<QueueElement>();
     for (const elem of formula.split(/\s+|,/))
-        rpnQueue = fnSplitOperator(elem, rpnQueue, scoreTable.table, scoreTable);
+        rpnQueue = await fnSplitOperator(elem, rpnQueue, scoreTable, objective);
 
-    rpnQueue.addFirst({ value: '=', type: 'op' }, rpnQueue.removeFirst(), { value: `${prefix}${response}`, type: 'str' });
-
-    const calcStack: string[] = [];
+    const calcStack: QueueElement[] = [];
     const resValues = new Set<string>();
     const resFormulas: string[] = [];
     let tempCount = 0;
@@ -52,29 +50,32 @@ export function rpnToScoreOperation(formula: string, prefix: string, objective: 
         switch (elem.type) {
             case 'num':
                 const put = elem.value.indexOf('0x') !== -1 ? parseInt(elem.value, 16) : parseFloat(elem.value);
-                calcStack.push(`${prefix}${put}`);
+                calcStack.push({ value: `${prefix}${put}`, objective: `${objective}`, type: 'num' });
                 resValues.add(`scoreboard players set ${prefix}${elem.value} ${objective} ${put}`);
                 break;
             case 'str':
-                calcStack.push(elem.value);
+                calcStack.push(elem);
                 break;
             case 'op':
             case 'fn':
                 const operate = scoreTable.table[ssft(elem.value, scoreTable)];
                 const op = operate.axiom;
                 const arg1 = calcStack.pop();
-                let arg2 = calcStack.pop();
+                const arg2 = calcStack.pop();
 
                 if (!arg1 || !arg2)
                     return undefined;
 
-                if (arg2 !== `${prefix}${response}` && arg2.indexOf(`${prefix}${temp}`) === -1) {
-                    resFormulas.push(`scoreboard players operation ${prefix}${temp}${++tempCount} ${objective} = ${arg2} ${objective}`);
-                    arg2 = `${prefix}Temp_${tempCount}`;
+                // arg2 が「${prefix}${temp}」で表される定数でないなら定数として登録
+                if (arg2.value.indexOf(`${prefix}${temp}`) === -1) {
+                    resFormulas.push(`scoreboard players operation ${prefix}${temp}${++tempCount} ${objective} = ${arg2.value} ${arg2.objective}`);
+                    arg2.value = `${prefix}${temp}${tempCount}`;
                 }
-                if (rpnQueue.size() === 0 && op === '=') resFormulas.push(`scoreboard players operation ${arg1} ${objective} ${op} ${arg2} ${objective}`);
-                else resFormulas.push(`scoreboard players operation ${arg2} ${objective} ${op} ${arg1} ${objective}`);
 
+                // 最後の代入時のみ arg1 と arg2 を反転させる
+                if (rpnQueue.size() === 0 && op === '=') resFormulas.push(`scoreboard players operation ${arg1.value} ${arg1.objective} ${op} ${arg2.value} ${arg2.objective}`);
+                else resFormulas.push(`scoreboard players operation ${arg2.value} ${arg2.objective} ${op} ${arg1.value} ${arg1.objective}`);
+                
                 calcStack.push(arg2);
                 break;
         }
@@ -82,12 +83,12 @@ export function rpnToScoreOperation(formula: string, prefix: string, objective: 
     return { resValues, resFormulas };
 }
 
-export function rpnCalculate(rpnExp: string): string | number | undefined {
+export async function rpnCalculate(rpnExp: string): Promise<string | number | undefined> {
     // 切り分け実行
     // 式を空白文字かカンマでセパレートして配列化＆これらデリミタを式から消す副作用
     const rpnQueue = new Deque<QueueElement>();
     for (const elem of rpnExp.split(/\s+|,/))
-        fnSplitOperator(elem, rpnQueue, opTable.table, opTable);
+        await fnSplitOperator(elem, rpnQueue, opTable, '');
 
     // 演算開始
     const calcStack: (number | string)[] = []; // 演算結果スタック
