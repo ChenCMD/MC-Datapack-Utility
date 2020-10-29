@@ -9,7 +9,6 @@ import { locale } from '../../locales';
 export async function scoreOperation(): Promise<void> {
     const prefix = config.get<string>('scoreOperation.prefix', '$MCDUtil_');
     const objective = config.get<string>('scoreOperation.objective', '_');
-    const response = config.get<string>('scoreOperation.response', 'Return');
     const temp = config.get<string>('scoreOperation.temp', 'Temp_');
     const inputType = config.get<string>('scoreOperation.forceInputType', 'Default');
     const editor = window.activeTextEditor;
@@ -32,9 +31,10 @@ export async function scoreOperation(): Promise<void> {
     }
 
     try {
-        const formula = rpnParse(text.split('=').reverse().join('='));
-        const result = rpnToScoreOperation(formula, prefix, objective, response, temp);
-        if (!result)
+        const formula = rpnParse(text.split(' = ').reverse().join(' = '));
+        let result: { resValues: Set<string>, resFormulas: string[] } = {resValues: new Set<string>(), resFormulas: []};
+        await rpnToScoreOperation(formula, prefix, objective, temp).then(res => (result = res ?? result));
+        if (result === {resValues: new Set<string>(), resFormulas: []})
             return;
 
         editor.edit(edit => {

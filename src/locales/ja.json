@@ -24,6 +24,7 @@
     "formula-to-score-operation.too-enough-term": "項が多すぎます。",
     "formula-to-score-operation.formula": "計算式",
     "formula-to-score-operation.complate-text": "必要に応じて、スコアホルダー名とスコアオブジェクトを変更することができます。",
+    "formula-to-score-operation.specifying-object": "のスコアオブジェクト",
 
     "too-much": "%0%が多すぎます。",
     "input-here": "%0%を入力",
