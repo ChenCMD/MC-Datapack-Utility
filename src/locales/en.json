@@ -13,6 +13,7 @@
     "create-datapack-template.duplicate-datapack": "Duplicate datapack name.\nWould you like to add a template to your Datapack?",
     "create-datapack-template.name-blank": "The datapack name cannot be blank.",
     "create-datapack-template.namespace-blank": "The namespace cannot be blank.",
+    "create-datapack-template.download-timeout": "The download request has timed out.",
     "create-datapack-template.dialog-title": "Select Datapack",
     "create-datapack-template.dialog-label": "Select",
     "create-datapack-template.datapack-name": "Datapack name",
