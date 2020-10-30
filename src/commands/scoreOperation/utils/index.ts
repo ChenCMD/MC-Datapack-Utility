@@ -27,35 +27,50 @@
 
 import { Deque } from '../../../types/Deque';
 import { QueueElement } from '../types/QueueElement';
-import { TableBase, ElementBase } from '../types/TableBase';
+import { TableBase } from '../types/TableBase';
+import { showInputBox } from '../../../utils/common';
+import { locale } from '../../../locales';
+import { workspace } from 'vscode';
 
 /**
  * Search String From Table
  * @param {string} _str -**_table**内からこのパラメータを探す
- * @param {ITablebase} _table このテーブル内から**_str**を探す
+ * @param {Tablebase} _table このテーブル内から**_str**を探す
  */
 export function ssft(_str: string, _table: TableBase): number {
     return _table.identifiers.indexOf(_str);
 }
 
-export function fnSplitOperator(_val: string, _stack: Deque<QueueElement>, _table: ElementBase[], _opTable: TableBase): Deque<QueueElement> {
+export async function fnSplitOperator(_val: string, _stack: Deque<QueueElement>, _opTable: TableBase, _objective: string): Promise<Deque<QueueElement>> {
+    // _val が空の文字列の時は何も行なわれない
     if (_val === '')
         return _stack;
+    // _val が _opTable に含まれるとき、その演算子を _stack に追加する
     if (ssft(_val, _opTable) !== -1 && !Number.prototype.isValue(_val)) {
-        _stack.addLast({ value: _val, type: _table[ssft(_val, _opTable)].type });
+        _stack.addLast({ value: _val, objective: '', type: _opTable.table[ssft(_val, _opTable)].type });
         return _stack;
     }
 
+    // _opTable で定義される演算子のうち、どれかが _val に含まれている場合
+    // その演算子以前、その演算子、その演算子以後に分けて再帰的に関数を実行する
     for (const i in _opTable.identifiers) {
-        const piv = _val.indexOf(_table[i].identifier);
+        const piv = _val.indexOf(_opTable.table[i].identifier);
         if (piv !== -1) {
-            _stack = fnSplitOperator(_val.substring(0, piv), _stack, _table, _opTable);
-            _stack = fnSplitOperator(_val.substring(piv, piv + _opTable.identifiers[i].length), _stack, _table, _opTable);
-            _stack = fnSplitOperator(_val.substring(piv + _opTable.identifiers[i].length), _stack, _table, _opTable);
+            _stack = await fnSplitOperator(_val.substring(0, piv), _stack, _opTable, _objective);
+            _stack = await fnSplitOperator(_val.substring(piv, piv + _opTable.identifiers[i].length), _stack, _opTable, _objective);
+            _stack = await fnSplitOperator(_val.substring(piv + _opTable.identifiers[i].length), _stack, _opTable, _objective);
             return _stack;
         }
     }
 
-    _stack.addLast(Number.prototype.isValue(_val) ? { value: _val, type: 'num' } : { value: _val, type: 'str' });
+    if (Number.prototype.isValue(_val)) {
+        _stack.addLast({ value: _val, objective: _objective, type: 'num' });
+    } else {
+        let obj = _objective;
+        if (workspace.getConfiguration('mcdutil').get<boolean>('scoreOperation.isAlwaysSpecifyObject', true))
+            obj = await showInputBox(locale('formula-to-score-operation.specifying-object', _val)) ?? _objective;
+
+        _stack.addLast({ value: _val, objective: obj, type: 'str' });
+    }
     return _stack;
 }
