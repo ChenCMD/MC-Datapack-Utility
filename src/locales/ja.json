@@ -20,6 +20,9 @@
     "create-datapack-template.datapack-description": "データパックの説明",
     "create-datapack-template.namespace-name": "データパックが使用する名前空間",
     "create-datapack-template.quickpick-placeholder": "生成するファイル/フォルダを選択",
+    "create-datapack-template.progress.title": "データパックテンプレートの作成",
+    "create-datapack-template.progress.download": "テンプレートデータをダウンロード中 %0%/%1%",
+    "create-datapack-template.progress.creating": "作成中...",
     "create-datapack-template.complete": "データパックテンプレートの生成が完了しました。",
 
     "formula-to-score-operation.not-selection": "選択範囲が存在しません。",

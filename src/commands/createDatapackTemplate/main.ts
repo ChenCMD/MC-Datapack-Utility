@@ -109,12 +109,12 @@ async function create(dir: Uri): Promise<void> {
             await window.withProgress({
                 location: ProgressLocation.Notification,
                 cancellable: false,
-                title: 'Creating Datapack'
+                title: locale('create-datapack-template.progress.title')
             }, async progress => {
-                progress.report({ increment: 0, message: `Downloading template data ${func.index}/${funcs.length}` });
+                progress.report({ increment: 0, message: locale('create-datapack-template.progress.download', func.index, funcs.length) });
 
                 const data = await getGitHubData(func.value, (_, m) => {
-                    progress.report({ increment: 100 / m, message: `Downloading template data ${func.index}/${funcs.length}` });
+                    progress.report({ increment: 100 / m, message: locale('create-datapack-template.progress.download', func.index, funcs.length) });
                 });
                 createItemData.push(...data);
             });
@@ -128,9 +128,9 @@ async function create(dir: Uri): Promise<void> {
     await window.withProgress({
         location: ProgressLocation.Notification,
         cancellable: false,
-        title: 'Creating Datapack'
+        title: locale('create-datapack-template.progress.title')
     }, async progress => {
-        progress.report({ increment: 0, message: 'Creating template...' });
+        progress.report({ increment: 0, message: locale('create-datapack-template.progress.creating') });
 
         const enconder = new TextEncoder();
 
@@ -149,7 +149,7 @@ async function create(dir: Uri): Promise<void> {
             if (item.type === 'folder')
                 await file.createDir(filePath);
 
-            progress.report({ increment: 100 / createItemData.length, message: 'Creating template...' });
+            progress.report({ increment: 100 / createItemData.length, message: locale('create-datapack-template.progress.creating') });
         }
         window.showInformationMessage(locale('create-datapack-template.complete'));
     });

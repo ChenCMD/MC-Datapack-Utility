@@ -20,6 +20,9 @@
     "create-datapack-template.datapack-description": "Datapack description",
     "create-datapack-template.namespace-name": "Namespace name",
     "create-datapack-template.quickpick-placeholder": "Select files/folders to generate",
+    "create-datapack-template.progress.title": "Creating a data pack template",
+    "create-datapack-template.progress.download": "Downloading template data %0%/%1%",
+    "create-datapack-template.progress.creating": "Creating...",
     "create-datapack-template.complete": "Datapack template generation is complete.",
 
     "formula-to-score-operation.not-selection": "The selection does not exist.",
