@@ -44,8 +44,6 @@ export async function rpnToScoreOperation(formula: string, prefix: string, objec
     let tempCount = 0;
     while (rpnQueue.size() > 0) {
         const elem = rpnQueue.removeFirst();
-        if (!elem)
-            throw Error('element');
 
         switch (elem.type) {
             case 'num':
@@ -58,8 +56,7 @@ export async function rpnToScoreOperation(formula: string, prefix: string, objec
                 break;
             case 'op':
             case 'fn':
-                const operate = scoreTable.table[ssft(elem.value, scoreTable)];
-                const op = operate.axiom;
+                const op = scoreTable.table[ssft(elem.value, scoreTable)].axiom;
                 const arg1 = calcStack.pop();
                 const arg2 = calcStack.pop();
 
@@ -73,9 +70,10 @@ export async function rpnToScoreOperation(formula: string, prefix: string, objec
                 }
 
                 // 最後の代入時のみ arg1 と arg2 を反転させる
-                if (rpnQueue.size() === 0 && op === '=') resFormulas.push(`scoreboard players operation ${arg1.value} ${arg1.objective} ${op} ${arg2.value} ${arg2.objective}`);
-                else resFormulas.push(`scoreboard players operation ${arg2.value} ${arg2.objective} ${op} ${arg1.value} ${arg1.objective}`);
-                
+                if (rpnQueue.size() === 0 && op === '=')
+                    resFormulas.push(`scoreboard players operation ${arg1.value} ${arg1.objective} ${op} ${arg2.value} ${arg2.objective}`);
+                else
+                    resFormulas.push(`scoreboard players operation ${arg2.value} ${arg2.objective} ${op} ${arg1.value} ${arg1.objective}`);
                 calcStack.push(arg2);
                 break;
         }
@@ -94,14 +92,10 @@ export async function rpnCalculate(rpnExp: string): Promise<string | number | un
     const calcStack: (number | string)[] = []; // 演算結果スタック
     while (rpnQueue.size() > 0) {
         const elem = rpnQueue.removeFirst();
-        if (!elem)
-            return;
         switch (elem.type) {
             // 演算項(数値のparse)
             case 'num':
-                calcStack.push(
-                    elem.value.indexOf('0x') !== -1 ? parseInt(elem.value, 16) : parseFloat(elem.value)
-                );
+                calcStack.push(elem.value.indexOf('0x') !== -1 ? parseInt(elem.value, 16) : parseFloat(elem.value));
                 break;
 
             // 演算項(文字列)※数値以外のリテラルを扱うような機能は未サポート
@@ -115,26 +109,26 @@ export async function rpnCalculate(rpnExp: string): Promise<string | number | un
                 break;
 
             // 演算子・計算機能
-            case 'op': case 'fn': {
+            case 'op':
+            case 'fn':
                 const operate = opTable.table[ssft(elem.value, opTable)];
                 if (!operate)
                     throw new CalculateUnfinishedError(locale('formula-to-score-operation.not-exist-operate', elem.value));
 
                 // 演算に必要な数だけ演算項を抽出
-                const args: (string | number | undefined)[] = [];
+                const args = new Deque<string | number | undefined>();
                 for (let i = 0; i < operate.arity; i++) {
                     if (calcStack.length > 0)
-                        args.unshift(calcStack.pop());
+                        args.addFirst(calcStack.pop());
                     else
                         throw new CalculateUnfinishedError(locale('formula-to-score-operation.not-enough-operand'));
                 }
 
                 // 演算を実行して結果をスタックへ戻す
-                const res = operate.fn?.apply(null, args);
+                const res = operate.fn?.apply(null, Array.from(args));
                 if (res)
                     calcStack.push(res);
                 break;
-            }
         }
     }
 
