@@ -33,7 +33,7 @@
 	},
 	"main": "out/extension.js",
 	"dependencies": {
-		"@octokit/rest": "^18.0.6",
+		"@octokit/rest": "^18.0.7",
 		"dateformat": "^3.0.3",
 		"minimatch": "^3.0.4"
 	},
@@ -404,14 +404,14 @@
 		"@types/dateformat": "^3.0.1",
 		"@types/glob": "^7.1.3",
 		"@types/mocha": "^8.0.0",
-		"@types/node": "^14.0.27",
-		"@types/vscode": "^1.48.0",
+		"@types/node": "^14.14.6",
+		"@types/vscode": "^1.50.0",
 		"@typescript-eslint/eslint-plugin": "^3.8.0",
 		"@typescript-eslint/parser": "^3.8.0",
-		"eslint": "^7.6.0",
+		"eslint": "^7.12.1",
 		"glob": "^7.1.6",
-		"mocha": "^8.0.1",
+		"mocha": "^8.2.0",
 		"typescript": "^3.8.3",
-		"vscode-test": "^1.4.0"
+		"vscode-test": "^1.4.1"
 	}
 }
