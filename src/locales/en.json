@@ -26,6 +26,7 @@
     "formula-to-score-operation.not-exist-operate": "not exist operate: %0%",
     "formula-to-score-operation.not-enough-operand": "not enough operand",
     "formula-to-score-operation.too-enough-term": "too enough term",
+    "formula-to-score-operation.illegal-formula": "Invalid expression.",
     "formula-to-score-operation.formula": "formula",
     "formula-to-score-operation.complate-text": "if u wish, u can change both SCORE HOLDERs' NAME and the SCORE OBJECT",
     "formula-to-score-operation.specifying-object": "%0%s' SCORE OBJECT",
