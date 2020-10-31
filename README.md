@@ -1,9 +1,13 @@
-# MC Datapack Utility
+![Banner](https://raw.githubusercontent.com/ChenCMD/MC-Datapack-Utility/master/images/banner.png)
 
-[![license](https://img.shields.io/github/license/ChenCMD/mc-commander-util)](https://github.com/ChenCMD/mc-commander-util/blob/master/LICENCE)
-[![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](https://gitmoji.carloscuesta.me/)
+[![license](https://img.shields.io/github/license/ChenCMD/MC-Datapack-Utility)](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENCE)
+[![Version](https://img.shields.io/visual-studio-marketplace/v/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
+[![LastUpdate](https://img.shields.io/visual-studio-marketplace/last-updated/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
+[![Download](https://img.shields.io/visual-studio-marketplace/d/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
+[![Install](https://img.shields.io/visual-studio-marketplace/i/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
+[![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg)](https://gitmoji.carloscuesta.me/)
 
-English / [日本語](https://github.com/ChenCMD/mc-commander-util/blob/master/README_ja.md)
+English / [日本語](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/README_ja.md)
 
 This extension provides several useful features for Datapack development.
 
@@ -19,7 +23,7 @@ This extension provides several useful features for Datapack development.
 
 # Disclaimer
 
-> [MIT license](https://github.com/ChenCMD/mc-commander-util/blob/master/LICENCE)
+> [MIT license](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENCE)
 
 While we do our best to prevent damage to our files, it is possible that under rare, unforeseeable circumstances files may become corrupted.
 We cannot be held responsible when this happens.
@@ -28,7 +32,10 @@ Please back up your important working data at all times. This is very important 
 
 # How to Install
 
-Writing in progress...
+The MC Datapack Utility can be installed from the VSCode Marketplace
+[![Version](https://img.shields.io/visual-studio-marketplace/v/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
+
+Another way is to press `Ctrl + P` on VSCode and execute `ext install chencmd.mc-datapack-utility`.
 
 # Features
 ## Creating a datapack template
@@ -81,5 +88,5 @@ This extension provides comprehensive support for Datapack and is very useful.
 
 # Special Thanks
 
-Thanks to [Yavu](https://twitter.com/Yavu_Minecraft) for creating the MC Datapack Utility icon.
+Thanks to [Yavu](https://twitter.com/Yavu_Minecraft) for creating the MC Datapack Utility icon/banner.
 I'd like to take this opportunity to thank you.

@@ -1,9 +1,3 @@
-# Change Log
+# [v1.0.0](https://github.com/ChenCMD/MC-Datapack-Utility/tree/v1.0.0)
 
-All notable changes to the "mccommanderutil" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+Release.

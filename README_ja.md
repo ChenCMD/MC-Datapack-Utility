@@ -1,9 +1,13 @@
-# MC Datapack Utility
+![Banner](https://raw.githubusercontent.com/ChenCMD/MC-Datapack-Utility/master/images/banner.png)
 
-[![license](https://img.shields.io/github/license/ChenCMD/mc-commander-util)](https://github.com/ChenCMD/mc-commander-util/blob/master/LICENCE)
-[![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg?style=flat-square)](https://gitmoji.carloscuesta.me/)
+[![license](https://img.shields.io/github/license/ChenCMD/MC-Datapack-Utility)](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENCE)
+[![Version](https://img.shields.io/visual-studio-marketplace/v/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
+[![LastUpdate](https://img.shields.io/visual-studio-marketplace/last-updated/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
+[![Download](https://img.shields.io/visual-studio-marketplace/d/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
+[![Install](https://img.shields.io/visual-studio-marketplace/i/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
+[![Gitmoji](https://img.shields.io/badge/gitmoji-%20😜%20😍-FFDD67.svg)](https://gitmoji.carloscuesta.me/)
 
-#### [English](https://github.com/ChenCMD/mc-commander-util/blob/master/README.md) / 日本語
+#### [English](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/README.md) / 日本語
 
 この拡張機能はDatapackの開発に便利な複数の機能を提供します。
 
@@ -19,7 +23,7 @@
 
 # 免責事項
 
-> [MITライセンス](https://github.com/ChenCMD/mc-commander-util/blob/master/LICENCE)
+> [MITライセンス](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENCE)
 
 私たちはファイルが破損しないように最善を尽くしていますが、想定しえない極稀な状況下でファイルが破損する可能性があり得ます。
 発生した際に私たちは責任をとることはできません。
@@ -28,7 +32,10 @@
 
 # インストール方法
 
-作成中...
+MC Datapack UtilityはVSCode Marketplaceからインストールすることができます
+[![Version](https://img.shields.io/visual-studio-marketplace/v/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
+
+他の方法として、VSCodeで`Ctrl + P`を押し`ext install chencmd.mc-datapack-utility`と入力することでもインストールが可能です。
 
 # 機能
 ## データパックテンプレートの作成
@@ -71,7 +78,7 @@ scoreboard players operationで計算式を作るのが面倒？
 
 また、configからデフォルトで使用するObjectやスコアホルダーのPrefix、式のInput方法の強制が可能です。
 
-![gif](https://raw.githubusercontent.com/ChenCMD/MC-Datapack-Utility/master/images/scoreOperation.gif)
+![gif](https://raw.githubusercontent.com/ChenCMD/MC-Datapacmc-datapack-utilityk-Utility/master/images/scoreOperation.gif)
 
 # 推奨事項
 
@@ -81,5 +88,5 @@ VSCodeでDatapackを作成する際は[Datapack Helper Plus](https://marketplace
 
 # Special Thanks
 
-[藪](https://twitter.com/Yavu_Minecraft)氏にMC Datapack Utilityのアイコンを作成していただきました。
+[藪](https://twitter.com/Yavu_Minecraft)氏にMC Datapack Utilityのアイコン/バナーを作成していただきました。
 この場をお借りしてお礼申し上げます。

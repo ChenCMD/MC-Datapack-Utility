@@ -2,7 +2,7 @@
 	"name": "mc-datapack-utility",
 	"displayName": "MC Datapack Utility",
 	"description": "%mcdutil.description%",
-	"version": "1.0.0-beta.6",
+	"version": "1.0.0",
 	"icon": "icon.png",
 	"categories": [
 		"Other"
@@ -21,7 +21,7 @@
 		"url": "https://github.com/ChenCMD/MC-Datapack-Utility/issues"
 	},
 	"engines": {
-		"vscode": "^1.48.0"
+		"vscode": "^1.50.0"
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile && npm run lint",
