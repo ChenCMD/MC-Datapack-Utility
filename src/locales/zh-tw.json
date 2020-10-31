@@ -4,13 +4,13 @@
 	"copy-resource-path.success": "已將資源路徑複製到剪貼簿。",
 
 	"create-file.not-datapack": "無法建立檔案，因為不是資料包。",
-	"create-file.unknown-filetype": "你不可以在此創建檔案。",
+	"create-file.unknown-filetype": "您不可以在此建立檔案。",
 	"create-file.structure": "不支持結構檔案。",
 	"create-file.already-exists": "此%0%已存在。",
 	"create-file.file-name": "%0%名稱",
 
-	"create-datapack-template.inside-datapack": "所選的資料夾在資料包「%0%」內。\n你希望在此建立資料包嗎？",
-	"create-datapack-template.duplicate-datapack": "資料包名字重複了。\n你希望向你的資料包中添加模板嗎？",
+	"create-datapack-template.inside-datapack": "所選的資料夾在資料包「%0%」內。\n您希望在此建立資料包嗎？",
+	"create-datapack-template.duplicate-datapack": "資料包名字重複了。\n您希望向你的資料包中添加模板嗎？",
 	"create-datapack-template.name-blank": "資料包名稱不可為空。",
 	"create-datapack-template.namespace-blank": "命名空間不可為空。",
 	"create-datapack-template.download-timeout": "下載請求已逾時。",
@@ -32,7 +32,7 @@
 	"formula-to-score-operation.too-enough-term": "項數過多",
 	"formula-to-score-operation.illegal-formula": "表達式不合法。",
 	"formula-to-score-operation.formula": "公式",
-	"formula-to-score-operation.complate-text": "只要你想，你可以同時更改SCORE HOLDER的名稱和SCORE OBJECT的名稱。",
+	"formula-to-score-operation.complate-text": "只要您願意，你可以同時更改SCORE HOLDER的名稱和SCORE OBJECT的名稱。",
 	"formula-to-score-operation.specifying-object": "%0%的SCORE OBJECT",
 
 	"too-much": "過多的%0%",
