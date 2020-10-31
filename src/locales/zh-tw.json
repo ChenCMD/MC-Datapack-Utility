@@ -10,7 +10,7 @@
 	"create-file.file-name": "%0%名稱",
 
 	"create-datapack-template.inside-datapack": "所選的資料夾在資料包「%0%」內。\n您希望在此建立資料包嗎？",
-	"create-datapack-template.duplicate-datapack": "資料包名字重複了。\n您希望向你的資料包中添加模板嗎？",
+	"create-datapack-template.duplicate-datapack": "資料包名字重複了。\n您希望向您的資料包中添加模板嗎？",
 	"create-datapack-template.name-blank": "資料包名稱不可為空。",
 	"create-datapack-template.namespace-blank": "命名空間不可為空。",
 	"create-datapack-template.download-timeout": "下載請求已逾時。",
