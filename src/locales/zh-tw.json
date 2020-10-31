@@ -20,9 +20,9 @@
 	"create-datapack-template.datapack-description": "資料包描述",
 	"create-datapack-template.namespace-name": "命名空間名稱",
 	"create-datapack-template.quickpick-placeholder": "選擇要生成的檔案/資料夾",
-	"create-datapack-template.progress.title": "正在創建資料包模板",
+	"create-datapack-template.progress.title": "正在建立資料包模板",
 	"create-datapack-template.progress.download": "正在下載模板資料 %0%/%1%",
-	"create-datapack-template.progress.creating": "正在創建……",
+	"create-datapack-template.progress.creating": "正在建立……",
 	"create-datapack-template.complete": "資料包模板生成完畢。",
 
 	"formula-to-score-operation.not-selection": "選區不存在。",
