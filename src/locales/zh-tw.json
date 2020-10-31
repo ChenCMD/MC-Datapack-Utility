@@ -27,7 +27,7 @@
 
 	"formula-to-score-operation.not-selection": "選區不存在。",
 	"formula-to-score-operation.illegal-expression": "非法的表達式：%0%……",
-	"formula-to-score-operation.not-exist-operate": "不存在的操作（Operate）：%0%",
+	"formula-to-score-operation.not-exist-operate": "不存在的運算（Operate）：%0%",
 	"formula-to-score-operation.not-enough-operand": "缺少運算元",
 	"formula-to-score-operation.too-enough-term": "項數過多",
 	"formula-to-score-operation.illegal-formula": "表達式不合法。",
