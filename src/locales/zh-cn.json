@@ -9,7 +9,7 @@
     "create-file.already-exists": "此%0%已存在。",
     "create-file.file-name": "%0%名称",
 
-    "create-datapack-template.inside-datapack": "所选的文件夹在数据包“%0%"内。\n你希望在此建立数据包吗？",
+    "create-datapack-template.inside-datapack": "所选的文件夹在数据包“%0%”内。\n你希望在此建立数据包吗？",
     "create-datapack-template.duplicate-datapack": "数据包名字重复了。\n你希望向你的数据包中添加模板吗？",
     "create-datapack-template.name-blank": "数据包名称不可为空。",
     "create-datapack-template.namespace-blank": "命名空间不可为空。",
