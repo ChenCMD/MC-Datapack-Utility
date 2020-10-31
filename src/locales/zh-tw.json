@@ -5,7 +5,7 @@
 
 	"create-file.not-datapack": "無法建立檔案，因為不是資料包。",
 	"create-file.unknown-filetype": "您不可以在此建立檔案。",
-	"create-file.structure": "不支持結構檔案。",
+	"create-file.structure": "不支援結構檔案。",
 	"create-file.already-exists": "此%0%已存在。",
 	"create-file.file-name": "%0%名稱",
 
