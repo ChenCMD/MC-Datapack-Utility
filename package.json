@@ -7,6 +7,11 @@
 	"categories": [
 		"Other"
 	],
+	"keywords": [
+		"minecraft",
+		"datapack",
+		"mcfunction"
+	],
 	"license": "MIT",
 	"publisher": "ChenCMD",
 	"author": "ChenCMD",
