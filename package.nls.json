@@ -1,5 +1,4 @@
 {
-    "mcdutil.description": "Extensions that provide multiple features that are useful for developing Datapack",
     "mcdutil.commands.createDatapackTemplate.title": "Create Datapack template",
     "mcdutil.commands.createFile.title": "Create Datapack file",
     "mcdutil.commands.scoreOperation.title": "Convert Formula to Score Operation",

@@ -1,5 +1,4 @@
 {
-    "mcdutil.description": "Datapackの開発に便利な複数の機能を提供する拡張機能",
     "mcdutil.commands.createDatapackTemplate.title": "データパックテンプレートを作成する",
     "mcdutil.commands.createFile.title": "データパックファイルを作成する",
     "mcdutil.commands.scoreOperation.title": "計算式をscore opearationに変換",

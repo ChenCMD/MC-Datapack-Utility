@@ -1,7 +1,7 @@
 {
 	"name": "mc-datapack-utility",
 	"displayName": "MC Datapack Utility",
-	"description": "%mcdutil.description%",
+	"description": "Extensions that provide multiple features that are useful for developing Minecraft: Java Edition Datapack",
 	"version": "1.0.0",
 	"icon": "icon.png",
 	"categories": [
