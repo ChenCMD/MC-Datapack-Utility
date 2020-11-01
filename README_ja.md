@@ -110,8 +110,8 @@ MC Datapack Utilityは複数の言語をサポートしています。このプ�
 #### ステップ
 1. [翻訳用のウェブサイト](https://l10n.spgoding.com/)に行く
 1. GitHubアカウント(推奨)もしくはメールアドレスで登録する
-  - ユーザー名とメールアドレスはリポジトリのcommitログに表示されることに注意してください。
-  メールアドレスを公開したくない場合[SPGoding](https://github.com/SPGoding/datapack-language-server/wiki/Contact-SPGoding)に連絡して偽のメールアドレスのアカウントを取得してください。
+    - ユーザー名とメールアドレスはリポジトリのcommitログに表示されることに注意してください。
+    メールアドレスを公開したくない場合[SPGoding](https://github.com/SPGoding/datapack-language-server/wiki/Contact-SPGoding)に連絡して偽のメールアドレスのアカウントを取得してください。
 1. [ここ](https://l10n.spgoding.com/projects/mc-datapack-utility)でMCDUの二つのコンポーネントを参照してください。
 1. 翻訳を始めましょう！
 
