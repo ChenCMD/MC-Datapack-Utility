@@ -113,7 +113,9 @@
 					"enum": [
 						"Default",
 						"en",
-						"ja"
+						"ja",
+						"zh-cn",
+						"zh-tw"
 					],
 					"markdownDescription": "%mcdutil.config.language%",
 					"default": "Default"
