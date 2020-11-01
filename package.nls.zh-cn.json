@@ -1,1 +1,16 @@
-{}
+{
+    "mcdutil.config.createDatapackTemplate.customTemplate": "**创建数据包模板**：自定义模板",
+    "mcdutil.config.scoreOperation.forceInputType.alwaysInputBox": "总是使用输入框",
+    "mcdutil.config.scoreOperation.forceInputType.alwaysSelection": "总是使用选区",
+    "mcdutil.config.scoreOperation.forceInputType.default": "选区不存在时使用输入框",
+    "mcdutil.config.scoreOperation.forceInputType": "**公式转换为记分板操作**：公式输入方法",
+    "mcdutil.config.scoreOperation.prefix": "**公式转换为记分板操作**：分数持有者前缀",
+    "mcdutil.config.scoreOperation.temp": "**公式转换为记分板操作**：过程中保存的临时变量",
+    "mcdutil.config.scoreOperation.objective": "**公式转换为记分板操作**：记分项名称",
+    "mcdutil.config.dateFormat": "模板生成时的时间日期变量格式（具体格式[见此](https://github.com/felixge/node-dateformat#mask-options)）",
+    "mcdutil.config.language": "MC Datapack Utility的显示语言",
+    "mcdutil.commands.copyResourcePath.title": "复制资源路径",
+    "mcdutil.commands.scoreOperation.title": "将公式转换为记分板操作",
+    "mcdutil.commands.createFile.title": "创建数据包文件",
+    "mcdutil.commands.createDatapackTemplate.title": "创建数据包模板"
+}
