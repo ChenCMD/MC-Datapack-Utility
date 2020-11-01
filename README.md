@@ -90,3 +90,31 @@ This extension provides comprehensive support for Datapack and is very useful.
 
 Thanks to [Yavu](https://twitter.com/Yavu_Minecraft) for creating the MC Datapack Utility icon/banner.
 I'd like to take this opportunity to thank you.
+
+# Contribution
+
+## I have bugs or ideas!
+
+[Open Issue](https://github.com/ChenCMD/MC-Datapack-Utility/issues/new) and share it with us!
+
+Only one bug/idea in one Issue, and if it's a bug, create it with useful information to reproduce or fix!
+
+## Localization
+
+[![widget](https://l10n.spgoding.com/widgets/mc-datapack-utility/-/multi-auto.svg)](https://l10n.spgoding.com/engage/mc-datapack-utility/?utm_source=widget)
+
+We are using the [SPGoding](https://github.com/SPGoding) website together for translation.
+
+The MC Datapack Utility supports multiple languages,
+so if you can translate this project into your language, it would make MCDU even better.
+
+#### Steps
+1. Go to the [localization website](https://l10n.spgoding.com/).
+1. [Register](https://l10n.spgoding.com/accounts/register) by linking your GitHub account (recommended), or using your email.
+  - Note that the username and email will be shown in the repository's git commit log. If you don't feel like you want to disclose your own email address, feel free to [contact SPGoding](https://github.com/SPGoding/datapack-language-server/wiki/Contact-SPGoding) to get an account with a fake email address.
+1. See two components of MCDU [here](https://l10n.spgoding.com/projects/mc-datapack-utility).
+1. Start translating!
+
+#### Note
+- If your language is not listed on the platform, simply contact [ChenCMD](https://github.com/ChenCMD/MC-Datapack-Utility/wiki/Contact);
+- If you have suggestions for the source string (en-us), please [open an issue](https://github.com/ChenCMD/MC-Datapack-Utility/issues/new).
