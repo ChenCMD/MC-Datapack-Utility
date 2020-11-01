@@ -12,7 +12,7 @@
     "mcdutil.config.scoreOperation.forceInputType.default": "Use InputBox if there is no Selection",
     "mcdutil.config.scoreOperation.forceInputType.alwaysSelection": "Always use only Selection",
     "mcdutil.config.scoreOperation.forceInputType.alwaysInputBox": "Always use the InputBox",
-    "mcdutil.config.scoreOperation.isAlwaysSpecifyObject": "**Convert formula to Score Operation**: You must specify variables object / All objectives are always *Objective*",
+    "mcdutil.config.scoreOperation.isAlwaysSpecifyObject": "**Convert formula to Score Operation**: Whether the user should specify the score object of the variable one by one (if false, then `#mcdutil.scoreOperation.objective#` is referenced)",
     "mcdutil.config.createDatapackTemplate.customTemplate": "**Create Datapack template**: Custom template",
     "mcdutil.config.createDatapackTemplate.customTemplate.label": "The name displayed in the selection field",
     "mcdutil.config.createDatapackTemplate.customTemplate.picked": "Whether it is selected by default (default: false)",
