@@ -1,5 +1,4 @@
 {
-    "mcdutil.description": "Datapackの開発に便利な複数の機能を提供する拡張機能",
     "mcdutil.commands.createDatapackTemplate.title": "データパックテンプレートを作成する",
     "mcdutil.commands.createFile.title": "データパックファイルを作成する",
     "mcdutil.commands.scoreOperation.title": "計算式をscore opearationに変換",
@@ -13,7 +12,7 @@
     "mcdutil.config.scoreOperation.forceInputType.default": "選択範囲がない場合入力ボックスを使用する",
     "mcdutil.config.scoreOperation.forceInputType.alwaysSelection": "常に選択範囲のみを使用する",
     "mcdutil.config.scoreOperation.forceInputType.alwaysInputBox": "常に入力ボックスを使用する",
-    "mcdutil.config.scoreOperation.isAlwaysSpecifyObject": "**計算式をscore opearationに変換**: 変数のスコアオブジェクトは、ユーザーが指定 / *objective* で指定されたもの",
+    "mcdutil.config.scoreOperation.isAlwaysSpecifyObject": "**計算式をscore opearationに変換**: 変数のスコアオブジェクトをユーザーが逐一指定するか否か (falseの場合`#mcdutil.scoreOperation.objective#`が参照されます)",
     "mcdutil.config.createDatapackTemplate.customTemplate": "**データパックテンプレートを作成する**: カスタムテンプレート",
     "mcdutil.config.createDatapackTemplate.customTemplate.label": "選択欄で表示される名前",
     "mcdutil.config.createDatapackTemplate.customTemplate.picked": "デフォルトで選択されてるか否か (デフォルト: false)",

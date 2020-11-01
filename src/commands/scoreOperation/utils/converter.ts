@@ -26,14 +26,14 @@
 */
 
 import { Deque } from '../../../types/Deque';
-import { CalculateUnfinishedError } from '../types/Errors';
+import { CalculateUnfinishedError, GenerateError } from '../types/Errors';
 import { opTable } from '../types/OperateTable';
 import { QueueElement } from '../types/QueueElement';
 import { scoreTable } from '../types/ScoreTable';
 import { fnSplitOperator, ssft } from '.';
 import { locale } from '../../../locales';
 
-export async function rpnToScoreOperation(formula: string, prefix: string, objective: string, temp: string): Promise<{ resValues: Set<string>, resFormulas: string[] } | undefined> {
+export async function rpnToScoreOperation(formula: string, prefix: string, objective: string, temp: string): Promise<{ resValues: Set<string>, resFormulas: string[] }> {
     let rpnQueue = new Deque<QueueElement>();
     for (const elem of formula.split(/\s+|,/))
         rpnQueue = await fnSplitOperator(elem, rpnQueue, scoreTable, objective);
@@ -61,7 +61,7 @@ export async function rpnToScoreOperation(formula: string, prefix: string, objec
                 const arg2 = calcStack.pop();
 
                 if (!arg1 || !arg2)
-                    return undefined;
+                    throw new GenerateError(locale('formula-to-score-operation.illegal-formula'));
 
                 // arg2 が「${prefix}${temp}」で表される定数でないなら定数として登録
                 if (arg2.value.indexOf(`${prefix}${temp}`) === -1) {
