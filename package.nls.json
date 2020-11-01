@@ -5,7 +5,7 @@
     "mcdutil.commands.copyResourcePath.title": "Copy ResourcePath",
     "mcdutil.config.language": "Languages ​​displayed by MC Datapack Utility",
     "mcdutil.config.dateFormat": "Format of the date and time assigned by Date of the generation variable (Format See [here](https://github.com/felixge/node-dateformat#mask-options) for the format)",
-    "mcdutil.config.scoreOperation.prefix": "**Formula to Score Operation**: Scoreholder prefix",
+    "mcdutil.config.scoreOperation.prefix": "**Convert formula to Score Operation**: Scoreholder prefix",
     "mcdutil.config.scoreOperation.objective": "**Convert formula to Score Operation**: Score Objective name",
     "mcdutil.config.scoreOperation.temp": "**Convert formula to Score Operation**: Variables that are temporarily saved on the way",
     "mcdutil.config.scoreOperation.forceInputType": "**Convert formula to Score Operation**: How to enter formula",
