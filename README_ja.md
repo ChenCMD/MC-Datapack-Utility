@@ -78,7 +78,7 @@ scoreboard players operationで計算式を作るのが面倒？
 
 また、configからデフォルトで使用するObjectやスコアホルダーのPrefix、式のInput方法の強制が可能です。
 
-![gif](https://raw.githubusercontent.com/ChenCMD/MC-Datapacmc-datapack-utilityk-Utility/master/images/scoreOperation.gif)
+![gif](https://raw.githubusercontent.com/ChenCMD/MC-Datapack-Utility/master/images/scoreOperation.gif)
 
 # 推奨事項
 
