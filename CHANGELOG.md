@@ -1,4 +1,4 @@
-# [v1.0.1](https://github.com/ChenCMD/MC-Datapack-Utility/compare/) (2020/11/03)
+# [v1.1.0](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.0.0...v1.1.0) (2020/11/03)
 
 ## :globe_with_meridians: Localize
 
