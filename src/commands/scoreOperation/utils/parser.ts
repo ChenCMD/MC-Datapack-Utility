@@ -27,11 +27,20 @@
 
 import { Deque } from '../../../types/Deque';
 import { ExpectedTokenError } from '../types/Errors';
-import { opTable } from '../types/OperateTable';
+import { OperateElement, opTable } from '../types/OperateTable';
 import { ssft } from '.';
 import { locale } from '../../../locales';
+import { config } from '../../../extension';
 
 export function rpnParse(exp: string): string {
+    const customOperate = config.get<OperateElement[]>('scoreOperation.customOperate', []);
+    if (customOperate.length !== 0) {
+        for (const e of customOperate) {
+            opTable.table.push(e);
+            opTable.identifiers.push(e.identifier);
+        }
+    }
+
     const polish = []; // parse結果格納用
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const opeStack = [new Deque<string | undefined>()]; // 演算子スタック
@@ -58,8 +67,9 @@ export function rpnParse(exp: string): string {
 
         // 演算子抽出
         let op = null;
+        const sample = exp.slice(0, exp.indexOf(' '));
         for (const element of opTable.table) {
-            if (exp.startsWith(element.identifier)) {
+            if (element.identifier === sample) {
                 op = element.identifier;
                 exp = exp.slice(element.identifier.length);
                 break;
@@ -111,7 +121,7 @@ export function rpnParse(exp: string): string {
                 // ・演算子スタックの先頭にある演算子より優先度が高い
                 // ・演算子スタックの先頭にある演算子と優先度が同じでかつ結合法則がright to left
                 const opData = opTable.table[ssft(op, opTable)];
-                if (opeStack[depth].peekFirst() === undefined ||
+                if (!opeStack[depth].peekFirst() ||
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                     opData.order > opTable.table[ssft(opeStack[depth].peekFirst()!, opTable)].order ||
                     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion

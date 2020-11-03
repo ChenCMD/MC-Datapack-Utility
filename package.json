@@ -160,6 +160,75 @@
 					"markdownDescription": "%mcdutil.config.scoreOperation.isAlwaysSpecifyObject%",
 					"default": true
 				},
+				"mcdutil.scoreOperation.customOperate": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"identifier",
+							"order",
+							"type",
+							"arity",
+							"assocLow"
+						],
+						"properties": {
+							"identifier": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.identifier%"
+							},
+							"order": {
+								"type": "number",
+								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.order%",
+								"default": 18
+							},
+							"type": {
+								"type": "string",
+								"enum": ["fn"],
+								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.type%",
+								"default": "fn"
+							},
+							"arity": {
+								"type": "number",
+								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.arity%"
+							},
+							"assocLow": {
+								"type": "string",
+								"enum": ["L", "R"],
+								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.assocLow%"
+							},
+							"axiom": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"former",
+										"op",
+										"latter"
+									],
+									"properties": {
+										"former": {
+											"type": "boolean",
+											"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.axiom%%mcdutil.config.scoreOperation.customOperate.axiom.former%"
+										},
+										"op": {
+											"type": "string",
+											"enum": [
+												"*=", "/=", "%=", "+=", "-=", "="
+											],
+											"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.axiom%%mcdutil.config.scoreOperation.customOperate.axiom.op%"
+										},
+										"latter": {
+											"type": "boolean",
+											"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.axiom%%mcdutil.config.scoreOperation.customOperate.axiom.latter%"
+										}
+									}
+								}
+							}
+						}
+					},
+					"markdownDescription": "%mcdutil.config.scoreOperation.customOperate%",
+					"default": []
+				},
 				"mcdutil.createDatapackTemplate.customTemplate": {
 					"type": "array",
 					"items": {

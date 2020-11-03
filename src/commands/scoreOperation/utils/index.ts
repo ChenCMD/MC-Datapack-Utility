@@ -67,7 +67,8 @@ export async function fnSplitOperator(_val: string, _stack: Deque<QueueElement>,
         _stack.addLast({ value: _val, objective: _objective, type: 'num' });
     } else {
         let obj = _objective;
-        if (workspace.getConfiguration('mcdutil').get<boolean>('scoreOperation.isAlwaysSpecifyObject', true))
+        if (workspace.getConfiguration('mcdutil').get<boolean>('scoreOperation.isAlwaysSpecifyObject', true)
+            && _val !== '#' && _val !== '_')
             obj = await showInputBox(locale('formula-to-score-operation.specifying-object', _val)) ?? _objective;
 
         _stack.addLast({ value: _val, objective: obj, type: 'str' });

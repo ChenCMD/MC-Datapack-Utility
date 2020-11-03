@@ -6,7 +6,13 @@ export interface ScoreTable extends TableBase {
 
 export interface ScoreElement extends ElementBase {
     identifier: '*' | '/' | '%' | '+' | '-' | '='
-    axiom: string
+    axiom: Array<Axiom>
+}
+
+interface Axiom {
+    former: boolean
+    op: '*=' | '/=' | '%=' | '+=' | '-=' | '='
+    latter: boolean
 }
 
 export const scoreTable: ScoreTable = {
@@ -14,32 +20,68 @@ export const scoreTable: ScoreTable = {
         {
             identifier: '*',
             type: 'op',
-            axiom: '*='
+            axiom: [
+                {
+                    former: false,
+                    op: '*=',
+                    latter: false
+                }
+            ]
         },
         {
             identifier: '/',
             type: 'op',
-            axiom: '/='
+            axiom: [
+                {
+                    former: false,
+                    op: '/=',
+                    latter: false
+                }
+            ]
         },
         {
             identifier: '%',
             type: 'op',
-            axiom: '%='
+            axiom: [
+                {
+                    former: false,
+                    op: '%=',
+                    latter: false
+                }
+            ]
         },
         {
             identifier: '+',
             type: 'op',
-            axiom: '+='
+            axiom: [
+                {
+                    former: false,
+                    op: '+=',
+                    latter: false
+                }
+            ]
         },
         {
             identifier: '-',
             type: 'op',
-            axiom: '-='
+            axiom: [
+                {
+                    former: false,
+                    op: '-=',
+                    latter: false
+                }
+            ]
         },
         {
             identifier: '=',
             type: 'op',
-            axiom: '='
+            axiom: [
+                {
+                    former: true,
+                    op: '=',
+                    latter: true
+                }
+            ]
         }
     ],
     identifiers: ['*', '/', '%', '+', '-', '=']
