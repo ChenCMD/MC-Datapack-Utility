@@ -39,7 +39,7 @@ export async function createFile(uri: Uri): Promise<void> {
         if (await pathAccessible(path.join(uri.fsPath, `${v}.${fileExtension}`)))
             return locale('create-file.already-exists', `${v}.${fileExtension}`);
     });
-    if (!fileName)
+    if (fileName === undefined)
         return;
 
     // リソースパスの生成とファイルテンプレートの取得
