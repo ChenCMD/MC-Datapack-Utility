@@ -1,11 +1,7 @@
 *
 */**
 
-!node_modules
-!out/*.js
-!out/*.json
-!out/**/*.js
-!out/**/*.json
+!dist/**
 !CHANGELOG.md
 !icon.png
 !LICENSE

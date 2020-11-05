@@ -20,6 +20,7 @@
   - [計算式のscore operationへの変換](#計算式のscore-operationへの変換)
 - [推奨事項](#推奨事項)
 - [Special Thanks](#Special-Thanks)
+- [コントリビュートについて](#コントリビュートについて)
 
 # 免責事項
 
@@ -101,11 +102,10 @@ VSCodeでDatapackを作成する際は[Datapack Helper Plus](https://marketplace
 
 ## MC Datapack Utilityを翻訳したい！
 
-[![widget](https://l10n.spgoding.com/widgets/mc-datapack-utility/-/multi-auto.svg)](https://l10n.spgoding.com/engage/mc-datapack-utility/?utm_source=widget)
+MC Datapack Utilityは複数の言語をサポートしています。
+このプロジェクトをあなたの言語に翻訳していただけたらMCDUはもっといいものになると思います。
 
-[SPGoding](https://github.com/SPGoding)の翻訳用のウェブサイトを一緒に使わせていただいてます。
-
-MC Datapack Utilityは複数の言語をサポートしています。このプロジェクトをあなたの言語に翻訳していただけたらMCDUはもっといいものになると思います。
+また、[SPGoding](https://github.com/SPGoding)の翻訳用のウェブサイトを一緒に使わせていただいてます。
 
 #### ステップ
 1. [翻訳用のウェブサイト](https://l10n.spgoding.com/)に行く

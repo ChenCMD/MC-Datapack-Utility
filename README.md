@@ -20,6 +20,7 @@ This extension provides several useful features for Datapack development.
   - [Converting formulas to score operation](#Converting-formulas-to-score-operation)
 - [Recommendations](#Recommendations)
 - [Special Thanks](#Special-Thanks)
+- [Contribution](#Contribution)
 
 # Disclaimer
 
@@ -101,12 +102,10 @@ Only one bug/idea in one Issue, and if it's a bug, create it with useful informa
 
 ## Localization
 
-[![widget](https://l10n.spgoding.com/widgets/mc-datapack-utility/-/multi-auto.svg)](https://l10n.spgoding.com/engage/mc-datapack-utility/?utm_source=widget)
+MC Datapack Utility supports multiple languages.
+MCDU would be much better if you could translate this project into your language.
 
 We are using the [SPGoding](https://github.com/SPGoding) website together for translation.
-
-The MC Datapack Utility supports multiple languages,
-so if you can translate this project into your language, it would make MCDU even better.
 
 #### Steps
 1. Go to the [localization website](https://l10n.spgoding.com/).
