@@ -30,13 +30,13 @@ import { CalculateUnfinishedError, GenerateError } from '../types/Errors';
 import { OperateTable } from '../types/OperateTable';
 import { QueueElement } from '../types/QueueElement';
 import { scoreTable } from '../types/ScoreTable';
-import { fnSplitOperator, ssft } from '.';
+import { formulaToQueue, ssft } from '.';
 import { locale } from '../../../locales';
+import { Formula } from '../types/Formula';
 
-export async function rpnToScoreOperation(formula: string, prefix: string, objective: string, temp: string): Promise<{ resValues: Set<string>, resFormulas: string[] }> {
+export async function rpnToScoreOperation(formula: Formula | string, prefix: string, objective: string, temp: string): Promise<{ resValues: Set<string>, resFormulas: string[] }> {
     let rpnQueue = new Deque<QueueElement>();
-    for (const elem of formula.split(/\s+|,/))
-        rpnQueue = await fnSplitOperator(elem, rpnQueue, scoreTable, objective);
+    rpnQueue = await formulaToQueue(formula, rpnQueue, scoreTable, objective);
 
     const calcStack: QueueElement[] = [];
     const resValues = new Set<string>();
@@ -93,7 +93,7 @@ export async function rpnCalculate(rpnExp: string, opTable: OperateTable): Promi
     // 式を空白文字かカンマでセパレートして配列化＆これらデリミタを式から消す副作用
     const rpnQueue = new Deque<QueueElement>();
     for (const elem of rpnExp.split(/\s+|,/))
-        await fnSplitOperator(elem, rpnQueue, opTable, '');
+        await formulaToQueue(elem, rpnQueue, opTable, '');
 
     // 演算開始
     const calcStack: (number | string)[] = []; // 演算結果スタック

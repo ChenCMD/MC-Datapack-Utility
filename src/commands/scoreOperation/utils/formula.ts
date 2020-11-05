@@ -36,6 +36,8 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
             const _external = _str.substr(index).split(' ');
             _external.shift();
             const extOp = opTable.table[ssft(_external.shift(), opTable)];
+            if(!extOp)
+                return { front: _front, op: _op, back: nestFormula };
 
             // '(', _front, _op, nestFormula, ')', extOp, _external[1, 2, ...]
             const back = formulaAnalyzer(_external.join(' '), opTable);
@@ -60,21 +62,4 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
 
             return { front: { front: first, op: _op, back: _back.front }, op: _back.op, back: _back.back };
     }
-}
-
-export function formulaDefroster(exp: Formula | string, opTable: OperateTable): string {
-    if (typeof exp === 'string')
-        return exp;
-    const polish = []; // parse結果格納用
-    if (typeof exp.front === 'string')
-        polish.push(exp.front);
-    else
-        polish.push(formulaDefroster(exp.front, opTable));
-    if (typeof exp.back === 'string')
-        polish.push(exp.back);
-    else
-        polish.push(formulaDefroster(exp.back, opTable));
-
-    polish.push(exp.op.identifier);
-    return polish.join(' ');
 }

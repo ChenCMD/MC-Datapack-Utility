@@ -3,7 +3,7 @@ import '../../utils/methodExtensions';
 import { codeConsole, config } from '../../extension';
 import { showInputBox } from '../../utils/common';
 import { rpnToScoreOperation } from './utils/converter';
-import { formulaAnalyzer, formulaDefroster } from './utils/formula';
+import { formulaAnalyzer } from './utils/formula';
 import { locale } from '../../locales';
 import { OperateElement, opTable } from './types/OperateTable';
 
@@ -40,7 +40,7 @@ export async function scoreOperation(): Promise<void> {
     }
 
     try {
-        const formula = formulaDefroster(formulaAnalyzer(text.split(' = ').reverse().join(' = '), opTable), opTable);
+        const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = '), opTable);
         const result = await rpnToScoreOperation(formula, prefix, objective, temp);
 
         editor.edit(edit => {
