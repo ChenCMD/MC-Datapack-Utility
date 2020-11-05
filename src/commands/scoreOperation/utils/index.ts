@@ -37,7 +37,8 @@ import { workspace } from 'vscode';
  * @param {string} _str -**_table**内からこのパラメータを探す
  * @param {Tablebase} _table このテーブル内から**_str**を探す
  */
-export function ssft(_str: string, _table: TableBase): number {
+export function ssft(_str: string | undefined, _table: TableBase): number {
+    if (!_str) return -1;
     return _table.identifiers.indexOf(_str);
 }
 

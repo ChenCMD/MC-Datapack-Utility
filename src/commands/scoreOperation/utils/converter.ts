@@ -27,25 +27,16 @@
 
 import { Deque } from '../../../types/Deque';
 import { CalculateUnfinishedError, GenerateError } from '../types/Errors';
-import { opTable } from '../types/OperateTable';
+import { OperateTable } from '../types/OperateTable';
 import { QueueElement } from '../types/QueueElement';
-import { ScoreElement, scoreTable } from '../types/ScoreTable';
+import { scoreTable } from '../types/ScoreTable';
 import { fnSplitOperator, ssft } from '.';
 import { locale } from '../../../locales';
-import { config } from '../../../extension';
 
 export async function rpnToScoreOperation(formula: string, prefix: string, objective: string, temp: string): Promise<{ resValues: Set<string>, resFormulas: string[] }> {
     let rpnQueue = new Deque<QueueElement>();
     for (const elem of formula.split(/\s+|,/))
         rpnQueue = await fnSplitOperator(elem, rpnQueue, scoreTable, objective);
-
-    const customOperate = config.get<ScoreElement[]>('scoreOperation.customOperate', []);
-    if (customOperate.length !== 0) {
-        for (const e of customOperate) {
-            scoreTable.table.push(e);
-            scoreTable.identifiers.push(e.identifier);
-        }
-    }
 
     const calcStack: QueueElement[] = [];
     const resValues = new Set<string>();
@@ -97,7 +88,7 @@ export async function rpnToScoreOperation(formula: string, prefix: string, objec
     return { resValues, resFormulas };
 }
 
-export async function rpnCalculate(rpnExp: string): Promise<string | number | undefined> {
+export async function rpnCalculate(rpnExp: string, opTable: OperateTable): Promise<string | number | undefined> {
     // 切り分け実行
     // 式を空白文字かカンマでセパレートして配列化＆これらデリミタを式から消す副作用
     const rpnQueue = new Deque<QueueElement>();
