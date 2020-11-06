@@ -3,8 +3,9 @@ import '../../utils/methodExtensions';
 import { codeConsole, config } from '../../extension';
 import { showInputBox } from '../../utils/common';
 import { rpnToScoreOperation } from './utils/converter';
-import { rpnParse } from './utils/parser';
+import { formulaAnalyzer } from './utils/formula';
 import { locale } from '../../locales';
+import { OperateElement, opTable } from './types/OperateTable';
 
 export async function scoreOperation(): Promise<void> {
     const prefix = config.get<string>('scoreOperation.prefix', '$MCDUtil_');
@@ -14,6 +15,14 @@ export async function scoreOperation(): Promise<void> {
     const editor = window.activeTextEditor;
     if (!editor)
         return;
+
+    const customOperate = config.get<OperateElement[]>('scoreOperation.customOperate', []);
+    if (customOperate.length !== 0) {
+        for (const e of customOperate) {
+            opTable.table.push(e);
+            opTable.identifiers.push(e.identifier);
+        }
+    }
 
     let text = '';
     if (inputType !== 'Always InputBox')
@@ -31,7 +40,7 @@ export async function scoreOperation(): Promise<void> {
     }
 
     try {
-        const formula = rpnParse(text.split(' = ').reverse().join(' = '));
+        const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = '), opTable);
         const result = await rpnToScoreOperation(formula, prefix, objective, temp);
 
         editor.edit(edit => {

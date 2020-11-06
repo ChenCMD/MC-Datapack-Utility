@@ -27,16 +27,16 @@
 
 import { Deque } from '../../../types/Deque';
 import { CalculateUnfinishedError, GenerateError } from '../types/Errors';
-import { opTable } from '../types/OperateTable';
+import { OperateTable } from '../types/OperateTable';
 import { QueueElement } from '../types/QueueElement';
 import { scoreTable } from '../types/ScoreTable';
-import { fnSplitOperator, ssft } from '.';
+import { formulaToQueue, ssft } from '.';
 import { locale } from '../../../locales';
+import { Formula } from '../types/Formula';
 
-export async function rpnToScoreOperation(formula: string, prefix: string, objective: string, temp: string): Promise<{ resValues: Set<string>, resFormulas: string[] }> {
+export async function rpnToScoreOperation(formula: Formula | string, prefix: string, objective: string, temp: string): Promise<{ resValues: Set<string>, resFormulas: string[] }> {
     let rpnQueue = new Deque<QueueElement>();
-    for (const elem of formula.split(/\s+|,/))
-        rpnQueue = await fnSplitOperator(elem, rpnQueue, scoreTable, objective);
+    rpnQueue = await formulaToQueue(formula, rpnQueue, scoreTable, objective);
 
     const calcStack: QueueElement[] = [];
     const resValues = new Set<string>();
@@ -57,36 +57,43 @@ export async function rpnToScoreOperation(formula: string, prefix: string, objec
             case 'op':
             case 'fn':
                 const op = scoreTable.table[ssft(elem.value, scoreTable)].axiom;
-                const arg1 = calcStack.pop();
-                const arg2 = calcStack.pop();
+                for (const _op of op) {
+                    const arg1 = calcStack.pop();
+                    const arg2 = calcStack.pop();
 
-                if (!arg1 || !arg2)
-                    throw new GenerateError(locale('formula-to-score-operation.illegal-formula'));
+                    if (!arg1 || !arg2)
+                        throw new GenerateError(locale('formula-to-score-operation.illegal-formula'));
 
-                // arg2 が「${prefix}${temp}」で表される定数でないなら定数として登録
-                if (arg2.value.indexOf(`${prefix}${temp}`) === -1) {
-                    resFormulas.push(`scoreboard players operation ${prefix}${temp}${++tempCount} ${objective} = ${arg2.value} ${arg2.objective}`);
-                    arg2.value = `${prefix}${temp}${tempCount}`;
+                    // arg2 が「${prefix}${temp}」で表される数でないなら登録
+                    if (arg2.value.indexOf(`${prefix}${temp}`) === -1) {
+                        resFormulas.push(`scoreboard players operation ${prefix}${temp}${++tempCount} ${objective} = ${arg2.value} ${arg2.objective}`);
+                        arg2.value = `${prefix}${temp}${tempCount}`;
+                    }
+
+                    // 「(被演算数) (演算子) (加演算数)」という関係として、
+                    // 「被演算数」が arg1 であるとき _op.former: true
+                    // 「加演算数」が arg2 であるとき _op.latter: true
+                    // ∴・「arg1 (演算子) arg2」のとき、_op.former も _op.latter も true
+                    //   ・「arg2 (演算子) arg1」のとき、_op.former も _op.latter も false
+                    const _f = (_op.former) ? arg1 : arg2;
+                    const _l = (_op.latter) ? arg2 : arg1;
+                    resFormulas.push(`scoreboard players operation ${_f.value} ${_f.objective} ${_op.op} ${_l.value} ${_l.objective}`);
+
+                    if (!_op.former || !_op.latter)
+                        calcStack.push(arg2);
                 }
-
-                // 最後の代入時のみ arg1 と arg2 を反転させる
-                if (rpnQueue.size() === 0 && op === '=')
-                    resFormulas.push(`scoreboard players operation ${arg1.value} ${arg1.objective} ${op} ${arg2.value} ${arg2.objective}`);
-                else
-                    resFormulas.push(`scoreboard players operation ${arg2.value} ${arg2.objective} ${op} ${arg1.value} ${arg1.objective}`);
-                calcStack.push(arg2);
                 break;
         }
     }
     return { resValues, resFormulas };
 }
 
-export async function rpnCalculate(rpnExp: string): Promise<string | number | undefined> {
+export async function rpnCalculate(rpnExp: string, opTable: OperateTable): Promise<string | number | undefined> {
     // 切り分け実行
     // 式を空白文字かカンマでセパレートして配列化＆これらデリミタを式から消す副作用
     const rpnQueue = new Deque<QueueElement>();
     for (const elem of rpnExp.split(/\s+|,/))
-        await fnSplitOperator(elem, rpnQueue, opTable, '');
+        await formulaToQueue(elem, rpnQueue, opTable, '');
 
     // 演算開始
     const calcStack: (number | string)[] = []; // 演算結果スタック
