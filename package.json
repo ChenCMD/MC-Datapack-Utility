@@ -201,9 +201,7 @@
 								"items": {
 									"type": "object",
 									"required": [
-										"former",
-										"op",
-										"latter"
+										"op"
 									],
 									"properties": {
 										"former": {

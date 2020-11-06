@@ -6,13 +6,13 @@ export interface ScoreTable extends TableBase {
 
 export interface ScoreElement extends ElementBase {
     identifier: '*' | '/' | '%' | '+' | '-' | '='
-    axiom: Array<Axiom>
+    axiom: Axiom[]
 }
 
 interface Axiom {
-    former: boolean
+    former?: boolean
     op: '*=' | '/=' | '%=' | '+=' | '-=' | '='
-    latter: boolean
+    latter?: boolean
 }
 
 export const scoreTable: ScoreTable = {
@@ -22,9 +22,7 @@ export const scoreTable: ScoreTable = {
             type: 'op',
             axiom: [
                 {
-                    former: false,
-                    op: '*=',
-                    latter: false
+                    op: '*='
                 }
             ]
         },
@@ -33,9 +31,7 @@ export const scoreTable: ScoreTable = {
             type: 'op',
             axiom: [
                 {
-                    former: false,
-                    op: '/=',
-                    latter: false
+                    op: '/='
                 }
             ]
         },
@@ -44,9 +40,7 @@ export const scoreTable: ScoreTable = {
             type: 'op',
             axiom: [
                 {
-                    former: false,
-                    op: '%=',
-                    latter: false
+                    op: '%='
                 }
             ]
         },
@@ -55,9 +49,7 @@ export const scoreTable: ScoreTable = {
             type: 'op',
             axiom: [
                 {
-                    former: false,
-                    op: '+=',
-                    latter: false
+                    op: '+='
                 }
             ]
         },
@@ -66,9 +58,7 @@ export const scoreTable: ScoreTable = {
             type: 'op',
             axiom: [
                 {
-                    former: false,
-                    op: '-=',
-                    latter: false
+                    op: '-='
                 }
             ]
         },
