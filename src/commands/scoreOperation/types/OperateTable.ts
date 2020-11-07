@@ -1,7 +1,7 @@
 import { ElementBase, TableBase } from './TableBase';
 
 export interface OperateElement extends ElementBase {
-    identifier: '(' | ')' | '#' | '_' | '~' | '**' | '*' | '/' | '%' | '+' | '-' | '<<' | '>>' | '&' | '^' | '|' | '='
+    identifier: string
     order: number
     arity: number
     assocLow: '' | 'L' | 'R'
@@ -71,6 +71,7 @@ export const opTable: OperateTable = {
             assocLow: 'R',
             fn: (_l: number | string): number | undefined => (typeof _l === 'number') ? -_l : undefined
         },
+        /*
         {
             identifier: '~',
             order: 16,
@@ -87,6 +88,7 @@ export const opTable: OperateTable = {
             assocLow: 'R',
             fn: (_l: number | string, _r: number | string): number | undefined => (typeof _l === 'number' && typeof _r === 'number') ? _l ** _r : undefined
         },
+        */
         {
             identifier: '*',
             order: 14,
@@ -127,6 +129,7 @@ export const opTable: OperateTable = {
             assocLow: 'L',
             fn: (_l: number | string, _r: number | string): number | string => (typeof _l === 'number' && typeof _r === 'number') ? _l - _r : `${_l} - ${_r}`
         },
+        /*
         {
             identifier: '<<',
             order: 12,
@@ -167,6 +170,7 @@ export const opTable: OperateTable = {
             assocLow: 'L',
             fn: (_l: number | string, _r: number | string): number | undefined => (typeof _l === 'number' && typeof _r === 'number') ? _l | _r : undefined
         },
+        */
         {
             identifier: '=',
             order: 3,
@@ -177,6 +181,6 @@ export const opTable: OperateTable = {
         }
     ],
     identifiers: [
-        '(', ')', '#', '_', '~', '**', '*', '/', '%', '+', '-', '<<', '>>', '&', '^', '|', '='
+        '(', ')', '#', '_', /* '~', '**', */ '*', '/', '%', '+', '-', /* '<<', '>>', '&', '^', '|', */ '='
     ]
 };
