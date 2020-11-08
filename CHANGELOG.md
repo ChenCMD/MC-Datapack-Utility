@@ -1,9 +1,18 @@
-# Change Log
+# [v1.1.0](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.0.0...v1.1.0) (2020/11/03)
 
-All notable changes to the "mccommanderutil" extension will be documented in this file.
+## :globe_with_meridians: Localize
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+* Supported for zh_ch/zh_tw languages (With the help of @SPGoding @lakejason0)
 
-## [Unreleased]
+## :bug: Bug Fixes
 
-- Initial release
+* Fix if there is no open file name, assignment variables such as nowOpen will not be substituted.
+* Fix unnatural messages.
+
+## Others
+
+* :zap: Extensions now load faster. (maybe)
+
+# [v1.0.0](https://github.com/ChenCMD/MC-Datapack-Utility/tree/v1.0.0) (2020/11/01)
+
+Release.

@@ -4,12 +4,13 @@ import { loadLocale } from './locales';
 
 export const codeConsole = window.createOutputChannel('MC Commander Util');
 export let config = workspace.getConfiguration('mcdutil');
+const vscodeLanguage = getVSCodeLanguage();
 /**
  * @param {vscode.ExtensionContext} context
  */
 export function activate(context: ExtensionContext): void {
 
-    loadLocale(config.get('language', 'default'), getVSCodeLanguage());
+    loadLocale(config.get<string>('language', 'default'), vscodeLanguage);
 
     const disposable = [];
 
@@ -19,8 +20,10 @@ export function activate(context: ExtensionContext): void {
     disposable.push(commands.registerCommand('mcdutil.commands.copyResourcePath', copyResourcePath));
 
     disposable.push(workspace.onDidChangeConfiguration(e => {
-        if (e.affectsConfiguration('mcdutil'))
+        if (e.affectsConfiguration('mcdutil')) {
             config = workspace.getConfiguration('mcdutil');
+            loadLocale(config.get<string>('language', 'default'), vscodeLanguage);
+        }
     }));
 
     context.subscriptions.push(...disposable);

@@ -1,11 +1,16 @@
 {
 	"name": "mc-datapack-utility",
 	"displayName": "MC Datapack Utility",
-	"description": "%mcdutil.description%",
-	"version": "1.0.0-beta.6",
+	"description": "Extensions that provide multiple features that are useful for developing Minecraft: Java Edition Datapack",
+	"version": "0.0.0-development",
 	"icon": "icon.png",
 	"categories": [
 		"Other"
+	],
+	"keywords": [
+		"minecraft",
+		"datapack",
+		"mcfunction"
 	],
 	"license": "MIT",
 	"publisher": "ChenCMD",
@@ -21,19 +26,19 @@
 		"url": "https://github.com/ChenCMD/MC-Datapack-Utility/issues"
 	},
 	"engines": {
-		"vscode": "^1.48.0"
+		"vscode": "^1.50.0"
 	},
 	"scripts": {
-		"vscode:prepublish": "npm run compile && npm run lint",
-		"compile": "tsc -p ./",
-		"lint": "eslint src --ext ts",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile && npm run lint",
-		"test": "node ./out/test/runTest.js"
+		"vscode:prepublish": "webpack --mode production",
+		"build": "webpack --mode production",
+		"compile": "webpack --mode development",
+		"watch": "webpack --mode none --watch/",
+		"lint": "eslint --fix src/**/*/ts",
+		"release": "semantic-release"
 	},
-	"main": "out/extension.js",
+	"main": "dist/extension.js",
 	"dependencies": {
-		"@octokit/rest": "^18.0.6",
+		"@octokit/rest": "^18.0.7",
 		"dateformat": "^3.0.3",
 		"minimatch": "^3.0.4"
 	},
@@ -108,7 +113,9 @@
 					"enum": [
 						"Default",
 						"en",
-						"ja"
+						"ja",
+						"zh-cn",
+						"zh-tw"
 					],
 					"markdownDescription": "%mcdutil.config.language%",
 					"default": "Default"
@@ -152,6 +159,73 @@
 					"type": "boolean",
 					"markdownDescription": "%mcdutil.config.scoreOperation.isAlwaysSpecifyObject%",
 					"default": true
+				},
+				"mcdutil.scoreOperation.customOperate": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"required": [
+							"identifier",
+							"order",
+							"type",
+							"arity",
+							"assocLow"
+						],
+						"properties": {
+							"identifier": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.identifier%"
+							},
+							"order": {
+								"type": "number",
+								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.order%",
+								"default": 18
+							},
+							"type": {
+								"type": "string",
+								"enum": ["fn"],
+								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.type%",
+								"default": "fn"
+							},
+							"arity": {
+								"type": "number",
+								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.arity%"
+							},
+							"assocLow": {
+								"type": "string",
+								"enum": ["L", "R"],
+								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.assocLow%"
+							},
+							"axiom": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"required": [
+										"op"
+									],
+									"properties": {
+										"former": {
+											"type": "boolean",
+											"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.axiom.former%"
+										},
+										"op": {
+											"type": "string",
+											"enum": [
+												"*=", "/=", "%=", "+=", "-=", "="
+											],
+											"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.axiom.op%"
+										},
+										"latter": {
+											"type": "boolean",
+											"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.axiom.latter%"
+										}
+									}
+								}
+							}
+						}
+					},
+					"markdownDescription": "%mcdutil.config.scoreOperation.customOperate%",
+					"default": []
 				},
 				"mcdutil.createDatapackTemplate.customTemplate": {
 					"type": "array",
@@ -401,17 +475,25 @@
 		}
 	},
 	"devDependencies": {
+		"@semantic-release/changelog": "^5.0.1",
+		"@semantic-release/git": "^9.0.0",
 		"@types/dateformat": "^3.0.1",
 		"@types/glob": "^7.1.3",
 		"@types/mocha": "^8.0.0",
-		"@types/node": "^14.0.27",
-		"@types/vscode": "^1.48.0",
+		"@types/node": "^14.14.6",
+		"@types/vscode": "^1.50.0",
 		"@typescript-eslint/eslint-plugin": "^3.8.0",
 		"@typescript-eslint/parser": "^3.8.0",
-		"eslint": "^7.6.0",
+		"eslint": "^7.12.1",
 		"glob": "^7.1.6",
-		"mocha": "^8.0.1",
+		"mocha": "^8.2.0",
+		"semantic-release": "^17.2.2",
+		"semantic-release-gitmoji": "^1.3.4",
+		"semantic-release-vsce": "^3.0.1",
+		"ts-loader": "^8.0.7",
 		"typescript": "^3.8.3",
-		"vscode-test": "^1.4.0"
+		"vscode-test": "^1.4.1",
+		"webpack": "^5.3.2",
+		"webpack-cli": "^4.1.0"
 	}
 }

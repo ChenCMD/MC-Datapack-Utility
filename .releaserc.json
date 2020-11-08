@@ -1,0 +1,28 @@
+{
+    "plugins": [
+        "semantic-release-gitmoji",
+        "@semantic-release/changelog",
+        [
+            "semantic-release-vsce",
+            {
+                "packageVsix": "mc-datapack-utility.vsix"
+            }
+        ],
+        [
+            "@semantic-release/github",
+            {
+                "assets": "mc-datapack-utility.vsix",
+                "releasedLabels": [
+                    ":rocket: released"
+                ]
+            }
+        ],
+        [
+            "@semantic-release/git",
+            {
+                "message": "🔖 v${nextRelease.version}\n\nhttps://github.com/ChenCMD/MC-Datapack-Utility/releases/tag/${nextRelease.gitTag}"
+            }
+        ]
+    ],
+    "branches": "release"
+}

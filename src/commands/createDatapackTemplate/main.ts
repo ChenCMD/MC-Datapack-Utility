@@ -3,12 +3,13 @@ import { getDatapackRoot, getDate, getResourcePath, isDatapackRoot, showInputBox
 import path from 'path';
 import { TextEncoder } from 'util';
 import '../../utils/methodExtensions';
-import { getGitHubData, getPackMcMetaData, getPickItems } from './types/Items';
+import { getGitHubData, getPackMcMetaData, getPickItems } from './utils/data';
 import * as file from '../../utils/file';
 import { locale } from '../../locales';
 import { createMessageItemsHasId } from './types/MessageItems';
 import { resolveVars, VariableContainer } from '../../types/VariableContainer';
 import { getFileType } from '../../types/FileTypes';
+import { codeConsole } from '../../extension';
 
 export async function createDatapack(): Promise<void> {
     // フォルダ選択
@@ -103,27 +104,33 @@ async function create(dir: Uri): Promise<void> {
     const createItemData = createItems.flat(v => v.generates);
     createItemData.push(getPackMcMetaData());
 
-    for (const func of funcs.map((v, i) => ({ index: i + 1, value: v }))) {
-        await window.withProgress({
-            location: ProgressLocation.Notification,
-            cancellable: false,
-            title: 'Creating Datapack'
-        }, async progress => {
-            progress.report({ increment: 0, message: `Downloading template data ${func.index}/${funcs.length}` });
+    try {
+        for (const func of funcs.map((v, i) => ({ index: i + 1, value: v }))) {
+            await window.withProgress({
+                location: ProgressLocation.Notification,
+                cancellable: false,
+                title: locale('create-datapack-template.progress.title')
+            }, async progress => {
+                progress.report({ increment: 0, message: locale('create-datapack-template.progress.download', func.index, funcs.length) });
 
-            const data = await getGitHubData(func.value, (_, m) => {
-                progress.report({ increment: 100 / m, message: `Downloading template data ${func.index}/${funcs.length}` });
+                const data = await getGitHubData(func.value, (_, m) => {
+                    progress.report({ increment: 100 / m, message: locale('create-datapack-template.progress.download', func.index, funcs.length) });
+                });
+                createItemData.push(...data);
             });
-            createItemData.push(...data);
-        });
+        }
+    } catch (error) {
+        window.showErrorMessage(error.toString());
+        codeConsole.appendLine(error.stack ?? error.toString());
+        return;
     }
 
     await window.withProgress({
         location: ProgressLocation.Notification,
         cancellable: false,
-        title: 'Creating Datapack'
+        title: locale('create-datapack-template.progress.title')
     }, async progress => {
-        progress.report({ increment: 0, message: 'Creating template...' });
+        progress.report({ increment: 0, message: locale('create-datapack-template.progress.creating') });
 
         const enconder = new TextEncoder();
 
@@ -142,7 +149,7 @@ async function create(dir: Uri): Promise<void> {
             if (item.type === 'folder')
                 await file.createDir(filePath);
 
-            progress.report({ increment: 100 / createItemData.length, message: 'Creating template...' });
+            progress.report({ increment: 100 / createItemData.length, message: locale('create-datapack-template.progress.creating') });
         }
         window.showInformationMessage(locale('create-datapack-template.complete'));
     });

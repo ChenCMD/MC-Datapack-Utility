@@ -40,16 +40,18 @@ interface Locale {
 
 let language = '';
 
-export function locale(key: string, ...params: string[]): string {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function locale(key: string, ...params: any[]): string {
     const value: string | undefined = locales[language][key] ?? locales.en[key];
 
     return resolveLocalePlaceholders(value, params) ?? (codeConsole.appendLine(`Unknown locale key “${key}”`), '');
 }
 
-export function resolveLocalePlaceholders(val: string | undefined, params?: string[]): string | undefined {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function resolveLocalePlaceholders(val: string | undefined, params?: any[]): string | undefined {
     return val?.replace(/%\d+%/g, match => {
         const index = parseInt(match.slice(1, -1));
-        return params?.[index] !== undefined ? params[index] : match;
+        return params?.[index] !== undefined ? params[index].toString() : match;
     });
 }
 

@@ -39,7 +39,7 @@ export async function createFile(uri: Uri): Promise<void> {
         if (await pathAccessible(path.join(uri.fsPath, `${v}.${fileExtension}`)))
             return locale('create-file.already-exists', `${v}.${fileExtension}`);
     });
-    if (!fileName)
+    if (fileName === undefined)
         return;
 
     // リソースパスの生成とファイルテンプレートの取得
@@ -51,10 +51,11 @@ export async function createFile(uri: Uri): Promise<void> {
     let openFileName = '';
     let openFileExtname = '';
     if (openFilePath) {
-        openFileType = getFileType(openFilePath, datapackRoot) ?? '';
+        openFileType = getFileType(path.dirname(openFilePath), datapackRoot) ?? '';
         openFileResourcePath = openFileType !== '' ? getResourcePath(openFilePath, datapackRoot, openFileType as FileType) : '';
         openFileName = path.parse(openFilePath).name;
-        openFileExtname = path.extname(openFilePath).slice(1);
+        const index = openFilePath.lastIndexOf('.');
+        openFileExtname = index !== -1 ? openFilePath.substring(index) : '';
     }
 
     const variableContainer: VariableContainer = {
