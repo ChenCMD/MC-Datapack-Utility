@@ -183,7 +183,9 @@
 							},
 							"type": {
 								"type": "string",
-								"enum": ["fn"],
+								"enum": [
+									"fn"
+								],
 								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.type%",
 								"default": "fn"
 							},
@@ -193,7 +195,10 @@
 							},
 							"assocLow": {
 								"type": "string",
-								"enum": ["L", "R"],
+								"enum": [
+									"L",
+									"R"
+								],
 								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.assocLow%"
 							},
 							"axiom": {
@@ -211,7 +216,12 @@
 										"op": {
 											"type": "string",
 											"enum": [
-												"*=", "/=", "%=", "+=", "-=", "="
+												"*=",
+												"/=",
+												"%=",
+												"+=",
+												"-=",
+												"="
 											],
 											"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.axiom.op%"
 										},
@@ -226,6 +236,11 @@
 					},
 					"markdownDescription": "%mcdutil.config.scoreOperation.customOperate%",
 					"default": []
+				},
+				"mcdutil.scoreOperation.valueScale": {
+					"type": "number",
+					"markdownDescription": "%mcdutil.config.scoreOperation.valueScale%",
+					"default": 1
 				},
 				"mcdutil.createDatapackTemplate.customTemplate": {
 					"type": "array",

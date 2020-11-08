@@ -35,8 +35,7 @@ import { locale } from '../../../locales';
 import { Formula } from '../types/Formula';
 
 export async function rpnToScoreOperation(formula: Formula | string, prefix: string, objective: string, temp: string): Promise<{ resValues: Set<string>, resFormulas: string[] }> {
-    let rpnQueue = new Deque<QueueElement>();
-    rpnQueue = await formulaToQueue(formula, rpnQueue, scoreTable, objective);
+    const rpnQueue = await formulaToQueue(formula, new Deque<QueueElement>(), scoreTable, objective);
 
     const calcStack: QueueElement[] = [];
     const resValues = new Set<string>();
@@ -74,7 +73,7 @@ export async function rpnToScoreOperation(formula: Formula | string, prefix: str
                     // 「被演算数」が arg1 であるとき _op.former: true
                     // 「加演算数」が arg2 であるとき _op.latter: true
                     // ∴・「arg1 (演算子) arg2」のとき、_op.former も _op.latter も true
-                    //   ・「arg2 (演算子) arg1」のとき、_op.former も _op.latter も false
+                    //   ・「arg2 (演算子) arg1」のとき、_op.former も _op.latter も false または undefined
                     const _f = (_op.former) ? arg1 : arg2;
                     const _l = (_op.latter) ? arg2 : arg1;
                     resFormulas.push(`scoreboard players operation ${_f.value} ${_f.objective} ${_op.op} ${_l.value} ${_l.objective}`);
