@@ -2,7 +2,7 @@
 	"name": "mc-datapack-utility",
 	"displayName": "MC Datapack Utility",
 	"description": "Extensions that provide multiple features that are useful for developing Minecraft: Java Edition Datapack",
-	"version": "0.0.0-development",
+	"version": "1.2.0",
 	"icon": "icon.png",
 	"categories": [
 		"Other"
@@ -183,7 +183,9 @@
 							},
 							"type": {
 								"type": "string",
-								"enum": ["fn"],
+								"enum": [
+									"fn"
+								],
 								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.type%",
 								"default": "fn"
 							},
@@ -193,7 +195,10 @@
 							},
 							"assocLow": {
 								"type": "string",
-								"enum": ["L", "R"],
+								"enum": [
+									"L",
+									"R"
+								],
 								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.assocLow%"
 							},
 							"axiom": {
@@ -211,7 +216,12 @@
 										"op": {
 											"type": "string",
 											"enum": [
-												"*=", "/=", "%=", "+=", "-=", "="
+												"*=",
+												"/=",
+												"%=",
+												"+=",
+												"-=",
+												"="
 											],
 											"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.axiom.op%"
 										},
