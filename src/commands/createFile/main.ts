@@ -53,9 +53,8 @@ export async function createFile(uri: Uri): Promise<void> {
     if (openFilePath) {
         openFileType = getFileType(path.dirname(openFilePath), datapackRoot) ?? '';
         openFileResourcePath = openFileType !== '' ? getResourcePath(openFilePath, datapackRoot, openFileType as FileType) : '';
-        openFileName = path.parse(openFilePath).name;
-        const index = openFilePath.lastIndexOf('.');
-        openFileExtname = index !== -1 ? openFilePath.substring(index) : '';
+        openFileName = openFilePath.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? '';
+        openFileExtname = openFilePath.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? '';
     }
 
     const variableContainer: VariableContainer = {

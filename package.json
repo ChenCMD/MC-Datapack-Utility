@@ -33,7 +33,7 @@
 		"build": "webpack --mode production",
 		"compile": "webpack --mode development",
 		"watch": "webpack --mode none --watch/",
-		"lint": "eslint --fix src/**/*/ts",
+		"lint": "eslint --fix src/**/*.ts",
 		"release": "semantic-release"
 	},
 	"main": "dist/extension.js",
