@@ -3,13 +3,14 @@ import { getDatapackRoot, getDate, getResourcePath, isDatapackRoot, showInputBox
 import path from 'path';
 import { TextEncoder } from 'util';
 import '../../utils/methodExtensions';
-import { getGitHubData, getPackMcMetaData, getPickItems } from './utils/data';
+import { getGitHubData, packMcMetaData, pickItems } from './utils/data';
 import * as file from '../../utils/file';
 import { locale } from '../../locales';
 import { createMessageItemsHasId } from './types/MessageItems';
 import { resolveVars, VariableContainer } from '../../types/VariableContainer';
 import { getFileType } from '../../types/FileTypes';
 import { codeConsole } from '../../extension';
+import rfdc from 'rfdc';
 
 export async function createDatapack(): Promise<void> {
     // フォルダ選択
@@ -88,7 +89,7 @@ async function create(dir: Uri): Promise<void> {
     };
 
     // 生成するファイル/フォルダを選択
-    const quickPickItems = getPickItems();
+    const quickPickItems = rfdc()(pickItems);
     quickPickItems.forEach(v => v.label = resolveVars(v.label, variableContainer));
     const createItems = await window.showQuickPick(quickPickItems, {
         canPickMany: true,
@@ -102,7 +103,7 @@ async function create(dir: Uri): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const funcs = createItems.filter(v => v.func !== undefined).flat(v => v.func!);
     const createItemData = createItems.flat(v => v.generates);
-    createItemData.push(getPackMcMetaData());
+    createItemData.push(rfdc()(packMcMetaData));
 
     try {
         for (const func of funcs.map((v, i) => ({ index: i + 1, value: v }))) {
