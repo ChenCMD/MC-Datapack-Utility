@@ -82,6 +82,32 @@ export function getPickItems(): QuickPickFiles[] {
             ]
         },
         {
+            label: 'All Vanilla tags/entity_types',
+            generates: [],
+            func: [
+                {
+                    owner: 'SPGoding',
+                    repo: 'vanilla-datapack',
+                    ref: 'data',
+                    path: 'data/minecraft/tags/entity_types',
+                    relativeFilePath: data => data.path
+                }
+            ]
+        },
+        {
+            label: 'All Vanilla tags/fluids',
+            generates: [],
+            func: [
+                {
+                    owner: 'SPGoding',
+                    repo: 'vanilla-datapack',
+                    ref: 'data',
+                    path: 'data/minecraft/tags/fluids',
+                    relativeFilePath: data => data.path
+                }
+            ]
+        },
+        {
             label: 'All Vanilla tags/items',
             generates: [],
             func: [
