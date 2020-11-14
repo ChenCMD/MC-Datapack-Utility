@@ -3,7 +3,7 @@ import { GenerateFileData, QuickPickFiles } from '../types/QuickPickFiles';
 
 export const packMcMetaData: GenerateFileData = {
     type: 'file',
-    relativeFilePath: 'pack.mcmeta',
+    rel: 'pack.mcmeta',
     content: [
         '{',
         '    "pack": {',
@@ -21,7 +21,7 @@ export const pickItems: QuickPickFiles[] = [
         generates: [
             {
                 type: 'file',
-                relativeFilePath: 'data/minecraft/tags/functions/load.json',
+                rel: 'data/minecraft/tags/functions/load.json',
                 content: [
                     '{',
                     '    "values": [',
@@ -32,7 +32,7 @@ export const pickItems: QuickPickFiles[] = [
             },
             {
                 type: 'file',
-                relativeFilePath: 'data/%namespace%/functions/load.mcfunction',
+                rel: 'data/%namespace%/functions/load.mcfunction',
                 content: []
             }
         ]
@@ -43,7 +43,7 @@ export const pickItems: QuickPickFiles[] = [
         generates: [
             {
                 type: 'file',
-                relativeFilePath: 'data/minecraft/tags/functions/tick.json',
+                rel: 'data/minecraft/tags/functions/tick.json',
                 content: [
                     '{',
                     '    "values": [',
@@ -54,7 +54,7 @@ export const pickItems: QuickPickFiles[] = [
             },
             {
                 type: 'file',
-                relativeFilePath: 'data/%namespace%/functions/tick.mcfunction',
+                rel: 'data/%namespace%/functions/tick.mcfunction',
                 content: []
             }
         ]
@@ -66,7 +66,7 @@ export const pickItems: QuickPickFiles[] = [
             {
                 owner: 'SPGoding',
                 repo: 'vanilla-datapack',
-                ref: 'data',
+                ref: '%version%-data',
                 path: 'data/minecraft/tags/blocks',
                 relativeFilePath: (data: ReposGetContentResponseData): string => data.path
             }
@@ -79,7 +79,7 @@ export const pickItems: QuickPickFiles[] = [
             {
                 owner: 'SPGoding',
                 repo: 'vanilla-datapack',
-                ref: 'data',
+                ref: '%version%-data',
                 path: 'data/minecraft/tags/entity_types',
                 relativeFilePath: (data: ReposGetContentResponseData): string => data.path
             }
@@ -92,7 +92,7 @@ export const pickItems: QuickPickFiles[] = [
             {
                 owner: 'SPGoding',
                 repo: 'vanilla-datapack',
-                ref: 'data',
+                ref: '%version%-data',
                 path: 'data/minecraft/tags/fluids',
                 relativeFilePath: (data: ReposGetContentResponseData): string => data.path
             }
@@ -105,7 +105,7 @@ export const pickItems: QuickPickFiles[] = [
             {
                 owner: 'SPGoding',
                 repo: 'vanilla-datapack',
-                ref: 'data',
+                ref: '%version%-data',
                 path: 'data/minecraft/tags/items',
                 relativeFilePath: (data: ReposGetContentResponseData): string => data.path
             }
@@ -116,7 +116,7 @@ export const pickItems: QuickPickFiles[] = [
         generates: [
             {
                 type: 'folder',
-                relativeFilePath: 'data/%namespace%/advancements/'
+                rel: 'data/%namespace%/advancements/'
             }
         ]
     },
@@ -125,7 +125,7 @@ export const pickItems: QuickPickFiles[] = [
         generates: [
             {
                 type: 'folder',
-                relativeFilePath: 'data/%namespace%/dimensions/'
+                rel: 'data/%namespace%/dimensions/'
             }
         ]
     },
@@ -134,7 +134,7 @@ export const pickItems: QuickPickFiles[] = [
         generates: [
             {
                 type: 'folder',
-                relativeFilePath: 'data/%namespace%/dimension_types/'
+                rel: 'data/%namespace%/dimension_types/'
             }
         ]
     },
@@ -143,7 +143,7 @@ export const pickItems: QuickPickFiles[] = [
         generates: [
             {
                 type: 'folder',
-                relativeFilePath: 'data/%namespace%/loot_tables/'
+                rel: 'data/%namespace%/loot_tables/'
             }
         ]
     },
@@ -152,7 +152,7 @@ export const pickItems: QuickPickFiles[] = [
         generates: [
             {
                 type: 'folder',
-                relativeFilePath: 'data/%namespace%/predicates/'
+                rel: 'data/%namespace%/predicates/'
             }
         ]
     },
@@ -161,7 +161,7 @@ export const pickItems: QuickPickFiles[] = [
         generates: [
             {
                 type: 'folder',
-                relativeFilePath: 'data/%namespace%/recipes/'
+                rel: 'data/%namespace%/recipes/'
             }
         ]
     },
@@ -170,7 +170,7 @@ export const pickItems: QuickPickFiles[] = [
         generates: [
             {
                 type: 'folder',
-                relativeFilePath: 'data/%namespace%/tags/blocks/'
+                rel: 'data/%namespace%/tags/blocks/'
             }
         ]
     },
@@ -179,7 +179,7 @@ export const pickItems: QuickPickFiles[] = [
         generates: [
             {
                 type: 'folder',
-                relativeFilePath: 'data/%namespace%/tags/entity_types/'
+                rel: 'data/%namespace%/tags/entity_types/'
             }
         ]
     },
@@ -188,7 +188,7 @@ export const pickItems: QuickPickFiles[] = [
         generates: [
             {
                 type: 'folder',
-                relativeFilePath: 'data/%namespace%/tags/fluids/'
+                rel: 'data/%namespace%/tags/fluids/'
             }
         ]
     },
@@ -197,7 +197,7 @@ export const pickItems: QuickPickFiles[] = [
         generates: [
             {
                 type: 'folder',
-                relativeFilePath: 'data/%namespace%/tags/functions/'
+                rel: 'data/%namespace%/tags/functions/'
             }
         ]
     },
@@ -206,7 +206,7 @@ export const pickItems: QuickPickFiles[] = [
         generates: [
             {
                 type: 'folder',
-                relativeFilePath: 'data/%namespace%/tags/items/'
+                rel: 'data/%namespace%/tags/items/'
             }
         ]
     }

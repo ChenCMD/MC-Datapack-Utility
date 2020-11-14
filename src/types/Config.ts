@@ -41,7 +41,6 @@ export const defaultConfig: Config = {
     }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function constructConfig(custom: WorkspaceConfiguration, base = defaultConfig): Config {
     const scoreOperation = custom.scoreOperation || {};
     const createDatapackTemplate = custom.createDatapackTemplate || {};

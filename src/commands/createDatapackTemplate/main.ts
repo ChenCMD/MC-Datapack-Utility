@@ -137,7 +137,7 @@ async function create(dir: Uri): Promise<void> {
         const enconder = new TextEncoder();
 
         for (const item of createItemData) {
-            const filePath = path.join(dir.fsPath, datapackName, resolveVars(item.relativeFilePath, variableContainer));
+            const filePath = path.join(dir.fsPath, datapackName, resolveVars(item.rel, variableContainer));
             if (item.type === 'file') {
                 if (await file.pathAccessible(filePath)) continue;
 

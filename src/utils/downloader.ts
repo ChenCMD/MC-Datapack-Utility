@@ -12,13 +12,11 @@ export async function download(uri: string): Promise<string> {
             res.on('data', chunk => {
                 body += chunk;
             });
-            res.on('error', e => {
-                reject(e);
-            });
+            res.on('error', reject);
             res.on('end', () => {
                 resolve(body);
             });
-        });
+        }).end();
     });
 }
 

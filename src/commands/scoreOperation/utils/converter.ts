@@ -33,6 +33,7 @@ import { scoreTable } from '../types/ScoreTable';
 import { formulaToQueue, ssft } from '.';
 import { locale } from '../../../locales';
 import { Formula } from '../types/Formula';
+import { codeConsole } from '../../../extension';
 
 export async function rpnToScoreOperation(formula: Formula | string, prefix: string, objective: string, temp: string): Promise<{ resValues: Set<string>, resFormulas: string[] }> {
     let rpnQueue = new Deque<QueueElement>();
@@ -112,7 +113,7 @@ export async function rpnCalculate(rpnExp: string, opTable: OperateTable): Promi
 
             // 制御文 ※計算時にはないはずなのでwarningを出して無視
             case 'state':
-                console.warn(`inclute statement:${elem.value}`);
+                codeConsole.appendLine(`[WARN] inclute statement:${elem.value}`);
                 break;
 
             // 演算子・計算機能
