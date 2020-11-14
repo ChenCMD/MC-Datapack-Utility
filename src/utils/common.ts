@@ -5,6 +5,7 @@ import { locale } from '../locales';
 import dateFormat from 'dateformat';
 import { config } from '../extension';
 import { FileType, fileTypeFolderName } from '../types/FileTypes';
+import { DownloadTimeOutError } from '../types/Error';
 
 export async function showInputBox(message?: string, validateInput?: (value: string) => string | Thenable<string | null | undefined> | null | undefined): Promise<string | undefined> {
     return await window.showInputBox({
@@ -14,6 +15,10 @@ export async function showInputBox(message?: string, validateInput?: (value: str
         ignoreFocusOut: true,
         validateInput: validateInput
     });
+}
+
+export async function setTimeOut<T>(milisec: number): Promise<T> {
+    return await new Promise<T>((_, reject) => setTimeout(() => reject(new DownloadTimeOutError(locale('create-datapack-template.download-timeout'))), milisec));
 }
 
 export function getDate(): string {

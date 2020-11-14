@@ -7,11 +7,11 @@ export interface Config {
     language: 'Default' | 'en' | 'ja' | 'zh-cn' | 'zh-tw',
     dateFormat: string,
     scoreOperation: {
-        prefix: string,
-        objective: string,
-        temp: string,
-        forceInputType: 'Default' | 'Always Selection' | 'Always InputBox',
-        isAlwaysSpecifyObject: boolean,
+        prefix: string
+        objective: string
+        temp: string
+        forceInputType: 'Default' | 'Always Selection' | 'Always InputBox'
+        isAlwaysSpecifyObject: boolean
         customOperate: OperateElement[]
     },
     createDatapackTemplate: {

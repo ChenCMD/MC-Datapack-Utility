@@ -1,9 +1,8 @@
 import { Octokit } from '@octokit/rest';
 import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
 import { OctokitResponse } from '@octokit/types/dist-types/OctokitResponse';
-import { locale } from '../../../locales';
+import { setTimeOut } from '../../../utils/common';
 import { download } from '../../../utils/downloader';
-import { DownloadTimeOutError } from '../types/Errors';
 import { GenerateFileData, GetGitHubDataFunc, QuickPickFiles } from '../types/QuickPickFiles';
 
 export const packMcMetaData: GenerateFileData = {
@@ -226,14 +225,14 @@ export async function getGitHubData(data: GetGitHubDataFunc, elementFunc: (index
             ref: data.ref,
             path: data.path
         }) as unknown as OctokitResponse<ReposGetContentResponseData[]>,
-        new Promise<OctokitResponse<ReposGetContentResponseData[]>>((_, reject) => setTimeout(() => reject(new DownloadTimeOutError(locale('create-datapack-template.download-timeout'))), 7_000))
+        setTimeOut<OctokitResponse<ReposGetContentResponseData[]>>(7_000)
     ]);
     // コンパイラが雑魚
     const result: GenerateFileData[] = [];
     for (const file of files.data.map((v, i) => ({ index: i, value: v }))) {
         const content = await Promise.race([
             download(file.value.download_url),
-            new Promise<string>((_, reject) => setTimeout(() => reject(new DownloadTimeOutError(locale('create-datapack-template.download-timeout'))), 7_000))
+            setTimeOut<string>(7_000)
         ]);
         result.push({
             type: 'file',
