@@ -3,7 +3,7 @@ import { getDatapackRoot, getDate, getResourcePath, isDatapackRoot, showInputBox
 import path from 'path';
 import { TextEncoder } from 'util';
 import '../../utils/methodExtensions';
-import { getGitHubData, packMcMetaData, pickItems } from './utils/data';
+import { packMcMetaData, pickItems } from './utils/data';
 import * as file from '../../utils/file';
 import { locale } from '../../locales';
 import { createMessageItemsHasId } from './types/MessageItems';
@@ -11,6 +11,7 @@ import { resolveVars, VariableContainer } from '../../types/VariableContainer';
 import { getFileType } from '../../types/FileTypes';
 import { codeConsole, config } from '../../extension';
 import rfdc from 'rfdc';
+import { getGitHubData } from '../../utils/downloader';
 
 export async function createDatapack(): Promise<void> {
     // フォルダ選択
@@ -114,9 +115,9 @@ async function create(dir: Uri): Promise<void> {
             }, async progress => {
                 progress.report({ increment: 0, message: locale('create-datapack-template.progress.download', func.index, funcs.length) });
 
-                const data = await getGitHubData(func.value, (_, m) => {
-                    progress.report({ increment: 100 / m, message: locale('create-datapack-template.progress.download', func.index, funcs.length) });
-                });
+                const data = await getGitHubData(func.value, (_, m) =>
+                    progress.report({ increment: 100 / m, message: locale('create-datapack-template.progress.download', func.index, funcs.length) })
+                );
                 createItemData.push(...data);
             });
         }

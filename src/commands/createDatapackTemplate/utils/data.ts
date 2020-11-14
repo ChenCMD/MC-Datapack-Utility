@@ -1,9 +1,5 @@
-import { Octokit } from '@octokit/rest';
 import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
-import { OctokitResponse } from '@octokit/types/dist-types/OctokitResponse';
-import { setTimeOut } from '../../../utils/common';
-import { download } from '../../../utils/downloader';
-import { GenerateFileData, GetGitHubDataFunc, QuickPickFiles } from '../types/QuickPickFiles';
+import { GenerateFileData, QuickPickFiles } from '../types/QuickPickFiles';
 
 export const packMcMetaData: GenerateFileData = {
     type: 'file',
@@ -215,31 +211,3 @@ export const pickItems: QuickPickFiles[] = [
         ]
     }
 ];
-
-export async function getGitHubData(data: GetGitHubDataFunc, elementFunc: (index: number, max: number) => void): Promise<GenerateFileData[]> {
-    const octokit = new Octokit();
-    const files = await Promise.race([
-        octokit.repos.getContent({
-            owner: data.owner,
-            repo: data.repo,
-            ref: data.ref,
-            path: data.path
-        }) as unknown as OctokitResponse<ReposGetContentResponseData[]>,
-        setTimeOut<OctokitResponse<ReposGetContentResponseData[]>>(7_000)
-    ]);
-    // コンパイラが雑魚
-    const result: GenerateFileData[] = [];
-    for (const file of files.data.map((v, i) => ({ index: i, value: v }))) {
-        const content = await Promise.race([
-            download(file.value.download_url),
-            setTimeOut<string>(7_000)
-        ]);
-        result.push({
-            type: 'file',
-            relativeFilePath: data.relativeFilePath(file.value),
-            content: content.split('\n')
-        });
-        elementFunc(file.index, files.data.length);
-    }
-    return result;
-}
