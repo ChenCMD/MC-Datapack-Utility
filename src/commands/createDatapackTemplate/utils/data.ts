@@ -1,7 +1,6 @@
 import { Octokit } from '@octokit/rest';
 import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
 import { OctokitResponse } from '@octokit/types/dist-types/OctokitResponse';
-import { config } from '../../../extension';
 import { locale } from '../../../locales';
 import { download } from '../../../utils/downloader';
 import { DownloadTimeOutError } from '../types/Errors';
@@ -215,8 +214,7 @@ export const pickItems: QuickPickFiles[] = [
                 relativeFilePath: 'data/%namespace%/tags/items/'
             }
         ]
-    },
-    ...config.get<QuickPickFiles[]>('createDatapackTemplate.customTemplate', [])
+    }
 ];
 
 export async function getGitHubData(data: GetGitHubDataFunc, elementFunc: (index: number, max: number) => void): Promise<GenerateFileData[]> {

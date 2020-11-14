@@ -17,7 +17,7 @@ export async function showInputBox(message?: string, validateInput?: (value: str
 }
 
 export function getDate(): string {
-    return dateFormat(Date.now(), config.get<string>('dateFormat', 'm/dd HH:MM'));
+    return dateFormat(Date.now(), config.dateFormat);
 }
 
 /**

@@ -9,7 +9,7 @@ import { locale } from '../../locales';
 import { createMessageItemsHasId } from './types/MessageItems';
 import { resolveVars, VariableContainer } from '../../types/VariableContainer';
 import { getFileType } from '../../types/FileTypes';
-import { codeConsole } from '../../extension';
+import { codeConsole, config } from '../../extension';
 import rfdc from 'rfdc';
 
 export async function createDatapack(): Promise<void> {
@@ -89,7 +89,7 @@ async function create(dir: Uri): Promise<void> {
     };
 
     // 生成するファイル/フォルダを選択
-    const quickPickItems = rfdc()(pickItems);
+    const quickPickItems = { ...rfdc()(pickItems), ...config.createDatapackTemplate.customTemplate };
     quickPickItems.forEach(v => v.label = resolveVars(v.label, variableContainer));
     const createItems = await window.showQuickPick(quickPickItems, {
         canPickMany: true,

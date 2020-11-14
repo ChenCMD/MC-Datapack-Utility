@@ -1,16 +1,17 @@
-import { ExtensionContext, commands, window, workspace } from 'vscode';
+import { ExtensionContext, commands, window, workspace, ConfigurationChangeEvent } from 'vscode';
 import { copyResourcePath, createDatapack, createFile, scoreOperation } from './commands';
 import { loadLocale } from './locales';
+import { constructConfig } from './types/Config';
 
 export const codeConsole = window.createOutputChannel('MC Commander Util');
-export let config = workspace.getConfiguration('mcdutil');
+export let config = constructConfig(workspace.getConfiguration('mcdutil'));
 const vscodeLanguage = getVSCodeLanguage();
+
 /**
  * @param {vscode.ExtensionContext} context
  */
 export function activate(context: ExtensionContext): void {
-
-    loadLocale(config.get<string>('language', 'default'), vscodeLanguage);
+    loadLocale(config.language, vscodeLanguage);
 
     const disposable = [];
 
@@ -19,14 +20,16 @@ export function activate(context: ExtensionContext): void {
     disposable.push(commands.registerCommand('mcdutil.commands.scoreOperation', scoreOperation));
     disposable.push(commands.registerCommand('mcdutil.commands.copyResourcePath', copyResourcePath));
 
-    disposable.push(workspace.onDidChangeConfiguration(e => {
-        if (e.affectsConfiguration('mcdutil')) {
-            config = workspace.getConfiguration('mcdutil');
-            loadLocale(config.get<string>('language', 'default'), vscodeLanguage);
-        }
-    }));
+    disposable.push(workspace.onDidChangeConfiguration(updateConfig));
 
     context.subscriptions.push(...disposable);
+}
+
+function updateConfig(event: ConfigurationChangeEvent) {
+    if (event.affectsConfiguration('mcdutil')) {
+        config = constructConfig(workspace.getConfiguration('mcdutil'));
+        loadLocale(config.language, vscodeLanguage);
+    }
 }
 
 /**
