@@ -9,9 +9,10 @@ import { locale } from '../../locales';
 import { createMessageItemsHasId } from './types/MessageItems';
 import { resolveVars, VariableContainer } from '../../types/VariableContainer';
 import { getFileType } from '../../types/FileTypes';
-import { codeConsole, config } from '../../extension';
+import { codeConsole, config, versionInformation } from '../../extension';
 import rfdc from 'rfdc';
-import { getGitHubData } from '../../utils/downloader';
+import { GenerateFileData } from './types/QuickPickFiles';
+import { getVanillaData } from '../../utils/vanillaData';
 
 export async function createDatapack(): Promise<void> {
     // フォルダ選択
@@ -109,18 +110,24 @@ async function create(dir: Uri): Promise<void> {
     createItemData.push(rfdc()(packMcMetaData));
 
     try {
-        for (const func of funcs.map((v, i) => ({ index: i + 1, value: v }))) {
+        for (const func of funcs.map((value, index) => ({ value, index }))) {
             await window.withProgress({
                 location: ProgressLocation.Notification,
                 cancellable: false,
                 title: locale('create-datapack-template.progress.title')
             }, async progress => {
-                progress.report({ increment: 0, message: locale('create-datapack-template.progress.download', func.index, funcs.length) });
+                const message = locale('create-datapack-template.progress.download', func.index + 1, funcs.length);
+                progress.report({ increment: 0, message });
 
-                const data = await getGitHubData(func.value, (_, m) =>
-                    progress.report({ increment: 100 / m, message: locale('create-datapack-template.progress.download', func.index, funcs.length) })
+                const datas = await getVanillaData(
+                    config.createDatapackTemplate.dataVersion,
+                    versionInformation,
+                    func.value,
+                    func.value.rel,
+                    (_, m) => progress.report({ increment: 100 / m, message })
                 );
-                createItemData.push(...data);
+                for (const data of datas)
+                    createItemData.push({ type: 'file', ...data } as GenerateFileData);
             });
         }
     } catch (error) {

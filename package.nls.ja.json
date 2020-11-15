@@ -33,5 +33,6 @@
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath": "DatapackName以下の相対ファイルパス (ファイルの場合拡張子まで記載が必要です)",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath.error": "\\\\ : * ? \" < > | はファイル/フォルダ名に使えません",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.content": "ファイルの内容 (基本的に一つのアイテムは1行として解釈されます)",
+    "mcdutil.config.createDatapackTemplate.dataVersion": "使用するバニラデータのバージョン",
     "mcdutil.config.createFile.fileTemplate": "**データパックファイルを作成する**: ファイルの生成時に記載されている内容 (ファイル種毎に設定が可能です)"
 }
