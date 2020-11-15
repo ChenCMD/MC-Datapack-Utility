@@ -30,7 +30,7 @@
     "formula-to-score-operation.illegal-formula": "Invalid expression.",
     "formula-to-score-operation.formula": "formula",
     "formula-to-score-operation.complate-text": "if u wish, u can change both SCORE HOLDERs' NAME and the SCORE OBJECT",
-    "formula-to-score-operation.specifying-object": "%0%s' SCORE OBJECT",
+    "formula-to-score-operation.specifying-object": "%0%'s SCORE OBJECT",
     "too-much": "too much %0%.",
     "input-here": "Please enter %0%",
     "error.unexpected-character": "%0% cannot be used.",

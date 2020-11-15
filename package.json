@@ -231,6 +231,28 @@
 										}
 									}
 								}
+							},
+							"destination": {
+								"type": "object",
+								"required": [
+									"args",
+									"namely"
+								],
+								"properties": {
+									"args": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"default": [],
+										"description": "%mcdutil.config.scoreOperation.customOperate.destination.args%"
+									},
+									"namely": {
+										"type": "string",
+										"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.destination.namely%"
+									}
+								},
+								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.destination%"
 							}
 						}
 					},
