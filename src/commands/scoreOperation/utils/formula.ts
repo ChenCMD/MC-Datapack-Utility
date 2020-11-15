@@ -54,8 +54,7 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
             const sub = parts.slice(0, lastClose).join(' ');
             parts = parts.slice(lastClose + 1);
 
-            if (!parts[0])
-                return formulaAnalyzer(sub, opTable);
+            if (!parts[0]) return formulaAnalyzer(sub, opTable);
             return { front: formulaAnalyzer(sub, opTable), op: opTable.table[ssft(parts.shift(), opTable)], back: formulaAnalyzer(parts.join(' '), opTable) };
         case ')':
             // '('がなければエラー

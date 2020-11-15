@@ -68,7 +68,7 @@ export const pickItems: QuickPickFiles[] = [
                 repo: 'vanilla-datapack',
                 ref: '%version%-data',
                 path: 'data/minecraft/tags/blocks',
-                relativeFilePath: (data: ReposGetContentResponseData): string => data.path
+                rel: (data: ReposGetContentResponseData): string => data.path
             }
         ]
     },
@@ -81,7 +81,7 @@ export const pickItems: QuickPickFiles[] = [
                 repo: 'vanilla-datapack',
                 ref: '%version%-data',
                 path: 'data/minecraft/tags/entity_types',
-                relativeFilePath: (data: ReposGetContentResponseData): string => data.path
+                rel: (data: ReposGetContentResponseData): string => data.path
             }
         ]
     },
@@ -94,7 +94,7 @@ export const pickItems: QuickPickFiles[] = [
                 repo: 'vanilla-datapack',
                 ref: '%version%-data',
                 path: 'data/minecraft/tags/fluids',
-                relativeFilePath: (data: ReposGetContentResponseData): string => data.path
+                rel: (data: ReposGetContentResponseData): string => data.path
             }
         ]
     },
@@ -107,7 +107,7 @@ export const pickItems: QuickPickFiles[] = [
                 repo: 'vanilla-datapack',
                 ref: '%version%-data',
                 path: 'data/minecraft/tags/items',
-                relativeFilePath: (data: ReposGetContentResponseData): string => data.path
+                rel: (data: ReposGetContentResponseData): string => data.path
             }
         ]
     },
