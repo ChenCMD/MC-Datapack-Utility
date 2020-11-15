@@ -32,7 +32,8 @@ export const defaultConfig: Config = {
         temp: 'Temp_',
         forceInputType: 'Default',
         isAlwaysSpecifyObject: true,
-        customOperate: []
+        customOperate: [],
+        valueScale: 1
     },
     createDatapackTemplate: {
         customTemplate: []
