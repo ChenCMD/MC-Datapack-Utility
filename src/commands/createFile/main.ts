@@ -7,6 +7,7 @@ import { getFileTemplate } from './utils';
 import { TextEncoder } from 'util';
 import { FileType, getFileType } from '../../types/FileTypes';
 import { resolveVars, VariableContainer } from '../../types/VariableContainer';
+import { config } from '../../extension';
 
 export async function createFile(uri: Uri): Promise<void> {
     // Datapack内か確認
@@ -74,7 +75,7 @@ export async function createFile(uri: Uri): Promise<void> {
         date: getDate(),
         cursor: ''
     };
-    const fileTemplate = getFileTemplate(fileType);
+    const fileTemplate = getFileTemplate(config.createFile.fileTemplate, fileType);
     let cursor = undefined;
     fileTemplate.forEach((v, i) => {
         const res = v.search(/%cursor%/i);

@@ -1,7 +1,6 @@
 {
     "copy-resource-path.not-datapack": "無法取得資源路徑，因為其不在資料包中。",
     "copy-resource-path.unknown-filetype": "無法取得此檔案的資源路徑。",
-    "copy-resource-path.success": "已將資源路徑複製到剪貼簿。",
     "create-file.not-datapack": "無法新增檔案，因為其不在資料包內。",
     "create-file.unknown-filetype": "您不可以在此新增檔案。",
     "create-file.structure": "不支援結構檔案。",

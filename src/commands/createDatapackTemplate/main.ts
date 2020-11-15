@@ -3,13 +3,15 @@ import { getDatapackRoot, getDate, getResourcePath, isDatapackRoot, showInputBox
 import path from 'path';
 import { TextEncoder } from 'util';
 import '../../utils/methodExtensions';
-import { getGitHubData, getPackMcMetaData, getPickItems } from './utils/data';
+import { packMcMetaData, pickItems } from './utils/data';
 import * as file from '../../utils/file';
 import { locale } from '../../locales';
 import { createMessageItemsHasId } from './types/MessageItems';
 import { resolveVars, VariableContainer } from '../../types/VariableContainer';
 import { getFileType } from '../../types/FileTypes';
-import { codeConsole } from '../../extension';
+import { codeConsole, config } from '../../extension';
+import rfdc from 'rfdc';
+import { getGitHubData } from '../../utils/downloader';
 
 export async function createDatapack(): Promise<void> {
     // フォルダ選択
@@ -88,7 +90,7 @@ async function create(dir: Uri): Promise<void> {
     };
 
     // 生成するファイル/フォルダを選択
-    const quickPickItems = getPickItems();
+    const quickPickItems = { ...rfdc()(pickItems), ...config.createDatapackTemplate.customTemplate };
     quickPickItems.forEach(v => v.label = resolveVars(v.label, variableContainer));
     const createItems = await window.showQuickPick(quickPickItems, {
         canPickMany: true,
@@ -102,7 +104,7 @@ async function create(dir: Uri): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const funcs = createItems.filter(v => v.func !== undefined).flat(v => v.func!);
     const createItemData = createItems.flat(v => v.generates);
-    createItemData.push(getPackMcMetaData());
+    createItemData.push(rfdc()(packMcMetaData));
 
     try {
         for (const func of funcs.map((v, i) => ({ index: i + 1, value: v }))) {
@@ -113,9 +115,9 @@ async function create(dir: Uri): Promise<void> {
             }, async progress => {
                 progress.report({ increment: 0, message: locale('create-datapack-template.progress.download', func.index, funcs.length) });
 
-                const data = await getGitHubData(func.value, (_, m) => {
-                    progress.report({ increment: 100 / m, message: locale('create-datapack-template.progress.download', func.index, funcs.length) });
-                });
+                const data = await getGitHubData(func.value, (_, m) =>
+                    progress.report({ increment: 100 / m, message: locale('create-datapack-template.progress.download', func.index, funcs.length) })
+                );
                 createItemData.push(...data);
             });
         }
@@ -135,7 +137,7 @@ async function create(dir: Uri): Promise<void> {
         const enconder = new TextEncoder();
 
         for (const item of createItemData) {
-            const filePath = path.join(dir.fsPath, datapackName, resolveVars(item.relativeFilePath, variableContainer));
+            const filePath = path.join(dir.fsPath, datapackName, resolveVars(item.rel, variableContainer));
             if (item.type === 'file') {
                 if (await file.pathAccessible(filePath)) continue;
 

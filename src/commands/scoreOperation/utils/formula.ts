@@ -19,7 +19,8 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
 
     // firstがopTableに登録されていなければ、ただの文字列であると考える
     if (!func) {
-        const scale = config.get<number>('scoreOperation.valueScale', 1);
+        
+        const scale = config.scoreOperation.valueScale;
         const _first = (scale === 1) ? first : { front: first, op: opTable.table[ssft('*', opTable)], back: scale.toString() };
         // 数値と文字の値
         if (!parts[0])
