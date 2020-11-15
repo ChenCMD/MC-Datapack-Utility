@@ -8,3 +8,5 @@ export class ErrorTemplate extends Error {
         return this.message ? `${this.name}: ${this.message}` : `${this.name}`;
     }
 }
+
+export class DownloadTimeOutError extends ErrorTemplate { }

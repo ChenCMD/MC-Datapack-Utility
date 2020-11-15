@@ -20,5 +20,4 @@ export async function copyResourcePath(fileUri: Uri): Promise<void> {
     }
 
     env.clipboard.writeText(getResourcePath(fileUri.fsPath, datapackRoot, fileType));
-    window.showInformationMessage(locale('copy-resource-path.success'));
 }

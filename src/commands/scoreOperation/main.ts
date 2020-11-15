@@ -5,18 +5,18 @@ import { showInputBox } from '../../utils/common';
 import { rpnToScoreOperation } from './utils/converter';
 import { formulaAnalyzer } from './utils/formula';
 import { locale } from '../../locales';
-import { OperateElement, opTable } from './types/OperateTable';
+import { opTable } from './types/OperateTable';
 
 export async function scoreOperation(): Promise<void> {
-    const prefix = config.get<string>('scoreOperation.prefix', '$MCDUtil_');
-    const objective = config.get<string>('scoreOperation.objective', '_');
-    const temp = config.get<string>('scoreOperation.temp', 'Temp_');
-    const inputType = config.get<string>('scoreOperation.forceInputType', 'Default');
+    const prefix = config.scoreOperation.prefix;
+    const objective = config.scoreOperation.objective;
+    const temp = config.scoreOperation.temp;
+    const inputType = config.scoreOperation.forceInputType;
     const editor = window.activeTextEditor;
     if (!editor)
         return;
 
-    const customOperate = config.get<OperateElement[]>('scoreOperation.customOperate', []);
+    const customOperate = config.scoreOperation.customOperate;
     if (customOperate.length !== 0) {
         for (const e of customOperate) {
             opTable.table.push(e);
