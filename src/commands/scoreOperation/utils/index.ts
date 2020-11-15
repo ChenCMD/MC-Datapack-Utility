@@ -29,35 +29,8 @@ export async function formulaToQueue(_val: Formula | string, _stack: Deque<Queue
         }
         return _stack;
     }
-
-    if (typeof _val.front === 'string') {
-        if (Number.prototype.isValue(_val.front)) {
-            _stack.addLast({ value: _val.front, objective: _objective, type: 'num' });
-        } else {
-            let obj = _objective;
-            if (workspace.getConfiguration('mcdutil').get<boolean>('scoreOperation.isAlwaysSpecifyObject', true))
-                obj = await showInputBox(locale('formula-to-score-operation.specifying-object', _val.front)) ?? _objective;
-    
-            _stack.addLast({ value: _val.front, objective: obj, type: 'str' });
-        }
-    } else {
-        _stack = await formulaToQueue(_val.front, _stack, _opTable, _objective);
-    }
-
-    if (typeof _val.back === 'string') {
-        if (Number.prototype.isValue(_val.back)) {
-            _stack.addLast({ value: _val.back, objective: _objective, type: 'num' });
-        } else {
-            let obj = _objective;
-            if (workspace.getConfiguration('mcdutil').get<boolean>('scoreOperation.isAlwaysSpecifyObject', true))
-                obj = await showInputBox(locale('formula-to-score-operation.specifying-object', _val.back)) ?? _objective;
-    
-            _stack.addLast({ value: _val.back, objective: obj, type: 'str' });
-        }
-    } else {
-        _stack = await formulaToQueue(_val.back, _stack, _opTable, _objective);
-    }
-
+    _stack = await formulaToQueue(_val.front, _stack, _opTable, _objective);
+    _stack = await formulaToQueue(_val.back, _stack, _opTable, _objective);
     _stack.addLast({ value: _val.op.identifier, objective: '', type: _val.op.type });
     return _stack;
 }

@@ -238,6 +238,11 @@
 					"markdownDescription": "%mcdutil.config.scoreOperation.customOperate%",
 					"default": []
 				},
+				"mcdutil.scoreOperation.valueScale": {
+					"type": "number",
+					"markdownDescription": "%mcdutil.config.scoreOperation.valueScale%",
+					"default": 1
+				},
 				"mcdutil.createDatapackTemplate.customTemplate": {
 					"type": "array",
 					"items": {
