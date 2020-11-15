@@ -13,6 +13,7 @@ export interface Config {
         forceInputType: 'Default' | 'Always Selection' | 'Always InputBox'
         isAlwaysSpecifyObject: boolean
         customOperate: OperateElement[]
+        valueScale: number
     },
     createDatapackTemplate: {
         customTemplate: QuickPickFiles[]
@@ -31,7 +32,8 @@ export const defaultConfig: Config = {
         temp: 'Temp_',
         forceInputType: 'Default',
         isAlwaysSpecifyObject: true,
-        customOperate: []
+        customOperate: [],
+        valueScale: 1
     },
     createDatapackTemplate: {
         customTemplate: []

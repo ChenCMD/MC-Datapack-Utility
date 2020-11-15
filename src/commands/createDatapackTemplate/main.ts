@@ -46,6 +46,7 @@ async function create(dir: Uri): Promise<void> {
     const datapackName = await showInputBox(locale('create-datapack-template.datapack-name'), v => {
         const invalidChar = v.match(/[\\/:*?"<>|]/g);
         if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '));
+        return undefined;
     });
     if (datapackName === undefined) return;
     if (datapackName === '') {
@@ -75,6 +76,7 @@ async function create(dir: Uri): Promise<void> {
     const namespace = await showInputBox(locale('create-datapack-template.namespace-name'), v => {
         const invalidChar = v.match(/[^a-z0-9./_-]/g);
         if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '));
+        return undefined;
     });
     if (namespace === undefined) return;
     if (namespace === '') {
@@ -83,14 +85,14 @@ async function create(dir: Uri): Promise<void> {
     }
 
     const variableContainer: VariableContainer = {
-        datapackName: datapackName,
-        datapackDescription: datapackDescription,
-        namespace: namespace,
-        date: getDate()
+        datapackName,
+        datapackDescription,
+        namespace,
+        date: getDate(config.dateFormat)
     };
 
     // 生成するファイル/フォルダを選択
-    const quickPickItems = { ...rfdc()(pickItems), ...config.createDatapackTemplate.customTemplate };
+    const quickPickItems = [...rfdc()(pickItems), ...config.createDatapackTemplate.customTemplate];
     quickPickItems.forEach(v => v.label = resolveVars(v.label, variableContainer));
     const createItems = await window.showQuickPick(quickPickItems, {
         canPickMany: true,
@@ -132,26 +134,23 @@ async function create(dir: Uri): Promise<void> {
         cancellable: false,
         title: locale('create-datapack-template.progress.title')
     }, async progress => {
-        progress.report({ increment: 0, message: locale('create-datapack-template.progress.creating') });
+        const message = locale('create-datapack-template.progress.creating');
+        progress.report({ increment: 0, message });
 
         const enconder = new TextEncoder();
 
         for (const item of createItemData) {
             const filePath = path.join(dir.fsPath, datapackName, resolveVars(item.rel, variableContainer));
-            if (item.type === 'file') {
-                if (await file.pathAccessible(filePath)) continue;
 
-                const resourcePath = getResourcePath(filePath, datapackRoot, getFileType(filePath, datapackRoot));
-                const containerHasResourcePath = Object.assign({ resourcePath: resourcePath } as VariableContainer, variableContainer);
-                const str = item.content?.map(v => resolveVars(v, containerHasResourcePath)).join('\r\n');
-
+            if (item.type === 'folder') {
+                await file.createDir(filePath);
+            } else if (!await file.pathAccessible(filePath)) {
+                const fileResourcePath = getResourcePath(filePath, datapackRoot, getFileType(filePath, datapackRoot));
+                const str = item.content?.map(v => resolveVars(v, { fileResourcePath, ...variableContainer })).join('\r\n');
                 await file.createFile(filePath, enconder.encode(str ?? ''));
             }
 
-            if (item.type === 'folder')
-                await file.createDir(filePath);
-
-            progress.report({ increment: 100 / createItemData.length, message: locale('create-datapack-template.progress.creating') });
+            progress.report({ increment: 100 / createItemData.length, message });
         }
         window.showInformationMessage(locale('create-datapack-template.complete'));
     });

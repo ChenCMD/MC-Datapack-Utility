@@ -30,60 +30,55 @@ export async function createFile(uri: Uri): Promise<void> {
         return;
     }
     // 拡張子確定
-    const fileExtension = fileType === 'function' ? 'mcfunction' : 'json';
+    const fileExtname = fileType === 'function' ? 'mcfunction' : 'json';
 
     // ファイル名入力
     const fileName = await showInputBox(locale('create-file.file-name', fileType), async v => {
         const invalidChar = v.match(/[^a-z0-9./_-]/g);
         if (invalidChar)
             return locale('error.unexpected-character', invalidChar.join(', '));
-        if (await pathAccessible(path.join(uri.fsPath, `${v}.${fileExtension}`)))
-            return locale('create-file.already-exists', `${v}.${fileExtension}`);
+        if (await pathAccessible(path.join(uri.fsPath, `${v}.${fileExtname}`)))
+            return locale('create-file.already-exists', `${v}.${fileExtname}`);
+        return undefined;
     });
-    if (fileName === undefined)
-        return;
+    if (fileName === undefined) return;
 
     // リソースパスの生成とファイルテンプレートの取得
-    const filePath = path.join(uri.fsPath, `${fileName}.${fileExtension}`);
-
-    const openFilePath = window.activeTextEditor?.document.uri.fsPath;
-    let openFileType = '';
-    let openFileResourcePath = '';
-    let openFileName = '';
-    let openFileExtname = '';
-    if (openFilePath) {
-        openFileType = getFileType(path.dirname(openFilePath), datapackRoot) ?? '';
-        openFileResourcePath = openFileType !== '' ? getResourcePath(openFilePath, datapackRoot, openFileType as FileType) : '';
-        openFileName = openFilePath.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? '';
-        openFileExtname = openFilePath.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? '';
-    }
+    const filePath = path.join(uri.fsPath, `${fileName}.${fileExtname}`);
 
     const variableContainer: VariableContainer = {
         datapackName: path.basename(datapackRoot),
         namespace: getNamespace(filePath, datapackRoot),
 
         fileResourcePath: getResourcePath(filePath, datapackRoot, fileType),
-        fileName: fileName,
-        fileType: fileType,
-        fileExtname: fileExtension,
+        fileName,
+        fileType,
+        fileExtname,
 
-        nowOpenFileResourcePath: openFileResourcePath,
-        nowOpenFileName: openFileName,
-        nowOpenFileType: openFileType,
-        nowOpenFileExtname: openFileExtname,
-
-        date: getDate(),
+        date: getDate(config.dateFormat),
         cursor: ''
     };
+
+
+    const openFilePath = window.activeTextEditor?.document.uri.fsPath;
+    if (openFilePath) {
+        const nowOpenFileType = getFileType(path.dirname(openFilePath), datapackRoot) ?? '';
+        variableContainer['nowOpenFileType'] = nowOpenFileType;
+        variableContainer['nowOpenFileResourcePath'] = nowOpenFileType !== '' ? getResourcePath(openFilePath, datapackRoot, nowOpenFileType as FileType) : '';
+        variableContainer['nowOpenFileName'] = openFilePath.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? '';
+        variableContainer['nowOpenFileExtname'] = openFilePath.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? '';
+    }
+
     const fileTemplate = getFileTemplate(config.createFile.fileTemplate, fileType);
-    let cursor = undefined;
+    let selection = undefined;
     fileTemplate.forEach((v, i) => {
         const res = v.search(/%cursor%/i);
-        if (res !== -1) cursor = new Range(i, res, i, res);
+        if (res !== -1)
+            selection = new Range(i, res, i, res);
     });
 
     // 生成
     await create(filePath, new TextEncoder().encode(resolveVars(fileTemplate.join('\r\n'), variableContainer)));
     // ファイルを開く
-    await window.showTextDocument(Uri.file(filePath), { selection: cursor });
+    await window.showTextDocument(Uri.file(filePath), { selection });
 }
