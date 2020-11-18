@@ -60,10 +60,8 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
             // '('がなければエラー
             throw new ExpectedTokenError(locale('too-much', '\')\''));
         default:
-            const scale = config.scoreOperation.valueScale;
-            const _first = (scale === 1) ? first : { front: first, op: opTable.table[ssft('*', opTable)], back: scale.toString() };
-            // 数値と文字の値
-            if (!parts[0]) return _first;
+            if (!func.identifier.match(/^\S+\($/) || !func.destination)
+                throw new GenerateError(locale('formula-to-score-operation.illegal-formula'));
     }
 
     const nested = parts.slice(0, parts.lastIndexOf(')'));
