@@ -3,7 +3,6 @@ import * as file from './file';
 import { window } from 'vscode';
 import { locale } from '../locales';
 import dateFormat from 'dateformat';
-import { config } from '../extension';
 import { FileType, fileTypeFolderName } from '../types/FileTypes';
 import { DownloadTimeOutError } from '../types/Error';
 
@@ -21,8 +20,8 @@ export async function setTimeOut<T>(milisec: number): Promise<T> {
     return await new Promise<T>((_, reject) => setTimeout(() => reject(new DownloadTimeOutError(locale('create-datapack-template.download-timeout'))), milisec));
 }
 
-export function getDate(): string {
-    return dateFormat(Date.now(), config.dateFormat);
+export function getDate(format: string): string {
+    return dateFormat(Date.now(), format);
 }
 
 /**

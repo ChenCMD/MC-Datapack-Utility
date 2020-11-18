@@ -2,15 +2,21 @@ import { ExtensionContext, commands, window, workspace, ConfigurationChangeEvent
 import { copyResourcePath, createDatapack, createFile, scoreOperation } from './commands';
 import { loadLocale } from './locales';
 import { constructConfig } from './types/Config';
+import { VersionInformation } from './types/VersionInformation';
+import { getLatestVersions } from './utils/vanillaData';
 
 export const codeConsole = window.createOutputChannel('MC Commander Util');
 export let config = constructConfig(workspace.getConfiguration('mcdutil'));
+export let versionInformation: VersionInformation | undefined;
 const vscodeLanguage = getVSCodeLanguage();
 
 /**
  * @param {vscode.ExtensionContext} context
  */
 export function activate(context: ExtensionContext): void {
+
+    getLatestVersions().then(info => versionInformation = info);
+
     loadLocale(config.language, vscodeLanguage);
 
     const disposable = [];

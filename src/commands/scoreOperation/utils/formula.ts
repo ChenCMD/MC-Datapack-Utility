@@ -54,15 +54,16 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
             const sub = parts.slice(0, lastClose).join(' ');
             parts = parts.slice(lastClose + 1);
 
-            if (!parts[0])
-                return formulaAnalyzer(sub, opTable);
+            if (!parts[0]) return formulaAnalyzer(sub, opTable);
             return { front: formulaAnalyzer(sub, opTable), op: opTable.table[ssft(parts.shift(), opTable)], back: formulaAnalyzer(parts.join(' '), opTable) };
         case ')':
             // '('がなければエラー
             throw new ExpectedTokenError(locale('too-much', '\')\''));
         default:
-            if (!func.identifier.match(/^\S+\($/) || !func.destination)
-                throw new GenerateError(locale('formula-to-score-operation.illegal-formula'));
+            const scale = config.scoreOperation.valueScale;
+            const _first = (scale === 1) ? first : { front: first, op: opTable.table[ssft('*', opTable)], back: scale.toString() };
+            // 数値と文字の値
+            if (!parts[0]) return _first;
     }
 
     const nested = parts.slice(0, parts.lastIndexOf(')'));
@@ -84,6 +85,9 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
             i++;
     }
     subArr.push(nested.slice(separation + 1));
+
+    if(!func.destination)
+        throw new ExpectedTokenError(locale('formula-to-score-operation.illegal-expression', func.identifier));
 
     const nameElem = func.destination.namely.split(' ');
     func.destination.args.forEach((e, j) => {

@@ -16,6 +16,7 @@ export interface Config {
         valueScale: number
     },
     createDatapackTemplate: {
+        dataVersion: string
         customTemplate: QuickPickFiles[]
     },
     createFile: {
@@ -36,6 +37,7 @@ export const defaultConfig: Config = {
         valueScale: 1
     },
     createDatapackTemplate: {
+        dataVersion: 'Latest release',
         customTemplate: []
     },
     createFile: {
