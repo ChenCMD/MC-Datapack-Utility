@@ -11,7 +11,7 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
     if (!first)
         throw new GenerateError(locale('formula-to-score-operation.illegal-formula'));
 
-    let func: OperateElement | null = null;
+    let func: OperateElement | undefined;
     for (const e of opTable.table) {
         if (e.identifier === first)
             func = e;
@@ -21,21 +21,21 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
     if (!func) {
         
         const scale = config.scoreOperation.valueScale;
-        const _first = (scale === 1) ? first : { front: first, op: opTable.table[ssft('*', opTable)], back: scale.toString() };
+        const front = (scale === 1) ? first : { front: first, op: opTable.table[ssft('*', opTable)], back: scale.toString() };
         // 数値と文字の値
         if (!parts[0])
-            return _first;
+            return front;
 
-        const _op = opTable.table[ssft(parts.shift(), opTable)];
-        const _back = formulaAnalyzer(parts.join(' '), opTable);
+        const op = opTable.table[ssft(parts.shift(), opTable)];
+        const back = formulaAnalyzer(parts.join(' '), opTable);
 
-        if (_op.identifier === '=' && typeof _back !== 'string')
-            return { front: _first, op: _op, back: _back.front };
-        if (typeof _back === 'string' || !(_back.op.order < _op.order ||
-            (_back.op.order === _op.order && _op.assocLow === 'R')))
-            return { front: _first, op: _op, back: _back };
+        if (op.identifier === '=' && typeof back !== 'string')
+            return { front, op, back: back.front };
+        if (typeof back === 'string' || !(back.op.order < op.order ||
+            (back.op.order === op.order && op.assocLow === 'R')))
+            return { front, op, back };
 
-        return { front: { front: _first, op: _op, back: _back.front }, op: _back.op, back: _back.back };
+        return { front: { front, op, back: back.front }, op: back.op, back: back.back };
     }
 
     // 関数と一部の演算子のみが、1節目に許される
