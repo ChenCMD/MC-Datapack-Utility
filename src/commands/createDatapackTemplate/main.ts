@@ -6,7 +6,7 @@ import '../../utils/methodExtensions';
 import { packMcMetaData, pickItems } from './utils/data';
 import * as file from '../../utils/file';
 import { locale } from '../../locales';
-import { createMessageItemsHasId } from './types/MessageItems';
+import { createMessageItemHasIds } from './types/MessageItemHasId';
 import { resolveVars, VariableContainer } from '../../types/VariableContainer';
 import { getFileType } from '../../types/FileTypes';
 import { codeConsole, config, versionInformation } from '../../extension';
@@ -31,11 +31,7 @@ export async function createDatapack(): Promise<void> {
     if (datapackRoot) {
         // 内部なら確認
         const warningMessage = locale('create-datapack-template.inside-datapack', path.basename(datapackRoot));
-        const result = await window.showWarningMessage(warningMessage,
-            createMessageItemsHasId('yes'),
-            createMessageItemsHasId('reselect'),
-            createMessageItemsHasId('no')
-        );
+        const result = await window.showWarningMessage(warningMessage, ...createMessageItemHasIds('yes', 'reselect', 'no'));
         if (result === undefined || result.id === 'no') return;
         if (result.id === 'reselect') return await createDatapack();
     }
@@ -47,24 +43,17 @@ async function create(dir: Uri): Promise<void> {
     const datapackName = await showInputBox(locale('create-datapack-template.datapack-name'), v => {
         const invalidChar = v.match(/[\\/:*?"<>|]/g);
         if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '));
+        if (v === '') return window.showErrorMessage(locale('create-datapack-template.name-blank'));
         return undefined;
     });
     if (datapackName === undefined) return;
-    if (datapackName === '') {
-        window.showErrorMessage(locale('create-datapack-template.name-blank'));
-        return;
-    }
 
     // データパック名の被りをチェック
     const datapackRoot = path.join(dir.fsPath, datapackName);
     if (await isDatapackRoot(datapackRoot)) {
         // 内部なら確認
         const warningMessage = locale('create-datapack-template.duplicate-datapack', path.basename(datapackRoot));
-        const result = await window.showWarningMessage(warningMessage,
-            createMessageItemsHasId('yes'),
-            createMessageItemsHasId('rename'),
-            createMessageItemsHasId('no')
-        );
+        const result = await window.showWarningMessage(warningMessage, ...createMessageItemHasIds('yes', 'rename', 'no'));
         if (result === undefined || result.id === 'no') return;
         if (result.id === 'rename') return create(dir);
     }
@@ -77,13 +66,10 @@ async function create(dir: Uri): Promise<void> {
     const namespace = await showInputBox(locale('create-datapack-template.namespace-name'), v => {
         const invalidChar = v.match(/[^a-z0-9./_-]/g);
         if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '));
+        if (v === '') return locale('create-datapack-template.namespace-blank');
         return undefined;
     });
     if (namespace === undefined) return;
-    if (namespace === '') {
-        window.showErrorMessage(locale('create-datapack-template.namespace-blank'));
-        return;
-    }
 
     const variableContainer: VariableContainer = {
         datapackName,
