@@ -283,7 +283,7 @@
 									"additionalProperties": false,
 									"required": [
 										"type",
-										"relativeFilePath"
+										"rel"
 									],
 									"properties": {
 										"type": {
@@ -294,11 +294,11 @@
 												"folder"
 											]
 										},
-										"relativeFilePath": {
+										"rel": {
 											"type": "string",
-											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath%",
+											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel%",
 											"pattern": "^[^\\\\:*?\"<>|]+$",
-											"patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath.error%"
+											"patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error%"
 										},
 										"content": {
 											"type": "array",
