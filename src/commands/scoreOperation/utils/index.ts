@@ -1,7 +1,7 @@
 import { Deque } from '../../../types/Deque';
 import { QueueElement } from '../types/QueueElement';
 import { TableBase } from '../types/TableBase';
-import { showInputBox } from '../../../utils/common';
+import { listenInput } from '../../../utils/vscodeWrapper';
 import { locale } from '../../../locales';
 import { Formula } from '../types/Formula';
 
@@ -28,7 +28,7 @@ export async function formulaToQueue(value: Formula | string, queue: Deque<Queue
     } else {
         let _objective = objective;
         if (isAlwaysSpecifyObject) {
-            const str = await showInputBox(locale('formula-to-score-operation.specifying-object', value));
+            const str = await listenInput(locale('formula-to-score-operation.specifying-object', value));
             if (str === undefined) return false;
             _objective = str ?? objective;
         }

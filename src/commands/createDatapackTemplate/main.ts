@@ -1,150 +1,93 @@
-import { workspace, window, Uri, ProgressLocation } from 'vscode';
-import { getDatapackRoot, getDate, getResourcePath, isDatapackRoot, showInputBox } from '../../utils/common';
+import { window } from 'vscode';
+import { getDate, getResourcePath } from '../../utils/common';
+import { createProgressBar } from '../../utils/vscodeWrapper';
 import path from 'path';
 import { TextEncoder } from 'util';
 import '../../utils/methodExtensions';
-import { packMcMetaData, pickItems } from './utils/data';
+import { packMcMetaData } from './utils/data';
 import * as file from '../../utils/file';
 import { locale } from '../../locales';
-import { createMessageItemHasIds } from './types/MessageItemHasId';
 import { resolveVars, VariableContainer } from '../../types/VariableContainer';
 import { getFileType } from '../../types/FileTypes';
 import { codeConsole, config, versionInformation } from '../../extension';
 import rfdc from 'rfdc';
-import { GenerateFileData } from './types/QuickPickFiles';
+import { GenerateFileData, GetGitHubDataFunc, QuickPickFiles } from './types/QuickPickFiles';
 import { getVanillaData } from '../../utils/vanillaData';
+import { listenDatapackName, listenDescription, listenNamespace, listenGenerateTemplate, listenGenerateDir } from './utils/userInputs';
 
 export async function createDatapack(): Promise<void> {
-    // フォルダ選択
-    const dir = await window.showOpenDialog({
-        canSelectFiles: false,
-        canSelectFolders: true,
-        canSelectMany: false,
-        defaultUri: workspace.workspaceFolders?.[0].uri,
-        openLabel: locale('create-datapack-template.dialog-label'),
-        title: locale('create-datapack-template.dialog-title')
-    }).then(v => v?.[0]);
-    if (!dir) return;
-
-    // Datapack内部かチェック
-    const datapackRoot = await getDatapackRoot(dir.fsPath);
-    if (datapackRoot) {
-        // 内部なら確認
-        const warningMessage = locale('create-datapack-template.inside-datapack', path.basename(datapackRoot));
-        const result = await window.showWarningMessage(warningMessage, ...createMessageItemHasIds('yes', 'reselect', 'no'));
-        if (result === undefined || result.id === 'no') return;
-        if (result.id === 'reselect') return await createDatapack();
+    try {
+        // ディレクトリの選択
+        const dir = await listenGenerateDir();
+        // データパック名入力
+        const { datapackName, datapackRoot } = await listenDatapackName(dir);
+        // 説明入力
+        const datapackDescription = await listenDescription();
+        // 名前空間入力
+        const namespace = await listenNamespace();
+        // 変数コンテナ作成
+        const variableContainer: VariableContainer = { datapackName, datapackDescription, namespace, date: getDate(config.dateFormat) };
+        // 生成するファイル/フォルダを選択
+        const createItems = await listenGenerateTemplate(variableContainer);
+        // 選択されたデータを生成用の形式に加工
+        const generateData = await toGenerateData(createItems);
+        // 生成
+        await generate(generateData, datapackRoot, variableContainer);
+    } catch (error) {
+        if (error) codeConsole.appendLine(error);
     }
-    create(dir);
 }
 
-async function create(dir: Uri): Promise<void> {
-    // データパック名入力
-    const datapackName = await showInputBox(locale('create-datapack-template.datapack-name'), v => {
-        const invalidChar = v.match(/[\\/:*?"<>|]/g);
-        if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '));
-        if (v === '') return window.showErrorMessage(locale('create-datapack-template.name-blank'));
-        return undefined;
-    });
-    if (datapackName === undefined) return;
-
-    // データパック名の被りをチェック
-    const datapackRoot = path.join(dir.fsPath, datapackName);
-    if (await isDatapackRoot(datapackRoot)) {
-        // 内部なら確認
-        const warningMessage = locale('create-datapack-template.duplicate-datapack', path.basename(datapackRoot));
-        const result = await window.showWarningMessage(warningMessage, ...createMessageItemHasIds('yes', 'rename', 'no'));
-        if (result === undefined || result.id === 'no') return;
-        if (result.id === 'rename') return create(dir);
-    }
-
-    // 説明入力
-    const datapackDescription = await showInputBox(locale('create-datapack-template.datapack-description'));
-    if (datapackDescription === undefined) return;
-
-    // 名前空間入力
-    const namespace = await showInputBox(locale('create-datapack-template.namespace-name'), v => {
-        const invalidChar = v.match(/[^a-z0-9./_-]/g);
-        if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '));
-        if (v === '') return locale('create-datapack-template.namespace-blank');
-        return undefined;
-    });
-    if (namespace === undefined) return;
-
-    const variableContainer: VariableContainer = {
-        datapackName,
-        datapackDescription,
-        namespace,
-        date: getDate(config.dateFormat)
-    };
-
-    // 生成するファイル/フォルダを選択
-    const quickPickItems = [...rfdc()(pickItems), ...config.createDatapackTemplate.customTemplate];
-    quickPickItems.forEach(v => v.label = resolveVars(v.label, variableContainer));
-    const createItems = await window.showQuickPick(quickPickItems, {
-        canPickMany: true,
-        ignoreFocusOut: true,
-        matchOnDescription: false,
-        matchOnDetail: false,
-        placeHolder: locale('create-datapack-template.quickpick-placeholder')
-    });
-    if (!createItems) return;
-
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const funcs = createItems.filter(v => v.func !== undefined).flat(v => v.func!);
-    const createItemData = createItems.flat(v => v.generates);
-    createItemData.push(rfdc()(packMcMetaData));
-
-    try {
-        for (const func of funcs.map((value, index) => ({ value, index }))) {
-            await window.withProgress({
-                location: ProgressLocation.Notification,
-                cancellable: false,
-                title: locale('create-datapack-template.progress.title')
-            }, async progress => {
-                const message = locale('create-datapack-template.progress.download', func.index + 1, funcs.length);
-                progress.report({ increment: 0, message });
-
-                const datas = await getVanillaData(
-                    config.createDatapackTemplate.dataVersion,
-                    versionInformation,
-                    func.value,
-                    func.value.rel,
-                    (_, m) => progress.report({ increment: 100 / m, message })
-                );
-                for (const data of datas)
-                    createItemData.push({ type: 'file', ...data } as GenerateFileData);
-            });
-        }
-    } catch (error) {
-        window.showErrorMessage(error.toString());
-        codeConsole.appendLine(error.stack ?? error.toString());
-        return;
-    }
-
-    await window.withProgress({
-        location: ProgressLocation.Notification,
-        cancellable: false,
-        title: locale('create-datapack-template.progress.title')
-    }, async progress => {
+export async function generate(generateData: GenerateFileData[], datapackRoot: string, variableContainer: VariableContainer): Promise<void> {
+    await createProgressBar(locale('create-datapack-template.progress.title'), async report => {
         const message = locale('create-datapack-template.progress.creating');
-        progress.report({ increment: 0, message });
+        report({ increment: 0, message });
 
-        const enconder = new TextEncoder();
-
-        for (const item of createItemData) {
-            const filePath = path.join(dir.fsPath, datapackName, resolveVars(item.rel, variableContainer));
+        for (const item of generateData) {
+            const filePath = path.join(datapackRoot, resolveVars(item.rel, variableContainer));
 
             if (item.type === 'folder') {
                 await file.createDir(filePath);
             } else if (!await file.pathAccessible(filePath)) {
                 const fileResourcePath = getResourcePath(filePath, datapackRoot, getFileType(filePath, datapackRoot));
                 const str = item.content?.map(v => resolveVars(v, { fileResourcePath, ...variableContainer })).join('\r\n');
-                await file.createFile(filePath, enconder.encode(str ?? ''));
+                await file.createFile(filePath, new TextEncoder().encode(str ?? ''));
             }
-
-            progress.report({ increment: 100 / createItemData.length, message });
+            report({ increment: 100 / generateData.length, message });
         }
         window.showInformationMessage(locale('create-datapack-template.complete'));
     });
+}
+
+export async function toGenerateData(createItems: QuickPickFiles[]): Promise<GenerateFileData[]> {
+    const generateData = createItems.flat(v => v.generates);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const funcs = createItems.filter(v => v.func !== undefined).flat(v => v.func!);
+
+    generateData.push(rfdc()(packMcMetaData));
+    for (const item of funcs.map((func, index) => ({ func, index }))) {
+        await createProgressBar(
+            locale('create-datapack-template.progress.title'),
+            async report => generateData.push(...await download(item.func, item.index, funcs.length, report))
+        );
+    }
+
+    return generateData;
+}
+
+export async function download(
+    func: GetGitHubDataFunc, index: number, itemLength: number, report: (value: { increment: number, message: string }) => void
+): Promise<GenerateFileData[]> {
+    const message = locale('create-datapack-template.progress.download', index, itemLength);
+    report({ increment: 0, message });
+
+    const fileDatas = await getVanillaData(
+        config.createDatapackTemplate.dataVersion,
+        versionInformation,
+        func,
+        func.rel,
+        (_, m) => report({ increment: 100 / m, message })
+    );
+
+    return fileDatas.map(fileData => ({ type: 'file', ...fileData }));
 }

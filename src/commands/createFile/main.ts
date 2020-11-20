@@ -1,6 +1,7 @@
 import { Range, Uri, window } from 'vscode';
 import { pathAccessible, createFile as create } from '../../utils/file';
-import { getDatapackRoot, getDate, getNamespace, getResourcePath, showInputBox } from '../../utils/common';
+import { getDatapackRoot, getDate, getNamespace, getResourcePath } from '../../utils/common';
+import { listenInput } from '../../utils/vscodeWrapper';
 import path = require('path');
 import { locale } from '../../locales';
 import { getFileTemplate } from './utils';
@@ -33,7 +34,7 @@ export async function createFile(uri: Uri): Promise<void> {
     const fileExtname = fileType === 'function' ? 'mcfunction' : 'json';
 
     // ファイル名入力
-    const fileName = await showInputBox(locale('create-file.file-name', fileType), async v => {
+    const fileName = await listenInput(locale('create-file.file-name', fileType), async v => {
         const invalidChar = v.match(/[^a-z0-9./_-]/g);
         if (invalidChar)
             return locale('error.unexpected-character', invalidChar.join(', '));

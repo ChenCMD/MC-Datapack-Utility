@@ -1,7 +1,7 @@
 import { window } from 'vscode';
 import '../../utils/methodExtensions';
 import { codeConsole, config } from '../../extension';
-import { showInputBox } from '../../utils/common';
+import { listenInput } from '../../utils/vscodeWrapper';
 import { rpnToScoreOperation } from './utils/converter';
 import { formulaAnalyzer } from './utils/formula';
 import { locale } from '../../locales';
@@ -28,7 +28,7 @@ export async function scoreOperation(): Promise<void> {
             window.showErrorMessage(locale('formula-to-score-operation.not-selection'));
             return;
         }
-        const res = await showInputBox(locale('formula-to-score-operation.formula'));
+        const res = await listenInput(locale('formula-to-score-operation.formula'));
         if (!res) return;
         text = res;
     }
