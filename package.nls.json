@@ -33,8 +33,8 @@
     "mcdutil.config.createDatapackTemplate.customTemplate.detail": "Detailed explanation",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates": "Files/folders generated when selected",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.type": "file or folder",
-    "mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath": "Relative file path under DatapackName (In case of file, extension is required)",
-    "mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath.error": "\\\\ : * ? \" < > | cannot be used for file/folder names",
+    "mcdutil.config.createDatapackTemplate.customTemplate.generates.rel": "Relative file path under DatapackName (In case of file, extension is required)",
+    "mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error": "\\\\ : * ? \" < > | cannot be used for file/folder names",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.content": "File contents (Basically one item is interpreted as one line)",
     "mcdutil.config.createDatapackTemplate.dataVersion": "Version of vanilla data to use",
     "mcdutil.config.createFile.fileTemplate": "**Create Datapack file**: Contents described when the file is generated (can be set for each file type)"
