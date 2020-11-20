@@ -60,5 +60,5 @@ export async function createProgressBar<T>(
         location: ProgressLocation.Notification,
         cancellable: false,
         title
-    }, async progress => await task(progress.report));
+    }, async progress => await task((value: { increment?: number, message?: string }) => progress.report(value)));
 }
