@@ -3,6 +3,7 @@ import rfdc from 'rfdc';
 import { Uri, window } from 'vscode';
 import { config } from '../../../extension';
 import { locale } from '../../../locales';
+import { UserCancelledError } from '../../../types/Error';
 import { VariableContainer, resolveVars } from '../../../types/VariableContainer';
 import { getDatapackRoot, isDatapackRoot } from '../../../utils/common';
 import { listenInput, validater, listenPickItem, listenOpenDir } from '../../../utils/vscodeWrapper';
@@ -17,7 +18,7 @@ export async function listenGenerateDir(): Promise<Uri> {
     if (checkDatapackRoot) {
         const warningMessage = locale('create-datapack-template.inside-datapack', path.basename(checkDatapackRoot));
         const result = await window.showWarningMessage(warningMessage, ...createMessageItemHasIds('yes', 'reselect', 'no'));
-        if (result === undefined || result.id === 'no') throw undefined;
+        if (result === undefined || result.id === 'no') throw new UserCancelledError();
         if (result.id === 'reselect') return await listenGenerateDir();
     }
     return dir;
@@ -33,7 +34,7 @@ export async function listenDatapackName(dir: Uri): Promise<{datapackName: strin
     if (await isDatapackRoot(datapackRoot)) {
         const warningMessage = locale('create-datapack-template.duplicate-datapack', path.basename(datapackRoot));
         const result = await window.showWarningMessage(warningMessage, ...createMessageItemHasIds('yes', 'rename', 'no'));
-        if (result === undefined || result.id === 'no') throw undefined;
+        if (result === undefined || result.id === 'no') throw new UserCancelledError();
         if (result.id === 'rename') return await listenDatapackName(dir);
     }
     return {datapackName, datapackRoot};

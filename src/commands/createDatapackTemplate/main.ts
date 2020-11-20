@@ -14,6 +14,7 @@ import rfdc from 'rfdc';
 import { GenerateFileData, GetGitHubDataFunc, QuickPickFiles } from './types/QuickPickFiles';
 import { getVanillaData } from '../../utils/vanillaData';
 import { listenDatapackName, listenDescription, listenNamespace, listenGenerateTemplate, listenGenerateDir } from './utils/userInputs';
+import { UserCancelledError } from '../../types/Error';
 
 export async function createDatapack(): Promise<void> {
     try {
@@ -34,7 +35,9 @@ export async function createDatapack(): Promise<void> {
         // 生成
         await generate(generateData, datapackRoot, variableContainer);
     } catch (error) {
-        if (error) codeConsole.appendLine(error);
+        if (error instanceof UserCancelledError) return;
+        window.showErrorMessage(error.toString());
+        codeConsole.appendLine(error);
     }
 }
 

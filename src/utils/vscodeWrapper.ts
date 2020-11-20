@@ -1,5 +1,6 @@
 import { ProgressLocation, QuickPickItem, Uri, window, workspace } from 'vscode';
 import { locale } from '../locales';
+import { UserCancelledError } from '../types/Error';
 
 export async function listenInput(
     message?: string, validateInput?: (value: string) => Thenable<string | undefined> | string | undefined
@@ -12,7 +13,7 @@ export async function listenInput(
         ignoreFocusOut: true,
         validateInput
     });
-    if (ans === undefined) throw undefined;
+    if (ans === undefined) throw new UserCancelledError();
     return ans;
 }
 
@@ -33,7 +34,7 @@ export async function listenOpenDir(title: string, openLabel: string): Promise<U
         openLabel,
         title
     }).then(v => v?.[0]);
-    if (!ans) throw undefined;
+    if (!ans) throw new UserCancelledError();
     return ans;
 }
 
@@ -47,7 +48,7 @@ export async function listenPickItem<T extends QuickPickItem>(placeHolder: strin
         matchOnDetail: false,
         placeHolder
     });
-    if (!ans) throw undefined;
+    if (!ans) throw new UserCancelledError();
     return ans;
 }
 

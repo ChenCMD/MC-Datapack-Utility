@@ -10,3 +10,4 @@ export class ErrorTemplate extends Error {
 }
 
 export class DownloadTimeOutError extends ErrorTemplate { }
+export class UserCancelledError extends ErrorTemplate { }
