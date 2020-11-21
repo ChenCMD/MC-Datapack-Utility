@@ -11,3 +11,6 @@ export class ErrorTemplate extends Error {
 
 export class DownloadTimeOutError extends ErrorTemplate { }
 export class UserCancelledError extends ErrorTemplate { }
+export class CalculateUnfinishedError extends ErrorTemplate { }
+export class ExpectedTokenError extends ErrorTemplate { }
+export class GenerateError extends ErrorTemplate { }

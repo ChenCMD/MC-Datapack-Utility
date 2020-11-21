@@ -26,7 +26,6 @@
 */
 
 import { Deque } from '../../../types/Deque';
-import { CalculateUnfinishedError, GenerateError } from '../types/Errors';
 import { OperateTable } from '../types/OperateTable';
 import { QueueElement } from '../types/QueueElement';
 import { scoreTable } from '../types/ScoreTable';
@@ -34,6 +33,7 @@ import { formulaToQueue, ssft } from '.';
 import { locale } from '../../../locales';
 import { Formula } from '../types/Formula';
 import { codeConsole } from '../../../extension';
+import { GenerateError, CalculateUnfinishedError } from '../../../types/Error';
 
 export async function rpnToScoreOperation(formula: Formula | string, prefix: string, objective: string, temp: string, isAlwaysSpecifyObject: boolean): Promise<{ resValues: Set<string>, resFormulas: string[] } | undefined> {
     const rpnQueue = new Deque<QueueElement>();

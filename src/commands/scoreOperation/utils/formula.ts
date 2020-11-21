@@ -1,9 +1,9 @@
 import { Formula } from '../types/Formula';
 import { ssft } from '.';
 import { locale } from '../../../locales';
-import { ExpectedTokenError, GenerateError } from '../types/Errors';
 import { OperateElement, OperateTable } from '../types/OperateTable';
 import { config } from '../../../extension';
+import { GenerateError, ExpectedTokenError } from '../../../types/Error';
 
 export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | string {
     let parts = exp.split(' ');
@@ -19,7 +19,7 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
 
     // firstがopTableに登録されていなければ、ただの文字列であると考える
     if (!func) {
-        
+
         const scale = config.scoreOperation.valueScale;
         const front = (scale === 1) ? first : { front: first, op: opTable.table[ssft('*', opTable)], back: scale.toString() };
         // 数値と文字の値
