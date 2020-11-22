@@ -7,53 +7,59 @@ import '../../utils/methodExtensions';
 import { packMcMetaData } from './utils/data';
 import * as file from '../../utils/file';
 import { locale } from '../../locales';
-import { resolveVars, VariableContainer } from '../../types/VariableContainer';
+import { resolveVars, ContextContainer } from '../../types/ContextContainer';
 import { getFileType } from '../../types/FileTypes';
 import { codeConsole, config, versionInformation } from '../../extension';
 import rfdc from 'rfdc';
 import { GenerateFileData, GetGitHubDataFunc, QuickPickFiles } from './types/QuickPickFiles';
 import { getVanillaData } from '../../utils/vanillaData';
-import { listenDatapackName, listenDescription, listenNamespace, listenGenerateTemplate, listenGenerateDir } from './utils/userInputs';
+import { listenDatapackName, listenDescription, listenNamespace, listenGenerateTemplate, listenGenerateDir, listenGenerateType } from './utils/userInputs';
 import { UserCancelledError } from '../../types/Error';
 
 export async function createDatapack(): Promise<void> {
     try {
+        // 環境コンテナ作成
+        const ctx: ContextContainer = { date: getDate(config.dateFormat) };
+        // 生成タイプを聞く
+        const genType = await listenGenerateType();
         // ディレクトリの選択
-        const dir = await listenGenerateDir();
+        await listenGenerateDir(ctx, genType);
         // データパック名入力
-        const { datapackName, datapackRoot } = await listenDatapackName(dir);
+        await listenDatapackName(ctx, genType);
         // 説明入力
-        const datapackDescription = await listenDescription();
+        await listenDescription(ctx, genType);
         // 名前空間入力
-        const namespace = await listenNamespace();
-        // 変数コンテナ作成
-        const variableContainer: VariableContainer = { datapackName, datapackDescription, namespace, date: getDate(config.dateFormat) };
+        await listenNamespace(ctx);
         // 生成するファイル/フォルダを選択
-        const createItems = await listenGenerateTemplate(variableContainer);
+        const createItems = await listenGenerateTemplate(ctx);
         // 選択されたデータを生成用の形式に加工
         const generateData = await toGenerateData(createItems);
+        console.log(ctx);
         // 生成
-        await generate(generateData, datapackRoot, variableContainer);
+        await generate(ctx, generateData);
     } catch (error) {
         if (error instanceof UserCancelledError) return;
-        window.showErrorMessage(error.toString());
-        codeConsole.appendLine(error);
+        if (error instanceof Error) window.showErrorMessage(error.message);
+        else window.showErrorMessage(error.toString());
+        codeConsole.appendLine(error.stack ?? error.toString());
     }
 }
 
-export async function generate(generateData: GenerateFileData[], datapackRoot: string, variableContainer: VariableContainer): Promise<void> {
+export async function generate(ctxContainer: ContextContainer, generateData: GenerateFileData[]): Promise<void> {
     await createProgressBar(locale('create-datapack-template.progress.title'), async report => {
         const message = locale('create-datapack-template.progress.creating');
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const datapackRoot = ctxContainer.datapackRoot!;
         report({ increment: 0, message });
 
         for (const item of generateData) {
-            const filePath = path.join(datapackRoot, resolveVars(item.rel, variableContainer));
+            const filePath = path.join(datapackRoot, resolveVars(item.rel, ctxContainer));
 
             if (item.type === 'folder') {
                 await file.createDir(filePath);
             } else if (!await file.pathAccessible(filePath)) {
                 const fileResourcePath = getResourcePath(filePath, datapackRoot, getFileType(filePath, datapackRoot));
-                const str = item.content?.map(v => resolveVars(v, { fileResourcePath, ...variableContainer })).join('\r\n');
+                const str = item.content?.map(v => resolveVars(v, { fileResourcePath, ...ctxContainer })).join('\r\n');
                 await file.createFile(filePath, new TextEncoder().encode(str ?? ''));
             }
             report({ increment: 100 / generateData.length, message });
@@ -81,7 +87,7 @@ export async function toGenerateData(createItems: QuickPickFiles[]): Promise<Gen
 export async function download(
     func: GetGitHubDataFunc, index: number, itemLength: number, report: (value: { increment: number, message: string }) => void
 ): Promise<GenerateFileData[]> {
-    const message = locale('create-datapack-template.progress.download', index, itemLength);
+    const message = locale('create-datapack-template.progress.download', index + 1, itemLength);
     report({ increment: 0, message });
 
     const fileDatas = await getVanillaData(

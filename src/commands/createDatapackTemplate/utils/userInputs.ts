@@ -1,57 +1,90 @@
 import path from 'path';
 import rfdc from 'rfdc';
-import { Uri, window } from 'vscode';
+import { window } from 'vscode';
 import { config } from '../../../extension';
 import { locale } from '../../../locales';
-import { UserCancelledError } from '../../../types/Error';
-import { VariableContainer, resolveVars } from '../../../types/VariableContainer';
+import { GenerateError, UserCancelledError } from '../../../types/Error';
+import { ContextContainer, resolveVars } from '../../../types/ContextContainer';
 import { getDatapackRoot, isDatapackRoot } from '../../../utils/common';
 import { listenInput, validater, listenPickItem, listenOpenDir } from '../../../utils/vscodeWrapper';
 import { createMessageItemHasIds } from '../types/MessageItemHasId';
 import { QuickPickFiles } from '../types/QuickPickFiles';
+import { createQuickPickItemHasIds } from '../types/QuickPickItemHasId';
 import { pickItems } from './data';
+import { readFile } from '../../../utils/file';
 
-export async function listenGenerateDir(): Promise<Uri> {
-    const dir = await listenOpenDir(locale('create-datapack-template.dialog-title'), locale('create-datapack-template.dialog-label'));
-    const checkDatapackRoot = await getDatapackRoot(dir.fsPath);
-
-    if (checkDatapackRoot) {
-        const warningMessage = locale('create-datapack-template.inside-datapack', path.basename(checkDatapackRoot));
-        const result = await window.showWarningMessage(warningMessage, ...createMessageItemHasIds('yes', 'reselect', 'no'));
-        if (result === undefined || result.id === 'no') throw new UserCancelledError();
-        if (result.id === 'reselect') return await listenGenerateDir();
-    }
-    return dir;
+export async function listenGenerateType(): Promise<string> {
+    const items = createQuickPickItemHasIds('create-datapack-template.add', 'create-datapack-template.create');
+    return (await listenPickItem('', items, false)).id;
 }
 
-export async function listenDatapackName(dir: Uri): Promise<{datapackName: string, datapackRoot: string}> {
+export async function listenGenerateDir(ctxContainer: ContextContainer, genType: string): Promise<void> {
+    let title: string;
+    if (genType === 'create-datapack-template.create')
+        title = locale('create-datapack-template.dialog-title-directory');
+    else
+        title = locale('create-datapack-template.dialog-title-datapack');
+    const dir = await listenOpenDir(title, locale('create-datapack-template.dialog-label')).then(v => v.fsPath);
+
+    if (genType === 'create-datapack-template.create') {
+        const datapackRoot = await getDatapackRoot(dir);
+        if (datapackRoot) {
+            const warningMessage = locale('create-datapack-template.inside-datapack', path.basename(datapackRoot));
+            const result = await window.showWarningMessage(warningMessage, ...createMessageItemHasIds('yes', 'reselect', 'no'));
+            if (result === undefined || result.id === 'no') throw new UserCancelledError();
+            if (result.id === 'reselect') return await listenGenerateDir(ctxContainer, genType);
+        }
+    } else if (!await isDatapackRoot(dir)) {
+        throw new GenerateError(locale('create-datapack-template.not-datapack'));
+    }
+    ctxContainer.dir = dir;
+}
+
+export async function listenDatapackName(ctxContainer: ContextContainer, genType: string): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const dir = ctxContainer.dir!;
+
+    if (genType === 'create-datapack-template.add') {
+        ctxContainer.datapackName = path.basename(dir);
+        ctxContainer.datapackRoot = dir;
+        return;
+    }
+
+    // input表示
     const datapackName = await listenInput(
         locale('create-datapack-template.datapack-name'),
         v => validater(v, /[\\/:*?"<>|]/g, locale('create-datapack-template.name-blank'))
     );
-    const datapackRoot = path.join(dir.fsPath, datapackName);
-
+    const datapackRoot = path.join(dir, datapackName);
+    // データパックの重複をチェック
     if (await isDatapackRoot(datapackRoot)) {
         const warningMessage = locale('create-datapack-template.duplicate-datapack', path.basename(datapackRoot));
         const result = await window.showWarningMessage(warningMessage, ...createMessageItemHasIds('yes', 'rename', 'no'));
         if (result === undefined || result.id === 'no') throw new UserCancelledError();
-        if (result.id === 'rename') return await listenDatapackName(dir);
+        if (result.id === 'rename') return await listenDatapackName(ctxContainer, genType = 'create-datapack-template.add');
     }
-    return {datapackName, datapackRoot};
+    // 環境コンテナに適用
+    ctxContainer.datapackName = datapackName;
+    ctxContainer.datapackRoot = datapackRoot;
 }
 
-export async function listenDescription(): Promise<string> {
-    return await listenInput(locale('create-datapack-template.datapack-description'));
+export async function listenDescription(ctxContainer: ContextContainer, genType: string): Promise<void> {
+    if (genType === 'create-datapack-template.create') {
+        ctxContainer.datapackDescription = await listenInput(locale('create-datapack-template.datapack-description'));
+        return;
+    }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    ctxContainer.datapackDescription = JSON.parse(await readFile(path.join(ctxContainer.dir!, 'pack.mcmeta'))).pack.description;
 }
 
-export async function listenNamespace(): Promise<string> {
-    return await listenInput(
+export async function listenNamespace(ctxContainer: ContextContainer): Promise<void> {
+    ctxContainer.namespace = await listenInput(
         locale('create-datapack-template.namespace-name'),
         v => validater(v, /[^a-z0-9./_-]/g, locale('create-datapack-template.namespace-blank'))
     );
 }
 
-export async function listenGenerateTemplate(variableContainer: VariableContainer): Promise<QuickPickFiles[]> {
+export async function listenGenerateTemplate(variableContainer: ContextContainer): Promise<QuickPickFiles[]> {
     const items = [...rfdc()(pickItems), ...config.createDatapackTemplate.customTemplate];
     items.forEach(v => v.label = resolveVars(v.label, variableContainer));
     return await listenPickItem(locale('create-datapack-template.quickpick-placeholder'), items, true);

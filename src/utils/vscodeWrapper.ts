@@ -3,7 +3,7 @@ import { locale } from '../locales';
 import { UserCancelledError } from '../types/Error';
 
 export async function listenInput(
-    message?: string, validateInput?: (value: string) => Thenable<string | undefined> | string | undefined
+    message: string, validateInput?: (value: string) => Thenable<string | undefined> | string | undefined
 ): Promise<string> {
     const mes = message ? locale('input-here', message) : '';
     const ans = await window.showInputBox({

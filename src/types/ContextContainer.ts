@@ -1,4 +1,6 @@
-const variables = [
+const contexts = [
+    'dir',
+    'datapackRoot',
     'datapackName',
     'datapackDescription',
     'namespace',
@@ -14,18 +16,18 @@ const variables = [
     'cursor'
 ] as const;
 
-type Variable = typeof variables[number];
+type Context = typeof contexts[number];
 
-export type VariableContainer = {
-    [key in Variable]?: string
+export type ContextContainer = {
+    [key in Context]?: string
 };
 
-export function resolveVars(str: string, varContainer: VariableContainer): string {
+export function resolveVars(str: string, ctxContainer: ContextContainer): string {
     return str.replace(/%.+?%/g, match => {
         const key = match.slice(1, -1);
-        for (const safeKey of variables) {
+        for (const safeKey of contexts) {
             if (key === safeKey)
-                return varContainer[key] ?? '';
+                return ctxContainer[key] ?? '';
         }
         return match;
     });

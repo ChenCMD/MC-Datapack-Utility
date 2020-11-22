@@ -7,7 +7,7 @@ import { locale } from '../../locales';
 import { getFileTemplate } from './utils';
 import { TextEncoder } from 'util';
 import { FileType, getFileType } from '../../types/FileTypes';
-import { resolveVars, VariableContainer } from '../../types/VariableContainer';
+import { resolveVars, ContextContainer } from '../../types/ContextContainer';
 import { codeConsole, config } from '../../extension';
 import { UserCancelledError } from '../../types/Error';
 
@@ -48,7 +48,7 @@ export async function createFile(uri: Uri): Promise<void> {
         // リソースパスの生成とファイルテンプレートの取得
         const filePath = path.join(uri.fsPath, `${fileName}.${fileExtname}`);
 
-        const variableContainer: VariableContainer = {
+        const variableContainer: ContextContainer = {
             datapackName: path.basename(datapackRoot),
             namespace: getNamespace(filePath, datapackRoot),
 
