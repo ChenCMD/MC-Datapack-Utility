@@ -1,6 +1,13 @@
-import { ProgressLocation, QuickPickItem, Uri, window, workspace } from 'vscode';
+import { ProgressLocation, QuickPickItem, TextEditor, Uri, window, workspace } from 'vscode';
 import { locale } from '../locales';
-import { UserCancelledError } from '../types/Error';
+import { NotOpenTextDocumentError, UserCancelledError } from '../types/Error';
+import { MessageItemHasId } from '../types/MessageItemHasId';
+
+export function getTextEditor(): TextEditor {
+    const editor = window.activeTextEditor;
+    if (!editor) throw new NotOpenTextDocumentError();
+    return editor;
+}
 
 export async function listenInput(
     message: string, validateInput?: (value: string) => Thenable<string | undefined> | string | undefined
@@ -61,4 +68,40 @@ export async function createProgressBar<T>(
         cancellable: false,
         title
     }, async progress => await task((value: { increment?: number, message?: string }) => progress.report(value)));
+}
+
+export async function showInfo(message: string, modal?: boolean): Promise<void>;
+export async function showInfo(message: string, modal: boolean, items: MessageItemHasId[], cancelledString?: string[]): Promise<string>;
+export async function showInfo(message: string, modal?: boolean, items?: MessageItemHasId[], cancelledString?: string[]): Promise<string | void> {
+    if (items) {
+        const ans = await window.showInformationMessage(message, { modal }, ...items);
+        if (!ans || cancelledString?.includes(ans.id)) throw new UserCancelledError();
+        return ans.id;
+    }
+    await window.showInformationMessage(message, { modal });
+    return;
+}
+
+export async function showWarning(message: string, modal?: boolean): Promise<void>;
+export async function showWarning(message: string, modal: boolean, items: MessageItemHasId[], cancelledString?: string[]): Promise<string>;
+export async function showWarning(message: string, modal?: boolean, items?: MessageItemHasId[], cancelledString?: string[]): Promise<string | void> {
+    if (items) {
+        const ans = await window.showWarningMessage(message, { modal }, ...items);
+        if (!ans || cancelledString?.includes(ans.id)) throw new UserCancelledError();
+        return ans.id;
+    }
+    await window.showWarningMessage(message, { modal });
+    return;
+}
+
+export async function showError(message: string, modal?: boolean): Promise<void>;
+export async function showError(message: string, modal: boolean, items: MessageItemHasId[], cancelledString?: string[]): Promise<string>;
+export async function showError(message: string, modal?: boolean, items?: MessageItemHasId[], cancelledString?: string[]): Promise<string | void> {
+    if (items) {
+        const ans = await window.showErrorMessage(message, { modal }, ...items);
+        if (!ans || cancelledString?.includes(ans.id)) throw new UserCancelledError();
+        return ans.id;
+    }
+    await window.showErrorMessage(message, { modal });
+    return;
 }

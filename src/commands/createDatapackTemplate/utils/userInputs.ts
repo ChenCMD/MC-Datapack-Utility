@@ -1,15 +1,14 @@
 import path from 'path';
 import rfdc from 'rfdc';
-import { window } from 'vscode';
 import { config } from '../../../extension';
 import { locale } from '../../../locales';
-import { GenerateError, UserCancelledError } from '../../../types/Error';
+import { GenerateError } from '../../../types/Error';
 import { ContextContainer, resolveVars } from '../../../types/ContextContainer';
 import { getDatapackRoot, isDatapackRoot } from '../../../utils/common';
-import { listenInput, validater, listenPickItem, listenOpenDir } from '../../../utils/vscodeWrapper';
-import { createMessageItemHasIds } from '../types/MessageItemHasId';
+import { listenInput, validater, listenPickItem, listenOpenDir, showWarning } from '../../../utils/vscodeWrapper';
+import { createMessageItemHasIds } from '../../../types/MessageItemHasId';
 import { QuickPickFiles } from '../types/QuickPickFiles';
-import { createQuickPickItemHasIds } from '../types/QuickPickItemHasId';
+import { createQuickPickItemHasIds } from '../../../types/QuickPickItemHasId';
 import { pickItems } from './data';
 import { readFile } from '../../../utils/file';
 
@@ -30,9 +29,8 @@ export async function listenGenerateDir(ctxContainer: ContextContainer, genType:
         const datapackRoot = await getDatapackRoot(dir);
         if (datapackRoot) {
             const warningMessage = locale('create-datapack-template.inside-datapack', path.basename(datapackRoot));
-            const result = await window.showWarningMessage(warningMessage, ...createMessageItemHasIds('yes', 'reselect', 'no'));
-            if (result === undefined || result.id === 'no') throw new UserCancelledError();
-            if (result.id === 'reselect') return await listenGenerateDir(ctxContainer, genType);
+            const result = await showWarning(warningMessage, false, createMessageItemHasIds('yes', 'reselect', 'no'), ['no']);
+            if (result === 'reselect') return await listenGenerateDir(ctxContainer, genType);
         }
     } else if (!await isDatapackRoot(dir)) {
         throw new GenerateError(locale('create-datapack-template.not-datapack'));
@@ -59,9 +57,8 @@ export async function listenDatapackName(ctxContainer: ContextContainer, genType
     // データパックの重複をチェック
     if (await isDatapackRoot(datapackRoot)) {
         const warningMessage = locale('create-datapack-template.duplicate-datapack', path.basename(datapackRoot));
-        const result = await window.showWarningMessage(warningMessage, ...createMessageItemHasIds('yes', 'rename', 'no'));
-        if (result === undefined || result.id === 'no') throw new UserCancelledError();
-        if (result.id === 'rename') return await listenDatapackName(ctxContainer, genType = 'create-datapack-template.add');
+        const result = await showWarning(warningMessage, false, createMessageItemHasIds('yes', 'rename', 'no'), ['no']);
+        if (result === 'rename') return await listenDatapackName(ctxContainer, genType = 'create-datapack-template.add');
     }
     // 環境コンテナに適用
     ctxContainer.datapackName = datapackName;

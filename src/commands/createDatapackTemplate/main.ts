@@ -1,6 +1,5 @@
-import { window } from 'vscode';
 import { getDate, getResourcePath } from '../../utils/common';
-import { createProgressBar } from '../../utils/vscodeWrapper';
+import { createProgressBar, showError, showInfo } from '../../utils/vscodeWrapper';
 import path from 'path';
 import { TextEncoder } from 'util';
 import '../../utils/methodExtensions';
@@ -16,14 +15,16 @@ import { getVanillaData } from '../../utils/vanillaData';
 import { listenDatapackName, listenDescription, listenNamespace, listenGenerateTemplate, listenGenerateDir, listenGenerateType } from './utils/userInputs';
 import { UserCancelledError } from '../../types/Error';
 
-export async function createDatapack(): Promise<void> {
+export async function createDatapack(): Promise<void>;
+export async function createDatapack(genType: string, dir: string): Promise<void>;
+export async function createDatapack(genType?: string, dir?: string): Promise<void> {
     try {
         // 環境コンテナ作成
-        const ctx: ContextContainer = { date: getDate(config.dateFormat) };
+        const ctx: ContextContainer = { date: getDate(config.dateFormat), dir };
         // 生成タイプを聞く
-        const genType = await listenGenerateType();
+        genType = genType ?? await listenGenerateType();
         // ディレクトリの選択
-        await listenGenerateDir(ctx, genType);
+        if (!ctx.dir) await listenGenerateDir(ctx, genType);
         // データパック名入力
         await listenDatapackName(ctx, genType);
         // 説明入力
@@ -38,8 +39,8 @@ export async function createDatapack(): Promise<void> {
         await generate(ctx, generateData);
     } catch (error) {
         if (error instanceof UserCancelledError) return;
-        if (error instanceof Error) window.showErrorMessage(error.message);
-        else window.showErrorMessage(error.toString());
+        if (error instanceof Error) showError(error.message);
+        else showError(error.toString());
         codeConsole.appendLine(error.stack ?? error.toString());
     }
 }
@@ -63,7 +64,7 @@ export async function generate(ctxContainer: ContextContainer, generateData: Gen
             }
             report({ increment: 100 / generateData.length, message });
         }
-        window.showInformationMessage(locale('create-datapack-template.complete'));
+        showInfo(locale('create-datapack-template.complete'));
     });
 }
 

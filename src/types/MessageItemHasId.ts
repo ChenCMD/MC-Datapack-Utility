@@ -1,5 +1,5 @@
 import { MessageItem } from 'vscode';
-import { locale } from '../../../locales';
+import { locale } from '../locales';
 
 export interface MessageItemHasId extends MessageItem {
     id: string

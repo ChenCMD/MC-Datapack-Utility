@@ -1,5 +1,5 @@
 import { QuickPickItem } from 'vscode';
-import { locale } from '../../../locales';
+import { locale } from '../locales';
 
 export interface QuickPickItemHasId extends QuickPickItem {
     id: string

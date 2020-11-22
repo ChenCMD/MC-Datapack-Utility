@@ -3,6 +3,7 @@
     "copy-resource-path.unknown-filetype": "このファイルのリソースパスを取得できません。",
     "create-file.not-datapack": "datapack内ではないためファイルを作成できません。",
     "create-file.unknown-filetype": "ここにファイルを作成することはできません。",
+    "create-file.unknown-filetype.listen-add": "ここにファイルを作成することはできません。\ndatapack \"%0%\"にテンプレートを追加しますか？",
     "create-file.structure": "ストラクチャーファイルは未サポートです。",
     "create-file.already-exists": "%0%は既に存在します。",
     "create-file.file-name": "%0%名",
