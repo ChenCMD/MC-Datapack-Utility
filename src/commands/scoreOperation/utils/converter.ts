@@ -26,17 +26,19 @@
 */
 
 import { Deque } from '../../../types/Deque';
-import { CalculateUnfinishedError, GenerateError } from '../types/Errors';
 import { OperateTable } from '../types/OperateTable';
 import { QueueElement } from '../types/QueueElement';
 import { scoreTable } from '../types/ScoreTable';
 import { formulaToQueue, ssft } from '.';
 import { locale } from '../../../locales';
 import { Formula } from '../types/Formula';
+import { codeConsole } from '../../../extension';
+import { GenerateError, CalculateUnfinishedError } from '../../../types/Error';
 
-export async function rpnToScoreOperation(formula: Formula | string, prefix: string, objective: string, temp: string): Promise<{ resValues: Set<string>, resFormulas: string[] }> {
-    let rpnQueue = new Deque<QueueElement>();
-    rpnQueue = await formulaToQueue(formula, rpnQueue, scoreTable, objective);
+export async function rpnToScoreOperation(formula: Formula | string, prefix: string, objective: string, temp: string, isAlwaysSpecifyObject: boolean): Promise<{ resValues: Set<string>, resFormulas: string[] } | undefined> {
+    const rpnQueue = new Deque<QueueElement>();
+    const res = await formulaToQueue(formula, rpnQueue, scoreTable, objective, isAlwaysSpecifyObject);
+    if (!res) return undefined;
 
     const calcStack: QueueElement[] = [];
     const resValues = new Set<string>();
@@ -74,7 +76,7 @@ export async function rpnToScoreOperation(formula: Formula | string, prefix: str
                     // 「被演算数」が arg1 であるとき _op.former: true
                     // 「加演算数」が arg2 であるとき _op.latter: true
                     // ∴・「arg1 (演算子) arg2」のとき、_op.former も _op.latter も true
-                    //   ・「arg2 (演算子) arg1」のとき、_op.former も _op.latter も false
+                    //   ・「arg2 (演算子) arg1」のとき、_op.former も _op.latter も false または undefined
                     const _f = (_op.former) ? arg1 : arg2;
                     const _l = (_op.latter) ? arg2 : arg1;
                     resFormulas.push(`scoreboard players operation ${_f.value} ${_f.objective} ${_op.op} ${_l.value} ${_l.objective}`);
@@ -88,13 +90,14 @@ export async function rpnToScoreOperation(formula: Formula | string, prefix: str
     return { resValues, resFormulas };
 }
 
-export async function rpnCalculate(rpnExp: string, opTable: OperateTable): Promise<string | number | undefined> {
+export async function rpnCalculate(rpnExp: string, opTable: OperateTable, isAlwaysSpecifyObject: boolean): Promise<string | number | undefined> {
     // 切り分け実行
     // 式を空白文字かカンマでセパレートして配列化＆これらデリミタを式から消す副作用
     const rpnQueue = new Deque<QueueElement>();
-    for (const elem of rpnExp.split(/\s+|,/))
-        await formulaToQueue(elem, rpnQueue, opTable, '');
-
+    for (const elem of rpnExp.split(/\s+|,/)) {
+        const res = await formulaToQueue(elem, rpnQueue, opTable, '', isAlwaysSpecifyObject);
+        if (!res) return undefined;
+    }
     // 演算開始
     const calcStack: (number | string)[] = []; // 演算結果スタック
     while (rpnQueue.size() > 0) {
@@ -112,7 +115,7 @@ export async function rpnCalculate(rpnExp: string, opTable: OperateTable): Promi
 
             // 制御文 ※計算時にはないはずなのでwarningを出して無視
             case 'state':
-                console.warn(`inclute statement:${elem.value}`);
+                codeConsole.appendLine(`[WARN] inclute statement:${elem.value}`);
                 break;
 
             // 演算子・計算機能

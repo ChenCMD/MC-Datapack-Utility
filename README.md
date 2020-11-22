@@ -41,7 +41,7 @@ Another way is to press `Ctrl + P` on VSCode and execute `ext install chencmd.mc
 # Features
 ## Creating a datapack template
 
-Want to make the creation of a data pack easier?
+Want to make the creation of a datapack easier?
 
 Press `Alt + Shift + D -> Alt + Shift + T`.
 This feature makes creating a Datapack easy by simply answering a few questions in a flow.

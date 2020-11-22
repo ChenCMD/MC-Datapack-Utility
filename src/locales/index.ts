@@ -25,6 +25,7 @@
 
 import dateFormat from 'dateformat';
 import { codeConsole } from '../extension';
+import { Locale } from '../types/Locale';
 import enLocale from './en.json';
 
 const locales: {
@@ -33,10 +34,6 @@ const locales: {
     '': enLocale,
     en: enLocale
 };
-
-interface Locale {
-    [key: string]: string
-}
 
 let language = '';
 
