@@ -34,7 +34,6 @@ export async function createDatapack(): Promise<void> {
         const createItems = await listenGenerateTemplate(ctx);
         // 選択されたデータを生成用の形式に加工
         const generateData = await toGenerateData(createItems);
-        console.log(ctx);
         // 生成
         await generate(ctx, generateData);
     } catch (error) {
