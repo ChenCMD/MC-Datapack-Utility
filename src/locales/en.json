@@ -1,6 +1,7 @@
 {
     "copy-resource-path.not-datapack": "The resource path cannot be obtained because it is not in the datapack.",
     "copy-resource-path.unknown-filetype": "Unable to get the resource path for this file.",
+    "could-not-access-key": "Could not access key: \"%1%\" of file: \"%0%\".",
     "create-file.not-datapack": "Cannot create file because it is not in a datapack.",
     "create-file.unknown-filetype": "You can't create a file here.",
     "create-file.unknown-filetype.listen-add": "You can't create a file here.\nWould you like to add a template to your datapack \"%0%\"?",

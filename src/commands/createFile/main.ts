@@ -62,9 +62,9 @@ export async function createFile(uri: Uri): Promise<void> {
 
         try {
             const openFilePath = getTextEditor().document.uri.fsPath;
-            const nowOpenFileType = getFileType(path.dirname(openFilePath), datapackRoot) ?? '';
-            ctxContainer.nowOpenFileType = nowOpenFileType;
-            ctxContainer.nowOpenFileResourcePath = nowOpenFileType !== '' ? getResourcePath(openFilePath, datapackRoot, nowOpenFileType as FileType) : '';
+            const nowOpenFileType = getFileType(path.dirname(openFilePath), datapackRoot);
+            ctxContainer.nowOpenFileType = nowOpenFileType ?? '';
+            ctxContainer.nowOpenFileResourcePath = getResourcePath(openFilePath, datapackRoot, nowOpenFileType) ?? '';
             ctxContainer.nowOpenFileName = openFilePath.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? '';
             ctxContainer.nowOpenFileExtname = openFilePath.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? '';
         } catch (error) {

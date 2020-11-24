@@ -32,6 +32,7 @@
     "mcdutil.config.createDatapackTemplate.customTemplate.description": "Explanatory text",
     "mcdutil.config.createDatapackTemplate.customTemplate.detail": "Detailed explanation",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates": "Files/folders generated when selected",
+    "mcdutil.config.createDatapackTemplate.customTemplate.generates.append": "Add elem to key if the target has already been generated in json.",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.type": "file or folder",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.rel": "Relative file path under DatapackName (In case of file, extension is required)",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error": "\\\\ : * ? \" < > | cannot be used for file/folder names",

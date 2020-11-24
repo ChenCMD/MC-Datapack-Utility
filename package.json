@@ -329,6 +329,41 @@
 												"type": "string",
 												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content%"
 											}
+										},
+										"append": {
+											"type": "object",
+											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%",
+											"required": [
+												"key",
+												"elem"
+											],
+											"properties": {
+												"key": {
+													"type": "string"
+												},
+												"elem": {
+													"oneOf": [
+														{
+															"type": "array"
+														},
+														{
+															"type": "boolean"
+														},
+														{
+															"type": "integer"
+														},
+														{
+															"type": "number"
+														},
+														{
+															"type": "object"
+														},
+														{
+															"type": "string"
+														}
+													]
+												}
+											}
 										}
 									}
 								}

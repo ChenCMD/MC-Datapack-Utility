@@ -9,6 +9,11 @@ export function getTextEditor(): TextEditor {
     return editor;
 }
 
+export function getIndent(path: string): number {
+    const config = workspace.getConfiguration('editor.tabSize', Uri.file(path));
+    return config.get<number>('tabSize', 4);
+}
+
 export async function listenInput(
     message: string, validateInput?: (value: string) => Thenable<string | undefined> | string | undefined
 ): Promise<string> {

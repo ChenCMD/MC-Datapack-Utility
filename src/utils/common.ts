@@ -2,7 +2,7 @@ import * as path from 'path';
 import * as file from './file';
 import { locale } from '../locales';
 import dateFormat from 'dateformat';
-import { FileType, fileTypeFolderName } from '../types/FileTypes';
+import { FileType, getFilePath, getFileType } from '../types/FileTypes';
 import { DownloadTimeOutError } from '../types/Error';
 
 export async function setTimeOut<T>(milisec: number): Promise<T> {
@@ -13,13 +13,29 @@ export function getDate(format: string): string {
     return dateFormat(Date.now(), format);
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+export function appendElemFromKey(object: any, key: string, element: any): boolean {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const walk = (obj: any, keys: string[], elem: any): boolean => {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const newObj = obj[keys.shift()!];
+        if (!newObj) return false;
+        if (keys.length > 0) return walk(newObj, keys, elem);
+        (newObj as (typeof elem)[]).push(elem);
+        return true;
+    };
+    if (key.length === 0) return false;
+    return walk(object, key.split('.'), element);
+}
+
 /**
  * リソースパスを取得します
  * @param filePath 取得したいファイルのファイルパス
  * @param datapackRoot データパックのルートパス
  */
-export function getResourcePath(filePath: string, datapackRoot: string, fileType: FileType | undefined): string {
-    return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(RegExp(`^data/([^/]+)/${fileType ? fileTypeFolderName[fileType] : '[^/]+'}/(.*)\\.(?:mcfunction|json)$`), '$1:$2');
+export function getResourcePath(filePath: string, datapackRoot: string, fileType?: FileType): string {
+    const fileTypePath = getFilePath(fileType ?? getFileType(filePath, datapackRoot)) ?? '[^/]+';
+    return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(RegExp(`^data/([^/]+)/${fileTypePath}/(.*)\\.(?:mcfunction|json)$`), '$1:$2');
 }
 
 /**

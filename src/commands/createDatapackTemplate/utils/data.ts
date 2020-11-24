@@ -28,7 +28,11 @@ export const pickItems: QuickPickFiles[] = [
                     '        "%namespace%:load"',
                     '    ]',
                     '}'
-                ]
+                ],
+                jsonAppend: {
+                    key: 'values',
+                    elem: '%namespace%:load'
+                }
             },
             {
                 type: 'file',
@@ -50,7 +54,11 @@ export const pickItems: QuickPickFiles[] = [
                     '        "%namespace%:tick"',
                     '    ]',
                     '}'
-                ]
+                ],
+                jsonAppend: {
+                    key: 'value',
+                    elem: '%namespace%:tick'
+                }
             },
             {
                 type: 'file',
