@@ -323,12 +323,28 @@
 											"patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error%"
 										},
 										"content": {
-											"type": "array",
-											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content%",
-											"items": {
-												"type": "string",
-												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content%"
-											}
+											"oneOf": [
+												{
+													"type": "array",
+													"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content%",
+													"items": {
+														"oneOf": [
+															{
+																"type": "string",
+																"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-str%"
+															},
+															{
+																"type": "object",
+																"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj%"
+															}
+														]
+													}
+												},
+												{
+													"type": "object",
+													"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj%"
+												}
+											]
 										},
 										"append": {
 											"type": "object",
@@ -339,29 +355,14 @@
 											],
 											"properties": {
 												"key": {
-													"type": "string"
+													"type": "string",
+													"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
 												},
 												"elem": {
-													"oneOf": [
-														{
-															"type": "array"
-														},
-														{
-															"type": "boolean"
-														},
-														{
-															"type": "integer"
-														},
-														{
-															"type": "number"
-														},
-														{
-															"type": "object"
-														},
-														{
-															"type": "string"
-														}
-													]
+													"not": {
+														"type": "null"
+													},
+													"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
 												}
 											}
 										}

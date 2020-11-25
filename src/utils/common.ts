@@ -13,21 +13,6 @@ export function getDate(format: string): string {
     return dateFormat(Date.now(), format);
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-export function appendElemFromKey(object: any, key: string, element: any): boolean {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const walk = (obj: any, keys: string[], elem: any): boolean => {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const newObj = obj[keys.shift()!];
-        if (!newObj) return false;
-        if (keys.length > 0) return walk(newObj, keys, elem);
-        (newObj as (typeof elem)[]).push(elem);
-        return true;
-    };
-    if (key.length === 0) return false;
-    return walk(object, key.split('.'), element);
-}
-
 /**
  * リソースパスを取得します
  * @param filePath 取得したいファイルのファイルパス

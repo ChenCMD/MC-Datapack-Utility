@@ -3,7 +3,7 @@ import { ssft } from '.';
 import { locale } from '../../../locales';
 import { OperateElement, OperateTable } from '../types/OperateTable';
 import { config } from '../../../extension';
-import { GenerateError, ExpectedTokenError } from '../../../types/Error';
+import { GenerateError, ParsingError } from '../../../types/Error';
 
 export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | string {
     let parts = exp.split(' ');
@@ -50,7 +50,7 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
             const lastClose = parts.lastIndexOf(')');
             if (lastClose === -1)
                 // ')'がなければエラー
-                throw new ExpectedTokenError(locale('too-much', '\'(\''));
+                throw new ParsingError(locale('too-much', '\'(\''));
             const sub = parts.slice(0, lastClose).join(' ');
             parts = parts.slice(lastClose + 1);
 
@@ -58,7 +58,7 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
             return { front: formulaAnalyzer(sub, opTable), op: opTable.table[ssft(parts.shift(), opTable)], back: formulaAnalyzer(parts.join(' '), opTable) };
         case ')':
             // '('がなければエラー
-            throw new ExpectedTokenError(locale('too-much', '\')\''));
+            throw new ParsingError(locale('too-much', '\')\''));
         default:
             if (!func.identifier.match(/^\S+\($/) || !func.destination)
                 throw new GenerateError(locale('formula-to-score-operation.illegal-formula'));
@@ -85,7 +85,7 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
     subArr.push(nested.slice(separation + 1));
 
     if(!func.destination)
-        throw new ExpectedTokenError(locale('formula-to-score-operation.illegal-expression', func.identifier));
+        throw new ParsingError(locale('parsing-error', func.identifier));
 
     const nameElem = func.destination.namely.split(' ');
     func.destination.args.forEach((e, j) => {

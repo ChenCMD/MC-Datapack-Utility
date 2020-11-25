@@ -1,17 +1,16 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
 import { GenerateFileData, QuickPickFiles } from '../types/QuickPickFiles';
 
 export const packMcMetaData: GenerateFileData = {
     type: 'file',
     rel: 'pack.mcmeta',
-    content: [
-        '{',
-        '    "pack": {',
-        '        "pack_format": 6,',
-        '        "description": "%datapackDescription%"',
-        '    }',
-        '}'
-    ]
+    content: {
+        pack: {
+            pack_format: 6,
+            description: '%datapackDescription%'
+        }
+    }
 };
 
 export const pickItems: QuickPickFiles[] = [
@@ -22,14 +21,12 @@ export const pickItems: QuickPickFiles[] = [
             {
                 type: 'file',
                 rel: 'data/minecraft/tags/functions/load.json',
-                content: [
-                    '{',
-                    '    "values": [',
-                    '        "%namespace%:load"',
-                    '    ]',
-                    '}'
-                ],
-                jsonAppend: {
+                content: {
+                    values: [
+                        '%namespace%:load'
+                    ]
+                },
+                append: {
                     key: 'values',
                     elem: '%namespace%:load'
                 }
@@ -48,15 +45,13 @@ export const pickItems: QuickPickFiles[] = [
             {
                 type: 'file',
                 rel: 'data/minecraft/tags/functions/tick.json',
-                content: [
-                    '{',
-                    '    "values": [',
-                    '        "%namespace%:tick"',
-                    '    ]',
-                    '}'
-                ],
-                jsonAppend: {
-                    key: 'value',
+                content: {
+                    values: [
+                        '%namespace%:tick'
+                    ]
+                },
+                append: {
+                    key: 'values',
                     elem: '%namespace%:tick'
                 }
             },

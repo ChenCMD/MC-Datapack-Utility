@@ -1,4 +1,4 @@
-import { getDate, getResourcePath, appendElemFromKey } from '../../utils/common';
+import { getDate, getResourcePath } from '../../utils/common';
 import { createProgressBar, getIndent, showError, showInfo } from '../../utils/vscodeWrapper';
 import path from 'path';
 import { TextEncoder } from 'util';
@@ -13,6 +13,8 @@ import { GenerateFileData, GetGitHubDataFunc, QuickPickFiles } from './types/Qui
 import { getVanillaData } from '../../utils/vanillaData';
 import { listenDatapackName, listenDescription, listenNamespace, listenGenerateTemplate, listenGenerateDir, listenGenerateType } from './utils/userInputs';
 import { GenerateError, UserCancelledError } from '../../types/Error';
+import { isStringArray } from '../../utils/typeGuards';
+import { appendElemFromKey } from '../../utils/jsonKeyWalker';
 
 export async function createDatapack(): Promise<void>;
 export async function createDatapack(genType: string, dir: string): Promise<void>;
@@ -74,16 +76,27 @@ export async function singleGenerate(ctxContainer: ContextContainer, item: Gener
         return;
     }
     if (item.type === 'file') {
+        const indent = ' '.repeat(getIndent(filePath));
+
         if (!await file.pathAccessible(filePath)) {
-            const contents = item.content?.map(v => resolveVars(v, { fileResourcePath: getResourcePath(filePath, datapackRoot), ...ctxContainer }));
-            await file.createFile(filePath, new TextEncoder().encode(contents?.join('\r\n') ?? ''));
-        } else if (item.jsonAppend) {
-            // eslint-disable-next-line prefer-const
-            let { key, elem } = item.jsonAppend;
+            let contents: string;
+            const singleCtxContainer = { fileResourcePath: getResourcePath(filePath, datapackRoot), ...ctxContainer };
+
+            if (isStringArray(item.content))
+                contents = resolveVars(item.content, singleCtxContainer).join('\r\n');
+            else
+                contents = JSON.stringify(resolveVars(item.content, singleCtxContainer), undefined, indent);
+
+            await file.createFile(filePath, new TextEncoder().encode(contents ?? ''));
+        } else if (item.append) {
+            const { key, elem } = item.append;
             const parsedJson = JSON.parse(await file.readFile(filePath));
-            if (typeof elem === 'string') elem = resolveVars(elem, ctxContainer);
-            if (!appendElemFromKey(parsedJson, key, elem)) throw new GenerateError(locale('could-not-access-key', filePath, key));
-            file.writeFile(filePath, JSON.stringify(parsedJson, undefined, ' '.repeat(getIndent(filePath))));
+
+            const res = appendElemFromKey(parsedJson, key, resolveVars(elem, ctxContainer));
+            if (!res[0])
+                throw new GenerateError(locale(res[1], filePath, key));
+
+            file.writeFile(filePath, JSON.stringify(parsedJson, undefined, indent));
         }
     }
 }
@@ -95,10 +108,10 @@ export async function toGenerateData(createItems: QuickPickFiles[], genType: str
 
     if (genType === 'create-datapack-template.create') ans.push(rfdc()(packMcMetaData));
 
-    for (const item of funcs.map((func, index) => ({ func, index }))) {
+    for (const [i, func] of funcs.entries()) {
         await createProgressBar(
             locale('create-datapack-template.progress.title'),
-            async report => ans.push(...await download(item.func, item.index, funcs.length, report))
+            async report => ans.push(...await download(func, i, funcs.length, report))
         );
     }
 

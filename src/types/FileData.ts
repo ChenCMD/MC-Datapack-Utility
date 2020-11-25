@@ -1,11 +1,17 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface FileData {
     rel: string
-    content?: string[],
-    jsonAppend?: AppendElement
+    content?: ContentType
+    append?: AppendElement
 }
+
+export interface FileDataReqContent extends FileData {
+    content: ContentType
+}
+
+export type ContentType = string[] | { [key: string]: any } | { [key: string]: any }[];
 
 export interface AppendElement {
     key: string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     elem: any
 }
