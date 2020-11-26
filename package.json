@@ -29,6 +29,7 @@
 		"vscode": "^1.50.0"
 	},
 	"scripts": {
+		"compile": "webpack --mode development",
 		"build": "webpack --mode production",
 		"watch": "webpack --mode none --watch/",
 		"lint": "eslint --fix src/**/*.ts",
@@ -315,67 +316,100 @@
 								"minItems": 1,
 								"items": {
 									"type": "object",
-									"additionalProperties": false,
-									"required": [
-										"type",
-										"rel"
-									],
-									"properties": {
-										"type": {
-											"type": "string",
-											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.type%",
-											"enum": [
-												"file",
-												"folder"
-											]
-										},
-										"rel": {
-											"type": "string",
-											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel%",
-											"pattern": "^[^\\\\:*?\"<>|]+$",
-											"patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error%"
-										},
-										"content": {
-											"oneOf": [
-												{
-													"type": "array",
-													"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content%",
-													"items": {
-														"oneOf": [
-															{
-																"type": "string",
-																"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-str%"
-															},
-															{
-																"type": "object",
-																"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj%"
-															}
-														]
-													}
-												},
-												{
-													"type": "object",
-													"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj%"
-												}
-											]
-										},
-										"append": {
-											"type": "object",
-											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%",
-											"required": [
-												"key",
-												"elem"
-											],
-											"properties": {
-												"key": {
-													"type": "string",
-													"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
-												},
-												"elem": {
-													"not": {
-														"type": "null"
+									"if": {
+										"properties": {
+											"type": {
+												"const": "folder"
+											}
+										}
+									},
+									"then": {
+										"additionalProperties": false,
+										"required": [
+											"type",
+											"rel"
+										],
+										"properties": {
+											"type": {
+												"type": "string",
+												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.type%",
+												"enum": [
+													"file",
+													"folder"
+												]
+											},
+											"rel": {
+												"type": "string",
+												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel%",
+												"pattern": "^[^\\\\:*?\"<>|]+$",
+												"patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error%"
+											}
+										}
+									},
+									"else": {
+										"additionalProperties": false,
+										"required": [
+											"type",
+											"rel",
+											"content"
+										],
+										"properties": {
+											"type": {
+												"type": "string",
+												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.type%",
+												"enum": [
+													"file",
+													"folder"
+												]
+											},
+											"rel": {
+												"type": "string",
+												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel%",
+												"pattern": "^[^\\\\:*?\"<>|]+$",
+												"patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error%"
+											},
+											"content": {
+												"oneOf": [
+													{
+														"type": "array",
+														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content%",
+														"items": {
+															"oneOf": [
+																{
+																	"type": "string",
+																	"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-str%"
+																},
+																{
+																	"type": "object",
+																	"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj%"
+																}
+															]
+														}
 													},
-													"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
+													{
+														"type": "object",
+														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj%"
+													}
+												]
+											},
+											"append": {
+												"type": "object",
+												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%",
+												"required": [
+													"key",
+													"elem"
+												],
+												"properties": {
+													"key": {
+														"type": "string",
+														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
+													},
+													"elem": {
+														"not": {
+															"type": "null"
+														},
+														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
+													}
 												}
 											}
 										}
