@@ -1,3 +1,8 @@
+# [v1.4.1](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.4.0...v1.4.1) (2020-11-26)
+
+## 🐛 Bug Fixes
+- [`7738bc6`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/7738bc6)  Fix cannot disable default templates (Issues: [`#22`](https://github.com/ChenCMD/MC-Datapack-Utility/issues/22))
+
 # [v1.4.0](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.3.0...v1.4.0) (2020-11-26)
 
 ## ✨ New Features
