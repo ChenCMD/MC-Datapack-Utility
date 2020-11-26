@@ -40,5 +40,8 @@
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.content-str": "文字列 (基本的に一つのアイテムは1行として解釈されます)",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj": "オブジェクト 値はそのままファイルに記載されます。",
     "mcdutil.config.createDatapackTemplate.dataVersion": "使用するバニラデータのバージョン",
+    "mcdutil.config.createDatapackTemplate.defaultLoadAndTick": "`#load`と`#tick`のテンプレートを選択画面に表示するか否か",
+    "mcdutil.config.createDatapackTemplate.defaultVanillaData": "vanillaの`tags/~`のテンプレートを選択画面に表示するか否か",
+    "mcdutil.config.createDatapackTemplate.defaultFolder": "`advancements/`, `loot_tables/` 等のテンプレートを選択画面に表示するか否か",
     "mcdutil.config.createFile.fileTemplate": "**データパックファイルを作成する**: ファイルの生成時に記載されている内容 (ファイル種毎に設定が可能です)"
 }

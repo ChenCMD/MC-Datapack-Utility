@@ -270,6 +270,21 @@
 					"markdownDescription": "%mcdutil.config.createDatapackTemplate.dataVersion%",
 					"default": "Latest release"
 				},
+				"mcdutil.createDatapackTemplate.defaultLoadAndTick": {
+					"type": "boolean",
+					"markdownDescription": "%mcdutil.config.createDatapackTemplate.defaultLoadAndTick%",
+					"default": true
+				},
+				"mcdutil.createDatapackTemplate.defaultVanillaData": {
+					"type": "boolean",
+					"markdownDescription": "%mcdutil.config.createDatapackTemplate.defaultVanillaData%",
+					"default": true
+				},
+				"mcdutil.createDatapackTemplate.defaultFolder": {
+					"type": "boolean",
+					"markdownDescription": "%mcdutil.config.createDatapackTemplate.defaultFolder%",
+					"default": true
+				},
 				"mcdutil.createDatapackTemplate.customTemplate": {
 					"type": "array",
 					"items": {

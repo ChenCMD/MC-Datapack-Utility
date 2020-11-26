@@ -80,7 +80,11 @@ export async function listenNamespace(ctxContainer: ContextContainer): Promise<v
 }
 
 export async function listenGenerateTemplate(variableContainer: ContextContainer): Promise<QuickPickFiles[]> {
-    const items = [...rfdc()(pickItems), ...config.createDatapackTemplate.customTemplate];
+    const items: QuickPickFiles[] = [];
+    if (config.createDatapackTemplate.defaultLoadAndTick) items.push(...rfdc()(pickItems['#load & #tick']));
+    if (config.createDatapackTemplate.defaultVanillaData) items.push(...rfdc()(pickItems['Vanilla data']));
+    if (config.createDatapackTemplate.defaultFolder) items.push(...rfdc()(pickItems['Folders']));
+    items.push(...config.createDatapackTemplate.customTemplate);
     items.forEach(v => v.label = resolveVars(v.label, variableContainer));
     return await listenPickItem(locale('create-datapack-template.quickpick-placeholder'), items, true);
 }
