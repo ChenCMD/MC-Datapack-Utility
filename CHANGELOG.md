@@ -1,3 +1,8 @@
+# [v1.4.2](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.4.1...v1.4.2) (2020-11-26)
+
+## 🐛 Bug Fixes
+- [`b3ad7cf`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/b3ad7cf)  Fix the customTemplate can include files without content
+
 # [v1.4.1](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.4.0...v1.4.1) (2020-11-26)
 
 ## 🐛 Bug Fixes
