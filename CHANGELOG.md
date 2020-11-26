@@ -1,3 +1,9 @@
+# [v1.4.0](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.3.0...v1.4.0) (2020-11-26)
+
+## ✨ New Features
+- [`3ab0ebe`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/3ab0ebe)  add elem if already generate to file 
+- [`eb61661`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/eb61661)  NBTPath-like syntax can be used with key
+
 # [v1.3.0](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.2.0...v1.3.0) (2020-11-22)
 
 ## ✨ New Features
