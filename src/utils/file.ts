@@ -57,8 +57,6 @@ export async function pathAccessible(testPath: string | Uri): Promise<boolean> {
 }
 
 /**
- * パスが存在するか、アクセス可能かを判別します
- * @param testPath 確認するパス
  * @license
  * MIT License
  *
@@ -90,4 +88,8 @@ export async function readFile(path: string): Promise<string> {
             .on('end', () => resolve(data))
             .on('error', reject);
     });
+}
+
+export async function writeFile(path: string, content: string): Promise<void> {
+    return await fsp.writeFile(path, content);
 }

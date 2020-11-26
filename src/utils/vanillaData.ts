@@ -26,7 +26,7 @@
 import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
 import { codeConsole } from '../extension';
 import { AskGitHubData } from '../types/AskGitHubData';
-import { FileData } from '../types/FileData';
+import { FileDataReqContent } from '../types/FileData';
 import { VersionInformation } from '../types/VersionInformation';
 import { setTimeOut } from './common';
 import { download, getGitHubData } from './downloader';
@@ -37,22 +37,22 @@ export async function getVanillaData(
     askGitHubdata: AskGitHubData,
     relProcessingFunc: (data: ReposGetContentResponseData) => string,
     elementFunc: (index: number, max: number) => void
-): Promise<FileData[]> {
+): Promise<FileDataReqContent[]> {
     askGitHubdata.ref = askGitHubdata.ref.replace(/%version%/, resolveVersion(versionOrLiteral, versionInfo));
 
     const files = await getGitHubData(askGitHubdata);
-    const ans: FileData[] = [];
+    const ans: FileDataReqContent[] = [];
 
-    for (const file of files.map((value, index) => ({ index, value }))) {
+    for (const [i, file] of files.entries()) {
         const content = await Promise.race([
-            download(file.value.download_url),
+            download(file.download_url),
             setTimeOut<string>(7000)
         ]);
         ans.push({
-            rel: relProcessingFunc(file.value),
+            rel: relProcessingFunc(file),
             content: content.split('\n')
         });
-        elementFunc(file.index, files.length);
+        elementFunc(i, files.length);
     }
     return ans;
 }

@@ -19,10 +19,8 @@ export async function listenGenerateType(): Promise<string> {
 
 export async function listenGenerateDir(ctxContainer: ContextContainer, genType: string): Promise<void> {
     let title: string;
-    if (genType === 'create-datapack-template.create')
-        title = locale('create-datapack-template.dialog-title-directory');
-    else
-        title = locale('create-datapack-template.dialog-title-datapack');
+    if (genType === 'create-datapack-template.create') title = locale('create-datapack-template.dialog-title-directory');
+    else title = locale('create-datapack-template.dialog-title-datapack');
     const dir = await listenOpenDir(title, locale('create-datapack-template.dialog-label')).then(v => v.fsPath);
 
     if (genType === 'create-datapack-template.create') {
