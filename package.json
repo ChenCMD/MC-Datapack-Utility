@@ -29,9 +29,7 @@
 		"vscode": "^1.50.0"
 	},
 	"scripts": {
-		"vscode:prepublish": "webpack --mode production",
 		"build": "webpack --mode production",
-		"compile": "webpack --mode development",
 		"watch": "webpack --mode none --watch/",
 		"lint": "eslint --fix src/**/*.ts",
 		"release": "semantic-release"
