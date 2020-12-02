@@ -10,3 +10,10 @@ export class ErrorTemplate extends Error {
 }
 
 export class DownloadTimeOutError extends ErrorTemplate { }
+export class UserCancelledError extends ErrorTemplate { }
+export class CalculateUnfinishedError extends ErrorTemplate { }
+export class GenerateError extends ErrorTemplate { }
+export class NotOpenTextDocumentError extends ErrorTemplate { }
+export class ParsingError extends ErrorTemplate { }
+export class UnimplementedError extends ErrorTemplate { }
+export class TypeUnmatchError extends ErrorTemplate { }

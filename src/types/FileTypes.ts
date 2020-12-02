@@ -120,3 +120,8 @@ export function getFileType(filePath: string, datapackRoot: string): FileType | 
     }
     return undefined;
 }
+
+export function getFilePath(fileType: FileType | undefined): string | undefined {
+    if (!fileType) return undefined;
+    return fileTypeFolderName[fileType];
+}
