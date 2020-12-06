@@ -1,3 +1,8 @@
+# [v1.4.3](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.4.2...v1.4.3) (2020-12-06)
+
+## 🐛 Bug Fixes
+- [`20b626a`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/20b626a)  Fix wrong template folder name (Issues: [`#23`](https://github.com/ChenCMD/MC-Datapack-Utility/issues/23))
+
 # [v1.4.2](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.4.1...v1.4.2) (2020-11-26)
 
 ## 🐛 Bug Fixes
