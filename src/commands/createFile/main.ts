@@ -6,7 +6,7 @@ import path = require('path');
 import { locale } from '../../locales';
 import { getFileTemplate } from './utils';
 import { TextEncoder } from 'util';
-import { FileType, getFileType } from '../../types/FileTypes';
+import { getFileType } from '../../types/FileTypes';
 import { resolveVars, ContextContainer } from '../../types/ContextContainer';
 import { codeConsole, config } from '../../extension';
 import { GenerateError, NotOpenTextDocumentError, UserCancelledError } from '../../types/Error';

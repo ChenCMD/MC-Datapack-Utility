@@ -129,20 +129,20 @@ export const pickItems: { [key in '#load & #tick' | 'Vanilla data' | 'Folders']:
             ]
         },
         {
-            label: 'data/%namespace%/dimensions/',
+            label: 'data/%namespace%/dimension/',
             generates: [
                 {
                     type: 'folder',
-                    rel: 'data/%namespace%/dimensions/'
+                    rel: 'data/%namespace%/dimension/'
                 }
             ]
         },
         {
-            label: 'data/%namespace%/dimension_types/',
+            label: 'data/%namespace%/dimension_type/',
             generates: [
                 {
                     type: 'folder',
-                    rel: 'data/%namespace%/dimension_types/'
+                    rel: 'data/%namespace%/dimension_type/'
                 }
             ]
         },
