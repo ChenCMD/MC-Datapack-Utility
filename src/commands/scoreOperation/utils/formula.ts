@@ -72,6 +72,7 @@ export function formulaAnalyzer(exp: string, opTable: OperateTable): Formula | s
 
     // exp =    f( f( f( 1 , 2 ) , f( 3 , 4 ) ) , 5 )
     // nested = ["f(" "f(" "1" "," "2" ")" "," "f(" "3" "," "4" ")" ")" "," "5"]
+    // 最適なカンマでの区切りを行う
     let i = 0;
     while (i < func.arity - 1) {
         separation = nested.indexOf(',', separation + 1);
