@@ -3,7 +3,7 @@ import { QueueElement } from '../types/QueueElement';
 import { TableBase } from '../types/TableBase';
 import { listenInput } from '../../../utils/vscodeWrapper';
 import { locale } from '../../../locales';
-import { Formula, IfFormula } from '../types/Formula';
+import { Formula } from '../types/Formula';
 import { OperateElement, OperateTable } from '../types/OperateTable';
 
 /**
@@ -45,23 +45,5 @@ export async function formulaToQueue(value: Formula | string, queue: Deque<Queue
         }
         queue.addLast({ value, objective: _objective, type: 'str' });
     }
-    return true;
-}
-
-export async function ifFormulaToQueue(value: IfFormula | string, queue: Deque<QueueElement>, objective: string, isAlwaysSpecifyObject: boolean): Promise<boolean> {
-    if (typeof value === 'string') {
-        if (Number.prototype.isValue(value)) {
-            queue.addLast({ value, objective: objective, type: 'num' });
-        } else {
-            let _objective = objective;
-            if (isAlwaysSpecifyObject) {
-                const str = await listenInput(locale('formula-to-score-operation.specifying-object', value));
-                if (str === undefined) return false;
-                _objective = str ?? objective;
-            }
-            queue.addLast({ value, objective: _objective, type: 'str' });
-        }
-    }
-    
     return true;
 }

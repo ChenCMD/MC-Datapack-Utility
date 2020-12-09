@@ -1,14 +1,17 @@
 import '../../utils/methodExtensions';
 import { codeConsole, config } from '../../extension';
 import { getTextEditor, listenInput, showError } from '../../utils/vscodeWrapper';
-import { rpnToScoreOperation } from './utils/converter';
-import { formulaAnalyzer } from './utils/formula';
+// import { rpnToScoreOperation } from './utils/converter';
+import { ifFormulaAnalyzer } from './utils/ifFormula';
+import { ifFormulaDisassembler } from './utils/ifConverter';
 import { locale } from '../../locales';
 import { opTable } from './types/OperateTable';
 import { NotOpenTextDocumentError, UserCancelledError } from '../../types/Error';
+// import { formulaAnalyzer } from './utils/formula';
 
 export async function scoreOperation(): Promise<void> {
-    const { prefix, objective, temp, forceInputType, isAlwaysSpecifyObject } = config.scoreOperation;
+    // const { prefix, objective, temp, forceInputType, isAlwaysSpecifyObject } = config.scoreOperation;
+    const { objective, forceInputType } = config.scoreOperation;
     try {
         const editor = getTextEditor();
 
@@ -33,8 +36,10 @@ export async function scoreOperation(): Promise<void> {
             text = res;
         }
 
-        const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = '), opTable);
-        const result = await rpnToScoreOperation(formula, prefix, objective, temp, isAlwaysSpecifyObject);
+        // const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = '), opTable);
+        const formula = ifFormulaAnalyzer(text.split(' = ').reverse().join(' = ').split(' '), opTable);
+        // const result = await rpnToScoreOperation(formula, prefix, objective, temp, isAlwaysSpecifyObject);
+        const result = ifFormulaDisassembler(formula);
         if (!result) return;
 
         const { resValues, resFormulas } = result;
