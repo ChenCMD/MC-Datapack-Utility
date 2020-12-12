@@ -1,23 +1,16 @@
 import * as path from 'path';
 import * as file from './file';
-import { window } from 'vscode';
 import { locale } from '../locales';
 import dateFormat from 'dateformat';
-import { config } from '../extension';
-import { FileType, fileTypeFolderName } from '../types/FileTypes';
+import { FileType, getFilePath, getFileType } from '../types/FileTypes';
+import { DownloadTimeOutError } from '../types/Error';
 
-export async function showInputBox(message?: string, validateInput?: (value: string) => string | Thenable<string | null | undefined> | null | undefined): Promise<string | undefined> {
-    return await window.showInputBox({
-        value: message ? locale('input-here', message) : '',
-        placeHolder: '',
-        prompt: message ? locale('input-here', message) : '',
-        ignoreFocusOut: true,
-        validateInput: validateInput
-    });
+export async function setTimeOut<T>(milisec: number): Promise<T> {
+    return await new Promise<T>((_, reject) => setTimeout(() => reject(new DownloadTimeOutError(locale('create-datapack-template.download-timeout'))), milisec));
 }
 
-export function getDate(): string {
-    return dateFormat(Date.now(), config.get<string>('dateFormat', 'm/dd HH:MM'));
+export function getDate(format: string): string {
+    return dateFormat(Date.now(), format);
 }
 
 /**
@@ -25,8 +18,9 @@ export function getDate(): string {
  * @param filePath 取得したいファイルのファイルパス
  * @param datapackRoot データパックのルートパス
  */
-export function getResourcePath(filePath: string, datapackRoot: string, fileType: FileType | undefined): string {
-    return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(RegExp(`^data/([^/]+)/${fileType ? fileTypeFolderName[fileType] : '[^/]+'}/(.*)\\.(?:mcfunction|json)$`), '$1:$2');
+export function getResourcePath(filePath: string, datapackRoot: string, fileType?: FileType): string {
+    const fileTypePath = getFilePath(fileType ?? getFileType(filePath, datapackRoot)) ?? '[^/]+';
+    return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(RegExp(`^data/([^/]+)/${fileTypePath}/(.*)\\.(?:mcfunction|json)$`), '$1:$2');
 }
 
 /**

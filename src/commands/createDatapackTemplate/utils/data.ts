@@ -1,47 +1,40 @@
-import { Octokit } from '@octokit/rest';
+/* eslint-disable @typescript-eslint/naming-convention */
 import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
-import { OctokitResponse } from '@octokit/types/dist-types/OctokitResponse';
-import { config } from '../../../extension';
-import { locale } from '../../../locales';
-import { download } from '../../../utils/downloader';
-import { DownloadTimeOutError } from '../types/Errors';
-import { GenerateFileData, GetGitHubDataFunc, QuickPickFiles } from '../types/QuickPickFiles';
+import { GenerateFileData, QuickPickFiles } from '../types/QuickPickFiles';
 
-export function getPackMcMetaData(): GenerateFileData {
-    return {
-        type: 'file',
-        relativeFilePath: 'pack.mcmeta',
-        content: [
-            '{',
-            '    "pack": {',
-            '        "pack_format": 6,',
-            '        "description": "%datapackDescription%"',
-            '    }',
-            '}'
-        ]
-    };
-}
+export const packMcMetaData: GenerateFileData = {
+    type: 'file',
+    rel: 'pack.mcmeta',
+    content: {
+        pack: {
+            pack_format: 6,
+            description: '%datapackDescription%'
+        }
+    }
+};
 
-export function getPickItems(): QuickPickFiles[] {
-    return [
+export const pickItems: { [key in '#load & #tick' | 'Vanilla data' | 'Folders']: QuickPickFiles[] } = {
+    '#load & #tick': [
         {
             label: '#load.json & %namespace%:load.mcfunction',
             picked: true,
             generates: [
                 {
                     type: 'file',
-                    relativeFilePath: 'data/minecraft/tags/functions/load.json',
-                    content: [
-                        '{',
-                        '    "values": [',
-                        '        "%namespace%:load"',
-                        '    ]',
-                        '}'
-                    ]
+                    rel: 'data/minecraft/tags/functions/load.json',
+                    content: {
+                        values: [
+                            '%namespace%:load'
+                        ]
+                    },
+                    append: {
+                        key: 'values',
+                        elem: '%namespace%:load'
+                    }
                 },
                 {
                     type: 'file',
-                    relativeFilePath: 'data/%namespace%/functions/load.mcfunction',
+                    rel: 'data/%namespace%/functions/load.mcfunction',
                     content: []
                 }
             ]
@@ -52,22 +45,26 @@ export function getPickItems(): QuickPickFiles[] {
             generates: [
                 {
                     type: 'file',
-                    relativeFilePath: 'data/minecraft/tags/functions/tick.json',
-                    content: [
-                        '{',
-                        '    "values": [',
-                        '        "%namespace%:tick"',
-                        '    ]',
-                        '}'
-                    ]
+                    rel: 'data/minecraft/tags/functions/tick.json',
+                    content: {
+                        values: [
+                            '%namespace%:tick'
+                        ]
+                    },
+                    append: {
+                        key: 'values',
+                        elem: '%namespace%:tick'
+                    }
                 },
                 {
                     type: 'file',
-                    relativeFilePath: 'data/%namespace%/functions/tick.mcfunction',
+                    rel: 'data/%namespace%/functions/tick.mcfunction',
                     content: []
                 }
             ]
-        },
+        }
+    ],
+    'Vanilla data': [
         {
             label: 'All Vanilla tags/blocks',
             generates: [],
@@ -75,9 +72,35 @@ export function getPickItems(): QuickPickFiles[] {
                 {
                     owner: 'SPGoding',
                     repo: 'vanilla-datapack',
-                    ref: 'data',
+                    ref: '%version%-data',
                     path: 'data/minecraft/tags/blocks',
-                    relativeFilePath: data => data.path
+                    rel: (data: ReposGetContentResponseData): string => data.path
+                }
+            ]
+        },
+        {
+            label: 'All Vanilla tags/entity_types',
+            generates: [],
+            func: [
+                {
+                    owner: 'SPGoding',
+                    repo: 'vanilla-datapack',
+                    ref: '%version%-data',
+                    path: 'data/minecraft/tags/entity_types',
+                    rel: (data: ReposGetContentResponseData): string => data.path
+                }
+            ]
+        },
+        {
+            label: 'All Vanilla tags/fluids',
+            generates: [],
+            func: [
+                {
+                    owner: 'SPGoding',
+                    repo: 'vanilla-datapack',
+                    ref: '%version%-data',
+                    path: 'data/minecraft/tags/fluids',
+                    rel: (data: ReposGetContentResponseData): string => data.path
                 }
             ]
         },
@@ -88,18 +111,20 @@ export function getPickItems(): QuickPickFiles[] {
                 {
                     owner: 'SPGoding',
                     repo: 'vanilla-datapack',
-                    ref: 'data',
+                    ref: '%version%-data',
                     path: 'data/minecraft/tags/items',
-                    relativeFilePath: data => data.path
+                    rel: (data: ReposGetContentResponseData): string => data.path
                 }
             ]
-        },
+        }
+    ],
+    'Folders': [
         {
             label: 'data/%namespace%/advancements/',
             generates: [
                 {
                     type: 'folder',
-                    relativeFilePath: 'data/%namespace%/advancements/'
+                    rel: 'data/%namespace%/advancements/'
                 }
             ]
         },
@@ -108,7 +133,7 @@ export function getPickItems(): QuickPickFiles[] {
             generates: [
                 {
                     type: 'folder',
-                    relativeFilePath: 'data/%namespace%/dimensions/'
+                    rel: 'data/%namespace%/dimensions/'
                 }
             ]
         },
@@ -117,7 +142,7 @@ export function getPickItems(): QuickPickFiles[] {
             generates: [
                 {
                     type: 'folder',
-                    relativeFilePath: 'data/%namespace%/dimension_types/'
+                    rel: 'data/%namespace%/dimension_types/'
                 }
             ]
         },
@@ -126,7 +151,7 @@ export function getPickItems(): QuickPickFiles[] {
             generates: [
                 {
                     type: 'folder',
-                    relativeFilePath: 'data/%namespace%/loot_tables/'
+                    rel: 'data/%namespace%/loot_tables/'
                 }
             ]
         },
@@ -135,7 +160,7 @@ export function getPickItems(): QuickPickFiles[] {
             generates: [
                 {
                     type: 'folder',
-                    relativeFilePath: 'data/%namespace%/predicates/'
+                    rel: 'data/%namespace%/predicates/'
                 }
             ]
         },
@@ -144,7 +169,7 @@ export function getPickItems(): QuickPickFiles[] {
             generates: [
                 {
                     type: 'folder',
-                    relativeFilePath: 'data/%namespace%/recipes/'
+                    rel: 'data/%namespace%/recipes/'
                 }
             ]
         },
@@ -153,7 +178,7 @@ export function getPickItems(): QuickPickFiles[] {
             generates: [
                 {
                     type: 'folder',
-                    relativeFilePath: 'data/%namespace%/tags/blocks/'
+                    rel: 'data/%namespace%/tags/blocks/'
                 }
             ]
         },
@@ -162,7 +187,7 @@ export function getPickItems(): QuickPickFiles[] {
             generates: [
                 {
                     type: 'folder',
-                    relativeFilePath: 'data/%namespace%/tags/entity_types/'
+                    rel: 'data/%namespace%/tags/entity_types/'
                 }
             ]
         },
@@ -171,7 +196,7 @@ export function getPickItems(): QuickPickFiles[] {
             generates: [
                 {
                     type: 'folder',
-                    relativeFilePath: 'data/%namespace%/tags/fluids/'
+                    rel: 'data/%namespace%/tags/fluids/'
                 }
             ]
         },
@@ -180,7 +205,7 @@ export function getPickItems(): QuickPickFiles[] {
             generates: [
                 {
                     type: 'folder',
-                    relativeFilePath: 'data/%namespace%/tags/functions/'
+                    rel: 'data/%namespace%/tags/functions/'
                 }
             ]
         },
@@ -189,38 +214,9 @@ export function getPickItems(): QuickPickFiles[] {
             generates: [
                 {
                     type: 'folder',
-                    relativeFilePath: 'data/%namespace%/tags/items/'
+                    rel: 'data/%namespace%/tags/items/'
                 }
             ]
-        },
-        ...config.get<QuickPickFiles[]>('createDatapackTemplate.customTemplate', [])
-    ];
-}
-
-export async function getGitHubData(data: GetGitHubDataFunc, elementFunc: (index: number, max: number) => void): Promise<GenerateFileData[]> {
-    const octokit = new Octokit();
-    const files = await Promise.race([
-        octokit.repos.getContent({
-            owner: data.owner,
-            repo: data.repo,
-            ref: data.ref,
-            path: data.path
-        }) as unknown as OctokitResponse<ReposGetContentResponseData[]>,
-        new Promise<OctokitResponse<ReposGetContentResponseData[]>>((_, reject) => setTimeout(() => reject(new DownloadTimeOutError(locale('create-datapack-template.download-timeout'))), 7_000))
-    ]);
-    // コンパイラが雑魚
-    const result: GenerateFileData[] = [];
-    for (const file of files.data.map((v, i) => ({index: i, value: v}))) {
-        const content = await Promise.race([
-            download(file.value.download_url),
-            new Promise<string>((_, reject) => setTimeout(() => reject(new DownloadTimeOutError(locale('create-datapack-template.download-timeout'))), 7_000))
-        ]);
-        result.push({
-            type: 'file',
-            relativeFilePath: data.relativeFilePath(file.value),
-            content: content.split('\n')
-        });
-        elementFunc(file.index, files.data.length);
-    }
-    return result;
-}
+        }
+    ]
+};

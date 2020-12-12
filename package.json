@@ -2,7 +2,7 @@
 	"name": "mc-datapack-utility",
 	"displayName": "MC Datapack Utility",
 	"description": "Extensions that provide multiple features that are useful for developing Minecraft: Java Edition Datapack",
-	"version": "0.0.0-development",
+	"version": "1.4.2",
 	"icon": "icon.png",
 	"categories": [
 		"Other"
@@ -29,18 +29,18 @@
 		"vscode": "^1.50.0"
 	},
 	"scripts": {
-		"vscode:prepublish": "webpack --mode production",
-		"build": "webpack --mode production",
 		"compile": "webpack --mode development",
+		"build": "webpack --mode production",
 		"watch": "webpack --mode none --watch/",
-		"lint": "eslint --fix src/**/*/ts",
+		"lint": "eslint --fix src/**/*.ts",
 		"release": "semantic-release"
 	},
 	"main": "dist/extension.js",
 	"dependencies": {
 		"@octokit/rest": "^18.0.7",
 		"dateformat": "^3.0.3",
-		"minimatch": "^3.0.4"
+		"minimatch": "^3.0.4",
+		"rfdc": "^1.1.4"
 	},
 	"activationEvents": [
 		"onCommand:mcdutil.commands.createDatapackTemplate",
@@ -183,7 +183,9 @@
 							},
 							"type": {
 								"type": "string",
-								"enum": ["fn"],
+								"enum": [
+									"fn"
+								],
 								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.type%",
 								"default": "fn"
 							},
@@ -193,7 +195,10 @@
 							},
 							"assocLow": {
 								"type": "string",
-								"enum": ["L", "R"],
+								"enum": [
+									"L",
+									"R"
+								],
 								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.assocLow%"
 							},
 							"axiom": {
@@ -211,7 +216,12 @@
 										"op": {
 											"type": "string",
 											"enum": [
-												"*=", "/=", "%=", "+=", "-=", "="
+												"*=",
+												"/=",
+												"%=",
+												"+=",
+												"-=",
+												"="
 											],
 											"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.axiom.op%"
 										},
@@ -221,11 +231,58 @@
 										}
 									}
 								}
+							},
+							"destination": {
+								"type": "object",
+								"required": [
+									"args",
+									"namely"
+								],
+								"properties": {
+									"args": {
+										"type": "array",
+										"items": {
+											"type": "string"
+										},
+										"default": [],
+										"description": "%mcdutil.config.scoreOperation.customOperate.destination.args%"
+									},
+									"namely": {
+										"type": "string",
+										"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.destination.namely%"
+									}
+								},
+								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.destination%"
 							}
 						}
 					},
 					"markdownDescription": "%mcdutil.config.scoreOperation.customOperate%",
 					"default": []
+				},
+				"mcdutil.scoreOperation.valueScale": {
+					"type": "number",
+					"markdownDescription": "%mcdutil.config.scoreOperation.valueScale%",
+					"default": 1
+				},
+				"mcdutil.createDatapackTemplate.dataVersion": {
+					"type": "string",
+					"markdownDescription": "%mcdutil.config.createDatapackTemplate.dataVersion%",
+					"default": "Latest release"
+				},
+				"mcdutil.createDatapackTemplate.defaultLoadAndTick": {
+					"type": "boolean",
+					"markdownDescription": "%mcdutil.config.createDatapackTemplate.defaultLoadAndTick%",
+					"default": true
+				},
+				"mcdutil.createDatapackTemplate.defaultVanillaData": {
+					"type": "boolean",
+					"markdownDescription": "%mcdutil.config.createDatapackTemplate.defaultVanillaData%",
+					"default": true
+				},
+				"mcdutil.createDatapackTemplate.defaultFolder": {
+					"type": "boolean",
+					"markdownDescription": "%mcdutil.config.createDatapackTemplate.defaultFolder%",
+					"default": true
 				},
 				"mcdutil.createDatapackTemplate.customTemplate": {
 					"type": "array",
@@ -259,32 +316,101 @@
 								"minItems": 1,
 								"items": {
 									"type": "object",
-									"additionalProperties": false,
-									"required": [
-										"type",
-										"relativeFilePath"
-									],
-									"properties": {
-										"type": {
-											"type": "string",
-											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.type%",
-											"enum": [
-												"file",
-												"folder"
-											]
-										},
-										"relativeFilePath": {
-											"type": "string",
-											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath%",
-											"pattern": "^[^\\\\:*?\"<>|]+$",
-											"patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath.error%"
-										},
-										"content": {
-											"type": "array",
-											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content%",
-											"items": {
+									"if": {
+										"properties": {
+											"type": {
+												"const": "folder"
+											}
+										}
+									},
+									"then": {
+										"additionalProperties": false,
+										"required": [
+											"type",
+											"rel"
+										],
+										"properties": {
+											"type": {
 												"type": "string",
-												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content%"
+												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.type%",
+												"enum": [
+													"file",
+													"folder"
+												]
+											},
+											"rel": {
+												"type": "string",
+												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel%",
+												"pattern": "^[^\\\\:*?\"<>|]+$",
+												"patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error%"
+											}
+										}
+									},
+									"else": {
+										"additionalProperties": false,
+										"required": [
+											"type",
+											"rel",
+											"content"
+										],
+										"properties": {
+											"type": {
+												"type": "string",
+												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.type%",
+												"enum": [
+													"file",
+													"folder"
+												]
+											},
+											"rel": {
+												"type": "string",
+												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel%",
+												"pattern": "^[^\\\\:*?\"<>|]+$",
+												"patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error%"
+											},
+											"content": {
+												"oneOf": [
+													{
+														"type": "array",
+														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content%",
+														"items": {
+															"oneOf": [
+																{
+																	"type": "string",
+																	"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-str%"
+																},
+																{
+																	"type": "object",
+																	"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj%"
+																}
+															]
+														}
+													},
+													{
+														"type": "object",
+														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj%"
+													}
+												]
+											},
+											"append": {
+												"type": "object",
+												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%",
+												"required": [
+													"key",
+													"elem"
+												],
+												"properties": {
+													"key": {
+														"type": "string",
+														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
+													},
+													"elem": {
+														"not": {
+															"type": "null"
+														},
+														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
+													}
+												}
 											}
 										}
 									}
@@ -481,13 +607,14 @@
 		"@types/glob": "^7.1.3",
 		"@types/mocha": "^8.0.0",
 		"@types/node": "^14.14.6",
+		"@types/rfdc": "^1.1.0",
 		"@types/vscode": "^1.50.0",
 		"@typescript-eslint/eslint-plugin": "^3.8.0",
 		"@typescript-eslint/parser": "^3.8.0",
 		"eslint": "^7.12.1",
 		"glob": "^7.1.6",
 		"mocha": "^8.2.0",
-		"semantic-release": "^17.2.2",
+		"semantic-release": "^17.2.3",
 		"semantic-release-gitmoji": "^1.3.4",
 		"semantic-release-vsce": "^3.0.1",
 		"ts-loader": "^8.0.7",

@@ -25,6 +25,7 @@
 
 import dateFormat from 'dateformat';
 import { codeConsole } from '../extension';
+import { Locale } from '../types/Locale';
 import enLocale from './en.json';
 
 const locales: {
@@ -33,10 +34,6 @@ const locales: {
     '': enLocale,
     en: enLocale
 };
-
-interface Locale {
-    [key: string]: string
-}
 
 let language = '';
 
@@ -74,4 +71,41 @@ function setupDateLocate() {
         monthNames: [...locale('monthNames').split(', '), ...locale('monthNamesAdridge').split(', ')],
         timeNames: locale('timeNames').split(', ')
     };
+}
+
+/**
+ * Convert an array to human-readable message.
+ * @param arr An array.
+ * @param quoted Whether or not to quote the result. Defaults to `true`
+ * @param conjunction The conjunction to use. Defaults to `and`.
+ * @returns Human-readable message.
+ * @example // Using English
+ * arrayToMessage([]) // "nothing"
+ * arrayToMessage('foo') // "“foo”"
+ * arrayToMessage(['foo']) // "“foo”"
+ * arrayToMessage(['bar', 'foo']) // "“bar” and “foo”"
+ * arrayToMessage(['bar', 'baz', 'foo']) // "“bar”, “baz”, and “foo”"
+ * @example // Using Locale
+ * arrayToMessage([], false) // "nothing"
+ * arrayToMessage(['A'], false) // "A"
+ * arrayToMessage(['A', 'B'], false) // "A{conjunction.and_2}B"
+ * arrayToMessage(['A', 'B', 'C'], false) // "A{conjunction.and_3+_1}B{conjunction.and_3+_2}C"
+ */
+export function arrayToMessage(arr: string | string[], quoted = true, conjunction: 'and' | 'or' = 'and'): string {
+    if (typeof arr === 'string')
+        arr = [arr];
+    const getPart = (str: string) => quoted ? locale('punc.quote', str) : str;
+    switch (arr.length) {
+        case 0:
+            return locale('nothing');
+        case 1:
+            return getPart(arr[0]);
+        case 2:
+            return getPart(arr[0]) + locale(`conjunction.${conjunction}_2`) + getPart(arr[1]);
+        default:
+            arr = arr.map(v => getPart(v));
+            const forwardMes = arr.slice(0, -1).join(locale(`conjunction.${conjunction}_3+_1`));
+            const backMes = arr[arr.length - 1];
+            return forwardMes + locale(`conjunction.${conjunction}_3+_2`) + backMes;
+    }
 }

@@ -1,8 +1,8 @@
 {
     "mcdutil.config.createFile.fileTemplate": "**新建資料包檔案**：檔案生成時的內容描述（可為每種檔案類別單獨設定）",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.content": "檔案內容（基本上一項會被解釋為一行）",
-    "mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath.error": "\\\\ : * ? \" < > | 不可作為檔案/資料夾的名稱",
-    "mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath": "DatapackName下的相對檔案路徑（若為檔案，需要副檔名）",
+    "mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error": "\\\\ : * ? \" < > | 不可作為檔案/資料夾的名稱",
+    "mcdutil.config.createDatapackTemplate.customTemplate.generates.rel": "DatapackName下的相對檔案路徑（若為檔案，需要副檔名）",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.type": "檔案或是資料夾",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates": "選擇時生成的檔案/資料夾",
     "mcdutil.config.createDatapackTemplate.customTemplate.detail": "詳細描述",

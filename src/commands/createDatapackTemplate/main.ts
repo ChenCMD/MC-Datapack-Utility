@@ -1,156 +1,136 @@
-import { workspace, window, Uri, ProgressLocation } from 'vscode';
-import { getDatapackRoot, getDate, getResourcePath, isDatapackRoot, showInputBox } from '../../utils/common';
+import { getDate, getResourcePath } from '../../utils/common';
+import { createProgressBar, getIndent, showError, showInfo } from '../../utils/vscodeWrapper';
 import path from 'path';
 import { TextEncoder } from 'util';
 import '../../utils/methodExtensions';
-import { getGitHubData, getPackMcMetaData, getPickItems } from './utils/data';
+import { packMcMetaData } from './utils/data';
 import * as file from '../../utils/file';
 import { locale } from '../../locales';
-import { createMessageItemsHasId } from './types/MessageItems';
-import { resolveVars, VariableContainer } from '../../types/VariableContainer';
-import { getFileType } from '../../types/FileTypes';
-import { codeConsole } from '../../extension';
+import { resolveVars, ContextContainer } from '../../types/ContextContainer';
+import { codeConsole, config, versionInformation } from '../../extension';
+import rfdc from 'rfdc';
+import { GenerateFileData, GetGitHubDataFunc, QuickPickFiles } from './types/QuickPickFiles';
+import { getVanillaData } from '../../utils/vanillaData';
+import { listenDatapackName, listenDescription, listenNamespace, listenGenerateTemplate, listenGenerateDir, listenGenerateType } from './utils/userInputs';
+import { GenerateError, UserCancelledError } from '../../types/Error';
+import { isStringArray } from '../../utils/typeGuards';
+import { appendElemFromKey } from '../../utils/jsonKeyWalker';
 
-export async function createDatapack(): Promise<void> {
-    // フォルダ選択
-    const dir = await window.showOpenDialog({
-        canSelectFiles: false,
-        canSelectFolders: true,
-        canSelectMany: false,
-        defaultUri: workspace.workspaceFolders?.[0].uri,
-        openLabel: locale('create-datapack-template.dialog-label'),
-        title: locale('create-datapack-template.dialog-title')
-    }).then(v => v?.[0]);
-    if (!dir) return;
-
-    // Datapack内部かチェック
-    const datapackRoot = await getDatapackRoot(dir.fsPath);
-    if (datapackRoot) {
-        // 内部なら確認
-        const warningMessage = locale('create-datapack-template.inside-datapack', path.basename(datapackRoot));
-        const result = await window.showWarningMessage(warningMessage,
-            createMessageItemsHasId('yes'),
-            createMessageItemsHasId('reselect'),
-            createMessageItemsHasId('no')
-        );
-        if (result === undefined || result.id === 'no') return;
-        if (result.id === 'reselect') return await createDatapack();
+export async function createDatapack(): Promise<void>;
+export async function createDatapack(genType: string, dir: string): Promise<void>;
+export async function createDatapack(genType?: string, dir?: string): Promise<void> {
+    try {
+        // 環境コンテナ作成
+        const ctx: ContextContainer = { date: getDate(config.dateFormat), dir };
+        // 生成タイプを聞く
+        genType = genType ?? await listenGenerateType();
+        // ディレクトリの選択
+        if (!ctx.dir) await listenGenerateDir(ctx, genType);
+        // データパック名入力
+        await listenDatapackName(ctx, genType);
+        // 説明入力
+        await listenDescription(ctx, genType);
+        // 名前空間入力
+        await listenNamespace(ctx);
+        // 生成するファイル/フォルダを選択
+        const createItems = await listenGenerateTemplate(ctx);
+        // 選択されたデータを生成用の形式に加工
+        const generateData = await toGenerateData(createItems, genType);
+        // 生成
+        await generate(ctx, generateData);
+    } catch (error) {
+        if (error instanceof UserCancelledError) return;
+        if (error instanceof Error) showError(error.message);
+        else showError(error.toString());
+        codeConsole.appendLine(error.stack ?? error.toString());
     }
-    create(dir);
 }
 
-async function create(dir: Uri): Promise<void> {
-    // データパック名入力
-    const datapackName = await showInputBox(locale('create-datapack-template.datapack-name'), v => {
-        const invalidChar = v.match(/[\\/:*?"<>|]/g);
-        if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '));
+export async function generate(ctxContainer: ContextContainer, generateData: GenerateFileData[]): Promise<void> {
+    await createProgressBar(locale('create-datapack-template.progress.title'), async report => {
+        const message = locale('create-datapack-template.progress.creating');
+        report({ message });
+
+        for (const item of generateData) {
+            try {
+                await singleGenerate(ctxContainer, item);
+            } catch (error) {
+                if (error instanceof Error) showError(error.message);
+                else showError(error.toString());
+                codeConsole.appendLine(error.stack ?? error.toString());
+            } finally {
+                report({ increment: 100 / generateData.length, message });
+            }
+        }
+        showInfo(locale('create-datapack-template.complete'));
     });
-    if (datapackName === undefined) return;
-    if (datapackName === '') {
-        window.showErrorMessage(locale('create-datapack-template.name-blank'));
+}
+
+export async function singleGenerate(ctxContainer: ContextContainer, item: GenerateFileData): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const datapackRoot = ctxContainer.datapackRoot!;
+    const filePath = path.join(datapackRoot, resolveVars(item.rel, ctxContainer));
+
+    if (item.type === 'folder') {
+        await file.createDir(filePath);
         return;
     }
+    if (item.type === 'file') {
+        const indent = ' '.repeat(getIndent(filePath));
 
-    // データパック名の被りをチェック
-    const datapackRoot = path.join(dir.fsPath, datapackName);
-    if (await isDatapackRoot(datapackRoot)) {
-        // 内部なら確認
-        const warningMessage = locale('create-datapack-template.duplicate-datapack', path.basename(datapackRoot));
-        const result = await window.showWarningMessage(warningMessage,
-            createMessageItemsHasId('yes'),
-            createMessageItemsHasId('rename'),
-            createMessageItemsHasId('no')
-        );
-        if (result === undefined || result.id === 'no') return;
-        if (result.id === 'rename') return create(dir);
+        if (!await file.pathAccessible(filePath)) {
+            let contents: string;
+            const singleCtxContainer = { fileResourcePath: getResourcePath(filePath, datapackRoot), ...ctxContainer };
+
+            if (isStringArray(item.content))
+                contents = resolveVars(item.content, singleCtxContainer).join('\r\n');
+            else
+                contents = JSON.stringify(resolveVars(item.content, singleCtxContainer), undefined, indent);
+
+            await file.createFile(filePath, new TextEncoder().encode(contents ?? ''));
+        } else if (item.append) {
+            const { key, elem } = item.append;
+            const parsedJson = JSON.parse(await file.readFile(filePath));
+
+            const res = appendElemFromKey(parsedJson, key, resolveVars(elem, ctxContainer));
+            if (!res[0])
+                throw new GenerateError(locale(res[1], filePath, key));
+
+            file.writeFile(filePath, JSON.stringify(parsedJson, undefined, indent));
+        }
     }
+}
 
-    // 説明入力
-    const datapackDescription = await showInputBox(locale('create-datapack-template.datapack-description'));
-    if (datapackDescription === undefined) return;
-
-    // 名前空間入力
-    const namespace = await showInputBox(locale('create-datapack-template.namespace-name'), v => {
-        const invalidChar = v.match(/[^a-z0-9./_-]/g);
-        if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '));
-    });
-    if (namespace === undefined) return;
-    if (namespace === '') {
-        window.showErrorMessage(locale('create-datapack-template.namespace-blank'));
-        return;
-    }
-
-    const variableContainer: VariableContainer = {
-        datapackName: datapackName,
-        datapackDescription: datapackDescription,
-        namespace: namespace,
-        date: getDate()
-    };
-
-    // 生成するファイル/フォルダを選択
-    const quickPickItems = getPickItems();
-    quickPickItems.forEach(v => v.label = resolveVars(v.label, variableContainer));
-    const createItems = await window.showQuickPick(quickPickItems, {
-        canPickMany: true,
-        ignoreFocusOut: true,
-        matchOnDescription: false,
-        matchOnDetail: false,
-        placeHolder: locale('create-datapack-template.quickpick-placeholder')
-    });
-    if (!createItems) return;
-
+export async function toGenerateData(createItems: QuickPickFiles[], genType: string): Promise<GenerateFileData[]> {
+    const ans = createItems.flat(v => v.generates);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const funcs = createItems.filter(v => v.func !== undefined).flat(v => v.func!);
-    const createItemData = createItems.flat(v => v.generates);
-    createItemData.push(getPackMcMetaData());
 
-    try {
-        for (const func of funcs.map((v, i) => ({ index: i + 1, value: v }))) {
-            await window.withProgress({
-                location: ProgressLocation.Notification,
-                cancellable: false,
-                title: locale('create-datapack-template.progress.title')
-            }, async progress => {
-                progress.report({ increment: 0, message: locale('create-datapack-template.progress.download', func.index, funcs.length) });
+    if (genType === 'create-datapack-template.create') ans.push(rfdc()(packMcMetaData));
 
-                const data = await getGitHubData(func.value, (_, m) => {
-                    progress.report({ increment: 100 / m, message: locale('create-datapack-template.progress.download', func.index, funcs.length) });
-                });
-                createItemData.push(...data);
-            });
-        }
-    } catch (error) {
-        window.showErrorMessage(error.toString());
-        codeConsole.appendLine(error.stack ?? error.toString());
-        return;
+    for (const [i, func] of funcs.entries()) {
+        await createProgressBar(
+            locale('create-datapack-template.progress.title'),
+            async report => ans.push(...await download(func, i, funcs.length, report))
+        );
     }
 
-    await window.withProgress({
-        location: ProgressLocation.Notification,
-        cancellable: false,
-        title: locale('create-datapack-template.progress.title')
-    }, async progress => {
-        progress.report({ increment: 0, message: locale('create-datapack-template.progress.creating') });
+    return ans;
+}
 
-        const enconder = new TextEncoder();
+export async function download(
+    func: GetGitHubDataFunc, index: number, itemLength: number, report: (value: { increment?: number, message: string }) => void
+): Promise<GenerateFileData[]> {
+    const message = locale('create-datapack-template.progress.download', index + 1, itemLength);
+    report({ message });
 
-        for (const item of createItemData) {
-            const filePath = path.join(dir.fsPath, datapackName, resolveVars(item.relativeFilePath, variableContainer));
-            if (item.type === 'file') {
-                if (await file.pathAccessible(filePath)) continue;
+    const ans = await getVanillaData(
+        config.createDatapackTemplate.dataVersion,
+        versionInformation,
+        func,
+        func.rel,
+        (_, m) => report({ increment: 100 / m, message })
+    );
 
-                const resourcePath = getResourcePath(filePath, datapackRoot, getFileType(filePath, datapackRoot));
-                const containerHasResourcePath = Object.assign({ resourcePath: resourcePath } as VariableContainer, variableContainer);
-                const str = item.content?.map(v => resolveVars(v, containerHasResourcePath)).join('\r\n');
-
-                await file.createFile(filePath, enconder.encode(str ?? ''));
-            }
-
-            if (item.type === 'folder')
-                await file.createDir(filePath);
-
-            progress.report({ increment: 100 / createItemData.length, message: locale('create-datapack-template.progress.creating') });
-        }
-        window.showInformationMessage(locale('create-datapack-template.complete'));
-    });
+    return ans.map(fileData => ({ type: 'file', ...fileData }));
 }
