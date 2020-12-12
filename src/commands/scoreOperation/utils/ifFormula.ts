@@ -3,7 +3,7 @@ import { config } from '../../../extension';
 import { locale } from '../../../locales';
 import { GenerateError, ParsingError } from '../../../types/Error';
 import { IfFormula, IfFormulaChain } from '../types/Formula';
-import { OperateTable } from '../types/OperateTable';
+import { OperateElement, OperateTable } from '../types/OperateTable';
 
 export function ifFormulaAnalyzer(exp: string[], opTable: OperateTable): string | IfFormula {
     const first = exp.shift();
@@ -60,10 +60,11 @@ export function ifFormulaAnalyzer(exp: string[], opTable: OperateTable): string 
                 { front: conditionedIfFormula('true', { front, op, back: back.falses.front }), op: back.falses.op, back: back.falses.back });
         }
 
-        throw new Error(); // TODO
+        throw new Error();
     }
 
     switch (func.identifier) {
+        // 単項演算子の場合
         case '+': {
             const op = identifierToOpElem('#', opTable);
             if (!op) throw new Error();
@@ -74,6 +75,7 @@ export function ifFormulaAnalyzer(exp: string[], opTable: OperateTable): string 
             if (!op) throw new Error();
             return conditionedIfFormula('true', { front: '', op, back: ifFormulaAnalyzer(exp, opTable) });
         }
+        // 括弧の場合
         case '(':
             const lastClose = exp.lastIndexOf(')');
             if (lastClose === -1)
@@ -88,10 +90,15 @@ export function ifFormulaAnalyzer(exp: string[], opTable: OperateTable): string 
         case ')':
             // '('がなければエラー
             throw new ParsingError(locale('too-much', '\')\''));
+        // 値でも括弧でもない1要素目は関数と考える
         default:
-            if (!func.identifier.match(/^\S+\($/) || !func.destination)
+            if (!func.identifier.match(/^\S+\($/))
                 throw new GenerateError(locale('formula-to-score-operation.illegal-formula'));
     }
+
+    // 関数なのに置換先がない
+    if (!func.destination)
+        throw new ParsingError(locale('parsing-error', func.identifier));
 
     const nested = exp.slice(0, exp.lastIndexOf(')'));
     exp = exp.slice(exp.lastIndexOf(')') + 1);
@@ -100,8 +107,10 @@ export function ifFormulaAnalyzer(exp: string[], opTable: OperateTable): string 
     let separation = 0;
     let _str: string;
 
+    // TODO もしかすると2つより多くの引数を取る場合は想定されていないかも
     let i = 0;
     while (i < func.arity - 1) {
+        // 最適な区切りの位置を探す
         separation = nested.indexOf(',', separation + 1);
         _str = nested.slice(0, separation).join(' ');
         subArr[i] = _str.split(' ');
@@ -111,30 +120,47 @@ export function ifFormulaAnalyzer(exp: string[], opTable: OperateTable): string 
     }
     subArr.push(nested.slice(separation + 1));
 
-    if (!func.destination)
-        throw new ParsingError(locale('parsing-error', func.identifier));
+    let op : OperateElement | undefined;
+    switch (func.identifier) {
+        case 'if(':
+            // if( ( c ) ? ( f ) : ( g ) )
+            const statement = exp.slice(0, exp.lastIndexOf(')'));
+            exp = exp.slice(exp.lastIndexOf(')') + 1);
+            const question = statement.indexOf('?');
+            const colon = statement.indexOf(':');
 
-    const nameElem = func.destination.namely.split(' ');
-    func.destination.args.forEach((e, j) => {
-        for (let argIndex = nameElem.indexOf(e); argIndex !== -1; argIndex = nameElem.indexOf(e, argIndex + 1))
-            nameElem[argIndex] = ifFormulaToString(ifFormulaAnalyzer(subArr[j], opTable));
-    });
-    const _exp = ['('];
-    _exp.push(...nameElem);
-    _exp.push(')');
+            const condition = statement.slice(1, question - 1).join(' ');
+            const trues = ifFormulaAnalyzer(statement.slice(question + 1, colon), opTable);
+            const falses = ifFormulaAnalyzer(statement.slice(colon + 1, statement.length), opTable);
 
-    const op = identifierToOpElem(exp.shift(), opTable);
-    if (!op)
-        return ifFormulaAnalyzer(_exp, opTable);
-    return conditionedIfFormula('true', { front: ifFormulaAnalyzer(_exp, opTable), op, back: ifFormulaAnalyzer(exp, opTable) });
+            op = identifierToOpElem(exp.shift(), opTable);
+            if (!op)
+                return ifFormulaAnalyzer([], opTable);
+            return conditionedIfFormula(condition,
+                { front: trues, op, back: ifFormulaAnalyzer(exp, opTable) },
+                { front: falses, op, back: ifFormulaAnalyzer(exp, opTable) });
+
+        default:
+            const nameElem = func.destination.namely.split(' ');
+            func.destination.args.forEach((e, j) => {
+                for (let argIndex = nameElem.indexOf(e); argIndex !== -1; argIndex = nameElem.indexOf(e, argIndex + 1))
+                    nameElem[argIndex] = ifFormulaToString(ifFormulaAnalyzer(subArr[j], opTable));
+            });
+
+            const _exp = `( ${nameElem.join(' ')} )`.split(' ');
+
+            op = identifierToOpElem(exp.shift(), opTable);
+            if (!op)
+                return ifFormulaAnalyzer(_exp, opTable);
+            return conditionedIfFormula('true', { front: ifFormulaAnalyzer(_exp, opTable), op, back: ifFormulaAnalyzer(exp, opTable) });
+    }
 }
-
 function conditionedIfFormula(_condition: string | IfFormula, trues: string | IfFormulaChain, falses?: string | IfFormulaChain): IfFormula {
     const condition = (typeof _condition === 'string') ? _condition : _condition.condition;
     if (condition === 'true')
         return { condition, trues };
     if (!falses)
-        throw new Error(); // TODO
+        throw new Error();
     return { condition, trues, falses };
 }
 

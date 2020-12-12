@@ -19,13 +19,29 @@ export function ifFormulaDisassembler(exp: IfFormula | string): { resValues: Set
             });
         }
         if (conditionStack.length === 0) {
-            if (typeof exp.trues !== 'string')
+            if (typeof exp.trues !== 'string') {
+                if (typeof exp.trues.front === 'string')
+                    addValue(exp.trues.front, resValues);
+                if (typeof exp.trues.back === 'string')
+                    addValue(exp.trues.back, resValues);
                 resFormulas.push(`scoreboard players operation ${exp.trues.front} _ ${exp.trues.op.identifier} ${exp.trues.back} _`);
-            else throw new Error();
+            } else {
+                throw new Error();
+            }
         } else {
             if (typeof exp.trues !== 'string' && exp.falses && typeof exp.falses !== 'string') {
-                resFormulas.push(`execute ${conditionStack.join(' ')} run scoreboard players operation ${exp.trues.front} _ ${exp.trues.op} ${exp.trues.back} _`);
-                resFormulas.push(`execute ${conditionStack.join(' ')} run scoreboard players operation ${exp.falses.front} _ ${exp.falses.op} ${exp.falses.back} _`);
+                if (typeof exp.trues.front === 'string')
+                    addValue(exp.trues.front, resValues);
+                if (typeof exp.trues.back === 'string')
+                    addValue(exp.trues.back, resValues);
+                if (typeof exp.falses.front === 'string')
+                    addValue(exp.falses.front, resValues);
+                if (typeof exp.falses.back === 'string')
+                    addValue(exp.falses.back, resValues);
+                resFormulas.push(`execute ${conditionStack.join(' ')} run scoreboard players operation ${exp.trues.front} _ ${exp.trues.op.identifier} ${exp.trues.back} _`);
+                conditionStack.push((conditionStack.pop() ?? '').replace('if', 'unless') ?? '');
+                resFormulas.push(`execute ${conditionStack.join(' ')} run scoreboard players operation ${exp.falses.front} _ ${exp.falses.op.identifier} ${exp.falses.back} _`);
+                conditionStack.pop();
             } else {
                 throw new Error();
             }

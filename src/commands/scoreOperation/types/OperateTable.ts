@@ -130,7 +130,11 @@ export const opTable: OperateTable = {
             order: 18,
             type: 'op',
             arity: 1,
-            assocLow: 'R'
+            assocLow: 'R',
+            destination: {
+                args: [],
+                namely: ''
+            }
         }
     ],
     identifiers: [
