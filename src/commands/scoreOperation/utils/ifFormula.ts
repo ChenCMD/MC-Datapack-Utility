@@ -34,7 +34,7 @@ export function ifFormulaAnalyzer(exp: string[], opTable: OperateTable): string 
         if (!back.falses)
             return conditionedIfFormula('true', { front: conditionedIfFormula(back, { front, op, back: back.trues.front }), op: back.trues.op, back: back.trues.back });
 
-        // 右優先なのか左優先なのか × back.condition が真/偽である => 2×2
+        // trues/falses の演算子が右優先か左優先か => 2×2
         if (!(back.trues.op.order < op.order || (back.trues.op.order === op.order && op.assocLow === 'R'))
             && !(back.falses.op.order < op.order || (back.falses.op.order === op.order && op.assocLow === 'R'))) {
             return conditionedIfFormula(back,
