@@ -1,9 +1,8 @@
 import { Deque } from '../../../types/Deque';
 import { QueueElement } from '../types/QueueElement';
 import { TableBase } from '../types/TableBase';
-import { showInputBox } from '../../../utils/common';
+import { listenInput } from '../../../utils/vscodeWrapper';
 import { locale } from '../../../locales';
-import { workspace } from 'vscode';
 import { Formula } from '../types/Formula';
 
 /**
@@ -16,21 +15,24 @@ export function ssft(_str: string | undefined, _table: TableBase): number {
     return _table.identifiers.indexOf(_str);
 }
 
-export async function formulaToQueue(_val: Formula | string, _stack: Deque<QueueElement>, _opTable: TableBase, _objective: string): Promise<Deque<QueueElement>> {
-    if (typeof _val === 'string') {
-        if (Number.prototype.isValue(_val)) {
-            _stack.addLast({ value: _val, objective: _objective, type: 'num' });
-        } else {
-            let obj = _objective;
-            if (workspace.getConfiguration('mcdutil').get<boolean>('scoreOperation.isAlwaysSpecifyObject', true))
-                obj = await showInputBox(locale('formula-to-score-operation.specifying-object', _val)) ?? _objective;
-    
-            _stack.addLast({ value: _val, objective: obj, type: 'str' });
-        }
-        return _stack;
+export async function formulaToQueue(value: Formula | string, queue: Deque<QueueElement>, opTable: TableBase, objective: string, isAlwaysSpecifyObject: boolean): Promise<boolean> {
+    if (typeof value !== 'string') {
+        const res1 = await formulaToQueue(value.front, queue, opTable, objective, isAlwaysSpecifyObject);
+        const res2 = await formulaToQueue(value.back, queue, opTable, objective, isAlwaysSpecifyObject);
+        if (!res1 || !res2) return false;
+        queue.addLast({ value: value.op.identifier, objective: '', type: value.op.type });
+        return true;
     }
-    _stack = await formulaToQueue(_val.front, _stack, _opTable, _objective);
-    _stack = await formulaToQueue(_val.back, _stack, _opTable, _objective);
-    _stack.addLast({ value: _val.op.identifier, objective: '', type: _val.op.type });
-    return _stack;
+    if (Number.prototype.isValue(value)) {
+        queue.addLast({ value, objective: objective, type: 'num' });
+    } else {
+        let _objective = objective;
+        if (isAlwaysSpecifyObject) {
+            const str = await listenInput(locale('formula-to-score-operation.specifying-object', value));
+            if (str === undefined) return false;
+            _objective = str ?? objective;
+        }
+        queue.addLast({ value, objective: _objective, type: 'str' });
+    }
+    return true;
 }

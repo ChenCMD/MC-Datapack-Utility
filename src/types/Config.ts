@@ -13,8 +13,13 @@ export interface Config {
         forceInputType: 'Default' | 'Always Selection' | 'Always InputBox'
         isAlwaysSpecifyObject: boolean
         customOperate: OperateElement[]
+        valueScale: number
     },
     createDatapackTemplate: {
+        dataVersion: string
+        defaultLoadAndTick: boolean
+        defaultVanillaData: boolean
+        defaultFolder: boolean
         customTemplate: QuickPickFiles[]
     },
     createFile: {
@@ -31,9 +36,14 @@ export const defaultConfig: Config = {
         temp: 'Temp_',
         forceInputType: 'Default',
         isAlwaysSpecifyObject: true,
-        customOperate: []
+        customOperate: [],
+        valueScale: 1
     },
     createDatapackTemplate: {
+        dataVersion: 'Latest release',
+        defaultLoadAndTick: true,
+        defaultVanillaData: true,
+        defaultFolder: true,
         customTemplate: []
     },
     createFile: {
@@ -58,5 +68,7 @@ export function constructConfig(custom: WorkspaceConfiguration, base = defaultCo
             ...base.createFile, ...createFile
         }
     };
+    console.log('config loaded.');
+    console.log(JSON.stringify(config));
     return config;
 }

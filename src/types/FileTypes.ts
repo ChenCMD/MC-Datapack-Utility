@@ -26,7 +26,6 @@
 
 import * as path from 'path';
 import minimatch from 'minimatch';
-import { VariableContainer } from './VariableContainer';
 
 export type FileType =
     | 'advancement'
@@ -52,7 +51,7 @@ export type FileType =
     | 'worldgen/processor_list'
     | 'worldgen/template_pool';
 
-export const fileTypeFolderName: VariableContainer = {
+export const fileTypeFolderName: {[key in FileType]: string} = {
     // common
     advancement: 'advancements',
     dimension: 'dimension',
@@ -120,4 +119,9 @@ export function getFileType(filePath: string, datapackRoot: string): FileType | 
             return type;
     }
     return undefined;
+}
+
+export function getFilePath(fileType: FileType | undefined): string | undefined {
+    if (!fileType) return undefined;
+    return fileTypeFolderName[fileType];
 }

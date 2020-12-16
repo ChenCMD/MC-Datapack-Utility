@@ -7,10 +7,16 @@ export interface OperateElement extends ElementBase {
     assocLow: '' | 'L' | 'R'
     // eslint-disable-next-line @typescript-eslint/ban-types
     fn?: Function
+    destination?: Destination
 }
 
 export interface OperateTable extends TableBase {
     table: OperateElement[]
+}
+
+interface Destination {
+    args: string[]
+    namely: string
 }
 
 /**

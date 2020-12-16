@@ -1,20 +1,23 @@
 import { QuickPickItem } from 'vscode';
 import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
-import { FileData } from '../../../types/FileData';
+import { FileData, FileDataReqContent } from '../../../types/FileData';
+import { AskGitHubData } from '../../../types/AskGitHubData';
 
 export interface QuickPickFiles extends QuickPickItem {
-    generates: GenerateFileData[],
+    generates: GenerateFileData[]
     func?: GetGitHubDataFunc[]
 }
 
-export interface GenerateFileData extends FileData {
-    type: 'file' | 'folder'
+export type GenerateFileData = GenFileData | GenFolderData;
+
+interface GenFileData extends FileDataReqContent {
+    type: 'file'
 }
 
-export interface GetGitHubDataFunc {
-    owner: string,
-    repo: string,
-    ref: string,
-    path: string,
-    relativeFilePath: (data: ReposGetContentResponseData) => string
+interface GenFolderData extends FileData {
+    type: 'folder'
+}
+
+export interface GetGitHubDataFunc extends AskGitHubData {
+    rel: (data: ReposGetContentResponseData) => string
 }

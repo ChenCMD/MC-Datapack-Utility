@@ -16,12 +16,18 @@
     "mcdutil.config.createFile.fileTemplate": "**创建数据包文件**：文件生成时的内容描述（可以为每种文件类型单独设置）",
     "mcdutil.config.scoreOperation.isAlwaysSpecifyObject": "**公式转换为记分板操作**：是否逐个指明变量的分数对象（为false则引用`#mcdutil.scoreOperation.objective#`）",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.content": "文件内容（基本上一项会被解释为一行）",
-    "mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath.error": "\\\\ : * ? \" < > | 不可作为文件/文件夹的名称",
-    "mcdutil.config.createDatapackTemplate.customTemplate.generates.relativeFilePath": "DatapackName下的相对文件路径（若为文件，需要扩展名）",
+    "mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error": "\\\\ : * ? \" < > | 不可作为文件/文件夹的名称",
+    "mcdutil.config.createDatapackTemplate.customTemplate.generates.rel": "DatapackName下的相对文件路径（若为文件，需要扩展名）",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.type": "文件还是文件夹",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates": "选择时生成的文件/文件夹",
     "mcdutil.config.createDatapackTemplate.customTemplate.detail": "详细说明",
     "mcdutil.config.createDatapackTemplate.customTemplate.description": "说明性文本",
     "mcdutil.config.createDatapackTemplate.customTemplate.picked": "默认是否选择（默认值：false）",
-    "mcdutil.config.createDatapackTemplate.customTemplate.label": "选择栏中显示的名字"
+    "mcdutil.config.createDatapackTemplate.customTemplate.label": "选择栏中显示的名字",
+    "mcdutil.config.scoreOperation.customOperate.assocLow": "\"L\": 左关联\n\"R\": 右关联",
+    "mcdutil.config.scoreOperation.customOperate.arity": "它的参数数(例如: \"+\"有2个操作数)",
+    "mcdutil.config.scoreOperation.customOperate.type": "它的类型(仅\"fn\")",
+    "mcdutil.config.scoreOperation.customOperate.order": "它的优先级(推荐: 4~16)",
+    "mcdutil.config.scoreOperation.customOperate.identifier": "它的标识符(例如\"加法\"的标识符是\"+\")",
+    "mcdutil.config.scoreOperation.customOperate": "**公式转换为记分板操作**：自定义操作表"
 }

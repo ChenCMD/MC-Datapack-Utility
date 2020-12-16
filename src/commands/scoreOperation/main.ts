@@ -1,60 +1,57 @@
-import { window } from 'vscode';
 import '../../utils/methodExtensions';
 import { codeConsole, config } from '../../extension';
-import { showInputBox } from '../../utils/common';
+import { getTextEditor, listenInput, showError } from '../../utils/vscodeWrapper';
 import { rpnToScoreOperation } from './utils/converter';
 import { formulaAnalyzer } from './utils/formula';
 import { locale } from '../../locales';
 import { opTable } from './types/OperateTable';
+import { NotOpenTextDocumentError, UserCancelledError } from '../../types/Error';
 
 export async function scoreOperation(): Promise<void> {
-    const prefix = config.scoreOperation.prefix;
-    const objective = config.scoreOperation.objective;
-    const temp = config.scoreOperation.temp;
-    const inputType = config.scoreOperation.forceInputType;
-    const editor = window.activeTextEditor;
-    if (!editor)
-        return;
-
-    const customOperate = config.scoreOperation.customOperate;
-    if (customOperate.length !== 0) {
-        for (const e of customOperate) {
-            opTable.table.push(e);
-            opTable.identifiers.push(e.identifier);
-        }
-    }
-
-    let text = '';
-    if (inputType !== 'Always InputBox')
-        text = editor.document.getText(editor.selection);
-    // セレクトされていないならInputBoxを表示
-    if (text === '') {
-        if (inputType === 'Always Selection') {
-            window.showErrorMessage(locale('formula-to-score-operation.not-selection'));
-            return;
-        }
-        const res = await showInputBox(locale('formula-to-score-operation.formula'));
-        if (!res || res === '')
-            return;
-        text = res;
-    }
-
+    const { prefix, objective, temp, forceInputType, isAlwaysSpecifyObject } = config.scoreOperation;
     try {
-        const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = '), opTable);
-        const result = await rpnToScoreOperation(formula, prefix, objective, temp);
+        const editor = getTextEditor();
 
+        const customOperate = config.scoreOperation.customOperate;
+        if (customOperate.length !== 0) {
+            for (const e of customOperate) {
+                opTable.table.push(e);
+                opTable.identifiers.push(e.identifier);
+            }
+        }
+
+        let text = '';
+        if (forceInputType !== 'Always InputBox') text = editor.document.getText(editor.selection);
+        // セレクトされていないならInputBoxを表示
+        if (text === '') {
+            if (forceInputType === 'Always Selection') {
+                showError(locale('formula-to-score-operation.not-selection'));
+                return;
+            }
+            const res = await listenInput(locale('formula-to-score-operation.formula'));
+            if (!res) return;
+            text = res;
+        }
+
+        const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = '), opTable);
+        const result = await rpnToScoreOperation(formula, prefix, objective, temp, isAlwaysSpecifyObject);
+        if (!result) return;
+
+        const { resValues, resFormulas } = result;
         editor.edit(edit => {
             edit.replace(editor.selection, [
                 `# ${text}`,
                 `# ${locale('formula-to-score-operation.complate-text')}`,
                 `scoreboard objectives add ${objective} dummy`,
-                Array.from(result.resValues).join('\r\n'),
+                Array.from(resValues).join('\r\n'),
                 '',
-                result.resFormulas.join('\r\n')
+                resFormulas.join('\r\n')
             ].join('\r\n'));
         });
     } catch (error) {
-        window.showErrorMessage(error.toString());
+        if (error instanceof UserCancelledError || error instanceof NotOpenTextDocumentError) return;
+        if (error instanceof Error) showError(error.message);
+        else showError(error.toString());
         codeConsole.appendLine(error.stack ?? error.toString());
     }
 }
