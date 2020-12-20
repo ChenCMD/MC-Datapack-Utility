@@ -77,24 +77,6 @@ export const opTable: OperateTable = {
             assocLow: 'R',
             fn: (_l: number | string): number | undefined => (typeof _l === 'number') ? -_l : undefined
         },
-        /*
-        {
-            identifier: '~',
-            order: 16,
-            type: 'op',
-            arity: 1,
-            assocLow: 'R',
-            fn: (_l: number | string): number | undefined => (typeof _l === 'number') ? ~_l : undefined
-        },
-        {
-            identifier: '**',
-            order: 15,
-            type: 'op',
-            arity: 2,
-            assocLow: 'R',
-            fn: (_l: number | string, _r: number | string): number | undefined => (typeof _l === 'number' && typeof _r === 'number') ? _l ** _r : undefined
-        },
-        */
         {
             identifier: '*',
             order: 14,
@@ -135,48 +117,6 @@ export const opTable: OperateTable = {
             assocLow: 'L',
             fn: (_l: number | string, _r: number | string): number | string => (typeof _l === 'number' && typeof _r === 'number') ? _l - _r : `${_l} - ${_r}`
         },
-        /*
-        {
-            identifier: '<<',
-            order: 12,
-            type: 'op',
-            arity: 2,
-            assocLow: 'L',
-            fn: (_l: number | string, _r: number | string): number | undefined => (typeof _l === 'number' && typeof _r === 'number') ? _l << _r : undefined
-        },
-        {
-            identifier: '>>',
-            order: 12,
-            type: 'op',
-            arity: 2,
-            assocLow: 'L',
-            fn: (_l: number | string, _r: number | string): number | undefined => (typeof _l === 'number' && typeof _r === 'number') ? _l >> _r : undefined
-        },
-        {
-            identifier: '&',
-            order: 9,
-            type: 'op',
-            arity: 2,
-            assocLow: 'L',
-            fn: (_l: number | string, _r: number | string): number | undefined => (typeof _l === 'number' && typeof _r === 'number') ? _l & _r : undefined
-        },
-        {
-            identifier: '^',
-            order: 8,
-            type: 'op',
-            arity: 2,
-            assocLow: 'L',
-            fn: (_l: number | string, _r: number | string): number | undefined => (typeof _l === 'number' && typeof _r === 'number') ? _l ^ _r : undefined
-        },
-        {
-            identifier: '|',
-            order: 7,
-            type: 'op',
-            arity: 2,
-            assocLow: 'L',
-            fn: (_l: number | string, _r: number | string): number | undefined => (typeof _l === 'number' && typeof _r === 'number') ? _l | _r : undefined
-        },
-        */
         {
             identifier: '=',
             order: 3,
@@ -184,9 +124,20 @@ export const opTable: OperateTable = {
             arity: 2,
             assocLow: 'R',
             fn: (_l: number | string, _r: number | string): string => `${_l} = ${_r}`
+        },
+        {
+            identifier: 'if(',
+            order: 18,
+            type: 'op',
+            arity: 3,
+            assocLow: 'R',
+            destination: {
+                args: [],
+                namely: 'if'
+            }
         }
     ],
     identifiers: [
-        '(', ')', '#', '_', /* '~', '**', */ '*', '/', '%', '+', '-', /* '<<', '>>', '&', '^', '|', */ '='
+        '(', ')', '#', '_', '*', '/', '%', '+', '-', '='
     ]
 };
