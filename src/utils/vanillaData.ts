@@ -46,7 +46,7 @@ export async function getVanillaData(
     for (const [i, file] of files.entries()) {
         const content = await Promise.race([
             download(file.download_url),
-            setTimeOut<string>(7000)
+            setTimeOut(7000)
         ]);
         ans.push({
             rel: relProcessingFunc(file),
@@ -76,7 +76,7 @@ export async function getLatestVersions(): Promise<VersionInformation | undefine
         codeConsole.appendLine('[LatestVersions] Fetching the latest versions...');
         const str = await Promise.race([
             download('https://launchermeta.mojang.com/mc/game/version_manifest.json'),
-            setTimeOut<string>(7000)
+            setTimeOut(7000)
         ]);
         const { latest: { release, snapshot }, versions }: { latest: { release: string, snapshot: string }, versions: { id: string }[] } = JSON.parse(str);
         const processedVersion = '1.16.2';
