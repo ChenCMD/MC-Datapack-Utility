@@ -1,9 +1,10 @@
+import { Formula } from './Formula';
 import { ElementBase, TableBase } from './TableBase';
 
 export interface ConditionExp {
-    front: string
+    front: string | Formula
     op: ConditionExpElement
-    back: string
+    back: string | Formula
     default: boolean
 }
 

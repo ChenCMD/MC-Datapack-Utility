@@ -45,24 +45,29 @@ export async function rpnToScoreOperation(formula: Formula | string, prefix: str
     const resValues = new Set<string>();
     const resFormulas: string[] = [];
 
+    // funcs とあるが、今はif文だけ。
     for (let i = 0; i < funcs.length; i++) {
         const cases: {true: string[], false: string[]} = {true: [], false: []};
+        let j = 0;
+        // if文の条件からexecute式の引数に変換
         for (const e of funcs[i].condition) {
-            const source = new Deque<QueueElement>();
-            await formulaToQueue(e.front, source, objective, prefix, isAlwaysSpecifyObject, enteredValues);
-            const sourceValue = source.getFirst();
-            if (sourceValue.type === 'num')
-                resValues.add(`scoreboard players set ${prefix}${sourceValue.value} ${objective} ${sourceValue.value}`);
+            const source = await rpnToScoreOperation({front: e.front, op: identifierToOperate('=', opTable), back: `${prefix}if_${i + 1}_${j++}`}, prefix, objective, temp, [], opTable, isAlwaysSpecifyObject, enteredValues);
+            if (source) {
+                source.resValues.forEach(v => resValues.add(v));
+                resFormulas.push(...source.resFormulas);
+            }
 
-            const destination = new Deque<QueueElement>();
-            await formulaToQueue(e.back, destination, objective, prefix, isAlwaysSpecifyObject, enteredValues);
-            const destinationValue = destination.getFirst();
-            if (destinationValue.type === 'num')
-                resValues.add(`scoreboard players set ${prefix}${destinationValue.value} ${objective} ${destinationValue.value}`);
+            const destination = await rpnToScoreOperation({front: e.back, op: identifierToOperate('=', opTable), back: `${prefix}if_${i + 1}_${j++}`}, prefix, objective, temp, [], opTable, isAlwaysSpecifyObject, enteredValues);
+            if (destination) {
+                destination.resValues.forEach(v => resValues.add(v));
+                resFormulas.push(...destination.resFormulas);
+            }
 
-            cases.true.push(`${(e.default) ? 'if' : 'unless'} score ${sourceValue.value} ${sourceValue.objective} ${e.op.replaceTo} ${destinationValue.value} ${destinationValue.objective}`);
-            cases.false.push(`${(!e.default) ? 'if' : 'unless'} score ${sourceValue.value} ${sourceValue.objective} ${e.op.replaceTo} ${destinationValue.value} ${destinationValue.objective}`);
+            cases.true.push(`${(e.default) ? 'if' : 'unless'} score ${prefix}if_${i + 1}_${j - 1} ${objective} ${e.op.replaceTo} ${prefix}if_${i + 1}_${j} ${objective}`);
+            cases.false.push(`${(!e.default) ? 'if' : 'unless'} score ${prefix}if_${i + 1}_${j - 1} ${objective} ${e.op.replaceTo} ${prefix}if_${i + 1}_${j} ${objective}`);
         }
+
+        // if文のthen/else節から、scoreboard operationに変換する
         const THEN = await rpnToScoreOperation({front: funcs[i].then, op: identifierToOperate('=', opTable), back: `${prefix}if_${i + 1}`}, prefix, objective, temp, [], opTable, isAlwaysSpecifyObject, enteredValues);
         if (THEN) {
             THEN.resValues.forEach(v => resValues.add(v));

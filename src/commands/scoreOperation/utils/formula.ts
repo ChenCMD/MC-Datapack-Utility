@@ -89,7 +89,7 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
 
     const nameElem = func.destination.namely.split(' ');
     if (func.identifier === 'if(') {
-        funcs.push({ condition: conditionAssembling(subArr[0], true), then: formulaAnalyzer(subArr[1], opTable, funcs), else: formulaAnalyzer(subArr[2], opTable, funcs) });
+        funcs.push({ condition: conditionAssembling(subArr[0], true, opTable, funcs), then: formulaAnalyzer(subArr[1], opTable, funcs), else: formulaAnalyzer(subArr[2], opTable, funcs) });
         nameElem[0] = `$MCDUtil_${nameElem[0]}_${funcs.length}`;
     }
 
@@ -110,14 +110,19 @@ function formulaToString(formula: Formula | string): string {
     return `${formulaToString(formula.front)} ${formula.op.identifier} ${formulaToString(formula.back)}`;
 }
 
-function conditionAssembling(exp: string[], isTrue: boolean): ConditionExp[] {
+function conditionAssembling(exp: string[], isTrue: boolean, opTable: OperateTable, funcs: IfFormula[]): ConditionExp[] {
     if (exp.includes('&&')) {
         const index = exp.indexOf('&&');
-        return [...conditionAssembling(exp.slice(0, index), isTrue), ...conditionAssembling(exp.slice(index + '&&'.length), isTrue)];
+        return [...conditionAssembling(exp.slice(0, index), isTrue, opTable, funcs), ...conditionAssembling(exp.slice(index + 1), isTrue, opTable, funcs)];
     }
     if (exp.includes('||')) {
         const index = exp.indexOf('||');
-        return [...conditionAssembling(exp.slice(0, index), !isTrue), ...conditionAssembling(exp.slice(index + '&&'.length), !isTrue)];
+        return [...conditionAssembling(exp.slice(0, index), !isTrue, opTable, funcs), ...conditionAssembling(exp.slice(index + 1), !isTrue, opTable, funcs)];
     }
-    return [{ front: exp[0], op: conditionExpTable.table[ssft(exp[1], conditionExpTable)], back: exp[2], default: (exp[1] === '!=') ? !isTrue : isTrue }];
+    let spliter = 0;
+    for (let i = 0; i < exp.length; i++) {
+        if (conditionExpTable.table[ssft(exp[i], conditionExpTable)])
+            spliter = i;
+    }
+    return [{ front: formulaAnalyzer(exp.slice(0, spliter), opTable, funcs), op: conditionExpTable.table[ssft(exp[spliter], conditionExpTable)], back: formulaAnalyzer(exp.slice(spliter + 1), opTable, funcs), default: (exp[1] === '!=') ? !isTrue : isTrue }];
 }
