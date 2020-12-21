@@ -62,22 +62,6 @@ export const opTable: OperateTable = {
             assocLow: ''
         },
         {
-            identifier: '#',
-            order: 16,
-            type: 'op',
-            arity: 1,
-            assocLow: 'R',
-            fn: (_l: number | string): number | undefined => (typeof _l === 'number') ? _l : undefined
-        },
-        {
-            identifier: '_',
-            order: 16,
-            type: 'op',
-            arity: 1,
-            assocLow: 'R',
-            fn: (_l: number | string): number | undefined => (typeof _l === 'number') ? -_l : undefined
-        },
-        {
             identifier: '*',
             order: 14,
             type: 'op',
@@ -138,6 +122,6 @@ export const opTable: OperateTable = {
         }
     ],
     identifiers: [
-        '(', ')', '#', '_', '*', '/', '%', '+', '-', '='
+        '(', ')', '#', '_', '*', '/', '%', '+', '-', '=', 'if('
     ]
 };

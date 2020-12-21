@@ -29,27 +29,61 @@ import { Deque } from '../../../types/Deque';
 import { OperateTable } from '../types/OperateTable';
 import { QueueElement } from '../types/QueueElement';
 import { scoreTable } from '../types/ScoreTable';
-import { formulaToQueue, ssft } from '.';
+import { formulaToQueue, identifierToOperate, ssft } from '.';
 import { locale } from '../../../locales';
-import { Formula } from '../types/Formula';
+import { Formula, IfFormula } from '../types/Formula';
 import { codeConsole } from '../../../extension';
 import { GenerateError, CalculateUnfinishedError } from '../../../types/Error';
 
-export async function rpnToScoreOperation(formula: Formula | string, prefix: string, objective: string, temp: string, isAlwaysSpecifyObject: boolean): Promise<{ resValues: Set<string>, resFormulas: string[] } | undefined> {
+export async function rpnToScoreOperation(formula: Formula | string, prefix: string, objective: string, temp: string, funcs: IfFormula[], opTable: OperateTable, isAlwaysSpecifyObject: boolean, _enteredValues?: Set<string>): Promise<{ resValues: Set<string>, resFormulas: string[] } | undefined> {
+    const enteredValues = _enteredValues ?? new Set<string>();
     const rpnQueue = new Deque<QueueElement>();
-    const res = await formulaToQueue(formula, rpnQueue, scoreTable, objective, isAlwaysSpecifyObject);
+    const res = await formulaToQueue(formula, rpnQueue, objective, prefix, isAlwaysSpecifyObject, enteredValues);
     if (!res) return undefined;
 
     const calcStack: QueueElement[] = [];
     const resValues = new Set<string>();
     const resFormulas: string[] = [];
+
+    for (let i = 0; i < funcs.length; i++) {
+        const cases: {true: string[], false: string[]} = {true: [], false: []};
+        for (const e of funcs[i].condition) {
+            const source = new Deque<QueueElement>();
+            await formulaToQueue(e.front, source, objective, prefix, isAlwaysSpecifyObject, enteredValues);
+            const sourceValue = source.getFirst();
+            if (sourceValue.type === 'num')
+                resValues.add(`scoreboard players set ${prefix}${sourceValue.value} ${objective} ${sourceValue.value}`);
+
+            const destination = new Deque<QueueElement>();
+            await formulaToQueue(e.back, destination, objective, prefix, isAlwaysSpecifyObject, enteredValues);
+            const destinationValue = destination.getFirst();
+            if (destinationValue.type === 'num')
+                resValues.add(`scoreboard players set ${prefix}${destinationValue.value} ${objective} ${destinationValue.value}`);
+
+            cases.true.push(`${(e.default) ? 'if' : 'unless'} score ${sourceValue.value} ${sourceValue.objective} ${e.op.replaceTo} ${destinationValue.value} ${destinationValue.objective}`);
+            cases.false.push(`${(!e.default) ? 'if' : 'unless'} score ${sourceValue.value} ${sourceValue.objective} ${e.op.replaceTo} ${destinationValue.value} ${destinationValue.objective}`);
+        }
+        const THEN = await rpnToScoreOperation({front: funcs[i].then, op: identifierToOperate('=', opTable), back: `${prefix}if_${i + 1}`}, prefix, objective, temp, [], opTable, isAlwaysSpecifyObject, enteredValues);
+        if (THEN) {
+            THEN.resValues.forEach(v => resValues.add(v));
+            THEN.resFormulas.forEach(v => resFormulas.push(`execute ${cases.true.join(' ')} run ${v}`));
+        }
+        
+        const ELSE = await rpnToScoreOperation({front: funcs[i].else, op: identifierToOperate('=', opTable), back: `${prefix}if_${i + 1}`}, prefix, objective, temp, [], opTable, isAlwaysSpecifyObject, enteredValues);
+        if (ELSE) {
+            ELSE.resValues.forEach(v => resValues.add(v));
+            ELSE.resFormulas.forEach(v => resFormulas.push(`execute ${cases.false.join(' ')} run ${v}`));
+        }
+        resFormulas.push('');
+    }
+
     let tempCount = 0;
     while (rpnQueue.size() > 0) {
         const elem = rpnQueue.removeFirst();
 
         switch (elem.type) {
             case 'num':
-                const put = elem.value.indexOf('0x') !== -1 ? parseInt(elem.value, 16) : parseFloat(elem.value);
+                const put = elem.value.startsWith('0x') ? parseInt(elem.value, 16) : parseFloat(elem.value);
                 calcStack.push({ value: `${prefix}${put}`, objective: `${objective}`, type: 'num' });
                 resValues.add(`scoreboard players set ${prefix}${elem.value} ${objective} ${put}`);
                 break;
@@ -67,7 +101,7 @@ export async function rpnToScoreOperation(formula: Formula | string, prefix: str
                         throw new GenerateError(locale('formula-to-score-operation.illegal-formula'));
 
                     // arg2 が「${prefix}${temp}」で表される数でないなら登録
-                    if (arg2.value.indexOf(`${prefix}${temp}`) === -1) {
+                    if (arg2.value.match(prefix + /\d/) || !arg2.value.startsWith(`${prefix}${temp}`)) {
                         resFormulas.push(`scoreboard players operation ${prefix}${temp}${++tempCount} ${objective} = ${arg2.value} ${arg2.objective}`);
                         arg2.value = `${prefix}${temp}${tempCount}`;
                     }
@@ -90,12 +124,12 @@ export async function rpnToScoreOperation(formula: Formula | string, prefix: str
     return { resValues, resFormulas };
 }
 
-export async function rpnCalculate(rpnExp: string, opTable: OperateTable, isAlwaysSpecifyObject: boolean): Promise<string | number | undefined> {
+export async function rpnCalculate(rpnExp: string, opTable: OperateTable): Promise<string | number | undefined> {
     // 切り分け実行
     // 式を空白文字かカンマでセパレートして配列化＆これらデリミタを式から消す副作用
     const rpnQueue = new Deque<QueueElement>();
     for (const elem of rpnExp.split(/\s+|,/)) {
-        const res = await formulaToQueue(elem, rpnQueue, opTable, '', isAlwaysSpecifyObject);
+        const res = await formulaToQueue(elem, rpnQueue, '', '', false, new Set<string>());
         if (!res) return undefined;
     }
     // 演算開始
