@@ -5,7 +5,7 @@ import { listenInput } from '../../../utils/vscodeWrapper';
 import { locale } from '../../../locales';
 import { Formula } from '../types/Formula';
 import { OperateElement, OperateTable } from '../types/OperateTable';
-import { config } from '../../../extension';
+import { ScoreOperationConfig } from '../../../types/Config';
 
 /**
  * Search String From Table
@@ -17,19 +17,19 @@ export function ssft(_str: string | undefined, _table: TableBase): number {
     return _table.identifiers.indexOf(_str);
 }
 
-export async function formulaToQueue(value: Formula | string, queue: Deque<QueueElement>, _objective: string, prefix: string, enteredValues: Set<string>): Promise<boolean> {
+export async function formulaToQueue(value: Formula | string, queue: Deque<QueueElement>, config: ScoreOperationConfig, enteredValues: Set<string>): Promise<boolean> {
     if (typeof value !== 'string') {
-        const res1 = await formulaToQueue(value.front, queue, _objective, prefix, enteredValues);
-        const res2 = await formulaToQueue(value.back, queue, _objective, prefix, enteredValues);
+        const res1 = await formulaToQueue(value.front, queue, config, enteredValues);
+        const res2 = await formulaToQueue(value.back, queue, config, enteredValues);
         if (!res1 || !res2) return false;
         queue.addLast({ value: value.op.identifier, objective: '', type: value.op.type });
         return true;
     }
-    let objective = _objective;
+    let objective = config.objective;
     if (Number.prototype.isValue(value)) {
         queue.addLast({ value, objective, type: 'num' });
     } else {
-        if (config.scoreOperation.isAlwaysSpecifyObject && !value.startsWith(prefix) && !enteredValues.has(value)) {
+        if (config.isAlwaysSpecifyObject && !value.startsWith(config.prefix) && !enteredValues.has(value)) {
             const str = await listenInput(locale('formula-to-score-operation.specifying-object', value));
             if (str === undefined) return false;
             objective = str ?? objective;

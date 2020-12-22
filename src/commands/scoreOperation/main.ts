@@ -9,7 +9,7 @@ import { NotOpenTextDocumentError, UserCancelledError } from '../../types/Error'
 import { IfFormula } from './types/Formula';
 
 export async function scoreOperation(): Promise<void> {
-    const { prefix, objective, temp, forceInputType } = config.scoreOperation;
+    const { objective, forceInputType } = config.scoreOperation;
     try {
         const editor = getTextEditor();
 
@@ -37,7 +37,7 @@ export async function scoreOperation(): Promise<void> {
         const ifStates: IfFormula[] = [];
         // 最後に代入を行うので、v = f を f = v の形にする。
         const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = ').split(' '), opTable, ifStates);
-        const result = await rpnToScoreOperation(formula, prefix, objective, temp, ifStates, opTable);
+        const result = await rpnToScoreOperation(formula, config.scoreOperation, ifStates, opTable);
         if (!result) return;
 
         const { resValues, resFormulas } = result;
