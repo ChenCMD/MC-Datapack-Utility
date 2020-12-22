@@ -7,7 +7,10 @@ import { DownloadTimeOutError } from '../types/Error';
 
 export async function setTimeOut(milisec: number): Promise<never> {
     // eslint-disable-next-line brace-style
-    return await new Promise(() => setTimeout(() => { throw new DownloadTimeOutError(locale('create-datapack-template.download-timeout')); }, milisec));
+    return await new Promise((_, reject) => setTimeout(
+        () => reject(new DownloadTimeOutError(locale('create-datapack-template.download-timeout'))),
+        milisec
+    ));
 }
 
 export function getDate(format: string): string {
