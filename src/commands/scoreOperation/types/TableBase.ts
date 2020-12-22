@@ -1,5 +1,5 @@
-export interface TableBase {
-    table: ElementBase[]
+export interface TableBase<E extends ElementBase> {
+    table: E[]
     identifiers: string[]
 }
 

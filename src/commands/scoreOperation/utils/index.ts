@@ -1,21 +1,10 @@
 import { Deque } from '../../../types/Deque';
 import { QueueElement } from '../types/QueueElement';
-import { TableBase } from '../types/TableBase';
+import { ElementBase, TableBase } from '../types/TableBase';
 import { listenInput } from '../../../utils/vscodeWrapper';
 import { locale } from '../../../locales';
 import { Formula } from '../types/Formula';
-import { OperateElement, OperateTable } from '../types/OperateTable';
 import { ScoreOperationConfig } from '../../../types/Config';
-
-/**
- * Search String From Table
- * @param {string} _str -**_table**内からこのパラメータを探す
- * @param {Tablebase} _table このテーブル内から**_str**を探す
- */
-export function ssft(_str: string | undefined, _table: TableBase): number {
-    if (!_str) return -1;
-    return _table.identifiers.indexOf(_str);
-}
 
 export async function formulaToQueue(value: Formula | string, queue: Deque<QueueElement>, config: ScoreOperationConfig, enteredValues: Set<string>): Promise<boolean> {
     if (typeof value !== 'string') {
@@ -40,6 +29,11 @@ export async function formulaToQueue(value: Formula | string, queue: Deque<Queue
     return true;
 }
 
-export function identifierToOperate(identifier: string, opTable: OperateTable): OperateElement {
-    return opTable.table.filter(e => e.identifier === identifier)[0];
+/**
+ * @param identifier 探す識別子
+ * @param table _ElementBase_ を継承する要素のテーブル
+ * @returns _table_ の要素
+ */
+export function identifierToElement<T extends TableBase<ElementBase>>(identifier: string, table: T): T['table'][number] {
+    return table.table.filter(e => e.identifier === identifier)[0];
 }

@@ -1,5 +1,7 @@
 import { ElementBase, TableBase } from './TableBase';
 
+export type OperateTable = TableBase<OperateElement>;
+
 export interface OperateElement extends ElementBase {
     identifier: string
     order: number
@@ -8,10 +10,6 @@ export interface OperateElement extends ElementBase {
     // eslint-disable-next-line @typescript-eslint/ban-types
     fn?: Function
     destination?: Destination
-}
-
-export interface OperateTable extends TableBase {
-    table: OperateElement[]
 }
 
 interface Destination {

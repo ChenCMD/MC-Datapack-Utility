@@ -13,9 +13,7 @@ export interface ConditionExpElement extends ElementBase {
     replaceTo: string
 }
 
-export interface ConditionExpTable extends TableBase {
-    table: ConditionExpElement[]
-}
+export type ConditionExpTable = TableBase<ConditionExpElement>;
 
 export const conditionExpTable: ConditionExpTable = {
     table: [

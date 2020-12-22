@@ -1,5 +1,5 @@
 import { Formula, IfFormula } from '../types/Formula';
-import { identifierToOperate, ssft } from '.';
+import { identifierToElement } from '.';
 import { locale } from '../../../locales';
 import { OperateElement, OperateTable } from '../types/OperateTable';
 import { config } from '../../../extension';
@@ -20,12 +20,12 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
     // firstがopTableに登録されていなければ、ただの文字列であると考える
     if (!func) {
         const scale = config.scoreOperation.valueScale;
-        const front = (scale === 1) ? first : { front: first, op: identifierToOperate('*', opTable), back: scale.toString() };
+        const front = (scale === 1) ? first : { front: first, op: identifierToElement('*', opTable), back: scale.toString() };
         // 数値と文字の値
         if (!exp[0])
             return front;
 
-        const op = identifierToOperate(exp.shift() ?? '', opTable);
+        const op = identifierToElement(exp.shift() ?? '', opTable);
         const back = formulaAnalyzer(exp, opTable, funcs);
 
         if (op.identifier === '=' && typeof back !== 'string')
@@ -54,7 +54,7 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
             exp = exp.slice(lastClose + 1);
 
             if (!exp[0]) return formulaAnalyzer(sub, opTable, funcs);
-            return { front: formulaAnalyzer(sub, opTable, funcs), op: identifierToOperate(exp.shift() ?? '', opTable), back: formulaAnalyzer(exp, opTable, funcs) };
+            return { front: formulaAnalyzer(sub, opTable, funcs), op: identifierToElement(exp.shift() ?? '', opTable), back: formulaAnalyzer(exp, opTable, funcs) };
         case ')':
             // '('がなければエラー
             throw new ParsingError(locale('too-much', '\')\''));
@@ -101,7 +101,7 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
 
     if (!exp[0])
         return formulaAnalyzer(_exp, opTable, funcs);
-    return { front: formulaAnalyzer(_exp, opTable, funcs), op: identifierToOperate(exp.shift() ?? '', opTable), back: formulaAnalyzer(exp, opTable, funcs) };
+    return { front: formulaAnalyzer(_exp, opTable, funcs), op: identifierToElement(exp.shift() ?? '', opTable), back: formulaAnalyzer(exp, opTable, funcs) };
 }
 
 function formulaToString(formula: Formula | string): string {
@@ -121,8 +121,8 @@ function conditionAssembling(exp: string[], isTrue: boolean, opTable: OperateTab
     }
     let spliter = 0;
     for (let i = 0; i < exp.length; i++) {
-        if (conditionExpTable.table[ssft(exp[i], conditionExpTable)])
+        if (identifierToElement(exp[i], conditionExpTable))
             spliter = i;
     }
-    return [{ front: formulaAnalyzer(exp.slice(0, spliter), opTable, funcs), op: conditionExpTable.table[ssft(exp[spliter], conditionExpTable)], back: formulaAnalyzer(exp.slice(spliter + 1), opTable, funcs), default: (exp[1] === '!=') ? !isTrue : isTrue }];
+    return [{ front: formulaAnalyzer(exp.slice(0, spliter), opTable, funcs), op: identifierToElement(exp[spliter], conditionExpTable), back: formulaAnalyzer(exp.slice(spliter + 1), opTable, funcs), default: (exp[1] === '!=') ? !isTrue : isTrue }];
 }
