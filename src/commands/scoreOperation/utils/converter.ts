@@ -35,10 +35,10 @@ import { Formula, IfFormula } from '../types/Formula';
 import { codeConsole } from '../../../extension';
 import { GenerateError, CalculateUnfinishedError } from '../../../types/Error';
 
-export async function rpnToScoreOperation(formula: Formula | string, prefix: string, objective: string, temp: string, funcs: IfFormula[], opTable: OperateTable, isAlwaysSpecifyObject: boolean, _enteredValues?: Set<string>): Promise<{ resValues: Set<string>, resFormulas: string[] } | undefined> {
+export async function rpnToScoreOperation(formula: Formula | string, prefix: string, objective: string, temp: string, funcs: IfFormula[], opTable: OperateTable, _enteredValues?: Set<string>): Promise<{ resValues: Set<string>, resFormulas: string[] } | undefined> {
     const enteredValues = _enteredValues ?? new Set<string>();
     const rpnQueue = new Deque<QueueElement>();
-    const res = await formulaToQueue(formula, rpnQueue, objective, prefix, isAlwaysSpecifyObject, enteredValues);
+    const res = await formulaToQueue(formula, rpnQueue, objective, prefix, enteredValues);
     if (!res) return undefined;
 
     const calcStack: QueueElement[] = [];
@@ -51,13 +51,13 @@ export async function rpnToScoreOperation(formula: Formula | string, prefix: str
         let j = 0;
         // if文の条件からexecute式の引数に変換
         for (const e of funcs[i].condition) {
-            const source = await rpnToScoreOperation({front: e.front, op: identifierToOperate('=', opTable), back: `${prefix}if_${i + 1}_${j++}`}, prefix, objective, temp, [], opTable, isAlwaysSpecifyObject, enteredValues);
+            const source = await rpnToScoreOperation({front: e.front, op: identifierToOperate('=', opTable), back: `${prefix}if_${i + 1}_${j++}`}, prefix, objective, temp, [], opTable, enteredValues);
             if (source) {
                 source.resValues.forEach(v => resValues.add(v));
                 resFormulas.push(...source.resFormulas);
             }
 
-            const destination = await rpnToScoreOperation({front: e.back, op: identifierToOperate('=', opTable), back: `${prefix}if_${i + 1}_${j++}`}, prefix, objective, temp, [], opTable, isAlwaysSpecifyObject, enteredValues);
+            const destination = await rpnToScoreOperation({front: e.back, op: identifierToOperate('=', opTable), back: `${prefix}if_${i + 1}_${j++}`}, prefix, objective, temp, [], opTable, enteredValues);
             if (destination) {
                 destination.resValues.forEach(v => resValues.add(v));
                 resFormulas.push(...destination.resFormulas);
@@ -68,13 +68,13 @@ export async function rpnToScoreOperation(formula: Formula | string, prefix: str
         }
 
         // if文のthen/else節から、scoreboard operationに変換する
-        const THEN = await rpnToScoreOperation({front: funcs[i].then, op: identifierToOperate('=', opTable), back: `${prefix}if_${i + 1}`}, prefix, objective, temp, [], opTable, isAlwaysSpecifyObject, enteredValues);
+        const THEN = await rpnToScoreOperation({front: funcs[i].then, op: identifierToOperate('=', opTable), back: `${prefix}if_${i + 1}`}, prefix, objective, temp, [], opTable, enteredValues);
         if (THEN) {
             THEN.resValues.forEach(v => resValues.add(v));
             THEN.resFormulas.forEach(v => resFormulas.push(`execute ${cases.true.join(' ')} run ${v}`));
         }
         
-        const ELSE = await rpnToScoreOperation({front: funcs[i].else, op: identifierToOperate('=', opTable), back: `${prefix}if_${i + 1}`}, prefix, objective, temp, [], opTable, isAlwaysSpecifyObject, enteredValues);
+        const ELSE = await rpnToScoreOperation({front: funcs[i].else, op: identifierToOperate('=', opTable), back: `${prefix}if_${i + 1}`}, prefix, objective, temp, [], opTable, enteredValues);
         if (ELSE) {
             ELSE.resValues.forEach(v => resValues.add(v));
             ELSE.resFormulas.forEach(v => resFormulas.push(`execute ${cases.false.join(' ')} run ${v}`));
@@ -134,7 +134,7 @@ export async function rpnCalculate(rpnExp: string, opTable: OperateTable): Promi
     // 式を空白文字かカンマでセパレートして配列化＆これらデリミタを式から消す副作用
     const rpnQueue = new Deque<QueueElement>();
     for (const elem of rpnExp.split(/\s+|,/)) {
-        const res = await formulaToQueue(elem, rpnQueue, '', '', false, new Set<string>());
+        const res = await formulaToQueue(elem, rpnQueue, '', '', new Set<string>());
         if (!res) return undefined;
     }
     // 演算開始
