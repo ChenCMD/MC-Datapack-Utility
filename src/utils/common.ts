@@ -5,8 +5,9 @@ import dateFormat from 'dateformat';
 import { FileType, getFilePath, getFileType } from '../types/FileTypes';
 import { DownloadTimeOutError } from '../types/Error';
 
-export async function setTimeOut<T>(milisec: number): Promise<T> {
-    return await new Promise<T>((_, reject) => setTimeout(() => reject(new DownloadTimeOutError(locale('create-datapack-template.download-timeout'))), milisec));
+export async function setTimeOut(milisec: number): Promise<never> {
+    // eslint-disable-next-line brace-style
+    return await new Promise(() => setTimeout(() => { throw new DownloadTimeOutError(locale('create-datapack-template.download-timeout')); }, milisec));
 }
 
 export function getDate(format: string): string {

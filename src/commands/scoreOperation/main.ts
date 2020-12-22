@@ -6,9 +6,10 @@ import { formulaAnalyzer } from './utils/formula';
 import { locale } from '../../locales';
 import { opTable } from './types/OperateTable';
 import { NotOpenTextDocumentError, UserCancelledError } from '../../types/Error';
+import { IfFormula } from './types/Formula';
 
 export async function scoreOperation(): Promise<void> {
-    const { prefix, objective, temp, forceInputType, isAlwaysSpecifyObject } = config.scoreOperation;
+    const { objective, forceInputType } = config.scoreOperation;
     try {
         const editor = getTextEditor();
 
@@ -33,8 +34,10 @@ export async function scoreOperation(): Promise<void> {
             text = res;
         }
 
-        const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = '), opTable);
-        const result = await rpnToScoreOperation(formula, prefix, objective, temp, isAlwaysSpecifyObject);
+        const ifStates: IfFormula[] = [];
+        // 最後に代入を行うので、v = f を f = v の形にする。
+        const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = ').split(' '), opTable, ifStates);
+        const result = await rpnToScoreOperation(formula, config.scoreOperation, ifStates, opTable);
         if (!result) return;
 
         const { resValues, resFormulas } = result;
