@@ -4,27 +4,33 @@ import { Template } from '../commands/createFile/types/Template';
 import { OperateElement } from '../commands/scoreOperation/types/OperateTable';
 
 export interface Config {
-    language: 'Default' | 'en' | 'ja' | 'zh-cn' | 'zh-tw',
-    dateFormat: string,
-    scoreOperation: {
-        prefix: string
-        objective: string
-        temp: string
-        forceInputType: 'Default' | 'Always Selection' | 'Always InputBox'
-        isAlwaysSpecifyObject: boolean
-        customOperate: OperateElement[]
-        valueScale: number
-    },
-    createDatapackTemplate: {
-        dataVersion: string
-        defaultLoadAndTick: boolean
-        defaultVanillaData: boolean
-        defaultFolder: boolean
-        customTemplate: QuickPickFiles[]
-    },
-    createFile: {
-        fileTemplate: Template
-    }
+    language: 'Default' | 'en' | 'ja' | 'zh-cn' | 'zh-tw'
+    dateFormat: string
+    scoreOperation: ScoreOperationConfig
+    createDatapackTemplate: CreateDatapackTemplateConfig
+    createFile: CreateFileConfig
+}
+
+export interface ScoreOperationConfig {
+    prefix: string
+    objective: string
+    temp: string
+    forceInputType: 'Default' | 'Always Selection' | 'Always InputBox'
+    isAlwaysSpecifyObject: boolean
+    customOperate: OperateElement[]
+    valueScale: number
+}
+
+export interface CreateDatapackTemplateConfig {
+    dataVersion: string
+    defaultLoadAndTick: boolean
+    defaultVanillaData: boolean
+    defaultFolder: boolean
+    customTemplate: QuickPickFiles[]
+}
+
+export interface CreateFileConfig {
+    fileTemplate: Template
 }
 
 export const defaultConfig: Config = {
