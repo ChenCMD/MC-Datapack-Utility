@@ -7,13 +7,14 @@ import { locale } from '../../locales';
 import { opTable } from './types/OperateTable';
 import { NotOpenTextDocumentError, UserCancelledError } from '../../types/Error';
 import { IfFormula } from './types/Formula';
+import rfdc from 'rfdc';
 
 export async function scoreOperation(): Promise<void> {
     const { objective, forceInputType } = config.scoreOperation;
     try {
         const editor = getTextEditor();
 
-        const operateTable = opTable;
+        const operateTable = rfdc()(opTable);
         config.scoreOperation.customOperate.forEach(e => {
             operateTable[e.identifier] = e;
         });
