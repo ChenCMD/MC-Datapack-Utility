@@ -13,8 +13,9 @@ export async function scoreOperation(): Promise<void> {
     try {
         const editor = getTextEditor();
 
+        const operateTable = opTable;
         config.scoreOperation.customOperate.forEach(e => {
-            opTable[e.identifier] = e;
+            operateTable[e.identifier] = e;
         });
 
         let text = '';
@@ -32,8 +33,8 @@ export async function scoreOperation(): Promise<void> {
 
         const ifStates: IfFormula[] = [];
         // 最後に代入を行うので、v = f を f = v の形にする。
-        const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = ').split(' '), opTable, ifStates);
-        const result = await rpnToScoreOperation(formula, config.scoreOperation, ifStates, opTable);
+        const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = ').split(' '), operateTable, ifStates);
+        const result = await rpnToScoreOperation(formula, config.scoreOperation, ifStates, operateTable);
         if (!result) return;
 
         const { resValues, resFormulas } = result;

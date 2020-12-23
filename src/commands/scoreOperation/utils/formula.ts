@@ -21,7 +21,10 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
             return front;
 
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const op = opTable[exp.shift()!];
+        const toBeOp = exp.shift()!;
+        const op = opTable[toBeOp];
+        if (!op) throw new GenerateError(locale('formula-to-score-operation.not-exist-operate', toBeOp));
+
         const back = formulaAnalyzer(exp, opTable, funcs);
 
         if (op.identifier === '=' && typeof back !== 'string')
@@ -50,8 +53,13 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
             exp = exp.slice(lastClose + 1);
 
             if (!exp[0]) return formulaAnalyzer(sub, opTable, funcs);
+
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            return { front: formulaAnalyzer(sub, opTable, funcs), op: opTable[exp.shift()!], back: formulaAnalyzer(exp, opTable, funcs) };
+            const toBeOp = exp.shift()!;
+            const op = opTable[toBeOp];
+            if (!op) throw new GenerateError(locale('formula-to-score-operation.not-exist-operate', toBeOp));
+
+            return { front: formulaAnalyzer(sub, opTable, funcs), op: op, back: formulaAnalyzer(exp, opTable, funcs) };
         case ')':
             // '('がなければエラー
             throw new ParsingError(locale('too-much', '\')\''));
@@ -98,8 +106,13 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
 
     if (!exp[0])
         return formulaAnalyzer(_exp, opTable, funcs);
+
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return { front: formulaAnalyzer(_exp, opTable, funcs), op: opTable[exp.shift()!], back: formulaAnalyzer(exp, opTable, funcs) };
+    const toBeOp = exp.shift()!;
+    const op = opTable[toBeOp];
+    if (!op) throw new GenerateError(locale('formula-to-score-operation.not-exist-operate', toBeOp));
+
+    return { front: formulaAnalyzer(_exp, opTable, funcs), op, back: formulaAnalyzer(exp, opTable, funcs) };
 }
 
 function formulaToString(formula: Formula | string): string {
