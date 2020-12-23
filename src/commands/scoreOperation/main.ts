@@ -13,13 +13,9 @@ export async function scoreOperation(): Promise<void> {
     try {
         const editor = getTextEditor();
 
-        const customOperate = config.scoreOperation.customOperate;
-        if (customOperate.length !== 0) {
-            for (const e of customOperate) {
-                opTable.table.push(e);
-                opTable.identifiers.push(e.identifier);
-            }
-        }
+        config.scoreOperation.customOperate.forEach(e => {
+            opTable[e.identifier] = e;
+        });
 
         let text = '';
         if (forceInputType !== 'Always InputBox') text = editor.document.getText(editor.selection);

@@ -1,7 +1,4 @@
-export interface TableBase<E extends ElementBase> {
-    table: E[]
-    identifiers: string[]
-}
+export type TableBase<E extends ElementBase> = { [key in E['identifier']]: E };
 
 export interface ElementBase {
     identifier: string

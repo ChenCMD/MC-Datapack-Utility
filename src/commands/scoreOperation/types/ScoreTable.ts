@@ -3,7 +3,7 @@ import { TableBase, ElementBase } from './TableBase';
 export type ScoreTable = TableBase<ScoreElement>;
 
 export interface ScoreElement extends ElementBase {
-    identifier: '*' | '/' | '%' | '+' | '-' | '='
+    identifier: string
     axiom: Axiom[]
 }
 
@@ -14,63 +14,60 @@ interface Axiom {
 }
 
 export const scoreTable: ScoreTable = {
-    table: [
-        {
-            identifier: '*',
-            type: 'op',
-            axiom: [
-                {
-                    op: '*='
-                }
-            ]
-        },
-        {
-            identifier: '/',
-            type: 'op',
-            axiom: [
-                {
-                    op: '/='
-                }
-            ]
-        },
-        {
-            identifier: '%',
-            type: 'op',
-            axiom: [
-                {
-                    op: '%='
-                }
-            ]
-        },
-        {
-            identifier: '+',
-            type: 'op',
-            axiom: [
-                {
-                    op: '+='
-                }
-            ]
-        },
-        {
-            identifier: '-',
-            type: 'op',
-            axiom: [
-                {
-                    op: '-='
-                }
-            ]
-        },
-        {
-            identifier: '=',
-            type: 'op',
-            axiom: [
-                {
-                    former: true,
-                    op: '=',
-                    latter: true
-                }
-            ]
-        }
-    ],
-    identifiers: ['*', '/', '%', '+', '-', '=']
+    '*': {
+        identifier: '*',
+        type: 'op',
+        axiom: [
+            {
+                op: '*='
+            }
+        ]
+    },
+    '/': {
+        identifier: '/',
+        type: 'op',
+        axiom: [
+            {
+                op: '/='
+            }
+        ]
+    },
+    '%': {
+        identifier: '%',
+        type: 'op',
+        axiom: [
+            {
+                op: '%='
+            }
+        ]
+    },
+    '+': {
+        identifier: '+',
+        type: 'op',
+        axiom: [
+            {
+                op: '+='
+            }
+        ]
+    },
+    '-': {
+        identifier: '-',
+        type: 'op',
+        axiom: [
+            {
+                op: '-='
+            }
+        ]
+    },
+    '=': {
+        identifier: '=',
+        type: 'op',
+        axiom: [
+            {
+                former: true,
+                op: '=',
+                latter: true
+            }
+        ]
+    }
 };

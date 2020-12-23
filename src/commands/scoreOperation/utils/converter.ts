@@ -29,7 +29,7 @@ import { Deque } from '../../../types/Deque';
 import { OperateTable } from '../types/OperateTable';
 import { QueueElement } from '../types/QueueElement';
 import { scoreTable } from '../types/ScoreTable';
-import { formulaToQueue, identifierToElement } from '.';
+import { formulaToQueue } from '.';
 import { locale } from '../../../locales';
 import { Formula, IfFormula } from '../types/Formula';
 import { codeConsole } from '../../../extension';
@@ -56,13 +56,13 @@ export async function rpnToScoreOperation(formula: Formula | string, config: Sco
         let j = 0;
         // if文の条件からexecute式の引数に変換
         for (const e of funcs[i].condition) {
-            const source = await rpnToScoreOperation({front: e.front, op: identifierToElement('=', opTable), back: `${prefix}if_${i + 1}_${j++}`}, config, [], opTable, enteredValues);
+            const source = await rpnToScoreOperation({front: e.front, op: opTable['='], back: `${prefix}if_${i + 1}_${j++}`}, config, [], opTable, enteredValues);
             if (source) {
                 source.resValues.forEach(v => resValues.add(v));
                 resFormulas.push(...source.resFormulas);
             }
 
-            const destination = await rpnToScoreOperation({front: e.back, op: identifierToElement('=', opTable), back: `${prefix}if_${i + 1}_${j++}`}, config, [], opTable, enteredValues);
+            const destination = await rpnToScoreOperation({front: e.back, op: opTable['='], back: `${prefix}if_${i + 1}_${j++}`}, config, [], opTable, enteredValues);
             if (destination) {
                 destination.resValues.forEach(v => resValues.add(v));
                 resFormulas.push(...destination.resFormulas);
@@ -73,13 +73,13 @@ export async function rpnToScoreOperation(formula: Formula | string, config: Sco
         }
 
         // if文のthen/else節から、scoreboard operationに変換する
-        const THEN = await rpnToScoreOperation({front: funcs[i].then, op: identifierToElement('=', opTable), back: `${prefix}if_${i + 1}`}, config, [], opTable, enteredValues);
+        const THEN = await rpnToScoreOperation({front: funcs[i].then, op: opTable['='], back: `${prefix}if_${i + 1}`}, config, [], opTable, enteredValues);
         if (THEN) {
             THEN.resValues.forEach(v => resValues.add(v));
             THEN.resFormulas.forEach(v => resFormulas.push(`execute ${cases.true.join(' ')} run ${v}`));
         }
         
-        const ELSE = await rpnToScoreOperation({front: funcs[i].else, op: identifierToElement('=', opTable), back: `${prefix}if_${i + 1}`}, config, [], opTable, enteredValues);
+        const ELSE = await rpnToScoreOperation({front: funcs[i].else, op: opTable['='], back: `${prefix}if_${i + 1}`}, config, [], opTable, enteredValues);
         if (ELSE) {
             ELSE.resValues.forEach(v => resValues.add(v));
             ELSE.resFormulas.forEach(v => resFormulas.push(`execute ${cases.false.join(' ')} run ${v}`));
@@ -102,7 +102,7 @@ export async function rpnToScoreOperation(formula: Formula | string, config: Sco
                 break;
             case 'op':
             case 'fn':
-                const op = identifierToElement(elem.value, scoreTable).axiom;
+                const op = scoreTable[elem.value].axiom;
                 for (const _op of op) {
                     const arg1 = calcStack.pop();
                     const arg2 = calcStack.pop();
@@ -165,7 +165,7 @@ export async function rpnCalculate(rpnExp: string, opTable: OperateTable, config
             // 演算子・計算機能
             case 'op':
             case 'fn':
-                const operate = identifierToElement(elem.value, opTable);
+                const operate = opTable[elem.value];
                 if (!operate)
                     throw new CalculateUnfinishedError(locale('formula-to-score-operation.not-exist-operate', elem.value));
 

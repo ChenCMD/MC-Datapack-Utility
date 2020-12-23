@@ -44,82 +44,77 @@ interface Destination {
  * @version 1.0.0
  */
 export const opTable: OperateTable = {
-    table: [
-        {
-            identifier: '(',
-            order: 20,
-            type: 'state',
-            arity: 0,
-            assocLow: ''
-        },
-        {
-            identifier: ')',
-            order: 20,
-            type: 'state',
-            arity: 0,
-            assocLow: ''
-        },
-        {
-            identifier: '*',
-            order: 14,
-            type: 'op',
-            arity: 2,
-            assocLow: 'L',
-            fn: (_l: number | string, _r: number | string): number | string => (typeof _l === 'number' && typeof _r === 'number') ? _l * _r : `${_l} * ${_r}`
-        },
-        {
-            identifier: '/',
-            order: 14,
-            type: 'op',
-            arity: 2,
-            assocLow: 'L',
-            fn: (_l: number | string, _r: number | string): number | string => (typeof _l === 'number' && typeof _r === 'number') ? _l / _r : `${_l} / ${_r}`
-        },
-        {
-            identifier: '%',
-            order: 14,
-            type: 'op',
-            arity: 2,
-            assocLow: 'L',
-            fn: (_l: number | string, _r: number | string): number | string => (typeof _l === 'number' && typeof _r === 'number') ? _l % _r : `${_l} % ${_r}`
-        },
-        {
-            identifier: '+',
-            order: 13,
-            type: 'op',
-            arity: 2,
-            assocLow: 'L',
-            fn: (_l: number | string, _r: number | string): number | string => (typeof _l === 'number' && typeof _r === 'number') ? _l + _r : `${_l} + ${_r}`
-        },
-        {
-            identifier: '-',
-            order: 13,
-            type: 'op',
-            arity: 2,
-            assocLow: 'L',
-            fn: (_l: number | string, _r: number | string): number | string => (typeof _l === 'number' && typeof _r === 'number') ? _l - _r : `${_l} - ${_r}`
-        },
-        {
-            identifier: '=',
-            order: 3,
-            type: 'op',
-            arity: 2,
-            assocLow: 'R',
-            fn: (_l: number | string, _r: number | string): string => `${_l} = ${_r}`
-        },
-        {
-            identifier: 'if(',
-            order: 18,
-            type: 'op',
-            arity: 3,
-            assocLow: 'R',
-            destination: {
-                args: [],
-                namely: 'if'
-            }
+    '(': {
+        identifier: '(',
+        order: 20,
+        type: 'state',
+        arity: 0,
+        assocLow: ''
+    },
+    ')': {
+        identifier: ')',
+        order: 20,
+        type: 'state',
+        arity: 0,
+        assocLow: ''
+    },
+    '*': {
+        identifier: '*',
+        order: 14,
+        type: 'op',
+        arity: 2,
+        assocLow: 'L',
+        fn: (_l: number | string, _r: number | string): number | string => (typeof _l === 'number' && typeof _r === 'number') ? _l * _r : `${_l} * ${_r}`
+    },
+    '/': {
+        identifier: '/',
+        order: 14,
+        type: 'op',
+        arity: 2,
+        assocLow: 'L',
+        fn: (_l: number | string, _r: number | string): number | string => (typeof _l === 'number' && typeof _r === 'number') ? _l / _r : `${_l} / ${_r}`
+    },
+    '%': {
+        identifier: '%',
+        order: 14,
+        type: 'op',
+        arity: 2,
+        assocLow: 'L',
+        fn: (_l: number | string, _r: number | string): number | string => (typeof _l === 'number' && typeof _r === 'number') ? _l % _r : `${_l} % ${_r}`
+    },
+    '+': {
+        identifier: '+',
+        order: 13,
+        type: 'op',
+        arity: 2,
+        assocLow: 'L',
+        fn: (_l: number | string, _r: number | string): number | string => (typeof _l === 'number' && typeof _r === 'number') ? _l + _r : `${_l} + ${_r}`
+    },
+    '-': {
+        identifier: '-',
+        order: 13,
+        type: 'op',
+        arity: 2,
+        assocLow: 'L',
+        fn: (_l: number | string, _r: number | string): number | string => (typeof _l === 'number' && typeof _r === 'number') ? _l - _r : `${_l} - ${_r}`
+    },
+    '=': {
+        identifier: '=',
+        order: 3,
+        type: 'op',
+        arity: 2,
+        assocLow: 'R',
+        fn: (_l: number | string, _r: number | string): string => `${_l} = ${_r}`
+    },
+    'if(': {
+        identifier: 'if(',
+        order: 18,
+        type: 'op',
+        arity: 3,
+        assocLow: 'R',
+        destination: {
+            args: [],
+            namely: 'if'
         }
-    ],
-    identifiers: [
-        '(', ')', '#', '_', '*', '/', '%', '+', '-', '=', 'if('
-    ]
+    }
 };

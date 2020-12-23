@@ -1,6 +1,5 @@
 import { Deque } from '../../../types/Deque';
 import { QueueElement } from '../types/QueueElement';
-import { ElementBase, TableBase } from '../types/TableBase';
 import { listenInput } from '../../../utils/vscodeWrapper';
 import { locale } from '../../../locales';
 import { Formula } from '../types/Formula';
@@ -27,13 +26,4 @@ export async function formulaToQueue(value: Formula | string, queue: Deque<Queue
     }
     enteredValues.add(value);
     return true;
-}
-
-/**
- * @param identifier 探す識別子
- * @param table _ElementBase_ を継承する要素のテーブル
- * @returns _table_ の要素
- */
-export function identifierToElement<T extends TableBase<ElementBase>>(identifier: string, table: T): T['table'][number] {
-    return table.table.filter(e => e.identifier === identifier)[0];
 }
