@@ -7,19 +7,17 @@ import { locale } from '../../locales';
 import { opTable } from './types/OperateTable';
 import { NotOpenTextDocumentError, UserCancelledError } from '../../types/Error';
 import { IfFormula } from './types/Formula';
+import rfdc from 'rfdc';
 
 export async function scoreOperation(): Promise<void> {
     const { objective, forceInputType } = config.scoreOperation;
     try {
         const editor = getTextEditor();
 
-        const customOperate = config.scoreOperation.customOperate;
-        if (customOperate.length !== 0) {
-            for (const e of customOperate) {
-                opTable.table.push(e);
-                opTable.identifiers.push(e.identifier);
-            }
-        }
+        const operateTable = rfdc()(opTable);
+        config.scoreOperation.customOperate.forEach(e => {
+            operateTable[e.identifier] = e;
+        });
 
         let text = '';
         if (forceInputType !== 'Always InputBox') text = editor.document.getText(editor.selection);
@@ -36,8 +34,8 @@ export async function scoreOperation(): Promise<void> {
 
         const ifStates: IfFormula[] = [];
         // 最後に代入を行うので、v = f を f = v の形にする。
-        const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = ').split(' '), opTable, ifStates);
-        const result = await rpnToScoreOperation(formula, config.scoreOperation, ifStates, opTable);
+        const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = ').split(' '), operateTable, ifStates);
+        const result = await rpnToScoreOperation(formula, config.scoreOperation, ifStates, operateTable);
         if (!result) return;
 
         const { resValues, resFormulas } = result;
