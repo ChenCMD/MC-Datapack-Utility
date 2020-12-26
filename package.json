@@ -43,6 +43,7 @@
 		"rfdc": "^1.1.4"
 	},
 	"activationEvents": [
+		"workspaceContains:**/pack.mcmeta",
 		"onCommand:mcdutil.commands.createDatapackTemplate",
 		"onCommand:mcdutil.commands.createFile",
 		"onCommand:mcdutil.commands.scoreOperation",
