@@ -86,7 +86,7 @@
 				{
 					"command": "mcdutil.commands.createFile",
 					"when": "explorerResourceIsFolder == true",
-					"group": "navigation@4"
+					"group": "MCDUtil@1"
 				},
 				{
 					"command": "mcdutil.commands.copyResourcePath",
