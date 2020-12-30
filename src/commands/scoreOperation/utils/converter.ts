@@ -28,7 +28,6 @@
 import { Deque } from '../../../types/Deque';
 import { OperateTable } from '../types/OperateTable';
 import { QueueElement } from '../types/QueueElement';
-import { scoreTable } from '../types/ScoreTable';
 import { formulaToQueue } from '.';
 import { locale } from '../../../locales';
 import { Formula, IfFormula } from '../types/Formula';
@@ -52,17 +51,17 @@ export async function rpnToScoreOperation(formula: Formula | string, config: Sco
 
     // funcs とあるが、今はif文だけ。
     for (let i = 0; i < funcs.length; i++) {
-        const cases: {true: string[], false: string[]} = {true: [], false: []};
+        const cases: { true: string[], false: string[] } = { true: [], false: [] };
         let j = 0;
         // if文の条件からexecute式の引数に変換
         for (const e of funcs[i].condition) {
-            const source = await rpnToScoreOperation({front: e.front, op: opTable['='], back: `${prefix}if_${i + 1}_${j++}`}, config, [], opTable, enteredValues);
+            const source = await rpnToScoreOperation({ front: e.front, op: opTable['='], back: `${prefix}if_${i + 1}_${j++}` }, config, [], opTable, enteredValues);
             if (source) {
                 source.resValues.forEach(v => resValues.add(v));
                 resFormulas.push(...source.resFormulas);
             }
 
-            const destination = await rpnToScoreOperation({front: e.back, op: opTable['='], back: `${prefix}if_${i + 1}_${j++}`}, config, [], opTable, enteredValues);
+            const destination = await rpnToScoreOperation({ front: e.back, op: opTable['='], back: `${prefix}if_${i + 1}_${j++}` }, config, [], opTable, enteredValues);
             if (destination) {
                 destination.resValues.forEach(v => resValues.add(v));
                 resFormulas.push(...destination.resFormulas);
@@ -73,13 +72,13 @@ export async function rpnToScoreOperation(formula: Formula | string, config: Sco
         }
 
         // if文のthen/else節から、scoreboard operationに変換する
-        const THEN = await rpnToScoreOperation({front: funcs[i].then, op: opTable['='], back: `${prefix}if_${i + 1}`}, config, [], opTable, enteredValues);
+        const THEN = await rpnToScoreOperation({ front: funcs[i].then, op: opTable['='], back: `${prefix}if_${i + 1}` }, config, [], opTable, enteredValues);
         if (THEN) {
             THEN.resValues.forEach(v => resValues.add(v));
             THEN.resFormulas.forEach(v => resFormulas.push(`execute ${cases.true.join(' ')} run ${v}`));
         }
-        
-        const ELSE = await rpnToScoreOperation({front: funcs[i].else, op: opTable['='], back: `${prefix}if_${i + 1}`}, config, [], opTable, enteredValues);
+
+        const ELSE = await rpnToScoreOperation({ front: funcs[i].else, op: opTable['='], back: `${prefix}if_${i + 1}` }, config, [], opTable, enteredValues);
         if (ELSE) {
             ELSE.resValues.forEach(v => resValues.add(v));
             ELSE.resFormulas.forEach(v => resFormulas.push(`execute ${cases.false.join(' ')} run ${v}`));
@@ -102,31 +101,23 @@ export async function rpnToScoreOperation(formula: Formula | string, config: Sco
                 break;
             case 'op':
             case 'fn':
-                const op = scoreTable[elem.value].axiom;
-                for (const _op of op) {
-                    const arg1 = calcStack.pop();
-                    const arg2 = calcStack.pop();
+                const arg1 = calcStack.pop();
+                const arg2 = calcStack.pop();
 
-                    if (!arg1 || !arg2)
-                        throw new GenerateError(locale('formula-to-score-operation.illegal-formula'));
+                if (!arg1 || !arg2)
+                    throw new GenerateError(locale('formula-to-score-operation.illegal-formula'));
 
-                    // arg2 が「${prefix}${temp}」で表される数でないなら登録
-                    if (arg2.value.match(prefix + /\d/) || !arg2.value.startsWith(`${prefix}${temp}`)) {
-                        resFormulas.push(`scoreboard players operation ${prefix}${temp}${++tempCount} ${objective} = ${arg2.value} ${arg2.objective}`);
-                        arg2.value = `${prefix}${temp}${tempCount}`;
-                    }
+                // arg2 が「${prefix}${temp}」で表される数でないなら登録
+                if (arg2.value.match(prefix + /\d/) || !arg2.value.startsWith(`${prefix}${temp}`)) {
+                    resFormulas.push(`scoreboard players operation ${prefix}${temp}${++tempCount} ${objective} = ${arg2.value} ${arg2.objective}`);
+                    arg2.value = `${prefix}${temp}${tempCount}`;
+                }
 
-                    // 「(被演算数) (演算子) (加演算数)」という関係として、
-                    // 「被演算数」が arg1 であるとき _op.former: true
-                    // 「加演算数」が arg2 であるとき _op.latter: true
-                    // ∴・「arg1 (演算子) arg2」のとき、_op.former も _op.latter も true
-                    //   ・「arg2 (演算子) arg1」のとき、_op.former も _op.latter も false または undefined
-                    const _f = (_op.former) ? arg1 : arg2;
-                    const _l = (_op.latter) ? arg2 : arg1;
-                    resFormulas.push(`scoreboard players operation ${_f.value} ${_f.objective} ${_op.op} ${_l.value} ${_l.objective}`);
-
-                    if (!_op.former || !_op.latter)
-                        calcStack.push(arg2);
+                if (elem.value === '=') {
+                    resFormulas.push(`scoreboard players operation ${arg1.value} ${arg1.objective} = ${arg2.value} ${arg2.objective}`);
+                } else {
+                    resFormulas.push(`scoreboard players operation ${arg2.value} ${arg2.objective} ${elem.value}= ${arg1.value} ${arg1.objective}`);
+                    calcStack.push(arg2);
                 }
                 break;
         }
