@@ -86,12 +86,12 @@
 			"explorer/context": [
 				{
 					"command": "mcdutil.commands.createFile",
-					"when": "explorerResourceIsFolder == true && showContextMenu == true",
+					"when": "explorerResourceIsFolder == true && mcdutil.showContextMenu == true",
 					"group": "navigation@4"
 				},
 				{
 					"command": "mcdutil.commands.copyResourcePath",
-					"when": "explorerResourceIsFolder == false && showContextMenu == true",
+					"when": "explorerResourceIsFolder == false && mcdutil.showContextMenu == true",
 					"group": "6_copypath@31"
 				}
 			],
