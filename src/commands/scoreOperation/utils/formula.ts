@@ -27,7 +27,7 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
 
         const back = formulaAnalyzer(exp, opTable, funcs);
 
-        if (op.identifier === '=' && typeof back !== 'string')
+        if (op.identifier.endsWith('=') && typeof back !== 'string')
             return { front, op, back: back.front };
         if (typeof back === 'string' || !(back.op.order < op.order ||
             (back.op.order === op.order && op.assocLow === 'R')))
@@ -76,7 +76,7 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
     let _str: string;
 
     // exp =    f( f( f( 1 , 2 ) , f( 3 , 4 ) ) , 5 )
-    // nested = ["f(" "f(" "1" "," "2" ")" "," "f(" "3" "," "4" ")" ")" "," "5"]
+    // nested = ['f('  'f('  '1'  ','  '2'  ')'  ','  'f('  '3'  ','  '4'  ')'  ')'  ','  '5']
     let i = 0;
     while (i < func.arity - 1) {
         separation.new = nested.indexOf(',', separation.old);

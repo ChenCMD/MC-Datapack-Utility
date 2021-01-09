@@ -106,6 +106,41 @@ export const opTable: OperateTable = {
         assocLow: 'R',
         fn: (_l: number | string, _r: number | string): string => `${_l} = ${_r}`
     },
+    '+=': {
+        identifier: '+=',
+        order: 3,
+        type: 'op',
+        arity: 2,
+        assocLow: 'R'
+    },
+    '-=': {
+        identifier: '-=',
+        order: 3,
+        type: 'op',
+        arity: 2,
+        assocLow: 'R'
+    },
+    '*=': {
+        identifier: '*=',
+        order: 3,
+        type: 'op',
+        arity: 2,
+        assocLow: 'R'
+    },
+    '/=': {
+        identifier: '/=',
+        order: 3,
+        type: 'op',
+        arity: 2,
+        assocLow: 'R'
+    },
+    '%=': {
+        identifier: '%=',
+        order: 3,
+        type: 'op',
+        arity: 2,
+        assocLow: 'R'
+    },
     'if(': {
         identifier: 'if(',
         order: 18,
