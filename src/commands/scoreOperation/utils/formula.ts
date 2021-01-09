@@ -27,8 +27,10 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
 
         const back = formulaAnalyzer(exp, opTable, funcs);
 
-        if (op.identifier.endsWith('=') && typeof back !== 'string')
-            return { front, op, back: back.front };
+        // 最後に = の処理を行うので、v = f を f = v の形にする。
+        if (op.identifier.endsWith('='))
+            return { front: back, op, back: front };
+
         if (typeof back === 'string' || !(back.op.order < op.order ||
             (back.op.order === op.order && op.assocLow === 'R')))
             return { front, op, back };

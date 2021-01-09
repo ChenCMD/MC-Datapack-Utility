@@ -33,15 +33,7 @@ export async function scoreOperation(): Promise<void> {
         }
 
         const ifStates: IfFormula[] = [];
-        // 最後に = の処理を行うので、v = f を f = v の形にする。
-        // ['v', '=', 'f'] => ['v', '=', 'f', '='] => ['=', 'f', '=', 'v'] => ['f', '=', 'v']
-        const nicerExp = text.split(' ');
-        nicerExp.push(nicerExp[1]);
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        nicerExp.push(nicerExp.shift()!);
-        nicerExp.shift();
-
-        const formula = formulaAnalyzer(nicerExp, operateTable, ifStates);
+        const formula = formulaAnalyzer(text.split(' '), operateTable, ifStates);
         const result = await rpnToScoreOperation(formula, config.scoreOperation, ifStates, operateTable);
         if (!result) return;
 
