@@ -113,8 +113,8 @@ export async function rpnToScoreOperation(formula: Formula | string, config: Sco
                     arg2.value = `${prefix}${temp}${tempCount}`;
                 }
 
-                if (elem.value === '=') {
-                    resFormulas.push(`scoreboard players operation ${arg1.value} ${arg1.objective} = ${arg2.value} ${arg2.objective}`);
+                if (elem.value.endsWith('=')) {
+                    resFormulas.push(`scoreboard players operation ${arg1.value} ${arg1.objective} ${elem.value} ${arg2.value} ${arg2.objective}`);
                 } else {
                     resFormulas.push(`scoreboard players operation ${arg2.value} ${arg2.objective} ${elem.value}= ${arg1.value} ${arg1.objective}`);
                     calcStack.push(arg2);

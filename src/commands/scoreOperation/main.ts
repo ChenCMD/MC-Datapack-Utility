@@ -33,8 +33,7 @@ export async function scoreOperation(): Promise<void> {
         }
 
         const ifStates: IfFormula[] = [];
-        // 最後に代入を行うので、v = f を f = v の形にする。
-        const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = ').split(' '), operateTable, ifStates);
+        const formula = formulaAnalyzer(text.split(' '), operateTable, ifStates);
         const result = await rpnToScoreOperation(formula, config.scoreOperation, ifStates, operateTable);
         if (!result) return;
 
