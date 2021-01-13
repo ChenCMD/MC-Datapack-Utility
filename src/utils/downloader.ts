@@ -29,7 +29,7 @@ export async function getGitHubData(data: AskGitHubData): Promise<ReposGetConten
             ref: data.ref,
             path: data.path
         }) as unknown as OctokitResponse<ReposGetContentResponseData[]>,
-        setTimeOut<OctokitResponse<ReposGetContentResponseData[]>>(7000)
+        setTimeOut(7000)
     ]);
     return files.data;
 }

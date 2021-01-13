@@ -1,7 +1,6 @@
 import { Formula, IfFormula } from '../types/Formula';
-import { identifierToOperate, ssft } from '.';
 import { locale } from '../../../locales';
-import { OperateElement, OperateTable } from '../types/OperateTable';
+import { OperateTable } from '../types/OperateTable';
 import { config } from '../../../extension';
 import { GenerateError, ParsingError } from '../../../types/Error';
 import { ConditionExp, conditionExpTable } from '../types/ConditionExpTable';
@@ -11,25 +10,27 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
     if (!first)
         throw new GenerateError(locale('formula-to-score-operation.illegal-formula'));
 
-    let func: OperateElement | undefined;
-    for (const e of opTable.table) {
-        if (e.identifier === first)
-            func = e;
-    }
+    const func = opTable[first];
 
     // firstがopTableに登録されていなければ、ただの文字列であると考える
     if (!func) {
         const scale = config.scoreOperation.valueScale;
-        const front = (scale === 1) ? first : { front: first, op: identifierToOperate('*', opTable), back: scale.toString() };
+        const front = (scale === 1) ? first : { front: first, op: opTable['*'], back: scale.toString() };
         // 数値と文字の値
         if (!exp[0])
             return front;
 
-        const op = identifierToOperate(exp.shift() ?? '', opTable);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        const toBeOp = exp.shift()!;
+        const op = opTable[toBeOp];
+        if (!op) throw new GenerateError(locale('formula-to-score-operation.not-exist-operate', toBeOp));
+
         const back = formulaAnalyzer(exp, opTable, funcs);
 
-        if (op.identifier === '=' && typeof back !== 'string')
-            return { front, op, back: back.front };
+        // 最後に = の処理を行うので、v = f を f = v の形にする。
+        if (op.identifier.endsWith('='))
+            return { front: back, op, back: front };
+
         if (typeof back === 'string' || !(back.op.order < op.order ||
             (back.op.order === op.order && op.assocLow === 'R')))
             return { front, op, back };
@@ -54,7 +55,13 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
             exp = exp.slice(lastClose + 1);
 
             if (!exp[0]) return formulaAnalyzer(sub, opTable, funcs);
-            return { front: formulaAnalyzer(sub, opTable, funcs), op: identifierToOperate(exp.shift() ?? '', opTable), back: formulaAnalyzer(exp, opTable, funcs) };
+
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            const toBeOp = exp.shift()!;
+            const op = opTable[toBeOp];
+            if (!op) throw new GenerateError(locale('formula-to-score-operation.not-exist-operate', toBeOp));
+
+            return { front: formulaAnalyzer(sub, opTable, funcs), op: op, back: formulaAnalyzer(exp, opTable, funcs) };
         case ')':
             // '('がなければエラー
             throw new ParsingError(locale('too-much', '\')\''));
@@ -71,7 +78,7 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
     let _str: string;
 
     // exp =    f( f( f( 1 , 2 ) , f( 3 , 4 ) ) , 5 )
-    // nested = ["f(" "f(" "1" "," "2" ")" "," "f(" "3" "," "4" ")" ")" "," "5"]
+    // nested = ['f('  'f('  '1'  ','  '2'  ')'  ','  'f('  '3'  ','  '4'  ')'  ')'  ','  '5']
     let i = 0;
     while (i < func.arity - 1) {
         separation.new = nested.indexOf(',', separation.old);
@@ -101,7 +108,13 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
 
     if (!exp[0])
         return formulaAnalyzer(_exp, opTable, funcs);
-    return { front: formulaAnalyzer(_exp, opTable, funcs), op: identifierToOperate(exp.shift() ?? '', opTable), back: formulaAnalyzer(exp, opTable, funcs) };
+
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const toBeOp = exp.shift()!;
+    const op = opTable[toBeOp];
+    if (!op) throw new GenerateError(locale('formula-to-score-operation.not-exist-operate', toBeOp));
+
+    return { front: formulaAnalyzer(_exp, opTable, funcs), op, back: formulaAnalyzer(exp, opTable, funcs) };
 }
 
 function formulaToString(formula: Formula | string): string {
@@ -121,8 +134,8 @@ function conditionAssembling(exp: string[], isTrue: boolean, opTable: OperateTab
     }
     let spliter = 0;
     for (let i = 0; i < exp.length; i++) {
-        if (conditionExpTable.table[ssft(exp[i], conditionExpTable)])
+        if (conditionExpTable[exp[i]])
             spliter = i;
     }
-    return [{ front: formulaAnalyzer(exp.slice(0, spliter), opTable, funcs), op: conditionExpTable.table[ssft(exp[spliter], conditionExpTable)], back: formulaAnalyzer(exp.slice(spliter + 1), opTable, funcs), default: (exp[1] === '!=') ? !isTrue : isTrue }];
+    return [{ front: formulaAnalyzer(exp.slice(0, spliter), opTable, funcs), op: conditionExpTable[exp[spliter]], back: formulaAnalyzer(exp.slice(spliter + 1), opTable, funcs), default: (exp[1] === '!=') ? !isTrue : isTrue }];
 }
