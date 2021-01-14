@@ -1,3 +1,9 @@
+# [v1.5.0](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.4.3...v1.5.0) (2021-01-14)
+
+## ✨ New Features
+- [`326fad2`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/326fad2)  if文を記述可能に (#25) (Issues: [`#25`](https://github.com/ChenCMD/MC-Datapack-Utility/issues/25))
+- [`218426c`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/218426c)  +&#x3D;などを入力出来るように (#33) (Issues: [`#33`](https://github.com/ChenCMD/MC-Datapack-Utility/issues/33))
+
 # [v1.4.3](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.4.2...v1.4.3) (2020-12-06)
 
 ## 🐛 Bug Fixes
