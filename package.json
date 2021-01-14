@@ -43,6 +43,7 @@
 		"rfdc": "^1.1.4"
 	},
 	"activationEvents": [
+		"workspaceContains:**/pack.mcmeta",
 		"onCommand:mcdutil.commands.createDatapackTemplate",
 		"onCommand:mcdutil.commands.createFile",
 		"onCommand:mcdutil.commands.scoreOperation",
@@ -85,12 +86,12 @@
 			"explorer/context": [
 				{
 					"command": "mcdutil.commands.createFile",
-					"when": "explorerResourceIsFolder == true",
+					"when": "explorerResourceIsFolder == true && mcdutil.showContextMenu == true",
 					"group": "navigation@4"
 				},
 				{
 					"command": "mcdutil.commands.copyResourcePath",
-					"when": "explorerResourceIsFolder == false",
+					"when": "explorerResourceIsFolder == false && mcdutil.showContextMenu == true",
 					"group": "6_copypath@31"
 				}
 			],
@@ -200,37 +201,6 @@
 									"R"
 								],
 								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.assocLow%"
-							},
-							"axiom": {
-								"type": "array",
-								"items": {
-									"type": "object",
-									"required": [
-										"op"
-									],
-									"properties": {
-										"former": {
-											"type": "boolean",
-											"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.axiom.former%"
-										},
-										"op": {
-											"type": "string",
-											"enum": [
-												"*=",
-												"/=",
-												"%=",
-												"+=",
-												"-=",
-												"="
-											],
-											"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.axiom.op%"
-										},
-										"latter": {
-											"type": "boolean",
-											"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.axiom.latter%"
-										}
-									}
-								}
 							},
 							"destination": {
 								"type": "object",
