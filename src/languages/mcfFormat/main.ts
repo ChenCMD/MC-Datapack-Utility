@@ -5,31 +5,47 @@ export const mcfFormat: DocumentFormattingEditProvider = {
         const editQueue: TextEdit[] = [];
 
         let depth = 0;
-        let isLastNumSign = true;
+        let lastLineType: 'numSign' | 'blankLine' | 'other' = 'blankLine';
+
         for (let i = 0; i < document.lineCount; i++) {
             const line = document.lineAt(i);
             const lineText = line.text.slice(line.firstNonWhitespaceCharacterIndex);
-            
+
             if (lineText === '') {
                 depth--;
                 editQueue.push(TextEdit.delete(line.range));
-                isLastNumSign = true;
+                lastLineType = 'blankLine';
                 continue;
             }
 
             const firstClauseChar = lineText.slice(0, lineText.indexOf(' ')).split('');
 
-            const numSigns = firstClauseChar.filter(e => e === '#').length;
-            if (numSigns !== 0) {
-                depth = numSigns - 1;
-                editQueue.push(TextEdit.replace(line.range, `${(isLastNumSign)? '': '\n'}${'    '.repeat(Math.max(depth, 0))}${lineText}`));
-                isLastNumSign = true;
-            } else {
-                depth++;
-                editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth--, 0))}${lineText}`));
-                isLastNumSign = false;
+            // コメントについての処理
+            if (firstClauseChar.indexOf('#') !== -1) {
+                switch (firstClauseChar.filter(e => e !== '#').join('')) {
+                    case '':
+                    case '>':
+                        // 「# ～」や「## ～」の場合
+                        const numSigns = firstClauseChar.filter(e => e === '#').length;
+                        depth = numSigns - 1;
+                        editQueue.push(TextEdit.replace(line.range, `${(lastLineType === 'other') ? '\n' : ''}${'    '.repeat(Math.max(depth, 0))}${lineText}`));
+                        lastLineType = 'numSign';
+                        continue;
+
+                    case 'alias':
+                    case 'declare':
+                    case 'define':
+                        // 「#alias ～」「#declare ～」「#define ～」の場合x
+                        editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth, 0) + 1)}${lineText.trim()}`));
+                        lastLineType = 'numSign';
+                        continue;
+                }
             }
-        }
+
+            // その他、コマンドの処理
+            editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth + 1, 0))}${lineText.trim()}`));
+            lastLineType = 'other';
+		}
         return editQueue;
     }
 };
