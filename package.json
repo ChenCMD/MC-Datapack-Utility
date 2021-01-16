@@ -52,13 +52,10 @@
 	"contributes": {
 		"languages": [
 			{
-				"id": "mcfunction",
-				"extensions": [
-					"mcfunction"
-				],
-				"aliases": [
-					"Minecraft Function"
-				]
+                "id": "mcfunction",
+                "extensions": [
+                    ".mcfunction"
+                ]
 			}
 		],
 		"commands": [
