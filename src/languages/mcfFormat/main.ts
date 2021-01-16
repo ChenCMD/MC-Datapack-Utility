@@ -27,15 +27,15 @@ export const mcfFormat: DocumentFormattingEditProvider = {
                     case '>':
                         // 「# ～」や「## ～」の場合
                         const numSigns = firstClauseChar.filter(e => e === '#').length;
-                        depth = numSigns - 1;
-                        editQueue.push(TextEdit.replace(line.range, `${(lastLineType === 'other') ? '\n' : ''}${'    '.repeat(Math.max(depth, 0))}${lineText}`));
+                        depth = numSigns;
+                        editQueue.push(TextEdit.replace(line.range, `${(lastLineType === 'other') ? '\n' : ''}${'    '.repeat(Math.max(depth - 1, 0))}${lineText}`));
                         lastLineType = 'numSign';
                         continue;
 
                     case 'alias':
                     case 'declare':
                     case 'define':
-                        // 「#alias ～」「#declare ～」「#define ～」の場合x
+                        // 「#alias ～」「#declare ～」「#define ～」の場合
                         editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth, 0) + 1)}${lineText.trim()}`));
                         lastLineType = 'numSign';
                         continue;
@@ -43,9 +43,36 @@ export const mcfFormat: DocumentFormattingEditProvider = {
             }
 
             // その他、コマンドの処理
-            editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth + 1, 0))}${lineText.trim()}`));
+            let formatted = lineText.trim();
+
+            const fixing = (char: string) => {
+                let separator = formatted.indexOf(char);
+                while (separator !== -1) {
+                    if (!formatted.startsWith(`${char} `, separator)) {
+                        const front = formatted.substring(0, separator).split('');
+                        const back = formatted.substring(separator + 1).split('');
+
+                        if (((front.filter(e => e === '[').length - front.filter(e => e === ']').length > 0
+                            && back.filter(e => e === '[').length - back.filter(e => e === ']').length < 0) // Selector内である
+                            || (front.filter(e => e === '{').length - front.filter(e => e === '}').length > 0
+                                && back.filter(e => e === '{').length - back.filter(e => e === '}').length < 0)) // Compound間である
+                            && front.filter(e => e === '\'').length % 2 === 0
+                            && front.filter(e => e === '"').length % 2 === 0
+                            && front.filter(e => e === '\\"').length % 2 === 0
+                        )
+                            formatted = [...front, char, ' ', ...back].join('');
+                    }
+
+                    separator = formatted.indexOf(char, separator + 2);
+                }
+            };
+            fixing(',');
+            fixing(':');
+
+            editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth, 0))}${formatted}`));
             lastLineType = 'other';
-		}
+        }
+
         return editQueue;
     }
 };

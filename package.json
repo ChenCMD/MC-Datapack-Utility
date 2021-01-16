@@ -52,10 +52,10 @@
 	"contributes": {
 		"languages": [
 			{
-                "id": "mcfunction",
-                "extensions": [
-                    ".mcfunction"
-                ]
+				"id": "mcfunction",
+				"extensions": [
+					".mcfunction"
+				]
 			}
 		],
 		"commands": [
