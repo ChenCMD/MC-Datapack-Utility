@@ -4,15 +4,16 @@ export const mcfFormat: DocumentFormattingEditProvider = {
     provideDocumentFormattingEdits(document: TextDocument): TextEdit[] {
         const editQueue: TextEdit[] = [];
 
-        let depth = 0;
+        const depth = [];
         let lastLineType: 'numSign' | 'blankLine' | 'other' = 'blankLine';
 
         for (let i = 0; i < document.lineCount; i++) {
             const line = document.lineAt(i);
             const lineText = line.text.slice(line.firstNonWhitespaceCharacterIndex);
 
+            // 改行
             if (lineText === '') {
-                depth--;
+                depth.shift();
                 editQueue.push(TextEdit.delete(line.range));
                 lastLineType = 'blankLine';
                 continue;
@@ -25,10 +26,9 @@ export const mcfFormat: DocumentFormattingEditProvider = {
                 switch (firstClauseChar.filter(e => e !== '#').join('')) {
                     case '':
                     case '>':
-                        // 「# ～」や「## ～」の場合
-                        const numSigns = firstClauseChar.filter(e => e === '#').length;
-                        depth = numSigns;
-                        editQueue.push(TextEdit.replace(line.range, `${(lastLineType === 'other') ? '\n' : ''}${'    '.repeat(Math.max(depth - 1, 0))}${lineText}`));
+                        // 「# ～」や「## ～」、「#> ～」の場合
+                        depth.push(firstClauseChar.filter(e => e === '#').join(''));
+                        editQueue.push(TextEdit.replace(line.range, `${(lastLineType === 'other') ? '\n' : ''}${'    '.repeat(Math.max(depth.length - 1, 0))}${lineText}`));
                         lastLineType = 'numSign';
                         continue;
 
@@ -36,14 +36,14 @@ export const mcfFormat: DocumentFormattingEditProvider = {
                     case 'declare':
                     case 'define':
                         // 「#alias ～」「#declare ～」「#define ～」の場合
-                        editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth, 0) + 1)}${lineText.trim()}`));
+                        editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth.length, 0) + 1)}${lineText.trim()}`));
                         lastLineType = 'numSign';
                         continue;
                 }
             }
 
             // その他、コマンドの処理(DHPがやってくれる)
-            editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth, 0))}${lineText.trim()}`));
+            editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth.length, 0))}${lineText.trim()}`));
             lastLineType = 'other';
         }
 
