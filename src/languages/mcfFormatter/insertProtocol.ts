@@ -1,6 +1,11 @@
 import { Position, Range, TextDocument, TextEdit } from 'vscode';
+import { config } from '../../extension';
 
 export function insertProtocol(document: TextDocument): TextEdit {
+    if (!config.mcfFormatter.doInsertIMPDocument)
+        // TODO 何もおこなわれない場合に関しての処理
+        return new TextEdit(new Range(0, 0, 0, 0), '');
+
     const path = document.uri.path.split(/\//g);
     const fileName = (path.pop() ?? '').replace('.mcfunction', '');
     path.push('');
