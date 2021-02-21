@@ -47,9 +47,21 @@
 		"onCommand:mcdutil.commands.createDatapackTemplate",
 		"onCommand:mcdutil.commands.createFile",
 		"onCommand:mcdutil.commands.scoreOperation",
-		"onCommand:mcdutil.commands.copyResourcePath"
+		"onCommand:mcdutil.commands.copyResourcePath",
+		"onLanguage:mcfunction"
 	],
 	"contributes": {
+		"languages": [
+			{
+				"id": "mcfunction",
+				"aliases": [
+					"Minecraft Function"
+				],
+				"extensions": [
+					"mcfunction"
+				]
+			}
+		],
 		"commands": [
 			{
 				"command": "mcdutil.commands.createDatapackTemplate",
