@@ -3,7 +3,7 @@ import { TextDocument, TextEdit } from 'vscode';
 export function insertIndent(document: TextDocument): TextEdit[] {
     const editQueue: TextEdit[] = [];
 
-    const depth: string[][] = [[]];
+    const depth: string[][] = [];
     let lastLineType: 'comment' | 'blankLine' | 'special' | 'command' = 'blankLine';
     let lastSigns = 0;
 
