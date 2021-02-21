@@ -1,60 +1,8 @@
 import { DocumentFormattingEditProvider, TextDocument, TextEdit } from 'vscode';
+import { insertIndent } from './insertIndent';
 
 export const mcfFormat: DocumentFormattingEditProvider = {
     provideDocumentFormattingEdits(document: TextDocument): TextEdit[] {
-        const editQueue: TextEdit[] = [];
-
-        const depth: string[][] = [[]];
-        let lastLineType: 'comment' | 'blankLine' | 'special' | 'command' = 'blankLine';
-        let lastSigns = 0;
-
-        for (let i = 0; i < document.lineCount; i++) {
-            const line = document.lineAt(i);
-            const lineText = line.text.slice(line.firstNonWhitespaceCharacterIndex);
-
-            // 改行
-            if (lineText === '') {
-                depth.shift();
-                editQueue.push(TextEdit.delete(line.range));
-                lastLineType = 'blankLine';
-                continue;
-            }
-
-            const firstClauseChar = lineText.slice(0, `${lineText} `.indexOf(' ')).split('');
-
-            // コメントについての処理
-            if (firstClauseChar.includes('#')) {
-                const commentOut = firstClauseChar.filter(e => e === '#');
-                switch (firstClauseChar.filter(e => e !== '#').join('')) {
-                    case '':
-                        // 「# ～」や「## ～」の場合
-                        if (lastLineType === 'comment' && commentOut.length === lastSigns)
-                            depth.push(commentOut);
-                        editQueue.push(TextEdit.replace(line.range, `${(lastLineType === 'command') ? '\n' : ''}${'    '.repeat(Math.max(depth.length - 1, 0))}${lineText}`));
-                        lastLineType = 'comment';
-                        continue;
-
-                    case 'declare':
-                    case 'define':
-                        // 「#alias ～」「#declare ～」「#define ～」の場合
-                        editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth.length, 0))}${lineText}`));
-                        lastLineType = 'special';
-                        continue;
-
-                    case '>':
-                        depth.clear();
-                        depth.push(commentOut);
-                        continue;
-                }
-
-                lastSigns = commentOut.length;
-            } else {
-                // その他、コマンドの処理(DHPがやってくれる)
-                editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth.length, 0))}${(lastLineType === 'special') ? '    ' : ''}${lineText}`));
-                lastLineType = 'command';
-            }
-        }
-
-        return editQueue;
+        return [...insertIndent(document)];
     }
 };
