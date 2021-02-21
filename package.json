@@ -575,6 +575,11 @@
 					},
 					"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 					"default": {}
+				},
+				"mcdutil.mcfFormatter.doInsertIMPDocument": {
+					"type": "boolean",
+					"markdownDescription": "%mcdutil.config.mcfFormatter.doInsertIMPDocument%",
+					"default": true
 				}
 			}
 		}

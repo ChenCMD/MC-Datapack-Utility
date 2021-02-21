@@ -9,6 +9,7 @@ export interface Config {
     scoreOperation: ScoreOperationConfig
     createDatapackTemplate: CreateDatapackTemplateConfig
     createFile: CreateFileConfig
+    mcfFormatter: McfFormatterConfig
 }
 
 export interface ScoreOperationConfig {
@@ -33,6 +34,10 @@ export interface CreateFileConfig {
     fileTemplate: Template
 }
 
+export interface McfFormatterConfig {
+    doInsertIMPDocument: boolean
+}
+
 export const defaultConfig: Config = {
     language: 'Default',
     dateFormat: 'm/dd HH:MM',
@@ -54,6 +59,9 @@ export const defaultConfig: Config = {
     },
     createFile: {
         fileTemplate: {}
+    },
+    mcfFormatter: {
+        doInsertIMPDocument: true
     }
 };
 
@@ -61,6 +69,7 @@ export function constructConfig(custom: WorkspaceConfiguration, base = defaultCo
     const scoreOperation = custom.scoreOperation || {};
     const createDatapackTemplate = custom.createDatapackTemplate || {};
     const createFile = custom.createFile || {};
+    const mcfFormatter = custom.mcfFormatter || {};
     const config = {
         language: custom.language || base.language,
         dateFormat: custom.dateFormat || base.dateFormat,
@@ -72,6 +81,9 @@ export function constructConfig(custom: WorkspaceConfiguration, base = defaultCo
         },
         createFile: {
             ...base.createFile, ...createFile
+        },
+        mcfFormatter: {
+            ...base.mcfFormatter, ...mcfFormatter
         }
     };
     console.log('config loaded.');
