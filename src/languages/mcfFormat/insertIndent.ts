@@ -1,6 +1,6 @@
 import { TextDocument, TextEdit } from 'vscode';
 
-export function insertIndent(document: TextDocument): TextEdit[] {
+export function insertIndent(document: TextDocument, indent: string): TextEdit[] {
     const editQueue: TextEdit[] = [];
 
     const depth: string[][] = [];
@@ -29,14 +29,14 @@ export function insertIndent(document: TextDocument): TextEdit[] {
                     // 「# ～」や「## ～」の場合
                     if (lastLineType === 'comment' && commentOut.length === lastSigns)
                         depth.push(commentOut);
-                    editQueue.push(TextEdit.replace(line.range, `${(lastLineType === 'command') ? '\n' : ''}${'    '.repeat(Math.max(depth.length - 1, 0))}${lineText}`));
+                    editQueue.push(TextEdit.replace(line.range, `${(lastLineType === 'command') ? '\n' : ''}${indent.repeat(Math.max(depth.length - 1, 0))}${lineText}`));
                     lastLineType = 'comment';
                     continue;
 
                 case 'declare':
                 case 'define':
                     // 「#alias ～」「#declare ～」「#define ～」の場合
-                    editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth.length, 0))}${lineText}`));
+                    editQueue.push(TextEdit.replace(line.range, `${indent.repeat(Math.max(depth.length, 0))}${lineText}`));
                     lastLineType = 'special';
                     continue;
 
@@ -49,7 +49,7 @@ export function insertIndent(document: TextDocument): TextEdit[] {
             lastSigns = commentOut.length;
         } else {
             // その他、コマンドの処理(DHPがやってくれる)
-            editQueue.push(TextEdit.replace(line.range, `${'    '.repeat(Math.max(depth.length, 0))}${(lastLineType === 'special') ? '    ' : ''}${lineText}`));
+            editQueue.push(TextEdit.replace(line.range, `${indent.repeat(Math.max(depth.length, 0))}${(lastLineType === 'special') ? indent : ''}${lineText}`));
             lastLineType = 'command';
         }
     }
