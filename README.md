@@ -1,6 +1,6 @@
 ![Banner](https://raw.githubusercontent.com/ChenCMD/MC-Datapack-Utility/master/images/banner.png)
 
-[![license](https://img.shields.io/github/license/ChenCMD/MC-Datapack-Utility)](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENCE)
+[![license](https://img.shields.io/github/license/ChenCMD/MC-Datapack-Utility)](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENSE)
 [![Version](https://img.shields.io/visual-studio-marketplace/v/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
 [![LastUpdate](https://img.shields.io/visual-studio-marketplace/last-updated/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
 [![Download](https://img.shields.io/visual-studio-marketplace/d/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
@@ -24,7 +24,7 @@ This extension provides several useful features for Datapack development.
 
 # Disclaimer
 
-> [MIT license](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENCE)
+> [MIT license](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENSE)
 
 While we do our best to prevent damage to our files, it is possible that under rare, unforeseeable circumstances files may become corrupted.
 We cannot be held responsible when this happens.
