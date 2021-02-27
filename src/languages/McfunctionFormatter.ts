@@ -1,9 +1,10 @@
-import { DocumentFormattingEditProvider, FormattingOptions, ProviderResult, TextDocument, TextEdit } from 'vscode';
+import { DocumentFormattingEditProvider, FormattingOptions, Position, ProviderResult, Range, TextDocument, TextEdit } from 'vscode';
+import { config } from '../extension';
 
 export class McfunctionFormatter implements DocumentFormattingEditProvider {
     provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions): ProviderResult<TextEdit[]> {
         const indent = option.insertSpaces ? ' '.repeat(option.tabSize) : '	';
-        return [...this.insertIndent(document, indent)];
+        return [this.insertProtocol(document), ...this.insertIndent(document, indent)];
     }
 
     private insertIndent(document: TextDocument, indent: string): TextEdit[] {
@@ -61,5 +62,30 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
         }
 
         return editQueue;
+    }
+
+    private insertProtocol(document: TextDocument): TextEdit {
+        if (!config.mcfFormatter.doInsertIMPDocument)
+            // TODO 何もおこなわれない場合に関しての処理
+            return new TextEdit(new Range(0, 0, 0, 0), '');
+    
+        const path = document.uri.path.split(/\//g);
+        const fileName = (path.pop() ?? '').replace('.mcfunction', '');
+        path.push('');
+    
+        const delivery = (filepath: string) => {
+            if (document.lineAt(0).text === filepath)
+                // TODO 何もおこなわれない場合に関しての処理
+                return new TextEdit(new Range(0, 0, 0, 0), '');
+    
+            return TextEdit.insert(new Position(0, 0), `${filepath}\n\n`);
+        };
+    
+        const index = path.indexOf('functions');
+    
+        if (index === -1 || path[index - 2] !== 'data')
+            return delivery(`#> minecraft:${fileName}`);
+    
+        return delivery(`#> ${path[index - 1]}:${path.slice(index + 1).join('/')}${fileName}`);
     }
 }
