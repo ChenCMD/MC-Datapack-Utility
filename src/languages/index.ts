@@ -1,1 +1,1 @@
-export * from './mcfFormatter/main';
+export * from './McfunctionFormatter';
