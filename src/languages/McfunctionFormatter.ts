@@ -1,4 +1,5 @@
 import { DocumentFormattingEditProvider, FormattingOptions, ProviderResult, TextDocument, TextEdit } from 'vscode';
+import { StringReader } from '../utils/StringReader';
 
 export class McfunctionFormatter implements DocumentFormattingEditProvider {
     provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions): ProviderResult<TextEdit[]> {
@@ -15,34 +16,37 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
         for (let i = 0; i < document.lineCount; i++) {
             const line = document.lineAt(i);
-            const lineText = line.text.slice(line.firstNonWhitespaceCharacterIndex);
-
             // 改行
-            if (lineText === '') {
+            if (line.isEmptyOrWhitespace) {
                 depth.shift();
                 editQueue.push(TextEdit.delete(line.range));
                 lastLineType = 'blankLine';
                 continue;
             }
 
-            const firstClauseChar = lineText.slice(0, `${lineText} `.indexOf(' ')).split('');
+            const lineText = new StringReader(line.text);
+
+            lineText.cursor = lineText.string.indexOf(' ');
+            const firstClauseChar = lineText.cursor === -1 ? lineText.string : lineText.passedString;
 
             // コメントについての処理
-            if (firstClauseChar.includes('#')) {
-                const commentOut = firstClauseChar.filter(e => e === '#');
-                switch (firstClauseChar.filter(e => e !== '#').join('')) {
+            if (firstClauseChar.startsWith('#')) {
+                const content = firstClauseChar.replace(/^#+/, '');
+
+                const commentOut = firstClauseChar.match(/^#+/) ?? [];
+                switch (content) {
                     case '':
                         // 「# ～」や「## ～」の場合
                         if (lastLineType === 'comment' && commentOut.length === lastSigns)
                             depth.push(commentOut);
-                        editQueue.push(TextEdit.replace(line.range, `${(lastLineType === 'command') ? '\n' : ''}${indent.repeat(Math.max(depth.length - 1, 0))}${lineText}`));
+                        editQueue.push(TextEdit.replace(line.range, `${lastLineType === 'command' ? '\n' : ''}${indent.repeat(Math.max(depth.length, 1) - 1)}${lineText.string}`));
                         lastLineType = 'comment';
                         continue;
 
                     case 'declare':
                     case 'define':
-                        // 「#alias ～」「#declare ～」「#define ～」の場合
-                        editQueue.push(TextEdit.replace(line.range, `${indent.repeat(Math.max(depth.length, 0))}${lineText}`));
+                        // 「#declare ～」「#define ～」の場合
+                        editQueue.push(TextEdit.replace(line.range, `${indent.repeat(Math.max(depth.length, 0))}${lineText.string}`));
                         lastLineType = 'special';
                         continue;
 
@@ -52,10 +56,11 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
                         continue;
                 }
 
+                // 前line の # の数を記憶し、次line と同じであれば 連続するコメント とみなす。
                 lastSigns = commentOut.length;
             } else {
-                // その他、コマンドの処理(DHPがやってくれる)
-                editQueue.push(TextEdit.replace(line.range, `${indent.repeat(Math.max(depth.length, 0))}${(lastLineType === 'special') ? indent : ''}${lineText}`));
+                // その他のコマンドの処理
+                editQueue.push(TextEdit.replace(line.range, `${indent.repeat(Math.max(depth.length, 0))}${lastLineType === 'special' ? indent : ''}${lineText.string}`));
                 lastLineType = 'command';
             }
         }
