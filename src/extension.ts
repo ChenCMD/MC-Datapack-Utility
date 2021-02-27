@@ -27,7 +27,7 @@ export function activate(context: ExtensionContext): void {
     disposable.push(commands.registerCommand('mcdutil.commands.scoreOperation', scoreOperation));
     disposable.push(commands.registerCommand('mcdutil.commands.copyResourcePath', copyResourcePath));
 
-    disposable.push(languages.registerDocumentFormattingEditProvider('mcfunction', McfunctionFormatter.f));
+    disposable.push(languages.registerDocumentFormattingEditProvider('mcfunction', new McfunctionFormatter));
 
     disposable.push(workspace.onDidChangeConfiguration(updateConfig));
 

@@ -1,12 +1,10 @@
-import { DocumentFormattingEditProvider, FormattingOptions, TextDocument, TextEdit } from 'vscode';
+import { DocumentFormattingEditProvider, FormattingOptions, ProviderResult, TextDocument, TextEdit } from 'vscode';
 
-export class McfunctionFormatter {
-    static f: DocumentFormattingEditProvider = {
-        provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions) {
-            const indent = option.insertSpaces ? ' '.repeat(option.tabSize) : '	';
-            return [...McfunctionFormatter.prototype.insertIndent(document, indent)];
-        }
-    };
+export class McfunctionFormatter implements DocumentFormattingEditProvider {
+    provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions): ProviderResult<TextEdit[]> {
+        const indent = option.insertSpaces ? ' '.repeat(option.tabSize) : '	';
+        return [...this.insertIndent(document, indent)];
+    }
 
     private insertIndent(document: TextDocument, indent: string): TextEdit[] {
         const editQueue: TextEdit[] = [];
