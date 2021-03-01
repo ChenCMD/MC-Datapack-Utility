@@ -1,6 +1,6 @@
 ![Banner](https://raw.githubusercontent.com/ChenCMD/MC-Datapack-Utility/master/images/banner.png)
 
-[![license](https://img.shields.io/github/license/ChenCMD/MC-Datapack-Utility)](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENCE)
+[![license](https://img.shields.io/github/license/ChenCMD/MC-Datapack-Utility)](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENSE)
 [![Version](https://img.shields.io/visual-studio-marketplace/v/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
 [![LastUpdate](https://img.shields.io/visual-studio-marketplace/last-updated/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
 [![Download](https://img.shields.io/visual-studio-marketplace/d/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
@@ -11,20 +11,20 @@ English / [日本語](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master
 
 This extension provides several useful features for Datapack development.
 
-- [Disclaimer](#Disclaimer)
-- [How to Install](#How-to-Install)
-- [Features](#Features)
-  - [Creating a datapack template](#Creating-a-datapack-template)
-  - [Copy resourcePath](#Copy-resourcePath)
-  - [Quick file creation](#Quick-file-creation)
-  - [Converting formulas to score operation](#Converting-formulas-to-score-operation)
-- [Recommendations](#Recommendations)
-- [Special Thanks](#Special-Thanks)
-- [Contribution](#Contribution)
+- [Disclaimer](#disclaimer)
+- [How to Install](#how-to-install)
+- [Features](#features)
+  - [Creating a datapack template](#creating-a-datapack-template)
+  - [Copy resourcePath](#copy-resourcepath)
+  - [Quick file creation](#quick-file-creation)
+  - [Converting formulas to score operation](#converting-formulas-to-score-operation)
+- [Recommendations](#recommendations)
+- [Special Thanks](#special-thanks)
+- [Contribution](#contribution)
 
 # Disclaimer
 
-> [MIT license](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENCE)
+> [MIT license](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENSE)
 
 While we do our best to prevent damage to our files, it is possible that under rare, unforeseeable circumstances files may become corrupted.
 We cannot be held responsible when this happens.
@@ -94,26 +94,4 @@ I'd like to take this opportunity to thank you.
 
 # Contribution
 
-## I have bugs or ideas!
-
-[Open Issue](https://github.com/ChenCMD/MC-Datapack-Utility/issues/new) and share it with us!
-
-Only one bug/idea in one Issue, and if it's a bug, create it with useful information to reproduce or fix!
-
-## Localization
-
-MC Datapack Utility supports multiple languages.
-MCDU would be much better if you could translate this project into your language.
-
-We are using the [SPGoding](https://github.com/SPGoding) website together for translation.
-
-#### Steps
-1. Go to the [localization website](https://l10n.spgoding.com/).
-1. [Register](https://l10n.spgoding.com/accounts/register) by linking your GitHub account (recommended), or using your email.
-    - Note that the username and email will be shown in the repository's git commit log. If you don't feel like you want to disclose your own email address, feel free to [contact SPGoding](https://github.com/SPGoding/datapack-language-server/wiki/Contact-SPGoding) to get an account with a fake email address.
-1. See two components of MCDU [here](https://l10n.spgoding.com/projects/mc-datapack-utility).
-1. Start translating!
-
-#### Note
-- If your language is not listed on the platform, simply contact [ChenCMD](https://github.com/ChenCMD/MC-Datapack-Utility/wiki/Contact);
-- If you have suggestions for the source string (en-us), please [open an issue](https://github.com/ChenCMD/MC-Datapack-Utility/issues/new).
+Please check [CONTRIBUTING.md](CONTRIBUTING.md) if you have any bugs or requests for this extension, or if you want to help translating it into other languages!

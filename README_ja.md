@@ -1,6 +1,6 @@
 ![Banner](https://raw.githubusercontent.com/ChenCMD/MC-Datapack-Utility/master/images/banner.png)
 
-[![license](https://img.shields.io/github/license/ChenCMD/MC-Datapack-Utility)](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENCE)
+[![license](https://img.shields.io/github/license/ChenCMD/MC-Datapack-Utility)](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENSE)
 [![Version](https://img.shields.io/visual-studio-marketplace/v/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
 [![LastUpdate](https://img.shields.io/visual-studio-marketplace/last-updated/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
 [![Download](https://img.shields.io/visual-studio-marketplace/d/chencmd.mc-datapack-utility?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=chencmd.mc-datapack-utility)
@@ -19,12 +19,12 @@
   - [素早いファイルの作成](#素早いファイルの作成)
   - [計算式のscore operationへの変換](#計算式のscore-operationへの変換)
 - [推奨事項](#推奨事項)
-- [Special Thanks](#Special-Thanks)
+- [Special Thanks](#special-thanks)
 - [コントリビュートについて](#コントリビュートについて)
 
 # 免責事項
 
-> [MITライセンス](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENCE)
+> [MITライセンス](https://github.com/ChenCMD/MC-Datapack-Utility/blob/master/LICENSE)
 
 私たちはファイルが破損しないように最善を尽くしていますが、想定しえない極稀な状況下でファイルが破損する可能性があり得ます。
 発生した際に私たちは責任をとることはできません。
@@ -94,27 +94,4 @@ VSCodeでDatapackを作成する際は[Datapack Helper Plus](https://marketplace
 
 # コントリビュートについて
 
-## バグやアイディアがあります！
-
-[Issueを開いて](https://github.com/ChenCMD/MC-Datapack-Utility/issues/new)それを共有してください！
-
-一つのIssueには一つのバグ/アイディアのみを入れ、バグの場合は再現や修正に有用な情報を入れて作成してください！
-
-## MC Datapack Utilityを翻訳したい！
-
-MC Datapack Utilityは複数の言語をサポートしています。
-このプロジェクトをあなたの言語に翻訳していただけたらMCDUはもっといいものになると思います。
-
-また、[SPGoding](https://github.com/SPGoding)の翻訳用のウェブサイトを一緒に使わせていただいてます。
-
-#### ステップ
-1. [翻訳用のウェブサイト](https://l10n.spgoding.com/)に行く
-1. GitHubアカウント(推奨)もしくはメールアドレスで登録する
-    - ユーザー名とメールアドレスはリポジトリのcommitログに表示されることに注意してください。
-    メールアドレスを公開したくない場合[SPGoding](https://github.com/SPGoding/datapack-language-server/wiki/Contact-SPGoding)に連絡して偽のメールアドレスのアカウントを取得してください。
-1. [ここ](https://l10n.spgoding.com/projects/mc-datapack-utility)でMCDUの二つのコンポーネントを参照してください。
-1. 翻訳を始めましょう！
-
-#### 注意
-- 翻訳したい言語がプラットフォームにリストされていない場合は、[ChenCMD](https://github.com/ChenCMD/MC-Datapack-Utility/wiki/Contact)に連絡をお願いします。
-- `en-us`の翻訳に提案がある場合は、[Issueを作って](https://github.com/ChenCMD/MC-Datapack-Utility/issues/new)ください
+もしこの拡張機能にバグや要望がある場合や他言語への翻訳を手伝っていただける場合は[CONTRIBUTING.md](CONTRIBUTING_ja.md)を確認してください！
