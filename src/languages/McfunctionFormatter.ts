@@ -1,5 +1,7 @@
 import { DocumentFormattingEditProvider, FormattingOptions, Position, ProviderResult, Range, TextDocument, TextEdit } from 'vscode';
 import { config } from '../extension';
+import { Deque } from '../types/Deque';
+import { StringReader } from '../utils/StringReader';
 
 export class McfunctionFormatter implements DocumentFormattingEditProvider {
     provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions): ProviderResult<TextEdit[]> {
@@ -10,54 +12,54 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
     private insertIndent(document: TextDocument, indent: string): TextEdit[] {
         const editQueue: TextEdit[] = [];
 
-        const depth: string[][] = [];
+        const depth = new Deque<number>();
         let lastLineType: 'comment' | 'blankLine' | 'special' | 'command' = 'blankLine';
-        let lastSigns = 0;
 
         for (let i = 0; i < document.lineCount; i++) {
             const line = document.lineAt(i);
-            const lineText = line.text.slice(line.firstNonWhitespaceCharacterIndex);
-
             // 改行
-            if (lineText === '') {
-                depth.shift();
+            if (line.isEmptyOrWhitespace) {
+                if (depth.size() > 0)
+                    depth.removeLast();
                 editQueue.push(TextEdit.delete(line.range));
                 lastLineType = 'blankLine';
                 continue;
             }
 
-            const firstClauseChar = lineText.slice(0, `${lineText} `.indexOf(' ')).split('');
+            const lineText = new StringReader(line.text, 0, line.text.indexOf(' '));
+            
+            while (lineText.peek() === '#') lineText.skip();
+            
+            // コマンドについての処理
+            if (lineText.cursor === 0) {
+                editQueue.push(TextEdit.replace(line.range, `${indent.repeat(depth.size())}${lastLineType === 'special' ? indent : ''}${lineText.string}`));
+                lastLineType = 'command';
+                continue;
+            }
 
             // コメントについての処理
-            if (firstClauseChar.includes('#')) {
-                const commentOut = firstClauseChar.filter(e => e === '#');
-                switch (firstClauseChar.filter(e => e !== '#').join('')) {
-                    case '':
-                        // 「# ～」や「## ～」の場合
-                        if (lastLineType === 'comment' && commentOut.length === lastSigns)
-                            depth.push(commentOut);
-                        editQueue.push(TextEdit.replace(line.range, `${(lastLineType === 'command') ? '\n' : ''}${indent.repeat(Math.max(depth.length - 1, 0))}${lineText}`));
-                        lastLineType = 'comment';
-                        continue;
+            const commentOut = lineText.passedString.length;
+            switch (lineText.remainingString) {
+                case '':
+                    // 「# ～」や「## ～」の場合
+                    if (lastLineType === 'comment' && commentOut === depth.getLast())
+                        // 前line の # の数を記憶し、次line と同じであれば 連続するコメント とみなす。
+                        depth.addLast(commentOut);
+                    editQueue.push(TextEdit.replace(line.range, `${lastLineType === 'command' ? '\n' : ''}${indent.repeat(Math.max(depth.size() - 1, 0))}${lineText.string}`));
+                    lastLineType = 'comment';
+                    continue;
 
-                    case 'declare':
-                    case 'define':
-                        // 「#alias ～」「#declare ～」「#define ～」の場合
-                        editQueue.push(TextEdit.replace(line.range, `${indent.repeat(Math.max(depth.length, 0))}${lineText}`));
-                        lastLineType = 'special';
-                        continue;
+                case 'declare':
+                case 'define':
+                    // 「#declare ～」「#define ～」の場合
+                    editQueue.push(TextEdit.replace(line.range, `${indent.repeat(depth.size())}${lineText.string}`));
+                    lastLineType = 'special';
+                    continue;
 
-                    case '>':
-                        depth.clear();
-                        depth.push(commentOut);
-                        continue;
-                }
-
-                lastSigns = commentOut.length;
-            } else {
-                // その他、コマンドの処理(DHPがやってくれる)
-                editQueue.push(TextEdit.replace(line.range, `${indent.repeat(Math.max(depth.length, 0))}${(lastLineType === 'special') ? indent : ''}${lineText}`));
-                lastLineType = 'command';
+                case '>':
+                    depth.clear();
+                    depth.addLast(commentOut);
+                    continue;
             }
         }
 
