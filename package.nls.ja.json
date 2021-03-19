@@ -19,9 +19,6 @@
     "mcdutil.config.scoreOperation.customOperate.type": "タイプ(\"fn\"しか指定しないでください！)",
     "mcdutil.config.scoreOperation.customOperate.arity": "引数の数(例えば、\"+\"の引数は 2 です)",
     "mcdutil.config.scoreOperation.customOperate.assocLow": "\"L\": 左結合\n\"R\": 右結合",
-    "mcdutil.config.scoreOperation.customOperate.axiom.former": "式は\" 'arg1' 'identifier' 'arg2' \"の形で与えられ\n途中式は \"former\" \"op\" \"latter\" と定義される\n\nもしtrueなら、\"former\"は'arg1'とされ、\nもしfalseなら、\"former\"は'arg2'とされる",
-    "mcdutil.config.scoreOperation.customOperate.axiom.op": "式は\" 'arg1' 'identifier' 'arg2' \"の形で与えられ\n途中式は \"former\" \"op\" \"latter\" と定義される\n\n\"*=\" か \"/=\" か \"%=\" か \"+=\" か \"-=\" か \"=\" から選択する",
-    "mcdutil.config.scoreOperation.customOperate.axiom.latter": "式は\" 'arg1' 'identifier' 'arg2' \"の形で与えられ\n途中式は \"former\" \"op\" \"latter\" と定義される\n\nもしtrueなら、\"latter\"は'arg2'とされ、\nもしfalseなら、\"latter\"は'arg1'とされる",
     "mcdutil.config.scoreOperation.customOperate.destination": "もしあなたが関数を追加したいとき、この設定を行うとともに、この演算子の識別子(\"identifier\")を正規表現「\"/\\S+\\(/\"」にマッチさせてください",
     "mcdutil.config.scoreOperation.customOperate.destination.args": "namelyのものに置換するときに用いる仮の数(個数は\"arity\"の数)",
     "mcdutil.config.scoreOperation.customOperate.destination.namely": "argsで設定されたものと、四則演算やカスタム演算子テーブル内で定義された演算で表された別の式",
@@ -43,5 +40,6 @@
     "mcdutil.config.createDatapackTemplate.defaultLoadAndTick": "`#load`と`#tick`のテンプレートを選択画面に表示するか否か",
     "mcdutil.config.createDatapackTemplate.defaultVanillaData": "vanillaの`tags/~`のテンプレートを選択画面に表示するか否か",
     "mcdutil.config.createDatapackTemplate.defaultFolder": "`advancements/`, `loot_tables/` 等のテンプレートを選択画面に表示するか否か",
-    "mcdutil.config.createFile.fileTemplate": "**データパックファイルを作成する**: ファイルの生成時に記載されている内容 (ファイル種毎に設定が可能です)"
+    "mcdutil.config.createFile.fileTemplate": "**データパックファイルを作成する**: ファイルの生成時に記載されている内容 (ファイル種毎に設定が可能です)",
+    "mcdutil.config.mcfFormatter.doInsertIMPDocument": "**IMP-Docを挿入する**: フォーマットをおこなう際にファイル頭にIMP-Docを挿入します。Data-pack Helper Plusとの併用をおすすめします。"
 }

@@ -6,19 +6,18 @@ import { formulaAnalyzer } from './utils/formula';
 import { locale } from '../../locales';
 import { opTable } from './types/OperateTable';
 import { NotOpenTextDocumentError, UserCancelledError } from '../../types/Error';
+import { IfFormula } from './types/Formula';
+import rfdc from 'rfdc';
 
 export async function scoreOperation(): Promise<void> {
-    const { prefix, objective, temp, forceInputType, isAlwaysSpecifyObject } = config.scoreOperation;
+    const { objective, forceInputType } = config.scoreOperation;
     try {
         const editor = getTextEditor();
 
-        const customOperate = config.scoreOperation.customOperate;
-        if (customOperate.length !== 0) {
-            for (const e of customOperate) {
-                opTable.table.push(e);
-                opTable.identifiers.push(e.identifier);
-            }
-        }
+        const operateTable = rfdc()(opTable);
+        config.scoreOperation.customOperate.forEach(e => {
+            operateTable[e.identifier] = e;
+        });
 
         let text = '';
         if (forceInputType !== 'Always InputBox') text = editor.document.getText(editor.selection);
@@ -33,8 +32,9 @@ export async function scoreOperation(): Promise<void> {
             text = res;
         }
 
-        const formula = formulaAnalyzer(text.split(' = ').reverse().join(' = '), opTable);
-        const result = await rpnToScoreOperation(formula, prefix, objective, temp, isAlwaysSpecifyObject);
+        const ifStates: IfFormula[] = [];
+        const formula = formulaAnalyzer(text.split(' '), operateTable, ifStates);
+        const result = await rpnToScoreOperation(formula, config.scoreOperation, ifStates, operateTable);
         if (!result) return;
 
         const { resValues, resFormulas } = result;

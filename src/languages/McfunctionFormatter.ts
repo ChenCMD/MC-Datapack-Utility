@@ -1,11 +1,13 @@
-import { DocumentFormattingEditProvider, FormattingOptions, ProviderResult, TextDocument, TextEdit } from 'vscode';
+import { DocumentFormattingEditProvider, FormattingOptions, Position, TextDocument, TextEdit } from 'vscode';
+import { config } from '../extension';
 import { Deque } from '../types/Deque';
+import { getDatapackRoot, getResourcePath } from '../utils/common';
 import { StringReader } from '../utils/StringReader';
 
 export class McfunctionFormatter implements DocumentFormattingEditProvider {
-    provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions): ProviderResult<TextEdit[]> {
+    async provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions): Promise<TextEdit[]> {
         const indent = option.insertSpaces ? ' '.repeat(option.tabSize) : '	';
-        return [...this.insertIndent(document, indent)];
+        return [...await this.insertProtocol(document), ...this.insertIndent(document, indent)];
     }
 
     private insertIndent(document: TextDocument, indent: string): TextEdit[] {
@@ -28,7 +30,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
             const lineText = new StringReader(line.text.trim(), 0, line.text.trim().indexOf(' '));
             
             while (lineText.peek() === '#') lineText.skip();
-            
+
             // コマンドについての処理
             if (lineText.cursor === 0) {
                 editQueue.push(TextEdit.replace(line.range, `${indent.repeat(depth.size())}${lastLineType === 'special' ? indent : ''}${lineText.string}`));
@@ -63,5 +65,25 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
         }
 
         return editQueue;
+    }
+
+    private async insertProtocol(document: TextDocument): Promise<TextEdit[]> {
+        const delivery = (filepath: string): TextEdit[] => {
+            if (document.lineAt(0).text !== `#> ${filepath}`)
+                return [TextEdit.insert(new Position(0, 0), `#> ${filepath}\n\n`)];
+
+            // TODO 何もおこなわれない場合に関しての処理
+            return [];
+        };
+
+        if (!config.mcfFormatter.doInsertIMPDocument)
+            return [];
+        
+        const rootPath = await getDatapackRoot(document.uri.fsPath);
+
+        if (!rootPath)
+            return delivery(`:${document.fileName.slice(document.fileName.lastIndexOf('\\\\')).replace('.mcfunction', '')}`);
+
+        return delivery(`${getResourcePath(document.uri.fsPath, rootPath, 'function')}`);
     }
 }

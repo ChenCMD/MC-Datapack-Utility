@@ -32,6 +32,9 @@ export function activate(context: ExtensionContext): void {
     disposable.push(workspace.onDidChangeConfiguration(updateConfig));
 
     context.subscriptions.push(...disposable);
+
+    // 拡張機能がアクティベートされた時にコンテキストメニューの項目を表示する
+    commands.executeCommand('setContext', 'mcdutil.showContextMenu', true);
 }
 
 function updateConfig(event: ConfigurationChangeEvent) {
