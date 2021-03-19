@@ -25,7 +25,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
                 continue;
             }
 
-            const lineText = new StringReader(line.text, 0, line.text.indexOf(' '));
+            const lineText = new StringReader(line.text.trim(), 0, line.text.trim().indexOf(' '));
             
             while (lineText.peek() === '#') lineText.skip();
             
