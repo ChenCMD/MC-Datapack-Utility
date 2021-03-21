@@ -16,8 +16,11 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
         const depth = new Deque<number>();
         let lastLineType: 'comment' | 'blankLine' | 'special' | 'command' = 'blankLine';
 
-        for (let i = 0; i < document.lineCount; i++) {
-            const line = document.lineAt(i);
+        const lineText = new StringReader(' ');
+
+        for (let lineCount = 0; lineCount < document.lineCount; lineCount++) {
+            const line = document.lineAt(lineCount);
+
             // 改行
             if (line.isEmptyOrWhitespace) {
                 if (depth.size() > 0)
@@ -27,7 +30,9 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
                 continue;
             }
 
-            const lineText = new StringReader(line.text.trim(), 0, line.text.trim().indexOf(' '));
+            lineText.string = line.text.trim();
+            lineText.cursor = 0;
+            lineText.end = Math.max(lineText.string.indexOf(' '), 0);
             
             while (lineText.peek() === '#') lineText.skip();
 
@@ -43,24 +48,25 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
             switch (lineText.remainingString) {
                 case '':
                     // 「# ～」や「## ～」の場合
-                    if (lastLineType === 'comment' && commentOut === depth.getLast())
+                    if (!(lastLineType === 'comment' && commentOut === depth.getLast()))
                         // 前line の # の数を記憶し、次line と同じであれば 連続するコメント とみなす。
                         depth.addLast(commentOut);
                     editQueue.push(TextEdit.replace(line.range, `${lastLineType === 'command' ? '\n' : ''}${indent.repeat(Math.max(depth.size() - 1, 0))}${lineText.string}`));
                     lastLineType = 'comment';
-                    continue;
+                    break;
 
                 case 'declare':
                 case 'define':
                     // 「#declare ～」「#define ～」の場合
                     editQueue.push(TextEdit.replace(line.range, `${indent.repeat(depth.size())}${lineText.string}`));
                     lastLineType = 'special';
-                    continue;
+                    break;
 
                 case '>':
                     depth.clear();
                     depth.addLast(commentOut);
-                    continue;
+                    lastLineType = 'comment';
+                    break;
             }
         }
 
