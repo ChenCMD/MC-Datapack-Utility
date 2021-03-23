@@ -1,4 +1,5 @@
-import { DocumentFormattingEditProvider, FormattingOptions, Position, TextDocument, TextEdit } from 'vscode';
+import { DocumentFormattingEditProvider, FormattingOptions, Position, Range, TextDocument, TextEdit } from 'vscode';
+import { TextDocument as TextDoc } from 'vscode-languageserver-textdocument';
 import { config } from '../extension';
 import { Deque } from '../types/Deque';
 import { getDatapackRoot, getResourcePath } from '../utils/common';
@@ -6,68 +7,75 @@ import { StringReader } from '../utils/StringReader';
 
 export class McfunctionFormatter implements DocumentFormattingEditProvider {
     async provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions): Promise<TextEdit[]> {
-        const indent = option.insertSpaces ? ' '.repeat(option.tabSize) : '	';
+        const indent = option.insertSpaces ? ' '.repeat(option.tabSize) : '\t';
         return [...await this.insertProtocol(document), ...this.insertIndent(document, indent)];
     }
 
     private insertIndent(document: TextDocument, indent: string): TextEdit[] {
+        const textDoc = TextDoc.create(document.uri.toString(), document.languageId, document.version, document.getText());
+
         const editQueue: TextEdit[] = [];
 
         const depth = new Deque<number>();
         let lastLineType: 'comment' | 'blankLine' | 'special' | 'command' = 'blankLine';
 
-        const lineText = new StringReader(' ');
+        const docText = new StringReader(document.getText());
 
         for (let lineCount = 0; lineCount < document.lineCount; lineCount++) {
-            const line = document.lineAt(lineCount);
+            docText.skipSpace();
+            const lineStart = docText.cursor;
+            const line = docText.readLine();
+            const range = new Range(new Position(lineCount, 0), new Position(lineCount + 1, 0));
 
             // 改行
-            if (line.isEmptyOrWhitespace) {
+            if (line === '') {
                 if (depth.size() > 0)
                     depth.removeLast();
-                editQueue.push(TextEdit.delete(line.range));
+                editQueue.push(TextEdit.replace(range, '\n'));
                 lastLineType = 'blankLine';
+                docText.nextLine(textDoc);
                 continue;
             }
 
-            lineText.string = line.text.trim();
-            lineText.cursor = 0;
-            lineText.end = Math.max(lineText.string.indexOf(' '), 0);
-            
-            while (lineText.peek() === '#') lineText.skip();
+            docText.cursor = lineStart;
+
+            while (docText.peek() === '#') docText.skip();
+            const numSigns = docText.cursor - lineStart;
 
             // コマンドについての処理
-            if (lineText.cursor === 0) {
-                editQueue.push(TextEdit.replace(line.range, `${indent.repeat(depth.size())}${lastLineType === 'special' ? indent : ''}${lineText.string}`));
+            if (numSigns === 0) {
+                editQueue.push(TextEdit.replace(range, `\n${indent.repeat(depth.size())}${lastLineType === 'special' ? indent : ''}${line}`));
                 lastLineType = 'command';
+                docText.nextLine(textDoc);
                 continue;
             }
 
             // コメントについての処理
-            const commentOut = lineText.passedString.length;
-            switch (lineText.remainingString) {
+            switch (line.slice(docText.cursor - lineStart, line.indexOf(' '))) {
                 case '':
                     // 「# ～」や「## ～」の場合
-                    if (!(lastLineType === 'comment' && commentOut === depth.getLast()))
-                        // 前line の # の数を記憶し、次line と同じであれば 連続するコメント とみなす。
-                        depth.addLast(commentOut);
-                    editQueue.push(TextEdit.replace(line.range, `${lastLineType === 'command' ? '\n' : ''}${indent.repeat(Math.max(depth.size() - 1, 0))}${lineText.string}`));
+                    if (!(lastLineType === 'comment' && numSigns === depth.getLast()))
+                        // 前line の # の数を記憶し、現line と同じであれば 連続するコメント とみなす。
+                        depth.addLast(numSigns);
+                    editQueue.push(TextEdit.replace(range, `\n${lastLineType === 'command' ? '\n' : ''}${indent.repeat(Math.max(depth.size() - 1, 0))}${line}`));
                     lastLineType = 'comment';
                     break;
 
                 case 'declare':
                 case 'define':
                     // 「#declare ～」「#define ～」の場合
-                    editQueue.push(TextEdit.replace(line.range, `${indent.repeat(depth.size())}${lineText.string}`));
+                    editQueue.push(TextEdit.replace(range, `\n${lastLineType === 'command' ? '\n' : ''}${indent.repeat(depth.size())}${line}`));
                     lastLineType = 'special';
                     break;
 
                 case '>':
+                    editQueue.push(TextEdit.replace(range, `${lineCount === 0 ? '' : '\n'}${lastLineType === 'command' ? '\n' : ''}${line}`));
                     depth.clear();
-                    depth.addLast(commentOut);
+                    depth.addLast(numSigns);
                     lastLineType = 'comment';
                     break;
             }
+            docText.nextLine(textDoc);
         }
 
         return editQueue;
@@ -76,7 +84,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
     private async insertProtocol(document: TextDocument): Promise<TextEdit[]> {
         const delivery = (filepath: string): TextEdit[] => {
             if (document.lineAt(0).text !== `#> ${filepath}`)
-                return [TextEdit.insert(new Position(0, 0), `#> ${filepath}\n\n`)];
+                return [TextEdit.insert(new Position(0, 0), `#> ${filepath}\n`)];
 
             // TODO 何もおこなわれない場合に関しての処理
             return [];
