@@ -80,22 +80,17 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
     }
 
     private async insertProtocol(document: TextDocument): Promise<TextEdit[]> {
-        const delivery = (filepath: string): TextEdit[] => {
-            if (document.lineAt(0).text !== `#> ${filepath}`)
-                return [TextEdit.insert(new Position(0, 0), `#> ${filepath}\n`)];
-
-            // TODO 何もおこなわれない場合に関しての処理
-            return [];
-        };
-
         if (!config.mcfFormatter.doInsertIMPDocument)
             return [];
         
-        const rootPath = await getDatapackRoot(document.uri.fsPath);
+        const rootPath = await getDatapackRoot(document.fileName);
 
-        if (!rootPath)
-            return delivery(`:${document.fileName.slice(document.fileName.lastIndexOf('\\\\')).replace('.mcfunction', '')}`);
+        if (rootPath) {
+            const filepath = getResourcePath(document.uri.fsPath, rootPath, 'function');
+            if (document.lineAt(0).text !== `#> ${filepath}`)
+                return [TextEdit.insert(new Position(0, 0), `#> ${filepath}\n`)];
+        }
 
-        return delivery(`${getResourcePath(document.uri.fsPath, rootPath, 'function')}`);
+        return [];
     }
 }
