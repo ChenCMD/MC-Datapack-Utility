@@ -18,61 +18,81 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
         const docText = new StringReader(document.getText());
 
+        const indentElement = { newLineSign: '\n', indents: 0 };
+
+        const next = (range: Range, line: string, indentMap: typeof indentElement) => {
+            editQueue.push(TextEdit.replace(range, indentMap.newLineSign + indent.repeat(indentMap.indents) + line));
+
+            docText.nextLine(document);
+        };
+
         for (let lineCount = 0; lineCount < document.lineCount; lineCount++) {
             docText.skipSpace();
             const lineStart = docText.cursor;
             const line = docText.readLine();
-            const range = new Range(new Position(lineCount, 0), new Position(lineCount + 1, 0));
+            const range = new Range(lineCount, 0, lineCount + 1, 0);
 
             // 改行
             if (line === '') {
                 if (depth.size() > 0)
                     depth.removeLast();
-                editQueue.push(TextEdit.replace(range, '\n'));
+
                 lastLineType = 'blankLine';
-                docText.nextLine(document);
+
+                next(range, '', { newLineSign: '\n', indents: 0 });
                 continue;
             }
 
+            // StringReader#readLine() で cursor が移動してしまうため
             docText.cursor = lineStart;
 
             while (docText.peek() === '#') docText.skip();
             const numSigns = docText.cursor - lineStart;
 
+            indentElement.newLineSign = '\n';
+
             // コマンドについての処理
             if (numSigns === 0) {
-                editQueue.push(TextEdit.replace(range, `\n${indent.repeat(depth.size())}${lastLineType === 'special' ? indent : ''}${line}`));
-                lastLineType = 'command';
-                docText.nextLine(document);
-                continue;
-            }
+                indentElement.indents = depth.size();
+                indentElement.indents += lastLineType === 'special' ? 1 : 0;
 
+                lastLineType = 'command';
+
+                next(range, line, indentElement);
+                continue;
+            }            
+            
+            
             // コメントについての処理
             switch (line.slice(docText.cursor - lineStart, line.indexOf(' '))) {
-                case '':
-                    // 「# ～」や「## ～」の場合
+                case '': // 「# ～」や「## ～」の場合
                     if (!(lastLineType === 'comment' && numSigns === depth.getLast()))
                         // 前line の # の数を記憶し、現line と同じであれば 連続するコメント とみなす。
                         depth.addLast(numSigns);
-                    editQueue.push(TextEdit.replace(range, `\n${lastLineType === 'command' ? '\n' : ''}${indent.repeat(Math.max(depth.size() - 1, 0))}${line}`));
+
+                    indentElement.newLineSign += lastLineType === 'command' ? '\n' : '';
+                    indentElement.indents = Math.max(depth.size() - 1, 0);
                     lastLineType = 'comment';
                     break;
 
-                case 'declare':
+                case 'declare': // 「#declare ～」「#define ～」の場合
                 case 'define':
-                    // 「#declare ～」「#define ～」の場合
-                    editQueue.push(TextEdit.replace(range, `\n${lastLineType === 'command' ? '\n' : ''}${indent.repeat(depth.size())}${line}`));
+                    indentElement.newLineSign += lastLineType === 'command' ? '\n' : '';
+                    indentElement.indents = depth.size();
                     lastLineType = 'special';
                     break;
 
                 case '>':
-                    editQueue.push(TextEdit.replace(range, `${lineCount === 0 ? '' : '\n'}${lastLineType === 'command' ? '\n' : ''}${line}`));
                     depth.clear();
                     depth.addLast(numSigns);
+                    
+                    indentElement.newLineSign = lineCount === 0 ? '' : '\n';
+                    indentElement.newLineSign += lastLineType === 'command' ? '\n' : '';
+                    indentElement.indents = 0;
                     lastLineType = 'comment';
                     break;
             }
-            docText.nextLine(document);
+            next(range, line, indentElement);
         }
 
         return editQueue;
