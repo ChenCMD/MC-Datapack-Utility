@@ -12,8 +12,6 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
     }
 
     private insertIndent(document: TextDocument, indent: string): TextEdit[] {
-        const textDoc = TextDoc.create(document.uri.toString(), document.languageId, document.version, document.getText());
-
         const editQueue: TextEdit[] = [];
 
         const depth = new Deque<number>();
@@ -33,7 +31,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
                     depth.removeLast();
                 editQueue.push(TextEdit.replace(range, '\n'));
                 lastLineType = 'blankLine';
-                docText.nextLine(textDoc);
+                docText.nextLine(document);
                 continue;
             }
 
@@ -46,7 +44,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
             if (numSigns === 0) {
                 editQueue.push(TextEdit.replace(range, `\n${indent.repeat(depth.size())}${lastLineType === 'special' ? indent : ''}${line}`));
                 lastLineType = 'command';
-                docText.nextLine(textDoc);
+                docText.nextLine(document);
                 continue;
             }
 
@@ -75,7 +73,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
                     lastLineType = 'comment';
                     break;
             }
-            docText.nextLine(textDoc);
+            docText.nextLine(document);
         }
 
         return editQueue;
