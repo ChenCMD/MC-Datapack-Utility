@@ -41,5 +41,5 @@
     "mcdutil.config.createDatapackTemplate.defaultVanillaData": "vanillaの`tags/~`のテンプレートを選択画面に表示するか否か",
     "mcdutil.config.createDatapackTemplate.defaultFolder": "`advancements/`, `loot_tables/` 等のテンプレートを選択画面に表示するか否か",
     "mcdutil.config.createFile.fileTemplate": "**データパックファイルを作成する**: ファイルの生成時に記載されている内容 (ファイル種毎に設定が可能です)",
-    "mcdutil.config.mcfFormatter.doInsertIMPDocument": "**IMP-Docを挿入する**: フォーマットをおこなう際にファイル頭にIMP-Docを挿入します。Data-pack Helper Plusとの併用をおすすめします。"
+    "mcdutil.config.mcfFormatter.doInsertIMPDocument": "**IMP-Docを挿入する**: \".mcfunction\"ファイルのフォーマットをおこなう際に、ファイル頭にIMP-Docを挿入します。Data-pack Helper Plusとの併用をおすすめします。"
 }
