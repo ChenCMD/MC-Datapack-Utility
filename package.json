@@ -1,611 +1,603 @@
 {
-	"name": "mc-datapack-utility",
-	"displayName": "MC Datapack Utility",
-	"description": "Extensions that provide multiple features that are useful for developing Minecraft: Java Edition Datapack",
-	"version": "1.4.3",
-	"icon": "icon.png",
-	"categories": [
-		"Other"
-	],
-	"keywords": [
-		"minecraft",
-		"datapack",
-		"mcfunction"
-	],
-	"license": "MIT",
-	"publisher": "ChenCMD",
-	"author": "ChenCMD",
-	"contributors": [
-		"t5ugu"
-	],
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/ChenCMD/MC-Datapack-Utility.git"
-	},
-	"bugs": {
-		"url": "https://github.com/ChenCMD/MC-Datapack-Utility/issues"
-	},
-	"engines": {
-		"vscode": "^1.50.0"
-	},
-	"scripts": {
-		"compile": "webpack --mode development",
-		"build": "webpack --mode production",
-		"watch": "webpack --mode none --watch/",
-		"lint": "eslint --fix src/**/*.ts",
-		"release": "semantic-release"
-	},
-	"main": "dist/extension.js",
-	"dependencies": {
-		"@octokit/rest": "^18.0.7",
-		"dateformat": "^3.0.3",
-		"minimatch": "^3.0.4",
-		"rfdc": "^1.1.4",
-		"vscode-languageserver-textdocument": "^1.0.1"
-	},
-	"activationEvents": [
-		"workspaceContains:**/pack.mcmeta",
-		"onCommand:mcdutil.commands.createDatapackTemplate",
-		"onCommand:mcdutil.commands.createFile",
-		"onCommand:mcdutil.commands.scoreOperation",
-		"onCommand:mcdutil.commands.copyResourcePath",
-		"onLanguage:mcfunction"
-	],
-	"contributes": {
-		"languages": [
-			{
-				"id": "mcfunction",
-				"extensions": [
-					".mcfunction"
-				]
-			}
-		],
-		"commands": [
-			{
-				"command": "mcdutil.commands.createDatapackTemplate",
-				"title": "%mcdutil.commands.createDatapackTemplate.title%",
-				"category": "Datapack"
-			},
-			{
-				"command": "mcdutil.commands.createFile",
-				"title": "%mcdutil.commands.createFile.title%",
-				"category": "Datapack"
-			},
-			{
-				"command": "mcdutil.commands.scoreOperation",
-				"title": "%mcdutil.commands.scoreOperation.title%",
-				"category": "Datapack"
-			},
-			{
-				"command": "mcdutil.commands.copyResourcePath",
-				"title": "%mcdutil.commands.copyResourcePath.title%",
-				"category": "Datapack"
-			}
-		],
-		"keybindings": [
-			{
-				"command": "mcdutil.commands.createDatapackTemplate",
-				"key": "Alt+Shift+D Alt+Shift+T"
-			},
-			{
-				"command": "mcdutil.commands.scoreOperation",
-				"key": "Alt+Shift+D Alt+Shift+S"
-			}
-		],
-		"menus": {
-			"explorer/context": [
-				{
-					"command": "mcdutil.commands.createFile",
-					"when": "explorerResourceIsFolder == true && mcdutil.showContextMenu == true",
-					"group": "navigation@4"
-				},
-				{
-					"command": "mcdutil.commands.copyResourcePath",
-					"when": "explorerResourceIsFolder == false && mcdutil.showContextMenu == true",
-					"group": "6_copypath@31"
-				}
-			],
-			"commandPalette": [
-				{
-					"command": "mcdutil.commands.createFile",
-					"when": "false"
-				},
-				{
-					"command": "mcdutil.commands.copyResourcePath",
-					"when": "false"
-				}
-			]
-		},
-		"configuration": {
-			"title": "MC Datapack Utilility",
-			"properties": {
-				"mcdutil.language": {
-					"type": "string",
-					"enum": [
-						"Default",
-						"en",
-						"ja",
-						"zh-cn",
-						"zh-tw"
-					],
-					"markdownDescription": "%mcdutil.config.language%",
-					"default": "Default"
-				},
-				"mcdutil.dateFormat": {
-					"type": "string",
-					"markdownDescription": "%mcdutil.config.dateFormat%",
-					"default": "m/dd HH:MM"
-				},
-				"mcdutil.scoreOperation.prefix": {
-					"type": "string",
-					"markdownDescription": "%mcdutil.config.scoreOperation.prefix%",
-					"default": "$MCDUtil_"
-				},
-				"mcdutil.scoreOperation.objective": {
-					"type": "string",
-					"markdownDescription": "%mcdutil.config.scoreOperation.objective%",
-					"default": "_"
-				},
-				"mcdutil.scoreOperation.temp": {
-					"type": "string",
-					"markdownDescription": "%mcdutil.config.scoreOperation.temp%",
-					"default": "Temp_"
-				},
-				"mcdutil.scoreOperation.forceInputType": {
-					"type": "string",
-					"enum": [
-						"Default",
-						"Always Selection",
-						"Always InputBox"
-					],
-					"markdownEnumDescriptions": [
-						"%mcdutil.config.scoreOperation.forceInputType.default%",
-						"%mcdutil.config.scoreOperation.forceInputType.alwaysSelection%",
-						"%mcdutil.config.scoreOperation.forceInputType.alwaysInputBox%"
-					],
-					"markdownDescription": "%mcdutil.config.scoreOperation.forceInputType%",
-					"default": "Default"
-				},
-				"mcdutil.scoreOperation.isAlwaysSpecifyObject": {
-					"type": "boolean",
-					"markdownDescription": "%mcdutil.config.scoreOperation.isAlwaysSpecifyObject%",
-					"default": true
-				},
-				"mcdutil.scoreOperation.customOperate": {
-					"type": "array",
-					"items": {
-						"type": "object",
-						"required": [
-							"identifier",
-							"order",
-							"type",
-							"arity",
-							"assocLow"
-						],
-						"properties": {
-							"identifier": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.identifier%"
-							},
-							"order": {
-								"type": "number",
-								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.order%",
-								"default": 18
-							},
-							"type": {
-								"type": "string",
-								"enum": [
-									"fn"
-								],
-								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.type%",
-								"default": "fn"
-							},
-							"arity": {
-								"type": "number",
-								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.arity%"
-							},
-							"assocLow": {
-								"type": "string",
-								"enum": [
-									"L",
-									"R"
-								],
-								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.assocLow%"
-							},
-							"destination": {
-								"type": "object",
-								"required": [
-									"args",
-									"namely"
-								],
-								"properties": {
-									"args": {
-										"type": "array",
-										"items": {
-											"type": "string"
-										},
-										"default": [],
-										"description": "%mcdutil.config.scoreOperation.customOperate.destination.args%"
-									},
-									"namely": {
-										"type": "string",
-										"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.destination.namely%"
-									}
-								},
-								"markdownDescription": "%mcdutil.config.scoreOperation.customOperate.destination%"
-							}
-						}
-					},
-					"markdownDescription": "%mcdutil.config.scoreOperation.customOperate%",
-					"default": []
-				},
-				"mcdutil.scoreOperation.valueScale": {
-					"type": "number",
-					"markdownDescription": "%mcdutil.config.scoreOperation.valueScale%",
-					"default": 1
-				},
-				"mcdutil.createDatapackTemplate.dataVersion": {
-					"type": "string",
-					"markdownDescription": "%mcdutil.config.createDatapackTemplate.dataVersion%",
-					"default": "Latest release"
-				},
-				"mcdutil.createDatapackTemplate.defaultLoadAndTick": {
-					"type": "boolean",
-					"markdownDescription": "%mcdutil.config.createDatapackTemplate.defaultLoadAndTick%",
-					"default": true
-				},
-				"mcdutil.createDatapackTemplate.defaultVanillaData": {
-					"type": "boolean",
-					"markdownDescription": "%mcdutil.config.createDatapackTemplate.defaultVanillaData%",
-					"default": true
-				},
-				"mcdutil.createDatapackTemplate.defaultFolder": {
-					"type": "boolean",
-					"markdownDescription": "%mcdutil.config.createDatapackTemplate.defaultFolder%",
-					"default": true
-				},
-				"mcdutil.createDatapackTemplate.customTemplate": {
-					"type": "array",
-					"items": {
-						"type": "object",
-						"additionalProperties": false,
-						"required": [
-							"label",
-							"generates"
-						],
-						"properties": {
-							"label": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.label%"
-							},
-							"picked": {
-								"type": "boolean",
-								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.picked%"
-							},
-							"description": {
-								"type": "string",
-								"markdownDesicription": "%mcdutil.config.createDatapackTemplate.customTemplate.description%"
-							},
-							"detail": {
-								"type": "string",
-								"markdownDesicription": "%mcdutil.config.createDatapackTemplate.customTemplate.detail%"
-							},
-							"generates": {
-								"type": "array",
-								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates%",
-								"minItems": 1,
-								"items": {
-									"type": "object",
-									"if": {
-										"properties": {
-											"type": {
-												"const": "folder"
-											}
-										}
-									},
-									"then": {
-										"additionalProperties": false,
-										"required": [
-											"type",
-											"rel"
-										],
-										"properties": {
-											"type": {
-												"type": "string",
-												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.type%",
-												"enum": [
-													"file",
-													"folder"
-												]
-											},
-											"rel": {
-												"type": "string",
-												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel%",
-												"pattern": "^[^\\\\:*?\"<>|]+$",
-												"patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error%"
-											}
-										}
-									},
-									"else": {
-										"additionalProperties": false,
-										"required": [
-											"type",
-											"rel",
-											"content"
-										],
-										"properties": {
-											"type": {
-												"type": "string",
-												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.type%",
-												"enum": [
-													"file",
-													"folder"
-												]
-											},
-											"rel": {
-												"type": "string",
-												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel%",
-												"pattern": "^[^\\\\:*?\"<>|]+$",
-												"patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error%"
-											},
-											"content": {
-												"oneOf": [
-													{
-														"type": "array",
-														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content%",
-														"items": {
-															"oneOf": [
-																{
-																	"type": "string",
-																	"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-str%"
-																},
-																{
-																	"type": "object",
-																	"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj%"
-																}
-															]
-														}
-													},
-													{
-														"type": "object",
-														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj%"
-													}
-												]
-											},
-											"append": {
-												"type": "object",
-												"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%",
-												"required": [
-													"key",
-													"elem"
-												],
-												"properties": {
-													"key": {
-														"type": "string",
-														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
-													},
-													"elem": {
-														"not": {
-															"type": "null"
-														},
-														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
-													}
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					},
-					"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate%",
-					"default": []
-				},
-				"mcdutil.createFile.fileTemplate": {
-					"type": "object",
-					"additionalProperties": false,
-					"properties": {
-						"advancement": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"dimension": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"dimension_type": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"function": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"loot_table": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"predicate": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"recipe": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"tag/block": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"tag/entity_type": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"tag/fluid": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"tag/function": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"tag/item": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"worldgen/biome": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"worldgen/configured_carver": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"worldgen/configured_decorator": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"worldgen/configured_feature": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"worldgen/configured_structure_feature": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"worldgen/configured_surface_builder": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"worldgen/noise_settings": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"worldgen/processor_list": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						},
-						"worldgen/template_pool": {
-							"type": "array",
-							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-							"items": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
-							}
-						}
-					},
-					"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
-					"default": {}
-				},
-				"mcdutil.mcfFormatter.doInsertIMPDocument": {
-					"type": "boolean",
-					"markdownDescription": "%mcdutil.config.mcfFormatter.doInsertIMPDocument%",
-					"default": true
-				}
-			}
-		}
-	},
-	"devDependencies": {
-		"@semantic-release/changelog": "^5.0.1",
-		"@semantic-release/git": "^9.0.0",
-		"@types/dateformat": "^3.0.1",
-		"@types/glob": "^7.1.3",
-		"@types/mocha": "^8.0.0",
-		"@types/node": "^14.14.6",
-		"@types/rfdc": "^1.1.0",
-		"@types/vscode": "^1.50.0",
-		"@typescript-eslint/eslint-plugin": "^3.8.0",
-		"@typescript-eslint/parser": "^3.8.0",
-		"eslint": "^7.12.1",
-		"glob": "^7.1.6",
-		"mocha": "^8.2.0",
-		"semantic-release": "^17.2.3",
-		"semantic-release-gitmoji": "^1.3.4",
-		"semantic-release-vsce": "^3.0.1",
-		"ts-loader": "^8.0.7",
-		"typescript": "^3.8.3",
-		"vscode-test": "^1.4.1",
-		"webpack": "^5.3.2",
-		"webpack-cli": "^4.1.0"
-	}
+    "name": "mc-datapack-utility",
+    "displayName": "MC Datapack Utility",
+    "description": "Extensions that provide multiple features that are useful for developing Minecraft: Java Edition Datapack",
+    "version": "1.4.3",
+    "icon": "icon.png",
+    "categories": [
+        "Other"
+    ],
+    "keywords": [
+        "minecraft",
+        "datapack",
+        "mcfunction"
+    ],
+    "license": "MIT",
+    "publisher": "ChenCMD",
+    "author": "ChenCMD",
+    "contributors": [
+        "t5ugu"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ChenCMD/MC-Datapack-Utility.git"
+    },
+    "bugs": {
+        "url": "https://github.com/ChenCMD/MC-Datapack-Utility/issues"
+    },
+    "engines": {
+        "vscode": "^1.50.0"
+    },
+    "scripts": {
+        "compile": "webpack --mode development",
+        "build": "webpack --mode production",
+        "watch": "webpack --mode none --watch/",
+        "lint": "eslint --fix src/**/*.ts",
+        "release": "semantic-release"
+    },
+    "main": "dist/extension.js",
+    "dependencies": {
+        "@octokit/rest": "^18.0.7",
+        "dateformat": "^3.0.3",
+        "minimatch": "^3.0.4",
+        "rfdc": "^1.1.4",
+        "vscode-languageserver-textdocument": "^1.0.1"
+    },
+    "activationEvents": [
+        "workspaceContains:**/pack.mcmeta",
+        "onCommand:mcdutil.commands.createDatapackTemplate",
+        "onCommand:mcdutil.commands.createFile",
+        "onCommand:mcdutil.commands.scoreOperation",
+        "onCommand:mcdutil.commands.copyResourcePath",
+        "onLanguage:mcfunction"
+    ],
+    "contributes": {
+        "languages": [{
+            "id": "mcfunction",
+            "extensions": [
+                ".mcfunction"
+            ]
+        }],
+        "commands": [{
+                "command": "mcdutil.commands.createDatapackTemplate",
+                "title": "%mcdutil.commands.createDatapackTemplate.title%",
+                "category": "Datapack"
+            },
+            {
+                "command": "mcdutil.commands.createFile",
+                "title": "%mcdutil.commands.createFile.title%",
+                "category": "Datapack"
+            },
+            {
+                "command": "mcdutil.commands.scoreOperation",
+                "title": "%mcdutil.commands.scoreOperation.title%",
+                "category": "Datapack"
+            },
+            {
+                "command": "mcdutil.commands.copyResourcePath",
+                "title": "%mcdutil.commands.copyResourcePath.title%",
+                "category": "Datapack"
+            }
+        ],
+        "keybindings": [{
+                "command": "mcdutil.commands.createDatapackTemplate",
+                "key": "Alt+Shift+D Alt+Shift+T"
+            },
+            {
+                "command": "mcdutil.commands.scoreOperation",
+                "key": "Alt+Shift+D Alt+Shift+S"
+            }
+        ],
+        "menus": {
+            "explorer/context": [{
+                    "command": "mcdutil.commands.createFile",
+                    "when": "explorerResourceIsFolder == true && mcdutil.showContextMenu == true",
+                    "group": "navigation@4"
+                },
+                {
+                    "command": "mcdutil.commands.copyResourcePath",
+                    "when": "explorerResourceIsFolder == false && mcdutil.showContextMenu == true",
+                    "group": "6_copypath@31"
+                }
+            ],
+            "commandPalette": [{
+                    "command": "mcdutil.commands.createFile",
+                    "when": "false"
+                },
+                {
+                    "command": "mcdutil.commands.copyResourcePath",
+                    "when": "false"
+                }
+            ]
+        },
+        "configuration": {
+            "title": "MC Datapack Utilility",
+            "properties": {
+                "mcdutil.language": {
+                    "type": "string",
+                    "enum": [
+                        "Default",
+                        "en",
+                        "ja",
+                        "zh-cn",
+                        "zh-tw"
+                    ],
+                    "markdownDescription": "%mcdutil.config.language%",
+                    "default": "Default"
+                },
+                "mcdutil.dateFormat": {
+                    "type": "string",
+                    "markdownDescription": "%mcdutil.config.dateFormat%",
+                    "default": "m/dd HH:MM"
+                },
+                "mcdutil.scoreOperation.prefix": {
+                    "type": "string",
+                    "markdownDescription": "%mcdutil.config.scoreOperation.prefix%",
+                    "default": "$MCDUtil_"
+                },
+                "mcdutil.scoreOperation.objective": {
+                    "type": "string",
+                    "markdownDescription": "%mcdutil.config.scoreOperation.objective%",
+                    "default": "_"
+                },
+                "mcdutil.scoreOperation.temp": {
+                    "type": "string",
+                    "markdownDescription": "%mcdutil.config.scoreOperation.temp%",
+                    "default": "Temp_"
+                },
+                "mcdutil.scoreOperation.forceInputType": {
+                    "type": "string",
+                    "enum": [
+                        "Default",
+                        "Always Selection",
+                        "Always InputBox"
+                    ],
+                    "markdownEnumDescriptions": [
+                        "%mcdutil.config.scoreOperation.forceInputType.default%",
+                        "%mcdutil.config.scoreOperation.forceInputType.alwaysSelection%",
+                        "%mcdutil.config.scoreOperation.forceInputType.alwaysInputBox%"
+                    ],
+                    "markdownDescription": "%mcdutil.config.scoreOperation.forceInputType%",
+                    "default": "Default"
+                },
+                "mcdutil.scoreOperation.isAlwaysSpecifyObject": {
+                    "type": "boolean",
+                    "markdownDescription": "%mcdutil.config.scoreOperation.isAlwaysSpecifyObject%",
+                    "default": true
+                },
+                "mcdutil.scoreOperation.customOperate": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "required": [
+                            "identifier",
+                            "order",
+                            "type",
+                            "arity",
+                            "assocLow"
+                        ],
+                        "properties": {
+                            "identifier": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.scoreOperation.customOperate.identifier%"
+                            },
+                            "order": {
+                                "type": "number",
+                                "markdownDescription": "%mcdutil.config.scoreOperation.customOperate.order%",
+                                "default": 18
+                            },
+                            "type": {
+                                "type": "string",
+                                "enum": [
+                                    "fn"
+                                ],
+                                "markdownDescription": "%mcdutil.config.scoreOperation.customOperate.type%",
+                                "default": "fn"
+                            },
+                            "arity": {
+                                "type": "number",
+                                "markdownDescription": "%mcdutil.config.scoreOperation.customOperate.arity%"
+                            },
+                            "assocLow": {
+                                "type": "string",
+                                "enum": [
+                                    "L",
+                                    "R"
+                                ],
+                                "markdownDescription": "%mcdutil.config.scoreOperation.customOperate.assocLow%"
+                            },
+                            "destination": {
+                                "type": "object",
+                                "required": [
+                                    "args",
+                                    "namely"
+                                ],
+                                "properties": {
+                                    "args": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        },
+                                        "default": [],
+                                        "description": "%mcdutil.config.scoreOperation.customOperate.destination.args%"
+                                    },
+                                    "namely": {
+                                        "type": "string",
+                                        "markdownDescription": "%mcdutil.config.scoreOperation.customOperate.destination.namely%"
+                                    }
+                                },
+                                "markdownDescription": "%mcdutil.config.scoreOperation.customOperate.destination%"
+                            }
+                        }
+                    },
+                    "markdownDescription": "%mcdutil.config.scoreOperation.customOperate%",
+                    "default": []
+                },
+                "mcdutil.scoreOperation.valueScale": {
+                    "type": "number",
+                    "markdownDescription": "%mcdutil.config.scoreOperation.valueScale%",
+                    "default": 1
+                },
+                "mcdutil.createDatapackTemplate.dataVersion": {
+                    "type": "string",
+                    "markdownDescription": "%mcdutil.config.createDatapackTemplate.dataVersion%",
+                    "default": "Latest release"
+                },
+                "mcdutil.createDatapackTemplate.defaultLoadAndTick": {
+                    "type": "boolean",
+                    "markdownDescription": "%mcdutil.config.createDatapackTemplate.defaultLoadAndTick%",
+                    "default": true
+                },
+                "mcdutil.createDatapackTemplate.defaultVanillaData": {
+                    "type": "boolean",
+                    "markdownDescription": "%mcdutil.config.createDatapackTemplate.defaultVanillaData%",
+                    "default": true
+                },
+                "mcdutil.createDatapackTemplate.defaultFolder": {
+                    "type": "boolean",
+                    "markdownDescription": "%mcdutil.config.createDatapackTemplate.defaultFolder%",
+                    "default": true
+                },
+                "mcdutil.createDatapackTemplate.customTemplate": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                            "label",
+                            "generates"
+                        ],
+                        "properties": {
+                            "label": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.label%"
+                            },
+                            "picked": {
+                                "type": "boolean",
+                                "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.picked%"
+                            },
+                            "description": {
+                                "type": "string",
+                                "markdownDesicription": "%mcdutil.config.createDatapackTemplate.customTemplate.description%"
+                            },
+                            "detail": {
+                                "type": "string",
+                                "markdownDesicription": "%mcdutil.config.createDatapackTemplate.customTemplate.detail%"
+                            },
+                            "generates": {
+                                "type": "array",
+                                "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates%",
+                                "minItems": 1,
+                                "items": {
+                                    "type": "object",
+                                    "if": {
+                                        "properties": {
+                                            "type": {
+                                                "const": "folder"
+                                            }
+                                        }
+                                    },
+                                    "then": {
+                                        "additionalProperties": false,
+                                        "required": [
+                                            "type",
+                                            "rel"
+                                        ],
+                                        "properties": {
+                                            "type": {
+                                                "type": "string",
+                                                "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.type%",
+                                                "enum": [
+                                                    "file",
+                                                    "folder"
+                                                ]
+                                            },
+                                            "rel": {
+                                                "type": "string",
+                                                "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel%",
+                                                "pattern": "^[^\\\\:*?\"<>|]+$",
+                                                "patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error%"
+                                            }
+                                        }
+                                    },
+                                    "else": {
+                                        "additionalProperties": false,
+                                        "required": [
+                                            "type",
+                                            "rel",
+                                            "content"
+                                        ],
+                                        "properties": {
+                                            "type": {
+                                                "type": "string",
+                                                "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.type%",
+                                                "enum": [
+                                                    "file",
+                                                    "folder"
+                                                ]
+                                            },
+                                            "rel": {
+                                                "type": "string",
+                                                "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel%",
+                                                "pattern": "^[^\\\\:*?\"<>|]+$",
+                                                "patternErrorMessage": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.rel.error%"
+                                            },
+                                            "content": {
+                                                "oneOf": [{
+                                                        "type": "array",
+                                                        "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content%",
+                                                        "items": {
+                                                            "oneOf": [{
+                                                                    "type": "string",
+                                                                    "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-str%"
+                                                                },
+                                                                {
+                                                                    "type": "object",
+                                                                    "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj%"
+                                                                }
+                                                            ]
+                                                        }
+                                                    },
+                                                    {
+                                                        "type": "object",
+                                                        "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj%"
+                                                    }
+                                                ]
+                                            },
+                                            "append": {
+                                                "type": "object",
+                                                "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%",
+                                                "required": [
+                                                    "key",
+                                                    "elem"
+                                                ],
+                                                "properties": {
+                                                    "key": {
+                                                        "type": "string",
+                                                        "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
+                                                    },
+                                                    "elem": {
+                                                        "not": {
+                                                            "type": "null"
+                                                        },
+                                                        "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate%",
+                    "default": []
+                },
+                "mcdutil.createFile.fileTemplate": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "advancement": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "dimension": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "dimension_type": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "function": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "loot_table": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "predicate": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "recipe": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "tag/block": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "tag/entity_type": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "tag/fluid": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "tag/function": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "tag/item": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "worldgen/biome": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "worldgen/configured_carver": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "worldgen/configured_decorator": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "worldgen/configured_feature": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "worldgen/configured_structure_feature": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "worldgen/configured_surface_builder": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "worldgen/noise_settings": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "worldgen/processor_list": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        },
+                        "worldgen/template_pool": {
+                            "type": "array",
+                            "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                            "items": {
+                                "type": "string",
+                                "markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+                            }
+                        }
+                    },
+                    "markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+                    "default": {}
+                },
+                "mcdutil.mcfFormatter.doInsertIMPDocument": {
+                    "type": "boolean",
+                    "markdownDescription": "%mcdutil.config.mcfFormatter.doInsertIMPDocument%",
+                    "default": false
+                }
+            }
+        }
+    },
+    "devDependencies": {
+        "@semantic-release/changelog": "^5.0.1",
+        "@semantic-release/git": "^9.0.0",
+        "@types/dateformat": "^3.0.1",
+        "@types/glob": "^7.1.3",
+        "@types/mocha": "^8.0.0",
+        "@types/node": "^14.14.6",
+        "@types/rfdc": "^1.1.0",
+        "@types/vscode": "^1.50.0",
+        "@typescript-eslint/eslint-plugin": "^3.8.0",
+        "@typescript-eslint/parser": "^3.8.0",
+        "eslint": "^7.12.1",
+        "glob": "^7.1.6",
+        "mocha": "^8.2.0",
+        "semantic-release": "^17.2.3",
+        "semantic-release-gitmoji": "^1.3.4",
+        "semantic-release-vsce": "^3.0.1",
+        "ts-loader": "^8.0.7",
+        "typescript": "^3.8.3",
+        "vscode-test": "^1.4.1",
+        "webpack": "^5.3.2",
+        "webpack-cli": "^4.1.0"
+    }
 }
