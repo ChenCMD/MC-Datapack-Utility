@@ -1,5 +1,4 @@
 import { DocumentFormattingEditProvider, FormattingOptions, Position, Range, TextDocument, TextEdit } from 'vscode';
-import { TextDocument as TextDoc } from 'vscode-languageserver-textdocument';
 import { config } from '../extension';
 import { Deque } from '../types/Deque';
 import { getDatapackRoot, getResourcePath } from '../utils/common';
