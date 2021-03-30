@@ -60,9 +60,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
                 next(range, line, indentElement);
                 continue;
-            }            
-            
-            
+            }
             // コメントについての処理
             switch (line.slice(docText.cursor - lineStart, line.indexOf(' '))) {
                 case '': // 「# ～」や「## ～」の場合
