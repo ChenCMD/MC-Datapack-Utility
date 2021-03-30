@@ -60,9 +60,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
                 next(range, line, indentElement);
                 continue;
-            }            
-            
-            
+            }
             // コメントについての処理
             switch (line.slice(docText.cursor - lineStart, line.indexOf(' '))) {
                 case '': // 「# ～」や「## ～」の場合
@@ -85,7 +83,6 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
                 case '>':
                     depth.clear();
                     depth.addLast(numSigns);
-                    
                     indentElement.newLineSign = lineCount === 0 ? '' : '\n';
                     indentElement.newLineSign += lastLineType === 'command' ? '\n' : '';
                     indentElement.indents = 0;
@@ -101,7 +98,6 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
     private async insertProtocol(document: TextDocument): Promise<TextEdit[]> {
         if (!config.mcfFormatter.doInsertIMPDocument)
             return [];
-        
         const rootPath = await getDatapackRoot(document.fileName);
 
         if (rootPath) {
