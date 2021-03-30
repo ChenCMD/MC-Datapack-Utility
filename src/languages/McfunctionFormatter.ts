@@ -98,7 +98,6 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
     private async insertProtocol(document: TextDocument): Promise<TextEdit[]> {
         if (!config.mcfFormatter.doInsertIMPDocument)
             return [];
-        
         const rootPath = await getDatapackRoot(document.fileName);
 
         if (rootPath) {
