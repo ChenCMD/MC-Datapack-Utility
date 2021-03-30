@@ -61,7 +61,7 @@ export const defaultConfig: Config = {
         fileTemplate: {}
     },
     mcfFormatter: {
-        doInsertIMPDocument: true
+        doInsertIMPDocument: false
     }
 };
 
