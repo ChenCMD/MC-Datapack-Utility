@@ -83,7 +83,6 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
                 case '>':
                     depth.clear();
                     depth.addLast(numSigns);
-                    
                     indentElement.newLineSign = lineCount === 0 ? '' : '\n';
                     indentElement.newLineSign += lastLineType === 'command' ? '\n' : '';
                     indentElement.indents = 0;
