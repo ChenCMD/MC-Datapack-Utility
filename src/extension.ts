@@ -1,6 +1,5 @@
-import { ExtensionContext, commands, window, workspace, ConfigurationChangeEvent, languages } from 'vscode';
+import { ExtensionContext, commands, window, workspace, ConfigurationChangeEvent } from 'vscode';
 import { copyResourcePath, createDatapack, createFile, scoreOperation } from './commands';
-import { McfunctionFormatter } from './languages';
 import { loadLocale } from './locales';
 import { constructConfig } from './types/Config';
 import { VersionInformation } from './types/VersionInformation';
@@ -26,8 +25,6 @@ export function activate(context: ExtensionContext): void {
     disposable.push(commands.registerCommand('mcdutil.commands.createFile', createFile));
     disposable.push(commands.registerCommand('mcdutil.commands.scoreOperation', scoreOperation));
     disposable.push(commands.registerCommand('mcdutil.commands.copyResourcePath', copyResourcePath));
-
-    disposable.push(languages.registerDocumentFormattingEditProvider('mcfunction', new McfunctionFormatter));
 
     disposable.push(workspace.onDidChangeConfiguration(updateConfig));
 

@@ -40,6 +40,5 @@
     "mcdutil.config.createDatapackTemplate.defaultVanillaData": "Whether to display the vanilla `tags/~` template on the selection screen",
     "mcdutil.config.createDatapackTemplate.defaultFolder": "Whether or not to display the templates of `advancements/`, `loot_tables/` etc. on the selection screen",
     "mcdutil.config.createDatapackTemplate.dataVersion": "Version of vanilla data to use",
-    "mcdutil.config.createFile.fileTemplate": "**Create Datapack file**: Contents described when the file is generated (can be set for each file type)",
-    "mcdutil.config.mcfFormatter.doInsertIMPDocument": "**Insert IMP-Doc**: When formatting a \".mcfunction\" document, insert IMP-Doc at the Beg of the file. Recommend using it together with Data-pack Helper Plus."
+    "mcdutil.config.createFile.fileTemplate": "**Create Datapack file**: Contents described when the file is generated (can be set for each file type)"
 }
