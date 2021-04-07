@@ -29,5 +29,8 @@
     "mcdutil.config.scoreOperation.customOperate.type": "它的类型（仅“fn”）",
     "mcdutil.config.scoreOperation.customOperate.order": "它的优先级（推荐: 4~16）",
     "mcdutil.config.scoreOperation.customOperate.identifier": "它的标识符（例如\"加法\"的标识符是\"+\"）",
-    "mcdutil.config.scoreOperation.customOperate": "**公式转换为记分板操作**：自定义操作表"
+    "mcdutil.config.scoreOperation.customOperate": "**公式转换为记分板操作**：自定义操作表",
+    "mcdutil.config.createDatapackTemplate.customTemplate.generates.append": "如果目标已经在Json中存在，则将元素添加到该键。",
+    "mcdutil.config.scoreOperation.valueScale": "**将公式转换成分数操作**: 值的缩放(\"输入的值\"乘以\"缩放比率\"等于\"计算结果\")",
+    "mcdutil.config.scoreOperation.customOperate.destination": "当你想添加一个自定义函数时，此 \"标识符\" 必须符合 \"/\\S+\\(/\", 一个常规表达式"
 }

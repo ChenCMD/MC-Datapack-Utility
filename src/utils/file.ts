@@ -2,6 +2,7 @@ import { Uri, FileSystemError, workspace } from 'vscode';
 import * as fs from 'fs';
 // eslint-disable-next-line no-duplicate-imports
 import { promises as fsp } from 'fs';
+import { flatPath } from './common';
 
 /**
  * ファイルを作成します
@@ -13,7 +14,7 @@ export async function createFile(filePath: string | Uri, content: Uint8Array): P
     if (await pathAccessible(filePath))
         throw FileSystemError.FileExists(filePath);
     else
-        await workspace.fs.writeFile(filePath instanceof Uri ? filePath : Uri.file(filePath), content);
+        await workspace.fs.writeFile(flatPath(filePath), content);
 }
 
 /**
@@ -21,7 +22,7 @@ export async function createFile(filePath: string | Uri, content: Uint8Array): P
  * @param dirPath ディレクトリパス
  */
 export async function createDir(dirPath: string | Uri): Promise<void> {
-    await workspace.fs.createDirectory(dirPath instanceof Uri ? dirPath : Uri.file(dirPath));
+    await workspace.fs.createDirectory(flatPath(dirPath));
 }
 
 /**
@@ -51,7 +52,7 @@ export async function createDir(dirPath: string | Uri): Promise<void> {
  * SOFTWARE.
  */
 export async function pathAccessible(testPath: string | Uri): Promise<boolean> {
-    return await fsp.access(testPath instanceof Uri ? testPath.fsPath : testPath)
+    return await fsp.access(flatPath(testPath).fsPath)
         .then(() => true)
         .catch(() => false);
 }
@@ -80,16 +81,16 @@ export async function pathAccessible(testPath: string | Uri): Promise<boolean> {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-export async function readFile(path: string): Promise<string> {
+export async function readFile(path: string | Uri): Promise<string> {
     return await new Promise((resolve, reject) => {
         let data = '';
-        fs.createReadStream(path, { encoding: 'utf-8', highWaterMark: 128 * 1024 })
+        fs.createReadStream(flatPath(path).fsPath, { encoding: 'utf-8', highWaterMark: 128 * 1024 })
             .on('data', chunk => data += chunk)
             .on('end', () => resolve(data))
             .on('error', reject);
     });
 }
 
-export async function writeFile(path: string, content: string): Promise<void> {
-    return await fsp.writeFile(path, content);
+export async function writeFile(path: string | Uri, content: string): Promise<void> {
+    return await fsp.writeFile(flatPath(path).fsPath, content);
 }
