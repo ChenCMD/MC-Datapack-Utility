@@ -3,18 +3,18 @@ import { ElementBase, TableBase } from './TableBase';
 export type OperateTable = TableBase<OperateElement>;
 
 export interface OperateElement extends ElementBase {
-    identifier: string
-    order: number
-    arity: number
-    assocLow: '' | 'L' | 'R'
+    identifier: string // 識別子
+    order: number // 優先度
+    arity: number // 引数の数
+    assocLow: '' | 'L' | 'R' // 結合方向
     // eslint-disable-next-line @typescript-eslint/ban-types
-    fn?: Function
-    destination?: Destination
+    fn?: Function // ! 関数(削除の可能性有)
+    destination?: Destination // 関数の場合に用いる
 }
 
 interface Destination {
-    args: string[]
-    namely: string
+    args: string[] // 引数の詳細
+    namely: string // 代替される別の式
 }
 
 /**

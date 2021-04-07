@@ -1,8 +1,9 @@
 import '../../utils/methodExtensions';
 import { codeConsole, config } from '../../extension';
 import { getTextEditor, listenInput, showError } from '../../utils/vscodeWrapper';
-import { rpnToScoreOperation } from './utils/converter';
-import { formulaAnalyzer } from './utils/formula';
+// import { rpnToScoreOperation } from './utils/converter';
+import { ifFormulaAnalyzer } from './utils/ifFormula';
+import { ifFormulaDisassembler } from './utils/ifConverter';
 import { locale } from '../../locales';
 import { opTable } from './types/OperateTable';
 import { NotOpenTextDocumentError, UserCancelledError } from '../../types/Error';
