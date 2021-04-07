@@ -24,7 +24,6 @@
  */
 
 
-import { Position, TextDocument } from 'vscode';
 import { locale } from '../locales';
 import { ParsingError } from '../types/Error';
 import { IndexMapping } from '../types/IndexMapping';
@@ -239,18 +238,6 @@ export class StringReader {
         const ans = this.remainingString;
         this.cursor = this.end;
         return ans;
-    }
-
-    lastLine(textDoc: TextDocument): this {
-        const pos = textDoc.positionAt(this.cursor);
-        this.cursor = textDoc.offsetAt(new Position(pos.line - 1, 0));
-        return this;
-    }
-
-    nextLine(textDoc: TextDocument): this {
-        const pos = textDoc.positionAt(this.cursor);
-        this.cursor = textDoc.offsetAt(new Position(pos.line + 1, 0));
-        return this;
     }
 
     static canInNumber(c: string): boolean {

@@ -50,14 +50,6 @@
 		"onCommand:mcdutil.commands.copyResourcePath"
 	],
 	"contributes": {
-		"languages": [
-			{
-				"id": "mcfunction",
-				"extensions": [
-					".mcfunction"
-				]
-			}
-		],
 		"commands": [
 			{
 				"command": "mcdutil.commands.createDatapackTemplate",
@@ -574,11 +566,6 @@
 					},
 					"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 					"default": {}
-				},
-				"mcdutil.mcfFormatter.doInsertIMPDocument": {
-					"type": "boolean",
-					"markdownDescription": "%mcdutil.config.mcfFormatter.doInsertIMPDocument%",
-					"default": false
 				}
 			}
 		}
