@@ -47,8 +47,7 @@
 		"onCommand:mcdutil.commands.createDatapackTemplate",
 		"onCommand:mcdutil.commands.createFile",
 		"onCommand:mcdutil.commands.scoreOperation",
-		"onCommand:mcdutil.commands.copyResourcePath",
-		"onLanguage:mcfunction"
+		"onCommand:mcdutil.commands.copyResourcePath"
 	],
 	"contributes": {
 		"languages": [
@@ -575,6 +574,11 @@
 					},
 					"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 					"default": {}
+				},
+				"mcdutil.mcfFormatter.doInsertIMPDocument": {
+					"type": "boolean",
+					"markdownDescription": "%mcdutil.config.mcfFormatter.doInsertIMPDocument%",
+					"default": false
 				}
 			}
 		}
