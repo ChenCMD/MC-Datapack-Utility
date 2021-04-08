@@ -129,6 +129,15 @@ export const pickItems: { [key in '#load & #tick' | 'Vanilla data' | 'Folders']:
             ]
         },
         {
+            label: 'data/%namespace%/functions/',
+            generates: [
+                {
+                    type: 'folder',
+                    rel: 'data/%namespace%/functions/'
+                }
+            ]
+        },
+        {
             label: 'data/%namespace%/dimension/',
             generates: [
                 {
