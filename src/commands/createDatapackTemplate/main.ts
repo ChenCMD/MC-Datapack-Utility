@@ -9,6 +9,7 @@ import { codeConsole, versionInformation } from '../../extension';
 import { TextEncoder } from 'util';
 import path from 'path';
 import rfdc from 'rfdc';
+import { CustomQuestion } from './types/CustomQuestion';
 
 export async function createDatapack({ createDatapackTemplate, dateFormat }: Config, generateType?: 'add' | 'create'): Promise<void> {
     try {
@@ -27,16 +28,16 @@ export async function createDatapack({ createDatapackTemplate, dateFormat }: Con
         const datapackDescription = await generatorChildNode.listenDatapackDescription(dir);
         // 名前空間
         const namespace = await listenNamespace();
-        // TODO カスタムの質問
-
-        // contextの作成
+        // 変数の作成
         const vars: Variables = {
             date: getDate(dateFormat),
             dir,
-            namespace,
-            datapackDescription,
             datapackName: name,
-            datapackRoot: root
+            datapackRoot: root,
+            datapackDescription,
+            namespace,
+            // カスタムの質問
+            ...await listenCustomQuestion(createDatapackTemplate.customQuestion)
         };
         // テンプレートの選択
         const createItems = await listenGenerateTemplate(vars, createDatapackTemplate);
@@ -62,6 +63,21 @@ async function listenNamespace(): Promise<string> {
         locale('create-datapack-template.namespace-name'),
         v => validater(v, /[^a-z0-9./_-]/g, locale('create-datapack-template.namespace-blank'))
     );
+}
+
+async function listenCustomQuestion(questions: CustomQuestion[]): Promise<Variables> {
+    const ans: Variables = {};
+    for (const question of questions) {
+        let patternChecker: ((str: string) => string | undefined) | undefined = undefined;
+        if (question.pattern) {
+            patternChecker = (str: string) => new RegExp(`^${question.pattern}$`).test(str)
+                ? undefined
+                : question.patternErrorMessage ?? locale('create-datapack-template.defaultPatternErrorMessage', `^${question.pattern}$`);
+        }
+
+        ans[question.name] = await listenInput(question.question, patternChecker);
+    }
+    return ans;
 }
 
 async function listenGenerateTemplate(vars: Variables, config: CreateDatapackTemplateConfig): Promise<QuickPickFiles[]> {
