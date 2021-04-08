@@ -18,7 +18,11 @@ export async function createFile(uri: Uri, config: Config): Promise<void> {
     try {
         // Datapack内か確認
         const datapackRoot = await getDatapackRoot(uri.fsPath);
-        if (!datapackRoot) throw new GenerateError(locale('create-file.not-datapack'));
+        if (!datapackRoot) {
+            const res = await showError(locale('create-file.not-datapack'), false, createMessageItemHasIds('yes', 'no'), ['no']);
+            if (res === 'yes') return await createDatapack(config, 'create');
+            return;
+        }
 
         // ファイルの種類を取得
         const fileType = getFileType(uri.fsPath, datapackRoot);

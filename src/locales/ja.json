@@ -3,7 +3,7 @@
     "copy-resource-path.unknown-filetype": "このファイルのリソースパスを取得できません。",
     "could-not-access-key": "ファイル: \"%0%\"のkey: \"%1%\"にアクセス出来ませんでした。",
     "cound-not-append-elem": "ファイル: \"%0%\"のkey: \"%1%\"は配列ではないためelemを追加出来ませんでした。",
-    "create-file.not-datapack": "datapack内ではないためファイルを作成できません。",
+    "create-file.not-datapack": "datapack内ではないためファイルを作成できません。ここにテンプレートを作成しますか？",
     "create-file.unknown-filetype": "ここにファイルを作成することはできません。",
     "create-file.unknown-filetype.listen-add": "ここにファイルを作成することはできません。\ndatapack \"%0%\"にテンプレートを追加しますか？",
     "create-file.structure": "ストラクチャーファイルは未サポートです。",
