@@ -51,7 +51,7 @@ export async function createFile(uri: Uri, config: Config): Promise<void> {
         // リソースパスの生成とファイルテンプレートの取得
         const filePath = path.join(uri.fsPath, `${fileName}.${fileExtname}`);
 
-        const ctxContainer: Variables = {
+        const vars: Variables = {
             datapackName: path.basename(datapackRoot),
             namespace: getNamespace(filePath, datapackRoot),
 
@@ -67,10 +67,10 @@ export async function createFile(uri: Uri, config: Config): Promise<void> {
         try {
             const openFilePath = getTextEditor().document.uri.fsPath;
             const nowOpenFileType = getFileType(path.dirname(openFilePath), datapackRoot);
-            ctxContainer.nowOpenFileType = nowOpenFileType ?? '';
-            ctxContainer.nowOpenFileResourcePath = getResourcePath(openFilePath, datapackRoot, nowOpenFileType) ?? '';
-            ctxContainer.nowOpenFileName = openFilePath.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? '';
-            ctxContainer.nowOpenFileExtname = openFilePath.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? '';
+            vars.nowOpenFileType = nowOpenFileType ?? '';
+            vars.nowOpenFileResourcePath = getResourcePath(openFilePath, datapackRoot, nowOpenFileType) ?? '';
+            vars.nowOpenFileName = openFilePath.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? '';
+            vars.nowOpenFileExtname = openFilePath.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? '';
         } catch (error) {
             if (!(error instanceof NotOpenTextDocumentError)) throw error;
         }
@@ -83,7 +83,7 @@ export async function createFile(uri: Uri, config: Config): Promise<void> {
         });
 
         // 生成
-        await create(filePath, new TextEncoder().encode(resolveVars(fileTemplate.join('\r\n'), ctxContainer)));
+        await create(filePath, new TextEncoder().encode(resolveVars(fileTemplate.join('\r\n'), vars)));
         // ファイルを開く
         await window.showTextDocument(Uri.file(filePath), { selection });
     } catch (error) {

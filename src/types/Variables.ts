@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { isObjectArray, isStringArray } from '../utils/typeGuards';
 import { isJsonObject, JsonObject, JsonValue } from './JsonObject';
 
 export type Variables = { [key: string]: string };
@@ -24,13 +23,11 @@ export function resolveVars<T extends string | string[] | JsonValue>(obj: T, var
         return _obj;
     };
 
-    if (Array.isArray(obj)) {
-        if (isStringArray(obj)) return obj.map(resolve) as any; // string[]
-        if (isObjectArray(obj)) return obj.map(walkObj) as any; // JsonObject[]
-        return obj.map(v => resolveVars(v, vars)) as any; // JsonValue[]
-    } else {
-        if (typeof obj === 'string') return resolve(obj) as any; // string
-        if (isJsonObject(obj)) return walkObj(obj) as any; // JsonObject
-        return obj as any; // number | boolean | null
-    }
+    if (Array.isArray(obj)) return obj.map((v: string | JsonValue) => resolveVars(v, vars)) as any; // JsonValue[]
+
+    if (typeof obj === 'string') return resolve(obj) as any; // string
+    if (isJsonObject(obj)) return walkObj(obj) as any; // JsonObject
+
+    return obj as any; // number | boolean | null
+
 }
