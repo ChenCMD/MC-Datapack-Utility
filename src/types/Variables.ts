@@ -4,11 +4,10 @@ import { isJsonObject, JsonObject, JsonValue } from './JsonObject';
 
 export type Variables = { [key: string]: string };
 
-export function resolveVars<T extends string | string[] | JsonObject | JsonObject[]>(obj: T, vars: Variables):
+export function resolveVars<T extends string | string[] | JsonValue>(obj: T, vars: Variables):
     T extends string ? string
     : T extends string[] ? string[]
-    : T extends JsonObject ? JsonObject
-    : T extends JsonObject[] ? JsonObject[]
+    : T extends JsonValue ? JsonValue
     : T {
     const resolve = (str: string) => str.replace(/%.+?%/g, match => {
         const key = match.slice(1, -1);
@@ -28,10 +27,10 @@ export function resolveVars<T extends string | string[] | JsonObject | JsonObjec
     if (Array.isArray(obj)) {
         if (isStringArray(obj)) return obj.map(resolve) as any; // string[]
         if (isObjectArray(obj)) return obj.map(walkObj) as any; // JsonObject[]
-        return obj as any;
+        return obj.map(v => resolveVars(v, vars)) as any; // JsonValue[]
     } else {
         if (typeof obj === 'string') return resolve(obj) as any; // string
         if (isJsonObject(obj)) return walkObj(obj) as any; // JsonObject
-        return obj as any;
+        return obj as any; // number | boolean | null
     }
 }
