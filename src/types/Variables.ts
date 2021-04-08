@@ -23,7 +23,7 @@ export function resolveVars<T extends string | string[] | JsonValue>(obj: T, var
         return _obj;
     };
 
-    if (Array.isArray(obj)) return obj.map((v: string | JsonValue) => resolveVars(v, vars)) as any; // JsonValue[]
+    if (Array.isArray(obj)) return (obj as JsonValue[]).map(v => resolveVars(v, vars)) as any; // JsonValue[]
 
     if (typeof obj === 'string') return resolve(obj) as any; // string
     if (isJsonObject(obj)) return walkObj(obj) as any; // JsonObject
