@@ -79,6 +79,7 @@ async function toGenerateData(createItems: QuickPickFiles[], isGeneratePackMcMet
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const funcs = createItems.filter(v => v.func !== undefined).flat(v => v.func!);
 
+    ans.push(rfdc()(dataFolder));
     if (isGeneratePackMcMeta) ans.push(rfdc()(packMcMetaData));
 
     for (const [i, func] of funcs.entries()) {

@@ -13,6 +13,11 @@ export const packMcMetaData: GenerateFileData = {
     }
 };
 
+export const dataFolder: GenerateFileData = {
+    type: 'folder',
+    rel: 'data/'
+};
+
 export const pickItems: { [key in '#load & #tick' | 'Vanilla data' | 'Folders']: QuickPickFiles[] } = {
     '#load & #tick': [
         {
