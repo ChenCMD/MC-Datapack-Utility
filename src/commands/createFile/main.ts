@@ -7,13 +7,14 @@ import { locale } from '../../locales';
 import { getFileTemplate } from './utils';
 import { TextEncoder } from 'util';
 import { getFileType } from '../../types/FileTypes';
-import { resolveVars, ContextContainer } from '../../types/ContextContainer';
-import { codeConsole, config } from '../../extension';
+import { resolveVars, Variables } from '../../types/Variables';
+import { codeConsole } from '../../extension';
 import { GenerateError, NotOpenTextDocumentError, UserCancelledError } from '../../types/Error';
 import { createMessageItemHasIds } from '../../types/MessageItemHasId';
 import { createDatapack } from '../createDatapackTemplate/main';
+import { Config } from '../../types';
 
-export async function createFile(uri: Uri): Promise<void> {
+export async function createFile(uri: Uri, config: Config): Promise<void> {
     try {
         // Datapack内か確認
         const datapackRoot = await getDatapackRoot(uri.fsPath);
@@ -24,10 +25,9 @@ export async function createFile(uri: Uri): Promise<void> {
         if (!fileType) {
             // 取得できない時の処理
             if (isDatapackRoot(datapackRoot)) {
-                const res = await showError(
-                    locale('create-file.unknown-filetype.listen-add', path.basename(datapackRoot)), false, createMessageItemHasIds('yes', 'no'), ['no']
-                );
-                if (res === 'yes') return await createDatapack('create-datapack-template.add', datapackRoot);
+                const res = await showError(locale('create-file.unknown-filetype.listen-add', path.basename(datapackRoot)),
+                    false, createMessageItemHasIds('yes', 'no'), ['no']);
+                if (res === 'yes') return await createDatapack(config, 'add');
             }
             throw new GenerateError(locale('create-file.unknown-filetype'));
         }
@@ -47,7 +47,7 @@ export async function createFile(uri: Uri): Promise<void> {
         // リソースパスの生成とファイルテンプレートの取得
         const filePath = path.join(uri.fsPath, `${fileName}.${fileExtname}`);
 
-        const ctxContainer: ContextContainer = {
+        const ctxContainer: Variables = {
             datapackName: path.basename(datapackRoot),
             namespace: getNamespace(filePath, datapackRoot),
 

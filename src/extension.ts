@@ -22,7 +22,7 @@ export function activate(context: ExtensionContext): void {
     const disposable = [];
 
     disposable.push(commands.registerCommand('mcdutil.commands.createDatapackTemplate', () => createDatapack(config)));
-    disposable.push(commands.registerCommand('mcdutil.commands.createFile', createFile));
+    disposable.push(commands.registerCommand('mcdutil.commands.createFile', uri => createFile(uri, config)));
     disposable.push(commands.registerCommand('mcdutil.commands.scoreOperation', scoreOperation));
     disposable.push(commands.registerCommand('mcdutil.commands.copyResourcePath', copyResourcePath));
 
