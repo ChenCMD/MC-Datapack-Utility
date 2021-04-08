@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { JsonObject, JsonValue } from './JSONObject';
+
 export interface FileData {
     rel: string
     content?: ContentType
@@ -9,9 +10,9 @@ export interface FileDataReqContent extends FileData {
     content: ContentType
 }
 
-export type ContentType = string[] | { [key: string]: any } | { [key: string]: any }[];
+export type ContentType = string[] | JsonObject | JsonObject[];
 
 export interface AppendElement {
     key: string
-    elem: any
+    elem: JsonValue
 }
