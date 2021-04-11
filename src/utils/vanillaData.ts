@@ -24,11 +24,11 @@
  */
 
 import { codeConsole } from '../extension';
-import { AskGitHubData, ReposGetContentResponseData } from '../types/OctokitWrapper';
+import { AskGitHubData, getGitHubData, ReposGetContentResponseData } from '../types/OctokitWrapper';
 import { FileDataReqContent } from '../types/FileData';
 import { VersionInformation } from '../types/VersionInformation';
 import { setTimeOut } from './common';
-import { download, getGitHubData } from './downloader';
+import { download } from './downloader';
 
 export async function getVanillaData(
     versionOrLiteral: string,
