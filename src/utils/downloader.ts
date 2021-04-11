@@ -1,9 +1,7 @@
 import https from 'https';
-import { Octokit } from '@octokit/rest';
-import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
-import { OctokitResponse } from '@octokit/types/dist-types/OctokitResponse';
+import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
 import { setTimeOut } from './common';
-import { AskGitHubData } from '../types/AskGitHubData';
+import { AskGitHubData } from '../types/OctokitWrapper';
 
 export async function download(uri: string): Promise<string> {
     return await new Promise((resolve, reject) => {
@@ -20,7 +18,7 @@ export async function download(uri: string): Promise<string> {
     });
 }
 
-export async function getGitHubData(data: AskGitHubData): Promise<ReposGetContentResponseData[]> {
+export async function getGitHubData(data: AskGitHubData): Promise<RestEndpointMethodTypes['repos']['getContent']['response']['data']> {
     const octokit = new Octokit();
     const files = await Promise.race([
         octokit.repos.getContent({
@@ -28,7 +26,7 @@ export async function getGitHubData(data: AskGitHubData): Promise<ReposGetConten
             repo: data.repo,
             ref: data.ref,
             path: data.path
-        }) as unknown as OctokitResponse<ReposGetContentResponseData[]>,
+        }),
         setTimeOut(7000)
     ]);
     return files.data;

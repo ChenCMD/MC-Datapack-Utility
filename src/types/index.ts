@@ -1,4 +1,4 @@
-export * from './AskGitHubData';
+export * from './OctokitWrapper';
 export * from './Config';
 export * from './Variables';
 export * from './Deque';

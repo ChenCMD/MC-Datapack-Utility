@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
+import { ReposGetContentResponseData } from '../../../types';
 import { GenerateFileData, QuickPickFiles } from '../types/QuickPickFiles';
 
 export const packMcMetaData: GenerateFileData = {

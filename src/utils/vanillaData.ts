@@ -23,9 +23,8 @@
  * SOFTWARE.
  */
 
-import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
 import { codeConsole } from '../extension';
-import { AskGitHubData } from '../types/AskGitHubData';
+import { AskGitHubData, ReposGetContentResponseData } from '../types/OctokitWrapper';
 import { FileDataReqContent } from '../types/FileData';
 import { VersionInformation } from '../types/VersionInformation';
 import { setTimeOut } from './common';
@@ -43,9 +42,12 @@ export async function getVanillaData(
     const files = await getGitHubData(askGitHubdata);
     const ans: FileDataReqContent[] = [];
 
-    for (const [i, file] of files.entries()) {
+    if (!Array.isArray(files)) return [];
+
+    for (const [i, file] of files.filter(v => v.download_url !== null).entries()) {
         const content = await Promise.race([
-            download(file.download_url),
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            download(file.download_url!),
             setTimeOut(7000)
         ]);
         ans.push({
