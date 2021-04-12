@@ -16,9 +16,11 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
         const edits: TextEdit[] = [];
 
-        if (!config.mcfFormatter.doInsertIMPDocument)
-            edits.push(...await this.insertProtocol(document, eol));
-
+        if (!config.mcfFormatter.doInsertIMPDocument) {
+            const protocol = await this.insertResourcePath(document, eol);
+            if (protocol)
+                edits.push(protocol);
+        }
         edits.push(...this.insertIndent(document, indent, eol));
 
         return edits;
@@ -111,15 +113,15 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
         return editQueue;
     }
 
-    private async insertProtocol(document: TextDocument, eol: string): Promise<TextEdit[]> {
+    private async insertResourcePath(document: TextDocument, eol: string): Promise<TextEdit | undefined> {
         const rootPath = await getDatapackRoot(document.fileName);
 
         if (rootPath) {
-            const filepath = getResourcePath(document.uri.fsPath, rootPath, 'function');
-            if (document.lineAt(0).text !== `#> ${filepath}`)
-                return [TextEdit.insert(new Position(0, 0), `#> ${filepath}${eol}`)];
+            const resourcePath = getResourcePath(document.uri.fsPath, rootPath, 'function');
+            if (document.lineAt(0).text !== `#> ${resourcePath}`)
+                return TextEdit.insert(new Position(0, 0), `#> ${resourcePath}${eol}`);
         }
 
-        return [];
+        return undefined;
     }
 }
