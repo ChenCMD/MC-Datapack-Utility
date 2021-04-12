@@ -1,4 +1,4 @@
-import { DocumentFormattingEditProvider, FormattingOptions, Position, Range, TextDocument, TextEdit } from 'vscode';
+import { DocumentFormattingEditProvider, EndOfLine, FormattingOptions, Position, Range, TextDocument, TextEdit } from 'vscode';
 import { config } from '../extension';
 import { Deque } from '../types/Deque';
 import { getDatapackRoot, getResourcePath } from '../utils/common';
@@ -7,18 +7,24 @@ import { StringReader } from '../utils/StringReader';
 export class McfunctionFormatter implements DocumentFormattingEditProvider {
     async provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions): Promise<TextEdit[]> {
         const indent = option.insertSpaces ? ' '.repeat(option.tabSize) : '\t';
+        const eol = (() => {
+            switch (document.eol) {
+                case EndOfLine.LF: return '\n';
+                case EndOfLine.CRLF: return '\r\n';
+            }
+        })();
 
         const edits: TextEdit[] = [];
 
         if (!config.mcfFormatter.doInsertIMPDocument)
-            edits.push(...await this.insertProtocol(document));
+            edits.push(...await this.insertProtocol(document, eol));
 
-        edits.push(...this.insertIndent(document, indent));
+        edits.push(...this.insertIndent(document, indent, eol));
 
         return edits;
     }
 
-    private insertIndent(document: TextDocument, indent: string): TextEdit[] {
+    private insertIndent(document: TextDocument, indent: string, eol: string): TextEdit[] {
         const editQueue: TextEdit[] = [];
 
         const depth = new Deque<number>();
@@ -26,7 +32,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
         const docText = new StringReader(document.getText());
 
-        const indentElement = { newLineSign: '\n', indents: 0 };
+        const indentElement = { newLineSign: eol, indents: 0 };
 
         const next = (range: Range, line: string, indentMap: typeof indentElement) => {
             editQueue.push(TextEdit.replace(range, indentMap.newLineSign + indent.repeat(indentMap.indents) + line));
@@ -47,7 +53,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
                 lastLineType = 'blankLine';
 
-                next(range, '', { newLineSign: '\n', indents: 0 });
+                next(range, '', { newLineSign: eol, indents: 0 });
                 continue;
             }
 
@@ -57,7 +63,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
             while (docText.peek() === '#') docText.skip();
             const numSigns = docText.cursor - lineStart;
 
-            indentElement.newLineSign = '\n';
+            indentElement.newLineSign = eol;
 
             // コマンドについての処理
             if (numSigns === 0) {
@@ -77,14 +83,14 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
                         // 前line の # の数を記憶し、現line と同じであれば 連続するコメント とみなす。
                         depth.addLast(numSigns);
 
-                    indentElement.newLineSign += lastLineType === 'command' ? '\n' : '';
+                    indentElement.newLineSign += lastLineType === 'command' ? eol : '';
                     indentElement.indents = Math.max(depth.size() - 1, 0);
                     lastLineType = 'comment';
                     break;
 
                 case 'declare': // 「#declare ～」「#define ～」の場合
                 case 'define':
-                    indentElement.newLineSign += lastLineType === 'command' ? '\n' : '';
+                    indentElement.newLineSign += lastLineType === 'command' ? eol : '';
                     indentElement.indents = depth.size();
                     lastLineType = 'special';
                     break;
@@ -93,8 +99,8 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
                     depth.clear();
                     depth.addLast(numSigns);
 
-                    indentElement.newLineSign = lineCount === 0 ? '' : '\n';
-                    indentElement.newLineSign += lastLineType === 'command' ? '\n' : '';
+                    indentElement.newLineSign = lineCount === 0 ? '' : eol;
+                    indentElement.newLineSign += lastLineType === 'command' ? eol : '';
                     indentElement.indents = 0;
                     lastLineType = 'comment';
                     break;
@@ -105,13 +111,13 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
         return editQueue;
     }
 
-    private async insertProtocol(document: TextDocument): Promise<TextEdit[]> {
+    private async insertProtocol(document: TextDocument, eol: string): Promise<TextEdit[]> {
         const rootPath = await getDatapackRoot(document.fileName);
 
         if (rootPath) {
             const filepath = getResourcePath(document.uri.fsPath, rootPath, 'function');
             if (document.lineAt(0).text !== `#> ${filepath}`)
-                return [TextEdit.insert(new Position(0, 0), `#> ${filepath}\n`)];
+                return [TextEdit.insert(new Position(0, 0), `#> ${filepath}${eol}`)];
         }
 
         return [];
