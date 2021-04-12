@@ -7,7 +7,15 @@ import { StringReader } from '../utils/StringReader';
 export class McfunctionFormatter implements DocumentFormattingEditProvider {
     async provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions): Promise<TextEdit[]> {
         const indent = option.insertSpaces ? ' '.repeat(option.tabSize) : '\t';
-        return [...await this.insertProtocol(document), ...this.insertIndent(document, indent)];
+
+        const edits: TextEdit[] = [];
+
+        if (!config.mcfFormatter.doInsertIMPDocument)
+            edits.push(...await this.insertProtocol(document));
+
+        edits.push(...this.insertIndent(document, indent));
+
+        return edits;
     }
 
     private insertIndent(document: TextDocument, indent: string): TextEdit[] {
@@ -98,9 +106,6 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
     }
 
     private async insertProtocol(document: TextDocument): Promise<TextEdit[]> {
-        if (!config.mcfFormatter.doInsertIMPDocument)
-            return [];
-
         const rootPath = await getDatapackRoot(document.fileName);
 
         if (rootPath) {
