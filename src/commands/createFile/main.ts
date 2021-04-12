@@ -7,27 +7,31 @@ import { locale } from '../../locales';
 import { getFileTemplate } from './utils';
 import { TextEncoder } from 'util';
 import { getFileType } from '../../types/FileTypes';
-import { resolveVars, ContextContainer } from '../../types/ContextContainer';
-import { codeConsole, config } from '../../extension';
+import { resolveVars, Variables } from '../../types/Variables';
+import { codeConsole } from '../../extension';
 import { GenerateError, NotOpenTextDocumentError, UserCancelledError } from '../../types/Error';
 import { createMessageItemHasIds } from '../../types/MessageItemHasId';
 import { createDatapack } from '../createDatapackTemplate/main';
+import { Config } from '../../types';
 
-export async function createFile(uri: Uri): Promise<void> {
+export async function createFile(uri: Uri, config: Config): Promise<void> {
     try {
         // Datapack内か確認
         const datapackRoot = await getDatapackRoot(uri.fsPath);
-        if (!datapackRoot) throw new GenerateError(locale('create-file.not-datapack'));
+        if (!datapackRoot) {
+            const res = await showError(locale('create-file.not-datapack'), false, createMessageItemHasIds('yes', 'no'), ['no']);
+            if (res === 'yes') return await createDatapack(config, 'create');
+            return;
+        }
 
         // ファイルの種類を取得
         const fileType = getFileType(uri.fsPath, datapackRoot);
         if (!fileType) {
             // 取得できない時の処理
             if (isDatapackRoot(datapackRoot)) {
-                const res = await showError(
-                    locale('create-file.unknown-filetype.listen-add', path.basename(datapackRoot)), false, createMessageItemHasIds('yes', 'no'), ['no']
-                );
-                if (res === 'yes') return await createDatapack('create-datapack-template.add', datapackRoot);
+                const res = await showError(locale('create-file.unknown-filetype.listen-add', path.basename(datapackRoot)),
+                    false, createMessageItemHasIds('yes', 'no'), ['no']);
+                if (res === 'yes') return await createDatapack(config, 'add');
             }
             throw new GenerateError(locale('create-file.unknown-filetype'));
         }
@@ -47,7 +51,7 @@ export async function createFile(uri: Uri): Promise<void> {
         // リソースパスの生成とファイルテンプレートの取得
         const filePath = path.join(uri.fsPath, `${fileName}.${fileExtname}`);
 
-        const ctxContainer: ContextContainer = {
+        const vars: Variables = {
             datapackName: path.basename(datapackRoot),
             namespace: getNamespace(filePath, datapackRoot),
 
@@ -63,10 +67,10 @@ export async function createFile(uri: Uri): Promise<void> {
         try {
             const openFilePath = getTextEditor().document.uri.fsPath;
             const nowOpenFileType = getFileType(path.dirname(openFilePath), datapackRoot);
-            ctxContainer.nowOpenFileType = nowOpenFileType ?? '';
-            ctxContainer.nowOpenFileResourcePath = getResourcePath(openFilePath, datapackRoot, nowOpenFileType) ?? '';
-            ctxContainer.nowOpenFileName = openFilePath.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? '';
-            ctxContainer.nowOpenFileExtname = openFilePath.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? '';
+            vars.nowOpenFileType = nowOpenFileType ?? '';
+            vars.nowOpenFileResourcePath = getResourcePath(openFilePath, datapackRoot, nowOpenFileType) ?? '';
+            vars.nowOpenFileName = openFilePath.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? '';
+            vars.nowOpenFileExtname = openFilePath.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? '';
         } catch (error) {
             if (!(error instanceof NotOpenTextDocumentError)) throw error;
         }
@@ -79,7 +83,7 @@ export async function createFile(uri: Uri): Promise<void> {
         });
 
         // 生成
-        await create(filePath, new TextEncoder().encode(resolveVars(fileTemplate.join('\r\n'), ctxContainer)));
+        await create(filePath, new TextEncoder().encode(resolveVars(fileTemplate.join('\r\n'), vars)));
         // ファイルを開く
         await window.showTextDocument(Uri.file(filePath), { selection });
     } catch (error) {

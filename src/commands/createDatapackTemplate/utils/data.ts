@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
+import { ReposGetContentResponseData } from '../../../types';
 import { GenerateFileData, QuickPickFiles } from '../types/QuickPickFiles';
 
 export const packMcMetaData: GenerateFileData = {
@@ -11,6 +11,11 @@ export const packMcMetaData: GenerateFileData = {
             description: '%datapackDescription%'
         }
     }
+};
+
+export const dataFolder: GenerateFileData = {
+    type: 'folder',
+    rel: 'data/'
 };
 
 export const pickItems: { [key in '#load & #tick' | 'Vanilla data' | 'Folders']: QuickPickFiles[] } = {
@@ -125,6 +130,15 @@ export const pickItems: { [key in '#load & #tick' | 'Vanilla data' | 'Folders']:
                 {
                     type: 'folder',
                     rel: 'data/%namespace%/advancements/'
+                }
+            ]
+        },
+        {
+            label: 'data/%namespace%/functions/',
+            generates: [
+                {
+                    type: 'folder',
+                    rel: 'data/%namespace%/functions/'
                 }
             ]
         },

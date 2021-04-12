@@ -37,10 +37,10 @@
 	},
 	"main": "dist/extension.js",
 	"dependencies": {
-		"@octokit/rest": "^18.2.1",
+		"@octokit/rest": "^18.5.2",
 		"dateformat": "^3.0.3",
 		"minimatch": "^3.0.4",
-		"rfdc": "^1.2.0"
+		"rfdc": "^1.3.0"
 	},
 	"activationEvents": [
 		"workspaceContains:**/pack.mcmeta",
@@ -399,6 +399,39 @@
 					"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate%",
 					"default": []
 				},
+				"mcdutil.createDatapackTemplate.customQuestion": {
+					"type": "array",
+					"items": {
+						"type": "object",
+						"additionalProperties": false,
+						"required": [
+							"name",
+							"question"
+						],
+						"properties": {
+							"name": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customQuestion.name%"
+							},
+							"question": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customQuestion.question%"
+							},
+							"pattern": {
+								"type": "string",
+								"format": "regex",
+								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customQuestion.pattern%"
+							},
+							"patternErrorMessage": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customQuestion.patternErrorMessage%"
+							}
+						},
+						"markdownDescription": "%mcdutil.config.createDatapackTemplate.customQuestion%"
+					},
+					"markdownDescription": "%mcdutil.config.createDatapackTemplate.customQuestion%",
+					"default": []
+				},
 				"mcdutil.createFile.fileTemplate": {
 					"type": "object",
 					"additionalProperties": false,
@@ -588,22 +621,22 @@
 		"@semantic-release/git": "^9.0.0",
 		"@types/dateformat": "^3.0.1",
 		"@types/glob": "^7.1.3",
-		"@types/mocha": "^8.2.1",
-		"@types/node": "^14.14.31",
+		"@types/mocha": "^8.2.2",
+		"@types/node": "^14.14.37",
 		"@types/rfdc": "^1.1.0",
-		"@types/vscode": "^1.53.0",
+		"@types/vscode": "^1.55.0",
 		"@typescript-eslint/eslint-plugin": "^3.8.0",
 		"@typescript-eslint/parser": "^3.8.0",
-		"eslint": "^7.20.0",
+		"eslint": "^7.24.0",
 		"glob": "^7.1.6",
-		"mocha": "^8.3.0",
-		"semantic-release": "^17.4.0",
+		"mocha": "^8.3.2",
+		"semantic-release": "^17.4.2",
 		"semantic-release-gitmoji": "^1.3.4",
-		"semantic-release-vsce": "^3.1.3",
-		"ts-loader": "^8.0.17",
+		"semantic-release-vsce": "^3.3.0",
+		"ts-loader": "^8.1.0",
 		"typescript": "^3.9.9",
-		"vscode-test": "^1.5.1",
-		"webpack": "^5.24.2",
-		"webpack-cli": "^4.5.0"
+		"vscode-test": "^1.5.2",
+		"webpack": "^5.31.2",
+		"webpack-cli": "^4.6.0"
 	}
 }

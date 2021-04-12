@@ -1,7 +1,6 @@
 import { QuickPickItem } from 'vscode';
-import { ReposGetContentResponseData } from '@octokit/types/dist-types/generated/Endpoints';
 import { FileData, FileDataReqContent } from '../../../types/FileData';
-import { AskGitHubData } from '../../../types/AskGitHubData';
+import { AskGitHubData, ReposGetContentResponseData } from '../../../types/OctokitWrapper';
 
 export interface QuickPickFiles extends QuickPickItem {
     generates: GenerateFileData[]

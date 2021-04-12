@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any */
 import { arrayToMessage, locale } from '../locales';
 import { JsonObject, JsonValue } from '../types';
 import { ObjectIsNotArrayError, ParsingError, TypeUnmatchError, UnimplementedError } from '../types/Error';
@@ -92,7 +91,7 @@ function multiResult(obj: JsonValue, reader: StringReader, elem: JsonValue): Jso
 
     reader.skipWhiteSpace().expect(']').skip();
 
-    const walkFunc: (obj: JsonValue, reader: StringReader) => any | undefined = canParseSep(reader)
+    const walkFunc: (obj: JsonValue, reader: StringReader) => JsonValue = canParseSep(reader)
         ? (_obj, _reader) => walkObjFromJsonKeyPath(_obj, _reader.skip(), elem, ['key', 'index'], false)
         : (_obj, _reader) => walkObjFromJsonKeyPath(_obj, _reader, elem, ['index'], true);
 

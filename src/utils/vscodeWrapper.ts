@@ -36,16 +36,26 @@ export function validater(v: string, validatePattern: RegExp, message: string): 
     return undefined;
 }
 
-export async function listenOpenDir(title: string, openLabel: string): Promise<Uri> {
-    // フォルダ選択
+export interface ListenDirOption {
+    canSelectFiles?: boolean
+    canSelectFolders?: boolean
+    canSelectMany?: boolean
+    defaultUri?: Uri
+    filters?: { [key: string]: string[] }
+}
+
+export async function listenDir(title: string, openLabel: string, otherOption?: ListenDirOption & { canSelectMany?: false }): Promise<Uri>;
+export async function listenDir(title: string, openLabel: string, otherOption?: ListenDirOption & { canSelectMany: true }): Promise<Uri[]>;
+export async function listenDir(title: string, openLabel: string, option: ListenDirOption = {}): Promise<Uri | Uri[]> {
     const ans = await window.showOpenDialog({
-        canSelectFiles: false,
-        canSelectFolders: true,
-        canSelectMany: false,
-        defaultUri: workspace.workspaceFolders?.[0].uri,
+        canSelectFiles: option.canSelectFiles ?? false,
+        canSelectFolders: option.canSelectFolders ?? true,
+        canSelectMany: option.canSelectMany ?? false,
+        defaultUri: option.defaultUri ?? workspace.workspaceFolders?.[0].uri,
         openLabel,
-        title
-    }).then(v => v?.[0]);
+        title,
+        filters: option.filters
+    }).then(v => option.canSelectMany ? v : v?.[0]);
     if (!ans) throw new UserCancelledError();
     return ans;
 }

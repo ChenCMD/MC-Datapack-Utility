@@ -21,7 +21,7 @@ export function isNumberArray(obj: any): obj is number[] {
 }
 
 export function isObjectArray(obj: any): obj is { [key: string]: any }[] {
-    return isSomethingArray(obj, 'object');
+    return isSomethingArray(obj, 'object') && obj !== null;
 }
 
 export function isStringArray(obj: any): obj is string[] {

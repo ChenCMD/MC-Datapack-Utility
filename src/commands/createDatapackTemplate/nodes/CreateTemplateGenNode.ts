@@ -1,0 +1,45 @@
+import path from 'path';
+import { locale } from '../../../locales';
+import { createMessageItemHasIds } from '../../../types/MessageItemHasId';
+import { getDatapackRoot, isDatapackRoot } from '../../../utils/common';
+import { listenDir, listenInput, showWarning, validater } from '../../../utils/vscodeWrapper';
+import { AbstractNode } from '../types/AbstractNode';
+
+export class CreateTemplateGenNode extends AbstractNode {
+    readonly isGeneratePackMcMeta = true;
+
+    async listenGenerateDir(): Promise<string> {
+        const dir = await listenDir(
+            locale('create-datapack-template.dialog-title-directory'),
+            locale('create-datapack-template.dialog-label')
+        ).then(v => v.fsPath);
+
+        const datapackRoot = await getDatapackRoot(dir);
+        if (datapackRoot) {
+            const warningMessage = locale('create-datapack-template.inside-datapack', path.basename(datapackRoot));
+            const result = await showWarning(warningMessage, false, createMessageItemHasIds('yes', 'reselect', 'no'), ['no']);
+            if (result === 'reselect') return await this.listenGenerateDir();
+        }
+        return dir;
+    }
+
+    async listenDatapackNameAndRoot(directory: string): Promise<{ name: string; root: string }> {
+        const name = await listenInput(
+            locale('create-datapack-template.datapack-name'),
+            v => validater(v, /[\\/:*?"<>|]/g, locale('create-datapack-template.name-blank'))
+        );
+        const root = path.join(directory, name);
+
+        if (await isDatapackRoot(root)) {
+            const warningMessage = locale('create-datapack-template.duplicate-datapack', path.basename(root));
+            const result = await showWarning(warningMessage, false, createMessageItemHasIds('yes', 'rename', 'no'), ['no']);
+            if (result === 'rename') return await this.listenDatapackNameAndRoot(directory);
+        }
+
+        return { name, root };
+    }
+
+    async listenDatapackDescription(): Promise<string> {
+        return await listenInput(locale('create-datapack-template.datapack-description'));
+    }
+}
