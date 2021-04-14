@@ -1,5 +1,5 @@
 import '../../utils/methodExtensions';
-import { codeConsole, config } from '../../extension';
+import { codeConsole } from '../../extension';
 import { getTextEditor, listenInput, showError } from '../../utils/vscodeWrapper';
 import { rpnToScoreOperation } from './utils/converter';
 import { formulaAnalyzer } from './utils/formula';
@@ -8,8 +8,9 @@ import { opTable } from './types/OperateTable';
 import { NotOpenTextDocumentError, UserCancelledError } from '../../types/Error';
 import { IfFormula } from './types/Formula';
 import rfdc from 'rfdc';
+import { Config } from '../../types';
 
-export async function scoreOperation(): Promise<void> {
+export async function scoreOperation(config: Config): Promise<void> {
     const { objective, forceInputType } = config.scoreOperation;
     try {
         const editor = getTextEditor();
