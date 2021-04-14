@@ -1,10 +1,21 @@
 import { DocumentFormattingEditProvider, EndOfLine, FormattingOptions, Position, Range, TextDocument, TextEdit } from 'vscode';
-import { config } from '../extension';
+// import { config } from '../extension';
+import { Config } from '../types';
 import { Deque } from '../types/Deque';
 import { getDatapackRoot, getResourcePath } from '../utils/common';
 import { StringReader } from '../utils/StringReader';
 
 export class McfunctionFormatter implements DocumentFormattingEditProvider {
+    private config: Config;
+
+    constructor(config: Config) {
+        this.config = config;
+    }
+
+    setConfig(config: Config): void {
+        this.config = config;
+    }
+
     async provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions): Promise<TextEdit[]> {
         const indent = option.insertSpaces ? ' '.repeat(option.tabSize) : '\t';
         const eol = (() => {
@@ -16,7 +27,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
         const edits: TextEdit[] = [];
 
-        if (!config.mcfFormatter.doInsertIMPDocument) {
+        if (!this.config.mcfFormatter.doInsertIMPDocument) {
             const protocol = await this.insertResourcePath(document, eol);
             if (protocol)
                 edits.push(protocol);
