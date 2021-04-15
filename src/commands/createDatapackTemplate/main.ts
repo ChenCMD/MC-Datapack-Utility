@@ -1,5 +1,5 @@
 import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, pathAccessible, readFile, showError, showInfo, validater, writeFile } from '../../utils';
-import { Config, Variables, createQuickPickItemHasIds, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError } from '../../types';
+import { Config, Variables, makeExtendQuickPickItem, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError } from '../../types';
 import { locale } from '../../locales';
 import { GenerateFileData, QuickPickFiles } from './types/QuickPickFiles';
 import { getGenTypeMap } from './types/GenerateType';
@@ -54,7 +54,7 @@ export async function createDatapack({ createDatapackTemplate, dateFormat }: Con
 }
 
 async function listenGenerateType(): Promise<GenNodes> {
-    const res = await listenPickItem('', createQuickPickItemHasIds(getGenTypeMap()), false);
+    const res = await listenPickItem('', makeExtendQuickPickItem(getGenTypeMap()), false);
     return res.extend;
 }
 
