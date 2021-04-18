@@ -89,7 +89,7 @@ This extension provides comprehensive support for Datapack and is very useful.
 
 # Special Thanks
 
-Thanks to [Yavu](https://twitter.com/Yavu_Minecraft) for creating the MC Datapack Utility icon/banner.
+Thanks to [Yavu](https://twitter.com/Yavu_8B) for creating the MC Datapack Utility icon/banner.
 I'd like to take this opportunity to thank you.
 
 # Contribution

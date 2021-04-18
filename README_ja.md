@@ -89,7 +89,7 @@ VSCodeでDatapackを作成する際は[Datapack Helper Plus](https://marketplace
 
 # Special Thanks
 
-[藪](https://twitter.com/Yavu_Minecraft)氏にMC Datapack Utilityのアイコン/バナーを作成していただきました。
+[藪](https://twitter.com/Yavu_8B)氏にMC Datapack Utilityのアイコン/バナーを作成していただきました。
 この場をお借りしてお礼申し上げます。
 
 # コントリビュートについて
