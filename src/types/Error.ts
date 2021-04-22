@@ -16,5 +16,5 @@ export class GenerateError extends ErrorTemplate { }
 export class NotOpenTextDocumentError extends ErrorTemplate { }
 export class ParsingError extends ErrorTemplate { }
 export class UnimplementedError extends ErrorTemplate { }
-export class TypeUnmatchError extends ErrorTemplate { }
+export class TypeUnmatchedError extends ErrorTemplate { }
 export class ObjectIsNotArrayError extends ErrorTemplate { }
