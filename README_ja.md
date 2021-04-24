@@ -19,7 +19,7 @@
   - [素早いファイルの作成](#素早いファイルの作成)
   - [計算式のscore operationへの変換](#計算式のscore-operationへの変換)
 - [推奨事項](#推奨事項)
-- [Special Thanks](#special-thanks)
+- [謝辞](#謝辞)
 - [コントリビュートについて](#コントリビュートについて)
 
 # 免責事項
@@ -87,7 +87,7 @@ VSCodeでDatapackを作成する際は[Datapack Helper Plus](https://marketplace
 
 この拡張機能はDatapackに関する包括的なサポートを行っており、非常に便利です。
 
-# Special Thanks
+# 謝辞
 
 [藪](https://twitter.com/Yavu_8B)氏にMC Datapack Utilityのアイコン/バナーを作成していただきました。
 この場をお借りしてお礼申し上げます。
