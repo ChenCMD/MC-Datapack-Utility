@@ -26,7 +26,7 @@
     "formula-to-score-operation.too-enough-term": "项数过多。",
     "formula-to-score-operation.illegal-formula": "表达式不合法。",
     "formula-to-score-operation.formula": "公式",
-    "formula-to-score-operation.complate-text": "只要你想，你可以同时更改SCORE HOLDER的名称和SCORE OBJECT的名称",
+    "formula-to-score-operation.complete-text": "只要你想，你可以同时更改SCORE HOLDER的名称和SCORE OBJECT的名称",
     "formula-to-score-operation.specifying-object": "%0%的SCORE OBJECT",
     "too-much": "过多的%0%。",
     "input-here": "请输入%0%",

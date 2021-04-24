@@ -42,7 +42,7 @@ export async function scoreOperation({ scoreOperation: config }: Config): Promis
         editor.edit(edit => {
             edit.replace(editor.selection, [
                 `# ${text}`,
-                `# ${locale('formula-to-score-operation.complate-text')}`,
+                `# ${locale('formula-to-score-operation.complete-text')}`,
                 `scoreboard objectives add ${objective} dummy`,
                 Array.from(resValues).join('\r\n'),
                 '',
