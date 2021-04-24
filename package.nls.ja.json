@@ -7,6 +7,7 @@
     "mcdutil.config.env.language": "MC Datapack Utilityが表示する言語",
     "mcdutil.config.env.dateFormat": "生成時代入変数のDateで代入される日時のフォーマット (フォーマット形式は[ここ](https://github.com/felixge/node-dateformat#mask-options)を参照してください)",
     "mcdutil.config.env.dataVersion": "使用するバニラデータのバージョン",
+    "mcdutil.config.env.detectionDepth": "データパックのrootフォルダを検出する深度上限",
     "mcdutil.config.scoreOperation.prefix": "**計算式をscore opearationに変換**: スコアホルダーの接頭辞",
     "mcdutil.config.scoreOperation.objective": "**計算式をscore opearationに変換**: スコアオブジェクトの名前",
     "mcdutil.config.scoreOperation.temp": "**計算式をscore opearationに変換**: 途中で仮に保存される変数",

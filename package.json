@@ -47,7 +47,8 @@
 		"onCommand:mcdutil.commands.createDatapackTemplate",
 		"onCommand:mcdutil.commands.createFile",
 		"onCommand:mcdutil.commands.scoreOperation",
-		"onCommand:mcdutil.commands.copyResourcePath"
+		"onCommand:mcdutil.commands.copyResourcePath",
+		"onCommand:mcdutil.commands.generateMultiLine"
 	],
 	"contributes": {
 		"commands": [
@@ -70,6 +71,11 @@
 				"command": "mcdutil.commands.copyResourcePath",
 				"title": "%mcdutil.commands.copyResourcePath.title%",
 				"category": "Datapack"
+			},
+			{
+				"command": "mcdutil.commands.generateMultiLine",
+				"title": "%mcdutil.commands.generateMultiLine.title%",
+				"category": "Datapack"
 			}
 		],
 		"keybindings": [
@@ -79,7 +85,13 @@
 			},
 			{
 				"command": "mcdutil.commands.scoreOperation",
-				"key": "Alt+Shift+D Alt+Shift+S"
+				"key": "Alt+Shift+D Alt+Shift+S",
+				"when": "editorTextFocus == true && editorReadonly == false"
+			},
+			{
+				"command": "mcdutil.commands.generateMultiLine",
+				"key": "Alt+Shift+D Alt+Shift+M",
+				"when": "editorTextFocus == true && editorReadonly == false"
 			}
 		],
 		"menus": {
@@ -120,6 +132,11 @@
 					],
 					"markdownDescription": "%mcdutil.config.env.language%",
 					"default": "Default"
+				},
+				"mcdutil.env.detectionDepth": {
+					"type": "integer",
+					"markdownDescription": "%mcdutil.config.env.detectionDepth%",
+					"default": 1
 				},
 				"mcdutil.env.dataVersion": {
 					"type": "string",

@@ -14,6 +14,7 @@ export interface Config {
 export interface EnvironmentConfig {
     language: 'Default' | 'en' | 'ja' | 'zh-cn' | 'zh-tw'
     dateFormat: string
+    detectionDepth: number
     dataVersion: string
 }
 
@@ -43,6 +44,7 @@ export const defaultConfig: Config = {
     env: {
         language: 'Default',
         dateFormat: 'm/dd HH:MM',
+        detectionDepth: 1,
         dataVersion: 'Latest release'
     },
     scoreOperation: {
