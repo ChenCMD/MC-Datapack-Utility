@@ -37,7 +37,7 @@ export function activate(context: ExtensionContext): void {
 function updateConfig(event: ConfigurationChangeEvent) {
     if (event.affectsConfiguration('mcdutil')) {
         config = constructConfig(workspace.getConfiguration('mcdutil'));
-        loadLocale(config.language, vscodeLanguage);
+        loadLocale(config.env.language, vscodeLanguage);
     }
 }
 

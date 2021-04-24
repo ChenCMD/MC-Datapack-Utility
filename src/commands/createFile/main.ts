@@ -60,7 +60,7 @@ export async function createFile(uri: Uri, config: Config): Promise<void> {
             fileType,
             fileExtname,
 
-            date: getDate(config.dateFormat),
+            date: getDate(config.env.dateFormat),
             cursor: ''
         };
 

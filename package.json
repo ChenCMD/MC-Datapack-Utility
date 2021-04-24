@@ -109,7 +109,7 @@
 		"configuration": {
 			"title": "MC Datapack Utilility",
 			"properties": {
-				"mcdutil.language": {
+				"mcdutil.env.language": {
 					"type": "string",
 					"enum": [
 						"Default",
@@ -118,12 +118,17 @@
 						"zh-cn",
 						"zh-tw"
 					],
-					"markdownDescription": "%mcdutil.config.language%",
+					"markdownDescription": "%mcdutil.config.env.language%",
 					"default": "Default"
 				},
-				"mcdutil.dateFormat": {
+				"mcdutil.env.dataVersion": {
 					"type": "string",
-					"markdownDescription": "%mcdutil.config.dateFormat%",
+					"markdownDescription": "%mcdutil.config.env.dataVersion%",
+					"default": "Latest release"
+				},
+				"mcdutil.env.dateFormat": {
+					"type": "string",
+					"markdownDescription": "%mcdutil.config.env.dateFormat%",
 					"default": "m/dd HH:MM"
 				},
 				"mcdutil.scoreOperation.prefix": {
@@ -233,11 +238,6 @@
 					"type": "number",
 					"markdownDescription": "%mcdutil.config.scoreOperation.valueScale%",
 					"default": 1
-				},
-				"mcdutil.createDatapackTemplate.dataVersion": {
-					"type": "string",
-					"markdownDescription": "%mcdutil.config.createDatapackTemplate.dataVersion%",
-					"default": "Latest release"
 				},
 				"mcdutil.createDatapackTemplate.defaultLoadAndTick": {
 					"type": "boolean",

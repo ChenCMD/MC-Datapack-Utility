@@ -5,11 +5,16 @@ import { Template } from '../commands/createFile/types/Template';
 import { OperateElement } from '../commands/scoreOperation/types/OperateTable';
 
 export interface Config {
-    language: 'Default' | 'en' | 'ja' | 'zh-cn' | 'zh-tw'
-    dateFormat: string
+    env: EnvironmentConfig
     scoreOperation: ScoreOperationConfig
     createDatapackTemplate: CreateDatapackTemplateConfig
     createFile: CreateFileConfig
+}
+
+export interface EnvironmentConfig {
+    language: 'Default' | 'en' | 'ja' | 'zh-cn' | 'zh-tw'
+    dateFormat: string
+    dataVersion: string
 }
 
 export interface ScoreOperationConfig {
@@ -23,7 +28,6 @@ export interface ScoreOperationConfig {
 }
 
 export interface CreateDatapackTemplateConfig {
-    dataVersion: string
     defaultLoadAndTick: boolean
     defaultVanillaData: boolean
     defaultFolder: boolean
@@ -36,8 +40,11 @@ export interface CreateFileConfig {
 }
 
 export const defaultConfig: Config = {
-    language: 'Default',
-    dateFormat: 'm/dd HH:MM',
+    env: {
+        language: 'Default',
+        dateFormat: 'm/dd HH:MM',
+        dataVersion: 'Latest release'
+    },
     scoreOperation: {
         prefix: '$MCDUtil_',
         objective: '_',
@@ -48,7 +55,6 @@ export const defaultConfig: Config = {
         valueScale: 1
     },
     createDatapackTemplate: {
-        dataVersion: 'Latest release',
         defaultLoadAndTick: true,
         defaultVanillaData: true,
         defaultFolder: true,
@@ -61,20 +67,18 @@ export const defaultConfig: Config = {
 };
 
 export function constructConfig(custom: WorkspaceConfiguration, base = defaultConfig): Config {
-    const scoreOperation = custom.scoreOperation || {};
-    const createDatapackTemplate = custom.createDatapackTemplate || {};
-    const createFile = custom.createFile || {};
     const config = {
-        language: custom.language || base.language,
-        dateFormat: custom.dateFormat || base.dateFormat,
+        env: {
+            ...base.env, ...custom.env || {}
+        },
         scoreOperation: {
-            ...base.scoreOperation, ...scoreOperation
+            ...base.scoreOperation, ...custom.scoreOperation || {}
         },
         createDatapackTemplate: {
-            ...base.createDatapackTemplate, ...createDatapackTemplate
+            ...base.createDatapackTemplate, ...custom.createDatapackTemplate || {}
         },
         createFile: {
-            ...base.createFile, ...createFile
+            ...base.createFile, ...custom.createFile || {}
         }
     };
     console.log('config loaded.');

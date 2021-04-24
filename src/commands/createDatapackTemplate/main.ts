@@ -11,7 +11,7 @@ import path from 'path';
 import rfdc from 'rfdc';
 import { CustomQuestion } from './types/CustomQuestion';
 
-export async function createDatapack({ createDatapackTemplate, dateFormat }: Config, generateType?: 'add' | 'create'): Promise<void> {
+export async function createDatapack({ env: { dataVersion, dateFormat }, createDatapackTemplate }: Config, generateType?: 'add' | 'create'): Promise<void> {
     try {
         // 生成する種類
         const generatorChildNode = new (
@@ -42,7 +42,7 @@ export async function createDatapack({ createDatapackTemplate, dateFormat }: Con
         // テンプレートの選択
         const createItems = await listenGenerateTemplate(vars, createDatapackTemplate);
         // 生成用のデータに加工する
-        const items = await toGenerateData(createItems, generatorChildNode.isGeneratePackMcMeta, createDatapackTemplate.dataVersion);
+        const items = await toGenerateData(createItems, generatorChildNode.isGeneratePackMcMeta, dataVersion);
         // 生成
         await generate(items, root, vars);
     } catch (error) {
