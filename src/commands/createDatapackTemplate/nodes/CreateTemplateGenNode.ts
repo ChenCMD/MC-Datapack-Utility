@@ -11,7 +11,7 @@ export class CreateTemplateGenNode extends AbstractNode {
     async listenGenerateDir(): Promise<string> {
         const dir = await listenDir(
             locale('create-datapack-template.dialog-title-directory'),
-            locale('create-datapack-template.dialog-label')
+            locale('select')
         ).then(v => v.fsPath);
 
         const datapackRoot = await getDatapackRoot(dir);
@@ -25,8 +25,8 @@ export class CreateTemplateGenNode extends AbstractNode {
 
     async listenDatapackNameAndRoot(directory: string): Promise<{ name: string; root: string }> {
         const name = await listenInput(
-            locale('create-datapack-template.datapack-name'),
-            v => validator(v, /[\\/:*?"<>|]/g, locale('create-datapack-template.name-blank'))
+            locale('datapack-name'),
+            v => validator(v, /[\\/:*?"<>|]/g, locale('error.input-blank', locale('datapack-name')))
         );
         const root = path.join(directory, name);
 
@@ -40,6 +40,6 @@ export class CreateTemplateGenNode extends AbstractNode {
     }
 
     async listenDatapackDescription(): Promise<string> {
-        return await listenInput(locale('create-datapack-template.datapack-description'));
+        return await listenInput(locale('datapack-description'));
     }
 }

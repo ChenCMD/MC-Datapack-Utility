@@ -44,7 +44,7 @@ export async function createFile(uri: Uri, config: Config): Promise<void> {
         const fileName = await listenInput(locale('create-file.file-name', fileType), async v => {
             const invalidChar = v.match(/[^a-z0-9./_-]/g);
             if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '));
-            if (await pathAccessible(path.join(uri.fsPath, `${v}.${fileExtname}`))) return locale('create-file.already-exists', `${v}.${fileExtname}`);
+            if (await pathAccessible(path.join(uri.fsPath, `${v}.${fileExtname}`))) return locale('error.already-exists', `${v}.${fileExtname}`);
             return undefined;
         });
 

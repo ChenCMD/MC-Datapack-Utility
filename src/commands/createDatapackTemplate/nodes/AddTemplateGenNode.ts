@@ -12,7 +12,7 @@ export class AddTemplateGenNode extends AbstractNode {
     async listenGenerateDir(): Promise<string> {
         const dir = await listenDir(
             locale('create-datapack-template.dialog-title-datapack'),
-            locale('create-datapack-template.dialog-label')
+            locale('select')
         ).then(v => v.fsPath);
 
         if (!await isDatapackRoot(dir)) throw new GenerateError(locale('create-datapack-template.not-datapack'));

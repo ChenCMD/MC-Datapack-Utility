@@ -21,7 +21,7 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         const toBeOp = exp.shift()!;
         const op = opTable[toBeOp];
-        if (!op) throw new GenerateError(locale('formula-to-score-operation.not-exist-operate', toBeOp));
+        if (!op) throw new GenerateError(locale('error.not-exist', locale('operator'), toBeOp));
 
         const back = formulaAnalyzer(exp, opTable, funcs, scale);
 
@@ -57,7 +57,7 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             const toBeOp = exp.shift()!;
             const op = opTable[toBeOp];
-            if (!op) throw new GenerateError(locale('formula-to-score-operation.not-exist-operate', toBeOp));
+            if (!op) throw new GenerateError(locale('error.not-exist', locale('operator'), toBeOp));
 
             return { front: formulaAnalyzer(sub, opTable, funcs, scale), op: op, back: formulaAnalyzer(exp, opTable, funcs, scale) };
         case ')':
@@ -110,7 +110,7 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const toBeOp = exp.shift()!;
     const op = opTable[toBeOp];
-    if (!op) throw new GenerateError(locale('formula-to-score-operation.not-exist-operate', toBeOp));
+    if (!op) throw new GenerateError(locale('error.not-exist', locale('operator'), toBeOp));
 
     return { front: formulaAnalyzer(_exp, opTable, funcs, scale), op, back: formulaAnalyzer(exp, opTable, funcs, scale) };
 }

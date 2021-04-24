@@ -8,8 +8,8 @@ export function appendElemFromKey(obj: JsonObject, key: string, elem: JsonValue)
         walkObjFromJsonKeyPath(obj, new StringReader(key), elem, ['key'], false);
         return [true];
     } catch (error) {
-        if (error instanceof ObjectIsNotArrayError) return [false, 'could-not-append-elem'];
-        if (error instanceof TypeUnmatchedError) return [false, 'could-not-access-key'];
+        if (error instanceof ObjectIsNotArrayError) return [false, 'error.could-not-append-elem'];
+        if (error instanceof TypeUnmatchedError) return [false, 'error.could-not-access-key'];
         throw error;
     }
 }
@@ -22,7 +22,7 @@ function walkObjFromJsonKeyPath(obj: JsonValue, reader: StringReader, elem: Json
     if (parseTypes.includes('index') && canParseIndex(reader))
         return parseIndex(obj, reader, elem);
     if (!allowEmpty)
-        throw new ParsingError(locale('expected-got', arrayToMessage(parseTypes.map(v => locale(`nbt-path.${v}`)), false, 'or'), locale('nothing')));
+        throw new ParsingError(locale('error.expected-got', arrayToMessage(parseTypes.map(v => locale(`nbt-path.${v}`)), false, 'or'), locale('nothing')));
 
     if (Array.isArray(obj))
         obj.push(elem);

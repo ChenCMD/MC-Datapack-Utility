@@ -61,7 +61,7 @@ async function listenGenerateType(): Promise<GenNodes> {
 async function listenNamespace(): Promise<string> {
     return await listenInput(
         locale('create-datapack-template.namespace-name'),
-        v => validator(v, /[^a-z0-9./_-]/g, locale('create-datapack-template.namespace-blank'))
+        v => validator(v, /[^a-z0-9./_-]/g, locale('error.input-blank', locale('create-datapack-template.namespace-name')))
     );
 }
 
