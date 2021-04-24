@@ -72,7 +72,7 @@ async function listenCustomQuestion(questions: CustomQuestion[]): Promise<Variab
         if (question.pattern) {
             patternChecker = (str: string) => new RegExp(`^${question.pattern}$`).test(str)
                 ? undefined
-                : question.patternErrorMessage ?? locale('create-datapack-template.defaultPatternErrorMessage', `^${question.pattern}$`);
+                : question.patternErrorMessage ?? locale('create-datapack-template.pattern-error-default', `^${question.pattern}$`);
         }
 
         ans[question.name] = await listenInput(question.question, patternChecker);
