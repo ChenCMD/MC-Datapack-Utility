@@ -22,7 +22,7 @@ export async function generateMultiLine(ctx: FeatureContext): Promise<void> {
         const { selections } = textEditor;
 
         // 挿入する文字列の質問
-        const insertString = await listenInput(locale('insert-string'), v => validator(v, undefined, locale('error.input-blank', locale('insert-string'))), { value: '%r' });
+        const insertString = await listenInput(locale('insert-string'), v => validator(v, undefined, locale('error.input-blank', locale('insert-string'))), '%r');
         // 挿入する回数
         const insertCount = selections.length === 1
             ? parseInt(await listenInput(locale('insert-count'), v => numberValidator(v, 10, { min: 1 })))

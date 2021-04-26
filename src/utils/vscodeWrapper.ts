@@ -24,15 +24,16 @@ export function getIndent(path: string): number {
     return config.get<number>('tabSize', 4);
 }
 
-export async function listenInput(
+export async function listenInput<T extends { toString(): string }>(
     message: string,
     validateInput?: (value: string) => Thenable<string | undefined> | string | undefined,
+    preFill?: T,
     otherOption?: InputBoxOptions
 ): Promise<string> {
     const mes = message ? locale('input-here', message) : '';
     const ans = await window.showInputBox({
-        value: mes,
-        placeHolder: '',
+        value: preFill?.toString(),
+        placeHolder: mes,
         prompt: mes,
         ignoreFocusOut: true,
         validateInput,
