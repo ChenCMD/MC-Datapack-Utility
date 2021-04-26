@@ -1,15 +1,14 @@
 import { DocumentFormattingEditProvider, EndOfLine, FormattingOptions, Position, Range, TextDocument, TextEdit } from 'vscode';
-// import { config } from '../extension';
 import { Config } from '../types';
 import { Deque } from '../types/Deque';
 import { getDatapackRoot, getResourcePath } from '../utils/common';
 import { StringReader } from '../utils/StringReader';
 
 export class McfunctionFormatter implements DocumentFormattingEditProvider {
-    constructor(private config: Config) { }
+    constructor(private _config: Config) { }
 
-    set cfg(config: Config) {
-        this.config = config;
+    set config(_config: Config) {
+        this._config = _config;
     }
 
     async provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions): Promise<TextEdit[]> {
@@ -20,7 +19,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
         const edits: TextEdit[] = [];
 
-        if (!this.config.mcfFormatter.doInsertIMPDocument) {
+        if (!this._config.mcfFormatter.doInsertIMPDocument) {
             const protocol = await this.insertResourcePath(document, eol);
             if (protocol)
                 edits.push(protocol);

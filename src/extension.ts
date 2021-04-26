@@ -49,7 +49,7 @@ function updateConfig(event: ConfigurationChangeEvent) {
         config = constructConfig(workspace.getConfiguration('mcdutil'));
         loadLocale(config.env.language, vscodeLanguage);
 
-        mcfunctionFormatter.cfg = config;
+        mcfunctionFormatter.config = config;
     }
 }
 
