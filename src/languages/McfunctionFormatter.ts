@@ -6,13 +6,9 @@ import { getDatapackRoot, getResourcePath } from '../utils/common';
 import { StringReader } from '../utils/StringReader';
 
 export class McfunctionFormatter implements DocumentFormattingEditProvider {
-    private config: Config;
+    constructor(private config: Config) { }
 
-    constructor(config: Config) {
-        this.config = config;
-    }
-
-    setConfig(config: Config): void {
+    set cfg(config: Config) {
         this.config = config;
     }
 

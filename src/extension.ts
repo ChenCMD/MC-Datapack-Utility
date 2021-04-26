@@ -13,6 +13,8 @@ let config = constructConfig(workspace.getConfiguration('mcdutil'));
 export let versionInformation: VersionInformation | undefined;
 const vscodeLanguage = getVSCodeLanguage();
 
+const mcfunctionFormatter = new McfunctionFormatter(config);
+
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -32,7 +34,7 @@ export function activate({ extensionUri, subscriptions }: ExtensionContext): voi
     disposable.push(commands.registerCommand('mcdutil.commands.copyResourcePath', copyResourcePath));
     disposable.push(commands.registerCommand('mcdutil.commands.generateMultiLine', () => generateMultiLine(ctx)));
 
-    disposable.push(languages.registerDocumentFormattingEditProvider('mcfunction', new McfunctionFormatter(config)));
+    disposable.push(languages.registerDocumentFormattingEditProvider('mcfunction', mcfunctionFormatter));
 
     disposable.push(workspace.onDidChangeConfiguration(updateConfig));
 
@@ -46,6 +48,8 @@ function updateConfig(event: ConfigurationChangeEvent) {
     if (event.affectsConfiguration('mcdutil')) {
         config = constructConfig(workspace.getConfiguration('mcdutil'));
         loadLocale(config.env.language, vscodeLanguage);
+
+        mcfunctionFormatter.cfg = config;
     }
 }
 
