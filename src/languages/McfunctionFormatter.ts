@@ -18,12 +18,9 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
     async provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions): Promise<TextEdit[]> {
         const indent = option.insertSpaces ? ' '.repeat(option.tabSize) : '\t';
-        const eol = (() => {
-            switch (document.eol) {
-                case EndOfLine.LF: return '\n';
-                case EndOfLine.CRLF: return '\r\n';
-            }
-        })();
+        let eol = '';
+        if (document.eol === EndOfLine.LF) eol = '\n';
+        if (document.eol === EndOfLine.CRLF) eol = '\r\n';
 
         const edits: TextEdit[] = [];
 
