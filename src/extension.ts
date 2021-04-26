@@ -1,37 +1,42 @@
 import { ExtensionContext, commands, window, workspace, ConfigurationChangeEvent, languages } from 'vscode';
 import { copyResourcePath, createDatapack, createFile, scoreOperation } from './commands';
 import { McfunctionFormatter } from './languages';
+import { generateMultiLine } from './commands/multiLineGenerator/main';
 import { loadLocale } from './locales';
 import { constructConfig } from './types/Config';
+import { createFeatureContext } from './types/FeatureContext';
 import { VersionInformation } from './types/VersionInformation';
 import { getLatestVersions } from './utils/vanillaData';
 
 export const codeConsole = window.createOutputChannel('MC Commander Util');
-export let config = constructConfig(workspace.getConfiguration('mcdutil'));
+let config = constructConfig(workspace.getConfiguration('mcdutil'));
 export let versionInformation: VersionInformation | undefined;
 const vscodeLanguage = getVSCodeLanguage();
 
 /**
  * @param {vscode.ExtensionContext} context
  */
-export function activate(context: ExtensionContext): void {
+export function activate({ extensionUri, subscriptions }: ExtensionContext): void {
 
     getLatestVersions().then(info => versionInformation = info);
 
-    loadLocale(config.language, vscodeLanguage);
+    loadLocale(config.env.language, vscodeLanguage);
 
     const disposable = [];
 
+    const ctx = createFeatureContext({ extensionUri, config });
+
     disposable.push(commands.registerCommand('mcdutil.commands.createDatapackTemplate', () => createDatapack(config)));
     disposable.push(commands.registerCommand('mcdutil.commands.createFile', uri => createFile(uri, config)));
-    disposable.push(commands.registerCommand('mcdutil.commands.scoreOperation', scoreOperation));
+    disposable.push(commands.registerCommand('mcdutil.commands.scoreOperation', () => scoreOperation(config)));
     disposable.push(commands.registerCommand('mcdutil.commands.copyResourcePath', copyResourcePath));
+    disposable.push(commands.registerCommand('mcdutil.commands.generateMultiLine', () => generateMultiLine(ctx)));
 
     disposable.push(languages.registerDocumentFormattingEditProvider('mcfunction', new McfunctionFormatter(config)));
 
     disposable.push(workspace.onDidChangeConfiguration(updateConfig));
 
-    context.subscriptions.push(...disposable);
+    subscriptions.push(...disposable);
 
     // 拡張機能がアクティベートされた時にコンテキストメニューの項目を表示する
     commands.executeCommand('setContext', 'mcdutil.showContextMenu', true);
@@ -40,9 +45,7 @@ export function activate(context: ExtensionContext): void {
 function updateConfig(event: ConfigurationChangeEvent) {
     if (event.affectsConfiguration('mcdutil')) {
         config = constructConfig(workspace.getConfiguration('mcdutil'));
-        loadLocale(config.language, vscodeLanguage);
-
-        McfunctionFormatter.prototype.setConfig(config);
+        loadLocale(config.env.language, vscodeLanguage);
     }
 }
 

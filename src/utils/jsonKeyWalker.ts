@@ -1,6 +1,6 @@
 import { arrayToMessage, locale } from '../locales';
 import { JsonObject, JsonValue } from '../types';
-import { ObjectIsNotArrayError, ParsingError, TypeUnmatchError, UnimplementedError } from '../types/Error';
+import { ObjectIsNotArrayError, ParsingError, TypeUnmatchedError, UnimplementedError } from '../types/Error';
 import { StringReader } from './StringReader';
 
 export function appendElemFromKey(obj: JsonObject, key: string, elem: JsonValue): [true] | [false, string] {
@@ -8,8 +8,8 @@ export function appendElemFromKey(obj: JsonObject, key: string, elem: JsonValue)
         walkObjFromJsonKeyPath(obj, new StringReader(key), elem, ['key'], false);
         return [true];
     } catch (error) {
-        if (error instanceof ObjectIsNotArrayError) return [false, 'could-not-append-elem'];
-        if (error instanceof TypeUnmatchError) return [false, 'could-not-access-key'];
+        if (error instanceof ObjectIsNotArrayError) return [false, 'error.could-not-append-elem'];
+        if (error instanceof TypeUnmatchedError) return [false, 'error.could-not-access-key'];
         throw error;
     }
 }
@@ -22,7 +22,7 @@ function walkObjFromJsonKeyPath(obj: JsonValue, reader: StringReader, elem: Json
     if (parseTypes.includes('index') && canParseIndex(reader))
         return parseIndex(obj, reader, elem);
     if (!allowEmpty)
-        throw new ParsingError(locale('expected-got', arrayToMessage(parseTypes.map(v => locale(`nbt-path.${v}`)), false, 'or'), locale('nothing')));
+        throw new ParsingError(locale('error.expected-got', arrayToMessage(parseTypes.map(v => locale(`nbt-path.${v}`)), false, 'or'), locale('nothing')));
 
     if (Array.isArray(obj))
         obj.push(elem);
@@ -34,7 +34,7 @@ function walkObjFromJsonKeyPath(obj: JsonValue, reader: StringReader, elem: Json
 
 function parseKey(obj: JsonValue, reader: StringReader, elem: JsonValue): JsonValue {
     // Type check
-    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) throw new TypeUnmatchError();
+    if (!obj || typeof obj !== 'object' || Array.isArray(obj)) throw new TypeUnmatchedError();
 
     let key = '';
     if (StringReader.isQuote(reader.peek()))
@@ -72,7 +72,7 @@ function parseIndex(obj: JsonValue, reader: StringReader, elem: JsonValue): Json
 
 function parseIndexNumber(obj: JsonValue, reader: StringReader, elem: JsonValue): JsonValue {
     // Type check
-    if (!obj || !Array.isArray(obj)) throw new TypeUnmatchError();
+    if (!obj || !Array.isArray(obj)) throw new TypeUnmatchedError();
 
     const value = reader.readInt();
     reader.skipWhiteSpace().expect(']').skip();
@@ -87,7 +87,7 @@ function parseIndexNumber(obj: JsonValue, reader: StringReader, elem: JsonValue)
 
 function multiResult(obj: JsonValue, reader: StringReader, elem: JsonValue): JsonValue {
     // Type check
-    if (!obj || !Array.isArray(obj)) throw new TypeUnmatchError();
+    if (!obj || !Array.isArray(obj)) throw new TypeUnmatchedError();
 
     reader.skipWhiteSpace().expect(']').skip();
 
@@ -100,7 +100,7 @@ function multiResult(obj: JsonValue, reader: StringReader, elem: JsonValue): Jso
     if (res.length)
         return res;
     else
-        throw new TypeUnmatchError();
+        throw new TypeUnmatchedError();
 }
 
 type Checker = (reader: StringReader) => boolean;

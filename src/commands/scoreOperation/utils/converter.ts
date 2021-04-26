@@ -150,7 +150,7 @@ export async function rpnCalculate(rpnExp: string, opTable: OperateTable, config
 
             // 制御文 ※計算時にはないはずなのでwarningを出して無視
             case 'state':
-                codeConsole.appendLine(`[WARN] inclute statement:${elem.value}`);
+                codeConsole.appendLine(`[WARN] include statement:${elem.value}`);
                 break;
 
             // 演算子・計算機能
@@ -158,7 +158,7 @@ export async function rpnCalculate(rpnExp: string, opTable: OperateTable, config
             case 'fn':
                 const operate = opTable[elem.value];
                 if (!operate)
-                    throw new CalculateUnfinishedError(locale('formula-to-score-operation.not-exist-operate', elem.value));
+                    throw new CalculateUnfinishedError(locale('error.not-exist', locale('operator'), elem.value));
 
                 // 演算に必要な数だけ演算項を抽出
                 const args = new Deque<string | number | undefined>();

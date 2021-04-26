@@ -1,5 +1,5 @@
-import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, pathAccessible, readFile, showError, showInfo, validater, writeFile } from '../../utils';
-import { Config, Variables, createQuickPickItemHasIds, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError } from '../../types';
+import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, pathAccessible, readFile, showError, showInfo, validator, writeFile } from '../../utils';
+import { Config, Variables, makeExtendQuickPickItem, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError } from '../../types';
 import { locale } from '../../locales';
 import { GenerateFileData, QuickPickFiles } from './types/QuickPickFiles';
 import { getGenTypeMap } from './types/GenerateType';
@@ -11,7 +11,7 @@ import path from 'path';
 import rfdc from 'rfdc';
 import { CustomQuestion } from './types/CustomQuestion';
 
-export async function createDatapack({ createDatapackTemplate, dateFormat }: Config, generateType?: 'add' | 'create'): Promise<void> {
+export async function createDatapack({ env: { dataVersion, dateFormat }, createDatapackTemplate }: Config, generateType?: 'add' | 'create'): Promise<void> {
     try {
         // 生成する種類
         const generatorChildNode = new (
@@ -42,7 +42,7 @@ export async function createDatapack({ createDatapackTemplate, dateFormat }: Con
         // テンプレートの選択
         const createItems = await listenGenerateTemplate(vars, createDatapackTemplate);
         // 生成用のデータに加工する
-        const items = await toGenerateData(createItems, generatorChildNode.isGeneratePackMcMeta, createDatapackTemplate.dataVersion);
+        const items = await toGenerateData(createItems, generatorChildNode.isGeneratePackMcMeta, dataVersion);
         // 生成
         await generate(items, root, vars);
     } catch (error) {
@@ -54,14 +54,14 @@ export async function createDatapack({ createDatapackTemplate, dateFormat }: Con
 }
 
 async function listenGenerateType(): Promise<GenNodes> {
-    const res = await listenPickItem('', createQuickPickItemHasIds(getGenTypeMap()), false);
+    const res = await listenPickItem('', makeExtendQuickPickItem(getGenTypeMap()), false);
     return res.extend;
 }
 
 async function listenNamespace(): Promise<string> {
     return await listenInput(
         locale('create-datapack-template.namespace-name'),
-        v => validater(v, /[^a-z0-9./_-]/g, locale('create-datapack-template.namespace-blank'))
+        v => validator(v, /[^a-z0-9./_-]/g, locale('error.input-blank', locale('create-datapack-template.namespace-name')))
     );
 }
 
@@ -72,7 +72,7 @@ async function listenCustomQuestion(questions: CustomQuestion[]): Promise<Variab
         if (question.pattern) {
             patternChecker = (str: string) => new RegExp(`^${question.pattern}$`).test(str)
                 ? undefined
-                : question.patternErrorMessage ?? locale('create-datapack-template.defaultPatternErrorMessage', `^${question.pattern}$`);
+                : question.patternErrorMessage ?? locale('create-datapack-template.pattern-error-default', `^${question.pattern}$`);
         }
 
         ans[question.name] = await listenInput(question.question, patternChecker);

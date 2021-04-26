@@ -1,5 +1,5 @@
 import '../../utils/methodExtensions';
-import { codeConsole, config } from '../../extension';
+import { codeConsole } from '../../extension';
 import { getTextEditor, listenInput, showError } from '../../utils/vscodeWrapper';
 import { rpnToScoreOperation } from './utils/converter';
 import { formulaAnalyzer } from './utils/formula';
@@ -8,14 +8,15 @@ import { opTable } from './types/OperateTable';
 import { NotOpenTextDocumentError, UserCancelledError } from '../../types/Error';
 import { IfFormula } from './types/Formula';
 import rfdc from 'rfdc';
+import { Config } from '../../types';
 
-export async function scoreOperation(): Promise<void> {
-    const { objective, forceInputType } = config.scoreOperation;
+export async function scoreOperation({ scoreOperation: config }: Config): Promise<void> {
+    const { objective, forceInputType, valueScale } = config;
     try {
         const editor = getTextEditor();
 
         const operateTable = rfdc()(opTable);
-        config.scoreOperation.customOperate.forEach(e => {
+        config.customOperate.forEach(e => {
             operateTable[e.identifier] = e;
         });
 
@@ -33,15 +34,15 @@ export async function scoreOperation(): Promise<void> {
         }
 
         const ifStates: IfFormula[] = [];
-        const formula = formulaAnalyzer(text.split(' '), operateTable, ifStates);
-        const result = await rpnToScoreOperation(formula, config.scoreOperation, ifStates, operateTable);
+        const formula = formulaAnalyzer(text.split(' '), operateTable, ifStates, valueScale);
+        const result = await rpnToScoreOperation(formula, config, ifStates, operateTable);
         if (!result) return;
 
         const { resValues, resFormulas } = result;
         editor.edit(edit => {
             edit.replace(editor.selection, [
                 `# ${text}`,
-                `# ${locale('formula-to-score-operation.complate-text')}`,
+                `# ${locale('formula-to-score-operation.complete-text')}`,
                 `scoreboard objectives add ${objective} dummy`,
                 Array.from(resValues).join('\r\n'),
                 '',

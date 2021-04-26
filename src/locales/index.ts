@@ -66,10 +66,58 @@ export async function loadLocale(setting: string, defaultLocaleCode: string): Pr
 }
 
 function setupDateLocate() {
+    const dayNames = [
+        locale('day-name-abridge.sun'),
+        locale('day-name-abridge.mon'),
+        locale('day-name-abridge.tue'),
+        locale('day-name-abridge.wed'),
+        locale('day-name-abridge.thu'),
+        locale('day-name-abridge.fri'),
+        locale('day-name-abridge.sat'),
+        locale('day-name.sunday'),
+        locale('day-name.monday'),
+        locale('day-name.tuesday'),
+        locale('day-name.wednesday'),
+        locale('day-name.thursday'),
+        locale('day-name.friday'),
+        locale('day-name.saturday')
+    ];
+    const monthNames = [
+        locale('month-name-abridge.jan'),
+        locale('month-name-abridge.feb'),
+        locale('month-name-abridge.mar'),
+        locale('month-name-abridge.apr'),
+        locale('month-name-abridge.may'),
+        locale('month-name-abridge.jun'),
+        locale('month-name-abridge.jul'),
+        locale('month-name-abridge.aug'),
+        locale('month-name-abridge.sep'),
+        locale('month-name-abridge.oct'),
+        locale('month-name-abridge.nov'),
+        locale('month-name-abridge.dec'),
+        locale('month-name.january'),
+        locale('month-name.february'),
+        locale('month-name.march'),
+        locale('month-name.april'),
+        locale('month-name.may'),
+        locale('month-name.june'),
+        locale('month-name.july'),
+        locale('month-name.august'),
+        locale('month-name.september'),
+        locale('month-name.october'),
+        locale('month-name.november'),
+        locale('month-name.december')
+    ];
+    const timeNames = [
+        locale('time-name-abridge.ante-meridiem'),
+        locale('time-name-abridge.post-meridiem'),
+        locale('time-name.ante-meridiem'),
+        locale('time-name.post-meridiem')
+    ];
     dateFormat.i18n = {
-        dayNames: [...locale('dayNames').split(', '), ...locale('dayNamesAdridge')],
-        monthNames: [...locale('monthNames').split(', '), ...locale('monthNamesAdridge').split(', ')],
-        timeNames: locale('timeNames').split(', ')
+        dayNames,
+        monthNames,
+        timeNames: [...timeNames, ...timeNames.map(v => v.toUpperCase())]
     };
 }
 

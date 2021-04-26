@@ -47,7 +47,8 @@
 		"onCommand:mcdutil.commands.createDatapackTemplate",
 		"onCommand:mcdutil.commands.createFile",
 		"onCommand:mcdutil.commands.scoreOperation",
-		"onCommand:mcdutil.commands.copyResourcePath"
+		"onCommand:mcdutil.commands.copyResourcePath",
+		"onCommand:mcdutil.commands.generateMultiLine"
 	],
 	"contributes": {
 		"languages": [
@@ -78,6 +79,11 @@
 				"command": "mcdutil.commands.copyResourcePath",
 				"title": "%mcdutil.commands.copyResourcePath.title%",
 				"category": "Datapack"
+			},
+			{
+				"command": "mcdutil.commands.generateMultiLine",
+				"title": "%mcdutil.commands.generateMultiLine.title%",
+				"category": "Datapack"
 			}
 		],
 		"keybindings": [
@@ -87,7 +93,13 @@
 			},
 			{
 				"command": "mcdutil.commands.scoreOperation",
-				"key": "Alt+Shift+D Alt+Shift+S"
+				"key": "Alt+Shift+D Alt+Shift+S",
+				"when": "editorTextFocus == true && editorReadonly == false"
+			},
+			{
+				"command": "mcdutil.commands.generateMultiLine",
+				"key": "Alt+Shift+D Alt+Shift+M",
+				"when": "editorTextFocus == true && editorReadonly == false"
 			}
 		],
 		"menus": {
@@ -117,7 +129,7 @@
 		"configuration": {
 			"title": "MC Datapack Utilility",
 			"properties": {
-				"mcdutil.language": {
+				"mcdutil.env.language": {
 					"type": "string",
 					"enum": [
 						"Default",
@@ -126,12 +138,22 @@
 						"zh-cn",
 						"zh-tw"
 					],
-					"markdownDescription": "%mcdutil.config.language%",
+					"markdownDescription": "%mcdutil.config.env.language%",
 					"default": "Default"
 				},
-				"mcdutil.dateFormat": {
+				"mcdutil.env.detectionDepth": {
+					"type": "integer",
+					"markdownDescription": "%mcdutil.config.env.detectionDepth%",
+					"default": 1
+				},
+				"mcdutil.env.dataVersion": {
 					"type": "string",
-					"markdownDescription": "%mcdutil.config.dateFormat%",
+					"markdownDescription": "%mcdutil.config.env.dataVersion%",
+					"default": "Latest release"
+				},
+				"mcdutil.env.dateFormat": {
+					"type": "string",
+					"markdownDescription": "%mcdutil.config.env.dateFormat%",
 					"default": "m/dd HH:MM"
 				},
 				"mcdutil.scoreOperation.prefix": {
@@ -241,11 +263,6 @@
 					"type": "number",
 					"markdownDescription": "%mcdutil.config.scoreOperation.valueScale%",
 					"default": 1
-				},
-				"mcdutil.createDatapackTemplate.dataVersion": {
-					"type": "string",
-					"markdownDescription": "%mcdutil.config.createDatapackTemplate.dataVersion%",
-					"default": "Latest release"
 				},
 				"mcdutil.createDatapackTemplate.defaultLoadAndTick": {
 					"type": "boolean",

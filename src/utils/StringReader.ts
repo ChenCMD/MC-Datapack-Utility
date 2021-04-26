@@ -95,12 +95,12 @@ export class StringReader {
         }
         if (str) {
             const num = Number(str);
-            if (isNaN(num)) throw new ParsingError(locale('expected-got', locale('number'), locale('punc.quote', str)));
+            if (isNaN(num)) throw new ParsingError(locale('error.expected-got', locale('number'), locale('punc.quote', str)));
             return str;
         } else {
             const value = this.peek();
-            if (value) throw new ParsingError(locale('expected-got', locale('number'), locale('punc.quote', this.peek())));
-            throw new ParsingError(locale('expected-got', locale('number'), locale('nothing')));
+            if (value) throw new ParsingError(locale('error.expected-got', locale('number'), locale('punc.quote', this.peek())));
+            throw new ParsingError(locale('error.expected-got', locale('number'), locale('nothing')));
         }
     }
 
@@ -111,7 +111,7 @@ export class StringReader {
         const str = this.readNumber();
         const num = parseInt(str);
         // num is float.
-        if (str.includes('.')) throw new ParsingError(locale('expected-got', locale('integer'), str));
+        if (str.includes('.')) throw new ParsingError(locale('error.expected-got', locale('integer'), str));
 
         return num;
     }
@@ -142,7 +142,7 @@ export class StringReader {
             this.skip();
             ans += this.readUntilQuote(quote, out, looseEscapeCheck);
         } else {
-            throw new ParsingError(locale('expected-got', locale('quote'), locale('punc.quote', quote)));
+            throw new ParsingError(locale('error.expected-got', locale('quote'), locale('punc.quote', quote)));
         }
         return ans;
     }
@@ -177,7 +177,7 @@ export class StringReader {
             }
         }
         this.cursor = start;
-        throw new ParsingError(locale('expected-got', locale('ending-quote', locale('punc.quote', terminator)), locale('nothing')));
+        throw new ParsingError(locale('error.expected-got', locale('ending-quote', locale('punc.quote', terminator)), locale('nothing')));
     }
 
     /**
@@ -222,7 +222,7 @@ export class StringReader {
         const string = this.readString();
         if (string === 'true') return true;
         if (string === 'false') return false;
-        throw new ParsingError(locale('expected-got', locale('boolean'), locale('punc.quote', string)));
+        throw new ParsingError(locale('error.expected-got', locale('boolean'), locale('punc.quote', string)));
 
     }
 
@@ -230,8 +230,8 @@ export class StringReader {
      * @throws {ParsingError} (tolerable) When the next char can't match the expected one.
      */
     expect(c: string): this {
-        if (!this.canRead()) throw new ParsingError(locale('expected-got', locale('punc.quote', c), locale('nothing')));
-        if (this.peek() !== c) throw new ParsingError(locale('expected-got', locale('punc.quote', c), locale('punc.quote', this.peek())));
+        if (!this.canRead()) throw new ParsingError(locale('error.expected-got', locale('punc.quote', c), locale('nothing')));
+        if (this.peek() !== c) throw new ParsingError(locale('error.expected-got', locale('punc.quote', c), locale('punc.quote', this.peek())));
         return this;
     }
 
