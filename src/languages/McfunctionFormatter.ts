@@ -124,11 +124,11 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
     private async insertResourcePath(document: TextDocument, eol: string): Promise<TextEdit | undefined> {
         const rootPath = await getDatapackRoot(document.fileName);
 
-        if (rootPath) {
-            const resourcePath = getResourcePath(document.uri.fsPath, rootPath, 'function');
-            if (document.lineAt(0).text !== `#> ${resourcePath}`)
-                return TextEdit.insert(new Position(0, 0), `#> ${resourcePath}${eol}`);
-        }
+        if (!rootPath) return undefined;
+        
+        const resourcePath = getResourcePath(document.uri.fsPath, rootPath, 'function');
+        if (document.lineAt(0).text !== `#> ${resourcePath}`)
+            return TextEdit.insert(new Position(0, 0), `#> ${resourcePath}${eol}`);
 
         return undefined;
     }
