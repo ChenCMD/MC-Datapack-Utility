@@ -4,11 +4,7 @@ import { locale } from '../locales';
 import dateFormat from 'dateformat';
 import { FileType, getFilePath, getFileType } from '../types/FileTypes';
 import { DownloadTimeOutError } from '../types/Error';
-import { Uri } from 'vscode';
 
-export function flatPath(pathOrUri: string | Uri): Uri {
-    return pathOrUri instanceof Uri ? pathOrUri : Uri.file(pathOrUri);
-}
 
 export async function setTimeOut(milisec: number): Promise<never> {
     // eslint-disable-next-line brace-style
