@@ -1,4 +1,4 @@
-import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, pathAccessible, readFile, showError, showInfo, validator, writeFile } from '../../utils';
+import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, pathAccessible, readFile, showError, showInfo, stringValidator, writeFile } from '../../utils';
 import { Config, Variables, makeExtendQuickPickItem, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError } from '../../types';
 import { locale } from '../../locales';
 import { GenerateFileData, QuickPickFiles } from './types/QuickPickFiles';
@@ -61,7 +61,7 @@ async function listenGenerateType(): Promise<GenNodes> {
 async function listenNamespace(): Promise<string> {
     return await listenInput(
         locale('create-datapack-template.namespace-name'),
-        v => validator(v, /[^a-z0-9./_-]/g, locale('error.input-blank', locale('create-datapack-template.namespace-name')))
+        v => stringValidator(v, { invalidCharRegex: /[^a-z0-9./_-]/g, emptyMessage: locale('error.input-blank', locale('create-datapack-template.namespace-name')) })
     );
 }
 

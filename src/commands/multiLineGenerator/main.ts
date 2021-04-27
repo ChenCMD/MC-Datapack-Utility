@@ -2,7 +2,7 @@ import { codeConsole } from '../../extension';
 import { locale } from '../../locales';
 import { makeExtendQuickPickItem, UserCancelledError } from '../../types';
 import { FeatureContext } from '../../types/FeatureContext';
-import { getTextEditor, numberValidator, listenInput, listenPickItem, showError, validator } from '../../utils';
+import { getTextEditor, numberValidator, listenInput, listenPickItem, showError, stringValidator } from '../../utils';
 import { getReplacerMap } from './replacer';
 
 /*
@@ -22,10 +22,10 @@ export async function generateMultiLine(ctx: FeatureContext): Promise<void> {
         const { selections } = textEditor;
 
         // 挿入する文字列の質問
-        const insertString = await listenInput(locale('insert-string'), v => validator(v, undefined, locale('error.input-blank', locale('insert-string'))), '%r');
+        const insertString = await listenInput(locale('insert-string'), v => stringValidator(v, { emptyMessage: locale('error.input-blank', locale('insert-string')) }), '%r');
         // 挿入する回数
         const insertCount = selections.length === 1
-            ? parseInt(await listenInput(locale('insert-count'), v => numberValidator(v, 10, { min: 1 })))
+            ? parseInt(await listenInput(locale('insert-count'), v => numberValidator(v, { min: 1 })))
             : selections.length;
         // 置換方法の選択
         const { extend: replacer } = await listenPickItem('', makeExtendQuickPickItem(getReplacerMap()), false);

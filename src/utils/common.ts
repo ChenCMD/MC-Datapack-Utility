@@ -5,6 +5,26 @@ import dateFormat from 'dateformat';
 import { FileType, getFilePath, getFileType } from '../types/FileTypes';
 import { DownloadTimeOutError } from '../types/Error';
 
+export function parseRadixFloat(str: string, radix = 10): number {
+    const radixChars = getRadixChars(radix);
+    const [, intParts, floatParts] = new RegExp(`^([${radixChars}]*)(?:\\.([${radixChars}]*))?`).exec(str) ?? [];
+    const intRes = parseInt(intParts, radix);
+    if (floatParts === '') return intRes;
+    let floatRes = 0;
+    let divisor = 1;
+    for (const digit of (floatParts ?? '').split('')) floatRes += parseInt(digit, radix) / (divisor *= radix);
+    console.log(intParts, intRes, floatParts, floatRes);
+    return intRes + floatRes;
+}
+
+export function getRadixRegExp(radix: number, allowFloat: boolean): RegExp {
+    return new RegExp(`^(\\+|-)?[${allowFloat ? '.' : ''}${getRadixChars(radix)}${getRadixChars(radix).toUpperCase()}]+$`);
+}
+
+function getRadixChars(radix: number): string {
+    const radixStrings = '0123456789abcdefghijklmnopqrstuvwxyz';
+    return radixStrings.slice(0, radix);
+}
 
 export async function setTimeOut(milisec: number): Promise<never> {
     // eslint-disable-next-line brace-style
