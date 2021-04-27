@@ -57,8 +57,8 @@ export function stringValidator(str: string, { invalidCharRegex, emptyMessage, m
         const invalidChar = str.match(invalidCharRegex);
         if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '));
     }
-    if (minLength && str.length < minLength) return locale('error.string-too-short');
-    if (maxLength && str.length > maxLength) return locale('error.string-too-long');
+    if (minLength && str.length < minLength) return locale('error.string-too-short', minLength);
+    if (maxLength && str.length > maxLength) return locale('error.string-too-long', maxLength);
     if (str === '') return emptyMessage;
     return undefined;
 }

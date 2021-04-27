@@ -118,6 +118,8 @@
     "serial-number.radix": "Base number",
     "serial-number.start": "Initial value of the value",
     "serial-number.step": "Interval to increase or decrease the value",
+    "serial-number.padding-char": "Character to fill in the beginning",
+    "serial-number.padding-length": "Length to pad the value at the beginning",
     "string.string": "String",
     "tags.multiple-tags-found": "Multiple data pack tags were found. Please select the one you want to use.",
     "tags.tag-type": "Type of data pack tag",

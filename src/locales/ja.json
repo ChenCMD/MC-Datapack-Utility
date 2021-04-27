@@ -118,6 +118,8 @@
     "serial-number.radix": "基数",
     "serial-number.start": "値の初期値",
     "serial-number.step": "値の増減の間隔",
+    "serial-number.padding-char": "先頭埋めする文字",
+    "serial-number.padding-length": "値を先頭埋めする長さ",
     "string.string": "文字列",
     "tags.multiple-tags-found": "複数のデータパックタグが見つかりました。使用するものを選択してください。",
     "tags.tag-type": "データパックタグの種類",
