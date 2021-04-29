@@ -36,7 +36,10 @@ export function activate({ extensionUri, subscriptions }: ExtensionContext): voi
 
     disposable.push(languages.registerDocumentFormattingEditProvider('mcfunction', mcfunctionFormatter));
 
-    disposable.push(workspace.onDidChangeConfiguration(updateConfig, { cb: () => mcfunctionFormatter.config = config }));
+    disposable.push(workspace.onDidChangeConfiguration(event => updateConfig(event, _config => {
+        loadLocale(_config.env.language, vscodeLanguage);
+        mcfunctionFormatter.config = _config;
+    })));
 
     subscriptions.push(...disposable);
 
@@ -44,12 +47,11 @@ export function activate({ extensionUri, subscriptions }: ExtensionContext): voi
     commands.executeCommand('setContext', 'mcdutil.showContextMenu', true);
 }
 
-function updateConfig(this: { cb: (config: Config) => void | Promise<void> }, event: ConfigurationChangeEvent) {
+async function updateConfig(event: ConfigurationChangeEvent, cb: (config: Config) => void | Promise<void>): Promise<void> {
     if (event.affectsConfiguration('mcdutil')) {
         config = constructConfig(workspace.getConfiguration('mcdutil'));
-        loadLocale(config.env.language, vscodeLanguage);
 
-        this.cb(config);
+        await cb(config);
     }
 }
 
