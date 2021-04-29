@@ -19,11 +19,11 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
         const edits: TextEdit[] = [];
 
-        if (!this._config.mcfFormatter.doInsertIMPDocument) {
+        if (this._config.mcfFormatter.doInsertIMPDocument === true) {
             const protocol = await this.insertResourcePath(document, eol);
             if (protocol)
                 edits.push(protocol);
-            
+
             edits.push(TextEdit.insert(new Position(0, 0), eol));
         }
         edits.push(...this.insertIndent(document, indent, eol));
@@ -117,7 +117,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
         const rootPath = await getDatapackRoot(document.fileName);
 
         if (!rootPath) return undefined;
-        
+
         const resourcePath = getResourcePath(document.uri.fsPath, rootPath, 'function');
         if (document.lineAt(0).text !== `#> ${resourcePath}`)
             return TextEdit.insert(new Position(0, 0), `#> ${resourcePath}${eol}`);
