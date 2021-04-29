@@ -19,7 +19,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
         const edits: TextEdit[] = [];
 
-        if (this._config.mcfFormatter.doInsertIMPDocument === true) {
+        if (this._config.mcfFormatter.doInsertIMPDocument) {
             const protocol = await this.insertResourcePath(document, eol);
             if (protocol)
                 edits.push(protocol);
