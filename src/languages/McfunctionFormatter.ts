@@ -23,6 +23,8 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
             const protocol = await this.insertResourcePath(document, eol);
             if (protocol)
                 edits.push(protocol);
+            
+            edits.push(TextEdit.insert(new Position(0, 0), eol));
         }
         edits.push(...this.insertIndent(document, indent, eol));
 
@@ -37,10 +39,10 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
         const docText = new StringReader(document.getText());
 
-        const indentElement = { newLineSign: eol, indents: 0 };
+        let indents = 0;
 
-        const next = (range: Range, line: string, indentMap: typeof indentElement) => {
-            editQueue.push(TextEdit.replace(range, indentMap.newLineSign + indent.repeat(indentMap.indents) + line));
+        const next = (range: Range, line: string, _indents: number) => {
+            editQueue.push(TextEdit.replace(range, indent.repeat(_indents) + line + eol));
 
             docText.nextLine(document);
         };
@@ -58,7 +60,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
                 lastLineType = 'blankLine';
 
-                next(range, '', { newLineSign: eol, indents: 0 });
+                next(range, '', 0);
                 continue;
             }
 
@@ -68,16 +70,13 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
             while (docText.peek() === '#') docText.skip();
             const numSigns = docText.cursor - lineStart;
 
-            indentElement.newLineSign = eol;
-
             // コマンドについての処理
             if (numSigns === 0) {
-                indentElement.indents = depth.size();
-                indentElement.indents += lastLineType === 'special' ? 1 : 0;
-
+                indents = depth.size();
+                indents += lastLineType === 'special' ? 1 : 0;
                 lastLineType = 'command';
 
-                next(range, line, indentElement);
+                next(range, line, indents);
                 continue;
             }
 
@@ -88,30 +87,28 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
                         // 前line の # の数を記憶し、現line と同じであれば 連続するコメント とみなす。
                         depth.addLast(numSigns);
 
-                    indentElement.newLineSign += lastLineType === 'command' ? eol : '';
-                    indentElement.indents = Math.max(depth.size() - 1, 0);
+                    indents = Math.max(depth.size() - 1, 0);
                     lastLineType = 'comment';
                     break;
 
                 case 'declare': // 「#declare ～」「#define ～」の場合
                 case 'define':
-                    indentElement.newLineSign += lastLineType === 'command' ? eol : '';
-                    indentElement.indents = depth.size();
+                    indents = depth.size();
                     lastLineType = 'special';
                     break;
 
-                case '>':
+                case '>': // 「#> ～」の場合
                     depth.clear();
                     depth.addLast(numSigns);
 
-                    indentElement.newLineSign = lineCount === 0 ? '' : eol;
-                    indentElement.newLineSign += lastLineType === 'command' ? eol : '';
-                    indentElement.indents = 0;
+                    indents = 0;
                     lastLineType = 'comment';
                     break;
             }
-            next(range, line, indentElement);
+            next(range, line, indents);
         }
+
+        if (lastLineType === 'blankLine') editQueue.pop();
 
         return editQueue;
     }
