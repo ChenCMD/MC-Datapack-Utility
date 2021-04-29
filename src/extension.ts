@@ -3,7 +3,7 @@ import { copyResourcePath, createDatapack, createFile, scoreOperation } from './
 import { McfunctionFormatter } from './languages';
 import { generateMultiLine } from './commands/multiLineGenerator/main';
 import { loadLocale } from './locales';
-import { constructConfig } from './types/Config';
+import { Config, constructConfig } from './types/Config';
 import { createFeatureContext } from './types/FeatureContext';
 import { VersionInformation } from './types/VersionInformation';
 import { getLatestVersions } from './utils/vanillaData';
@@ -36,7 +36,7 @@ export function activate({ extensionUri, subscriptions }: ExtensionContext): voi
 
     disposable.push(languages.registerDocumentFormattingEditProvider('mcfunction', mcfunctionFormatter));
 
-    disposable.push(workspace.onDidChangeConfiguration(updateConfig));
+    disposable.push(workspace.onDidChangeConfiguration(updateConfig, { cb: () => mcfunctionFormatter.config = config }));
 
     subscriptions.push(...disposable);
 
@@ -44,12 +44,12 @@ export function activate({ extensionUri, subscriptions }: ExtensionContext): voi
     commands.executeCommand('setContext', 'mcdutil.showContextMenu', true);
 }
 
-function updateConfig(event: ConfigurationChangeEvent) {
+function updateConfig(this: { cb: (config: Config) => void | Promise<void> }, event: ConfigurationChangeEvent) {
     if (event.affectsConfiguration('mcdutil')) {
         config = constructConfig(workspace.getConfiguration('mcdutil'));
         loadLocale(config.env.language, vscodeLanguage);
 
-        mcfunctionFormatter.config = config;
+        this.cb(config);
     }
 }
 
