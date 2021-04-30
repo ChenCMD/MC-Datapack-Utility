@@ -1,4 +1,4 @@
-import { JsonObject, JsonValue } from './JSONObject';
+import { JsonObject, JsonValue } from './JsonObject';
 
 export interface FileData {
     rel: string
