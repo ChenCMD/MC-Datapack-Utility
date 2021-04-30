@@ -26,7 +26,7 @@
 		"url": "https://github.com/ChenCMD/MC-Datapack-Utility/issues"
 	},
 	"engines": {
-		"vscode": "^1.50.0"
+		"vscode": "^1.55.0"
 	},
 	"scripts": {
 		"compile": "webpack --mode development",
