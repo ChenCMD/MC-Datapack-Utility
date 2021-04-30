@@ -9,6 +9,7 @@ export interface Config {
     scoreOperation: ScoreOperationConfig
     createDatapackTemplate: CreateDatapackTemplateConfig
     createFile: CreateFileConfig
+    mcfFormatter: McfFormatterConfig
 }
 
 export interface EnvironmentConfig {
@@ -40,6 +41,10 @@ export interface CreateFileConfig {
     fileTemplate: Template
 }
 
+export interface McfFormatterConfig {
+    doInsertIMPDocument: boolean
+}
+
 export const defaultConfig: Config = {
     env: {
         language: 'Default',
@@ -65,6 +70,9 @@ export const defaultConfig: Config = {
     },
     createFile: {
         fileTemplate: {}
+    },
+    mcfFormatter: {
+        doInsertIMPDocument: false
     }
 };
 
@@ -81,6 +89,9 @@ export function constructConfig(custom: WorkspaceConfiguration, base = defaultCo
         },
         createFile: {
             ...base.createFile, ...custom.createFile || {}
+        },
+        mcfFormatter: {
+            ...base.mcfFormatter, ...custom.mcfFormatter || {}
         }
     };
     console.log('config loaded.');

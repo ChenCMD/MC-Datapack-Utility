@@ -1,8 +1,9 @@
-import { ExtensionContext, commands, window, workspace, ConfigurationChangeEvent } from 'vscode';
+import { ExtensionContext, commands, window, workspace, ConfigurationChangeEvent, languages } from 'vscode';
 import { copyResourcePath, createDatapack, createFile, scoreOperation } from './commands';
+import { McfunctionFormatter } from './languages';
 import { generateMultiLine } from './commands/multiLineGenerator/main';
 import { loadLocale } from './locales';
-import { constructConfig } from './types/Config';
+import { Config, constructConfig } from './types/Config';
 import { createFeatureContext } from './types/FeatureContext';
 import { VersionInformation } from './types/VersionInformation';
 import { getLatestVersions } from './utils/vanillaData';
@@ -11,6 +12,8 @@ export const codeConsole = window.createOutputChannel('MC Commander Util');
 let config = constructConfig(workspace.getConfiguration('mcdutil'));
 export let versionInformation: VersionInformation | undefined;
 const vscodeLanguage = getVSCodeLanguage();
+
+const mcfunctionFormatter = new McfunctionFormatter(config);
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -31,7 +34,12 @@ export function activate({ extensionUri, subscriptions }: ExtensionContext): voi
     disposable.push(commands.registerCommand('mcdutil.commands.copyResourcePath', copyResourcePath));
     disposable.push(commands.registerCommand('mcdutil.commands.generateMultiLine', () => generateMultiLine(ctx)));
 
-    disposable.push(workspace.onDidChangeConfiguration(updateConfig));
+    disposable.push(languages.registerDocumentFormattingEditProvider('mcfunction', mcfunctionFormatter));
+
+    disposable.push(workspace.onDidChangeConfiguration(event => updateConfig(event, newConfig => {
+        loadLocale(newConfig.env.language, vscodeLanguage);
+        mcfunctionFormatter.config = newConfig;
+    })));
 
     subscriptions.push(...disposable);
 
@@ -39,10 +47,11 @@ export function activate({ extensionUri, subscriptions }: ExtensionContext): voi
     commands.executeCommand('setContext', 'mcdutil.showContextMenu', true);
 }
 
-function updateConfig(event: ConfigurationChangeEvent) {
+async function updateConfig(event: ConfigurationChangeEvent, cb: (config: Config) => void | Promise<void>): Promise<void> {
     if (event.affectsConfiguration('mcdutil')) {
         config = constructConfig(workspace.getConfiguration('mcdutil'));
-        loadLocale(config.env.language, vscodeLanguage);
+
+        await cb(config);
     }
 }
 

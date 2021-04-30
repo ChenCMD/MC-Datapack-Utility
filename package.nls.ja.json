@@ -47,5 +47,6 @@
     "mcdutil.config.scoreOperation.objective": "**計算式をscore operationに変換**: スコアオブジェクトの名前",
     "mcdutil.config.scoreOperation.prefix": "**計算式をscore operationに変換**: スコアホルダーの接頭辞",
     "mcdutil.config.scoreOperation.temp": "**計算式をscore operationに変換**: 途中で仮に保存される変数",
-    "mcdutil.config.scoreOperation.valueScale": "**計算式をscore operationに変換**: 項の拡大率(\"入力された値\" と \"この拡大率\" を掛けて \"実際に計算される値\" を求めます)"
+    "mcdutil.config.scoreOperation.valueScale": "**計算式をscore operationに変換**: 項の拡大率(\"入力された値\" と \"この拡大率\" を掛けて \"実際に計算される値\" を求めます)",
+    "mcdutil.config.mcfFormatter.doInsertIMPDocument": "**IMP-Docを挿入する**: \".mcfunction\"ファイルのフォーマットをおこなう際に、ファイル頭にIMP-Docを挿入します。Data-pack Helper Plusとの併用をおすすめします。"
 }

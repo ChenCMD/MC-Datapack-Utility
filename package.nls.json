@@ -47,5 +47,6 @@
     "mcdutil.config.scoreOperation.objective": "**Convert formula to Score Operation**: Score Objective name",
     "mcdutil.config.scoreOperation.prefix": "**Convert formula to Score Operation**: Scoreholder prefix",
     "mcdutil.config.scoreOperation.temp": "**Convert formula to Score Operation**: Variables that are temporarily saved on the way",
-    "mcdutil.config.scoreOperation.valueScale": "**Convert formula to Score Operation**: Values' scale (\"Entered value\" times \"this scale\" equals \"Calculating Value\")"
+    "mcdutil.config.scoreOperation.valueScale": "**Convert formula to Score Operation**: Values' scale (\"Entered value\" times \"this scale\" equals \"Calculating Value\")",
+    "mcdutil.config.mcfFormatter.doInsertIMPDocument": "**Insert IMP-Doc**: When formatting a \".mcfunction\" document, insert IMP-Doc at the Beg of the file. Recommend using it together with Data-pack Helper Plus."
 }
