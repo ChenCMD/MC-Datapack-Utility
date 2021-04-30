@@ -36,9 +36,9 @@ export function activate({ extensionUri, subscriptions }: ExtensionContext): voi
 
     disposable.push(languages.registerDocumentFormattingEditProvider('mcfunction', mcfunctionFormatter));
 
-    disposable.push(workspace.onDidChangeConfiguration(event => updateConfig(event, _config => {
-        loadLocale(_config.env.language, vscodeLanguage);
-        mcfunctionFormatter.config = _config;
+    disposable.push(workspace.onDidChangeConfiguration(event => updateConfig(event, newConfig => {
+        loadLocale(newConfig.env.language, vscodeLanguage);
+        mcfunctionFormatter.config = newConfig;
     })));
 
     subscriptions.push(...disposable);
