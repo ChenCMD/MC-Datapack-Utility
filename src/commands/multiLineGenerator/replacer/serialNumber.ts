@@ -1,6 +1,6 @@
 import { locale } from '../../../locales';
 import { makeExtendQuickPickItem } from '../../../types';
-import { numberValidator, listenInput, listenPickItem } from '../../../utils';
+import { numberValidator, listenInput, listenPickItem, parseRadixFloat, stringValidator } from '../../../utils';
 import { Replacer } from '../types/Replacer';
 
 const operators = ['+', '-', '*', '/'] as const;
@@ -16,16 +16,30 @@ const operatorMap = new Map<string, Operator>(operators.map(v => [v, v]));
  *
  */
 export const serialNumberReplacer: Replacer = async (insertString, insertCount) => {
-    const radix = parseInt(await listenInput(locale('serial-number.radix'), v => numberValidator(v, 10, { min: 2, max: 36 })));
-    const start = parseInt(await listenInput(locale('serial-number.start'), v => numberValidator(v, radix)), radix);
+    const radix = parseInt(await listenInput(locale('serial-number.radix'), v => numberValidator(v, { min: 2, max: 36, allowFloat: false }), 10));
+    const start = parseRadixFloat(await listenInput(locale('serial-number.start'), v => numberValidator(v, { radix }), 0), radix);
     const { extend: operator } = await listenPickItem(locale('serial-number.operator'), makeExtendQuickPickItem(operatorMap), false);
-    const step = parseInt(await listenInput(locale('serial-number.step'), v => numberValidator(v, radix, { min: 1 })), radix);
+    const step = parseRadixFloat(await listenInput(locale('serial-number.step'), v => {
+        const res = numberValidator(v, { radix });
+        if (res) return res;
+        if (operator === '/' && parseRadixFloat(v, radix) === 0) return locale('error.cant-divided-by-zero');
+        return undefined;
+    }, 1), radix);
+    const paddingLength = parseInt(await listenInput(locale('serial-number.padding-length'), v => numberValidator(v, { radix, min: 0 }), 0), radix);
+    const paddingChar = paddingLength >= 1
+        ? await listenInput(locale('serial-number.padding-char'), v => stringValidator(v, { minLength: 1, maxLength: 1 }))
+        : '0';
 
     const ans: string[] = [];
     let replaceValue = start;
-    ans.push(insertString.replace(/%r/g, replaceValue.toString(radix)));
-    for (let i = 1; i < insertCount; i++)
-        ans.push(insertString.replace(/%r/g, (replaceValue = safeEval(replaceValue, operator, step)).toString(radix)));
+    for (let i = 0; i < insertCount; i++) {
+        const replaceStr = replaceValue.toString(radix);
+        ans.push(insertString.replace(/%r/g, replaceStr.length <= paddingLength
+            ? `${paddingChar.repeat(paddingLength)}${replaceStr}`.slice(-paddingLength)
+            : replaceStr
+        ));
+        replaceValue = safeEval(replaceValue, operator, step);
+    }
     return ans;
 };
 

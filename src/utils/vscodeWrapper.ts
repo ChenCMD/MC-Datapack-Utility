@@ -1,7 +1,9 @@
 import { InputBoxOptions, ProgressLocation, QuickPickItem, TextEditor, Uri, ViewColumn, window, workspace, WorkspaceFolder } from 'vscode';
+import { getRadixRegExp } from '.';
 import { locale } from '../locales';
 import { NotOpenTextDocumentError, NotOpenWorkspaceError, UserCancelledError } from '../types/Error';
 import { MessageItemHasId } from '../types/MessageItemHasId';
+import { parseRadixFloat } from './common';
 
 export function getTextEditor(allowUndefined?: false): TextEditor;
 export function getTextEditor(allowUndefined: true): TextEditor | undefined;
@@ -24,15 +26,16 @@ export function getIndent(path: string): number {
     return config.get<number>('tabSize', 4);
 }
 
-export async function listenInput(
+export async function listenInput<T extends { toString(): string }>(
     message: string,
     validateInput?: (value: string) => Thenable<string | undefined> | string | undefined,
+    preFill?: T,
     otherOption?: InputBoxOptions
 ): Promise<string> {
     const mes = message ? locale('input-here', message) : '';
     const ans = await window.showInputBox({
-        value: mes,
-        placeHolder: '',
+        value: preFill?.toString(),
+        placeHolder: mes,
         prompt: mes,
         ignoreFocusOut: true,
         validateInput,
@@ -42,23 +45,20 @@ export async function listenInput(
     return ans;
 }
 
-export function numberValidator(str: string, radix = 10, { min, max }: { min?: number, max?: number } = {}): undefined | string {
-    if (!getRadixRegExp(radix).test(str)) return locale('error.invalid-number');
-    if (min && min > parseInt(str, radix)) return locale('error.number-too-small', min);
-    if (max && max < parseInt(str, radix)) return locale('error.number-too-large', max);
+export function numberValidator(str: string, { radix = 10, allowFloat, min, max }: { radix?: number, allowFloat?: boolean, min?: number, max?: number } = {}): undefined | string {
+    if (!getRadixRegExp(radix, allowFloat !== false).test(str)) return locale('error.invalid-number');
+    if (min && min > parseRadixFloat(str, radix)) return locale('error.number-too-small', min);
+    if (max && max < parseRadixFloat(str, radix)) return locale('error.number-too-large', max);
     return undefined;
 }
 
-export function getRadixRegExp(radix: number): RegExp {
-    const radixStrings = '00112233445566778899aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ';
-    return new RegExp(`^(\\+|-)?[${radixStrings.slice(0, radix * 2)}]+$`);
-}
-
-export function validator(str: string, invalidCharRegex?: RegExp, emptyMessage?: string): string | undefined {
+export function stringValidator(str: string, { invalidCharRegex, emptyMessage, maxLength, minLength }: { invalidCharRegex?: RegExp, emptyMessage?: string, minLength?: number, maxLength?: number } = {}): string | undefined {
     if (invalidCharRegex) {
         const invalidChar = str.match(invalidCharRegex);
         if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '));
     }
+    if (minLength && str.length < minLength) return locale('error.string-too-short', minLength);
+    if (maxLength && str.length > maxLength) return locale('error.string-too-long', maxLength);
     if (str === '') return emptyMessage;
     return undefined;
 }

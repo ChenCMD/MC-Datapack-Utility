@@ -33,13 +33,13 @@ import { download } from './downloader';
 export async function getVanillaData(
     versionOrLiteral: string,
     versionInfo: VersionInformation | undefined,
-    askGitHubdata: AskGitHubData,
+    askGitHubData: AskGitHubData,
     relProcessingFunc: (data: ReposGetContentResponseData) => string,
     elementFunc: (index: number, max: number) => void
 ): Promise<FileDataReqContent[]> {
-    askGitHubdata.ref = askGitHubdata.ref.replace(/%version%/, resolveVersion(versionOrLiteral, versionInfo));
+    askGitHubData.ref = askGitHubData.ref.replace(/%version%/, resolveVersion(versionOrLiteral, versionInfo));
 
-    const files = await getGitHubData(askGitHubdata);
+    const files = await getGitHubData(askGitHubData);
     const ans: FileDataReqContent[] = [];
 
     if (!Array.isArray(files)) return [];

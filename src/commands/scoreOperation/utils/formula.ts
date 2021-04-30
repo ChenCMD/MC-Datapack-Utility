@@ -130,10 +130,10 @@ function conditionAssembling(exp: string[], isTrue: boolean, opTable: OperateTab
         const index = exp.indexOf('||');
         return [...conditionAssembling(exp.slice(0, index), !isTrue, opTable, funcs, scale), ...conditionAssembling(exp.slice(index + 1), !isTrue, opTable, funcs, scale)];
     }
-    let spliter = 0;
+    let splitter = 0;
     for (let i = 0; i < exp.length; i++) {
         if (conditionExpTable[exp[i]])
-            spliter = i;
+            splitter = i;
     }
-    return [{ front: formulaAnalyzer(exp.slice(0, spliter), opTable, funcs, scale), op: conditionExpTable[exp[spliter]], back: formulaAnalyzer(exp.slice(spliter + 1), opTable, funcs, scale), default: (exp[1] === '!=') ? !isTrue : isTrue }];
+    return [{ front: formulaAnalyzer(exp.slice(0, splitter), opTable, funcs, scale), op: conditionExpTable[exp[splitter]], back: formulaAnalyzer(exp.slice(splitter + 1), opTable, funcs, scale), default: (exp[1] === '!=') ? !isTrue : isTrue }];
 }

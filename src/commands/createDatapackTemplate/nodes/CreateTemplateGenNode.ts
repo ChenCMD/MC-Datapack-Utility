@@ -2,7 +2,7 @@ import path from 'path';
 import { locale } from '../../../locales';
 import { createMessageItemHasIds } from '../../../types/MessageItemHasId';
 import { getDatapackRoot, isDatapackRoot } from '../../../utils/common';
-import { listenDir, listenInput, showWarning, validator } from '../../../utils/vscodeWrapper';
+import { listenDir, listenInput, showWarning, stringValidator } from '../../../utils/vscodeWrapper';
 import { AbstractNode } from '../types/AbstractNode';
 
 export class CreateTemplateGenNode extends AbstractNode {
@@ -26,7 +26,7 @@ export class CreateTemplateGenNode extends AbstractNode {
     async listenDatapackNameAndRoot(directory: string): Promise<{ name: string; root: string }> {
         const name = await listenInput(
             locale('datapack-name'),
-            v => validator(v, /[\\/:*?"<>|]/g, locale('error.input-blank', locale('datapack-name')))
+            v => stringValidator(v, { invalidCharRegex: /[\\/:*?"<>|]/g, emptyMessage: locale('error.input-blank', locale('datapack-name')) })
         );
         const root = path.join(directory, name);
 

@@ -2,8 +2,11 @@ import { Uri, FileSystemError, workspace } from 'vscode';
 import * as fs from 'fs';
 // eslint-disable-next-line no-duplicate-imports
 import { promises as fsp } from 'fs';
-import { flatPath } from './common';
 import path from 'path';
+
+function flatPath(pathOrUri: string | Uri): Uri {
+    return pathOrUri instanceof Uri ? pathOrUri : Uri.file(pathOrUri);
+}
 
 /**
  * ファイルを作成します
