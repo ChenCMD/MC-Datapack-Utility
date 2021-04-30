@@ -1,7 +1,6 @@
 import { ExtensionContext, commands, window, workspace, ConfigurationChangeEvent, languages } from 'vscode';
-import { copyResourcePath, createDatapack, createFile, scoreOperation } from './commands';
+import { copyResourcePath, createDatapack, createFile, generateMultiLine, scoreOperation } from './commands';
 import { McfunctionFormatter } from './languages';
-import { generateMultiLine } from './commands/multiLineGenerator/main';
 import { loadLocale } from './locales';
 import { Config, constructConfig } from './types/Config';
 import { createFeatureContext } from './types/FeatureContext';
