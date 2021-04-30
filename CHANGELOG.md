@@ -1,3 +1,17 @@
+# [v2.0.0](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.5.0...v2.0.0) (2021-04-30)
+
+## ✨ New Features
+- [`4741a9e`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/4741a9e)  induce createDatapackTemplate when try createFile in empty location 
+- [`b124b50`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/b124b50)  Add CustomQuestion config 
+- [`d7322a8`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/d7322a8)  add command generateMultiLine 
+
+## 🐛 Bug Fixes
+- [`bcba6b4`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/bcba6b4)  Fix missing function folder template 
+- [`30c637d`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/30c637d)  Fix not generate data folder when not template selecting 
+
+## 💥 Breaking Changes
+- [`f97f937`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/f97f937)  Some config names have been put together in an environment group.
+
 # [v1.5.0](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.4.3...v1.5.0) (2021-01-14)
 
 ## ✨ New Features
