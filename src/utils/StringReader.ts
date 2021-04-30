@@ -148,7 +148,7 @@ export class StringReader {
 
     /**
      * @throws {ParsingError}
-     * @param terminator Endding quote. Will not be included in the result.
+     * @param terminator Ending quote. Will not be included in the result.
      * @param out Stores a mapping from in-string indices to real indices.
      */
     private readUntilQuote(terminator: '"' | '\'', out: { mapping: IndexMapping }, looseEscapeCheck: boolean) {
@@ -180,7 +180,7 @@ export class StringReader {
     }
 
     /**
-     * @param terminator Endding character. Will not be included in the result.
+     * @param terminator Ending character. Will not be included in the result.
      */
     readUntilOrEnd(...terminators: string[]): string {
         let ans = '';

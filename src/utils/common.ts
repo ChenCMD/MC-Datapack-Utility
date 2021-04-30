@@ -26,11 +26,11 @@ function getRadixChars(radix: number): string {
     return radixStrings.slice(0, radix);
 }
 
-export async function setTimeOut(milisec: number): Promise<never> {
+export async function setTimeOut(millisecond: number): Promise<never> {
     // eslint-disable-next-line brace-style
     return await new Promise((_, reject) => setTimeout(
         () => reject(new DownloadTimeOutError(locale('error.download-timeout'))),
-        milisec
+        millisecond
     ));
 }
 

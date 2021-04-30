@@ -119,7 +119,7 @@
 			]
 		},
 		"configuration": {
-			"title": "MC Datapack Utilility",
+			"title": "MC Datapack Utility",
 			"properties": {
 				"mcdutil.env.language": {
 					"type": "string",
@@ -291,11 +291,11 @@
 							},
 							"description": {
 								"type": "string",
-								"markdownDesicription": "%mcdutil.config.createDatapackTemplate.customTemplate.description%"
+								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.description%"
 							},
 							"detail": {
 								"type": "string",
-								"markdownDesicription": "%mcdutil.config.createDatapackTemplate.customTemplate.detail%"
+								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.detail%"
 							},
 							"generates": {
 								"type": "array",
