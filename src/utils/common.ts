@@ -5,6 +5,10 @@ import dateFormat from 'dateformat';
 import { FileType, getFilePath, getFileType } from '../types/FileTypes';
 import { DownloadTimeOutError } from '../types/Error';
 
+export function mod(n: number, m:number): number {
+    return (n % m + m) % m;
+}
+
 export function parseRadixFloat(str: string, radix = 10): number {
     const radixChars = getRadixChars(radix);
     const [, intParts, floatParts] = new RegExp(`^([${radixChars}]*)(?:\\.([${radixChars}]*))?`).exec(str) ?? [];

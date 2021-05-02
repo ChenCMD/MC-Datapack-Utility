@@ -4,6 +4,7 @@ import { listenInput } from '../../../utils/vscodeWrapper';
 import { locale } from '../../../locales';
 import { Formula } from '../types/Formula';
 import { ScoreOperationConfig } from '../../../types/Config';
+import { isNumber } from '../../../utils';
 
 export async function formulaToQueue(value: Formula | string, queue: Deque<QueueElement>, config: ScoreOperationConfig, enteredValues: Set<string>): Promise<boolean> {
     if (typeof value !== 'string') {
@@ -14,7 +15,7 @@ export async function formulaToQueue(value: Formula | string, queue: Deque<Queue
         return true;
     }
     let objective = config.objective;
-    if (Number.prototype.isValue(value)) {
+    if (isNumber(value)) {
         queue.addLast({ value, objective, type: 'num' });
     } else {
         if (config.isAlwaysSpecifyObject && !value.startsWith(config.prefix) && !enteredValues.has(value)) {

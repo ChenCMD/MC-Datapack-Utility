@@ -1,3 +1,4 @@
+import { mod } from '../utils';
 import { ErrorTemplate } from './Error';
 
 export class Deque<E> implements IterableIterator<E> {
@@ -20,7 +21,7 @@ export class Deque<E> implements IterableIterator<E> {
         if (this.pointer < this.size()) {
             return {
                 done: false,
-                value: this.data[(this.front + this.pointer++).mod(this.capacity)]
+                value: this.data[mod(this.front + this.pointer++, this.capacity)]
             };
         } else {
             return {
@@ -31,22 +32,22 @@ export class Deque<E> implements IterableIterator<E> {
     }
 
     get(index: number): E {
-        return this.data[(this.front + index).mod(this.capacity)];
+        return this.data[mod(this.front + index, this.capacity)];
     }
 
     pickout(index: number): E {
-        const result = this.data[(this.front + index).mod(this.capacity)];
+        const result = this.data[mod(this.front + index, this.capacity)];
         this.reConstruct(index);
         return result;
     }
 
-    map(func: (element: E, index: number, array: E[]) => E): E[] {
+    map<U>(func: (element: E, index: number, array: E[]) => U): U[] {
         const array = new Array(this.length);
-        const returnArray = new Array<E>(this.length);
+        const returnArray = new Array<U>(this.length);
         for (let i = 0; i < this.size(); i++)
-            array[i] = this.data[(this.front + i - 1).mod(this.capacity)];
+            array[i] = this.data[mod(this.front + i - 1, this.capacity)];
         for (let i = this.size(); i > 0; i--)
-            returnArray.push(func(this.data[(this.front + i - 1).mod(this.capacity)], i, array));
+            returnArray.push(func(this.data[mod(this.front + i - 1, this.capacity)], i, array));
         return returnArray;
     }
 
@@ -56,9 +57,9 @@ export class Deque<E> implements IterableIterator<E> {
 
     addFirst(...elements: E[]): void {
         for (const element of elements) {
-            if ((this.front - 1).mod(this.capacity) === this.tail)
+            if (mod(this.front - 1, this.capacity) === this.tail)
                 this.reSize(this.getCapacity() * 2);
-            this.front = (this.front - 1).mod(this.capacity);
+            this.front = mod(this.front - 1, this.capacity);
             this.data[this.front] = element;
             this.length++;
         }
@@ -66,17 +67,17 @@ export class Deque<E> implements IterableIterator<E> {
 
     addLast(...elements: E[]): void {
         for (const element of elements) {
-            if ((this.tail + 1).mod(this.capacity) === this.front)
+            if (mod(this.tail + 1, this.capacity) === this.front)
                 this.reSize(this.getCapacity() * 2);
             this.data[this.tail] = element;
-            this.tail = (this.tail + 1).mod(this.capacity);
+            this.tail = mod(this.tail + 1, this.capacity);
             this.length++;
         }
     }
 
     contains(testElement: E): boolean {
         for (let i = 0; i < this.size(); i++) {
-            if (this.data[(this.front + i).mod(this.capacity)] === testElement)
+            if (this.data[mod(this.front + i, this.capacity)] === testElement)
                 return true;
         }
         return false;
@@ -84,7 +85,7 @@ export class Deque<E> implements IterableIterator<E> {
 
     descendingIterator(func: (element: E, index: number) => void): void {
         for (let i = this.size(); i > 0; i--)
-            func(this.data[(this.front + i - 1).mod(this.capacity)], i);
+            func(this.data[mod(this.front + i - 1, this.capacity)], i);
     }
 
     element(): E {
@@ -105,7 +106,7 @@ export class Deque<E> implements IterableIterator<E> {
 
     iterator(func: (element: E, index: number) => void): void {
         for (let i = 0; i < this.size(); i++)
-            func(this.data[(this.front + i).mod(this.capacity)], i);
+            func(this.data[mod(this.front + i, this.capacity)], i);
     }
 
     peek(): E | undefined {
@@ -133,7 +134,7 @@ export class Deque<E> implements IterableIterator<E> {
             return undefined;
 
         const result = this.data[this.tail - 1];
-        this.tail = (this.tail - 1).mod(this.capacity);
+        this.tail = mod(this.tail - 1, this.capacity);
         this.length--;
 
         if (this.length === this.getCapacity() / 4 && this.getCapacity() / 2 !== 0)
@@ -147,7 +148,7 @@ export class Deque<E> implements IterableIterator<E> {
             return undefined;
 
         const result: E = this.data[this.front];
-        this.front = (this.front + 1).mod(this.capacity);
+        this.front = mod(this.front + 1, this.capacity);
         this.length--;
 
         if (this.length === this.getCapacity() / 4 && this.getCapacity() / 2 !== 0)
@@ -177,7 +178,7 @@ export class Deque<E> implements IterableIterator<E> {
             throw new NoSuchElementError();
 
         const result: E = this.data[this.front];
-        this.front = (this.front + 1).mod(this.capacity);
+        this.front = mod(this.front + 1, this.capacity);
         this.length--;
 
         if (this.length === this.getCapacity() / 4 && this.getCapacity() / 2 !== 0)
@@ -191,7 +192,7 @@ export class Deque<E> implements IterableIterator<E> {
             throw new NoSuchElementError();
 
         const result: E = this.data[this.tail - 1];
-        this.tail = (this.tail - 1).mod(this.capacity);
+        this.tail = mod(this.tail - 1, this.capacity);
         this.length--;
 
         if (this.length === this.getCapacity() / 4 && this.getCapacity() / 2 !== 0)
@@ -202,7 +203,7 @@ export class Deque<E> implements IterableIterator<E> {
 
     removeFirstOccurrence(removeElement: E): boolean {
         for (let i = 0; i < this.size(); i++) {
-            if (this.data[(this.front + i).mod(this.capacity)] === removeElement) {
+            if (this.data[mod(this.front + i, this.capacity)] === removeElement) {
                 this.reConstruct(i);
                 return true;
             }
@@ -215,7 +216,7 @@ export class Deque<E> implements IterableIterator<E> {
 
     removeLastOccurrence(removeElement: E): boolean {
         for (let i = this.size(); i > 0; i--) {
-            if (this.data[(this.front + i - 1).mod(this.capacity)] === removeElement) {
+            if (this.data[mod(this.front + i - 1, this.capacity)] === removeElement) {
                 this.reConstruct(i - 1);
                 return true;
             }
@@ -240,9 +241,9 @@ export class Deque<E> implements IterableIterator<E> {
         const newData = new Array<E>(this.capacity + 1);
         for (let i = 0; i < this.size(); i++) {
             if (i < withoutElementIndex)
-                newData[i] = (this.data[(this.front + i).mod(this.capacity)]);
+                newData[i] = this.data[mod(this.front + i, this.capacity)];
             if (i > withoutElementIndex)
-                newData[i - 1] = (this.data[(this.front + i).mod(this.capacity)]);
+                newData[i - 1] = this.data[mod(this.front + i, this.capacity)];
         }
         this.length--;
         this.front = 0;
@@ -253,7 +254,7 @@ export class Deque<E> implements IterableIterator<E> {
     private reSize(newSize: number): void {
         const newData = new Array<E>(newSize + 1);
         for (let i = 0; i < this.size(); i++)
-            newData[i] = (this.data[(this.front + i).mod(this.capacity)]);
+            newData[i] = this.data[mod(this.front + i, this.capacity)];
         this.front = 0;
         this.tail = this.size();
         this.capacity = newSize;
@@ -269,7 +270,7 @@ export class Deque<E> implements IterableIterator<E> {
         for (let i = 0; i < this.size(); i++) {
             if (i !== 0)
                 str += ', ';
-            str += this.data[(this.front + i).mod(this.capacity)];
+            str += this.data[mod(this.front + i, this.capacity)];
         }
         return str;
     }
