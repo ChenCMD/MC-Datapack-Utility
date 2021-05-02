@@ -2,6 +2,10 @@
 
 type Types = 'string' | 'number' | 'bigint' | 'boolean' | 'symbol' | 'undefined' | 'object' | 'function';
 
+export function isNumber(obj: any): obj is number {
+    return !isNaN(Number(obj));
+}
+
 const isSomethingArray = (obj: any, type: Types): boolean => Array.isArray(obj) && obj.every(v => typeof v === type);
 
 export function isBigintArray(obj: any): obj is boolean[] {

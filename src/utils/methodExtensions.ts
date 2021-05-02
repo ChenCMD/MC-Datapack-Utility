@@ -6,11 +6,6 @@ declare global {
         flatPromise<U>(func: (x: T) => Promise<U[]>): Promise<U[]>
         clear(): void
     }
-    interface Number {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        isValue(testVar: any): boolean
-        mod(n: number): number
-    }
 }
 
 Array.prototype.flat = function <T, U>(func: (x: T) => U[]): U[] {
@@ -24,12 +19,4 @@ Array.prototype.flatPromise = async function <T, U>(func: (x: T) => Promise<U[]>
 Array.prototype.clear = function (): void {
     while (this.length > 0)
         this.pop();
-};
-
-Number.prototype.isValue = function (testVar) {
-    return (!isNaN(Number(testVar)));
-};
-
-Number.prototype.mod = function (n) {
-    return (((this as number) % n) + n) % n;
 };
