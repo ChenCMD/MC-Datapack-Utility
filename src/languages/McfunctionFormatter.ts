@@ -1,6 +1,7 @@
-import { DocumentFormattingEditProvider, EndOfLine, FormattingOptions, Position, Range, TextDocument, TextEdit } from 'vscode';
+import { DocumentFormattingEditProvider, FormattingOptions, Position, Range, TextDocument, TextEdit } from 'vscode';
 import { Config } from '../types';
 import { Deque } from '../types/Deque';
+import { getEolString } from '../utils';
 import { getDatapackRoot, getResourcePath } from '../utils/common';
 import { StringReader } from '../utils/StringReader';
 
@@ -13,9 +14,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
     async provideDocumentFormattingEdits(document: TextDocument, option: FormattingOptions): Promise<TextEdit[]> {
         const indent = option.insertSpaces ? ' '.repeat(option.tabSize) : '\t';
-        let eol = '';
-        if (document.eol === EndOfLine.LF) eol = '\n';
-        if (document.eol === EndOfLine.CRLF) eol = '\r\n';
+        const eol = getEolString(document.eol);
 
         const edits: TextEdit[] = [];
 
