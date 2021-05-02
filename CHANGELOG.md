@@ -1,3 +1,8 @@
+# [v2.0.1](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.0.0...v2.0.1) (2021-05-02)
+
+## 🐛 Bug Fixes
+- [`7623802`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/7623802)  Fix customQuestion exists in unexpected location
+
 # [v2.0.0](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v1.5.0...v2.0.0) (2021-04-30)
 
 ## ✨ New Features
