@@ -1,14 +1,13 @@
 import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, pathAccessible, readFile, showError, showInfo, stringValidator, writeFile } from '../../utils';
 import { Config, Variables, makeExtendQuickPickItem, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError } from '../../types';
 import { locale } from '../../locales';
-import { GenerateFileData, QuickPickFiles } from './types/QuickPickFiles';
+import { CustomQuestion, GenerateFileData, QuickPickFiles } from './types/QuickPickFiles';
 import { dataFolder, packMcMetaData, pickItems } from './utils/data';
 import { GenNodes, getGenTypeMap } from './nodes';
 import { codeConsole, versionInformation } from '../../extension';
 import { TextEncoder } from 'util';
 import path from 'path';
 import rfdc from 'rfdc';
-import { CustomQuestion } from './types/CustomQuestion';
 
 export async function createDatapack({ env: { dataVersion, dateFormat }, createDatapackTemplate }: Config, generateType?: 'add' | 'create'): Promise<void> {
     try {
@@ -34,16 +33,16 @@ export async function createDatapack({ env: { dataVersion, dateFormat }, createD
             datapackName: name,
             datapackRoot: root,
             datapackDescription,
-            namespace,
-            // カスタムの質問
-            ...await listenCustomQuestion(createDatapackTemplate.customQuestion)
+            namespace
         };
         // テンプレートの選択
         const createItems = await listenGenerateTemplate(vars, createDatapackTemplate);
+        // カスタムの質問
+        const customVars = await listenCustomQuestion(createItems.flat(v => v.customQuestion ?? []));
         // 生成用のデータに加工する
         const items = await toGenerateData(createItems, generatorChildNode.isGeneratePackMcMeta, dataVersion);
         // 生成
-        await generate(items, root, vars);
+        await generate(items, root, { ...vars, ...customVars });
     } catch (error) {
         if (error instanceof UserCancelledError) return;
         if (error instanceof Error) showError(error.message);

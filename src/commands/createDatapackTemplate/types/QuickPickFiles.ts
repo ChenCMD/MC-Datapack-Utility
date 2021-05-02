@@ -4,7 +4,8 @@ import { AskGitHubData, ReposGetContentResponseData } from '../../../types/Octok
 
 export interface QuickPickFiles extends QuickPickItem {
     generates: GenerateFileData[]
-    func?: GetGitHubDataFunc[]
+    func?: GetGitHubDataFunc[],
+    customQuestion?: CustomQuestion[]
 }
 
 export type GenerateFileData = GenFileData | GenFolderData;
@@ -19,4 +20,11 @@ interface GenFolderData extends FileData {
 
 export interface GetGitHubDataFunc extends AskGitHubData {
     rel: (data: ReposGetContentResponseData) => string
+}
+
+export interface CustomQuestion {
+    name: string
+    question: string
+    pattern?: string
+    patternErrorMessage?: string
 }

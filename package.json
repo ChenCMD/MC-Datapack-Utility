@@ -410,43 +410,43 @@
 										}
 									}
 								}
+							},
+							"customQuestion": {
+								"type": "array",
+								"items": {
+									"type": "object",
+									"additionalProperties": false,
+									"required": [
+										"name",
+										"question"
+									],
+									"properties": {
+										"name": {
+											"type": "string",
+											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.customQuestion.name%"
+										},
+										"question": {
+											"type": "string",
+											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.customQuestion.question%"
+										},
+										"pattern": {
+											"type": "string",
+											"format": "regex",
+											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.customQuestion.pattern%"
+										},
+										"patternErrorMessage": {
+											"type": "string",
+											"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.customQuestion.patternErrorMessage%"
+										}
+									},
+									"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.customQuestion%"
+								},
+								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.customQuestion%",
+								"default": []
 							}
 						}
 					},
 					"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate%",
-					"default": []
-				},
-				"mcdutil.createDatapackTemplate.customQuestion": {
-					"type": "array",
-					"items": {
-						"type": "object",
-						"additionalProperties": false,
-						"required": [
-							"name",
-							"question"
-						],
-						"properties": {
-							"name": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customQuestion.name%"
-							},
-							"question": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customQuestion.question%"
-							},
-							"pattern": {
-								"type": "string",
-								"format": "regex",
-								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customQuestion.pattern%"
-							},
-							"patternErrorMessage": {
-								"type": "string",
-								"markdownDescription": "%mcdutil.config.createDatapackTemplate.customQuestion.patternErrorMessage%"
-							}
-						},
-						"markdownDescription": "%mcdutil.config.createDatapackTemplate.customQuestion%"
-					},
-					"markdownDescription": "%mcdutil.config.createDatapackTemplate.customQuestion%",
 					"default": []
 				},
 				"mcdutil.createFile.fileTemplate": {

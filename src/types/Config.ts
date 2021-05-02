@@ -1,5 +1,4 @@
 import { WorkspaceConfiguration } from 'vscode';
-import { CustomQuestion } from '../commands/createDatapackTemplate/types/CustomQuestion';
 import { QuickPickFiles } from '../commands/createDatapackTemplate/types/QuickPickFiles';
 import { Template } from '../commands/createFile/types/Template';
 import { OperateElement } from '../commands/scoreOperation/types/OperateTable';
@@ -34,7 +33,6 @@ export interface CreateDatapackTemplateConfig {
     defaultVanillaData: boolean
     defaultFolder: boolean
     customTemplate: QuickPickFiles[]
-    customQuestion: CustomQuestion[]
 }
 
 export interface CreateFileConfig {
@@ -65,8 +63,7 @@ export const defaultConfig: Config = {
         defaultLoadAndTick: true,
         defaultVanillaData: true,
         defaultFolder: true,
-        customTemplate: [],
-        customQuestion: []
+        customTemplate: []
     },
     createFile: {
         fileTemplate: {}
