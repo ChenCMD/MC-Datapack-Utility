@@ -2,9 +2,8 @@ import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, g
 import { Config, Variables, makeExtendQuickPickItem, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError } from '../../types';
 import { locale } from '../../locales';
 import { GenerateFileData, QuickPickFiles } from './types/QuickPickFiles';
-import { getGenTypeMap } from './types/GenerateType';
 import { dataFolder, packMcMetaData, pickItems } from './utils/data';
-import { GenNodes } from './nodes';
+import { GenNodes, getGenTypeMap } from './nodes';
 import { codeConsole, versionInformation } from '../../extension';
 import { TextEncoder } from 'util';
 import path from 'path';
