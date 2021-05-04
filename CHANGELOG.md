@@ -1,3 +1,8 @@
+# [v2.0.2](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.0.1...v2.0.2) (2021-05-04)
+
+## 🚑 Critical Hotfixes
+- [`393f796`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/393f796)  Fix multiLineGenerator not working
+
 # [v2.0.1](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.0.0...v2.0.1) (2021-05-02)
 
 ## 🐛 Bug Fixes
