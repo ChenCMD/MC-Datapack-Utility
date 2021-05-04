@@ -1,6 +1,7 @@
 *
 */**
 
+!resource/**
 !dist/**
 !CHANGELOG.md
 !icon.png
