@@ -1,6 +1,6 @@
 import { DocumentFormattingEditProvider, FormattingOptions, Position, Range, TextDocument, TextEdit } from 'vscode';
-import { Config, Deque } from '../types';
-import { getEolString } from '../utils';
+import { Config } from '../types';
+import { Deque, getEolString } from '../utils';
 import { getDatapackRoot, getResourcePath } from '../utils/common';
 import { StringReader } from '../utils/StringReader';
 
