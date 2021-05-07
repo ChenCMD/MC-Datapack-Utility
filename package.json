@@ -26,7 +26,7 @@
 		"url": "https://github.com/ChenCMD/MC-Datapack-Utility/issues"
 	},
 	"engines": {
-		"vscode": "^1.55.0"
+		"vscode": "^1.56.0"
 	},
 	"scripts": {
 		"compile": "webpack --mode development",
@@ -646,7 +646,7 @@
 		"@typescript-eslint/parser": "^3.8.0",
 		"eslint": "^7.25.0",
 		"glob": "^7.1.7",
-		"mocha": "^8.3.2",
+		"mocha": "^8.4.0",
 		"semantic-release": "^17.4.2",
 		"semantic-release-gitmoji": "^1.3.4",
 		"semantic-release-vsce": "^3.3.0",
