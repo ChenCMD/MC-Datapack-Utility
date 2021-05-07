@@ -1,7 +1,5 @@
 import { Uri, FileSystemError, workspace } from 'vscode';
-import * as fs from 'fs';
-// eslint-disable-next-line no-duplicate-imports
-import { promises as fsp } from 'fs';
+import fs, { promises as fsp } from 'fs';
 import path from 'path';
 
 function flatPath(pathOrUri: string | Uri): Uri {
@@ -126,7 +124,7 @@ export async function writeFile(targetPath: string | Uri, content: string): Prom
 export async function walkRoot(
     workspaceRoot: Uri,
     abs: string,
-    cb: (xabs: string, stat: fs.Stats) => void,
+    cb: (abs: string, stat: fs.Stats) => void,
     depth = Infinity
 ): Promise<void> {
     if (depth <= 0) return;

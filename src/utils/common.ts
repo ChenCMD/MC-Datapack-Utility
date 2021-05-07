@@ -1,9 +1,9 @@
 import * as path from 'path';
-import * as file from './file';
 import { locale } from '../locales';
 import dateFormat from 'dateformat';
 import { FileType, getFilePath, getFileType } from '../types/FileTypes';
 import { DownloadTimeOutError } from '../types/Error';
+import { pathAccessible } from '.';
 
 export function mod(n: number, m:number): number {
     return (n % m + m) % m;
@@ -75,5 +75,5 @@ export async function getDatapackRoot(filePath: string): Promise<string | undefi
 }
 
 export async function isDatapackRoot(testPath: string): Promise<boolean> {
-    return await file.pathAccessible(path.join(testPath, 'pack.mcmeta')) && await file.pathAccessible(path.join(testPath, 'data'));
+    return await pathAccessible(path.join(testPath, 'pack.mcmeta')) && await pathAccessible(path.join(testPath, 'data'));
 }

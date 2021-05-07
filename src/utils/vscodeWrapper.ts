@@ -1,9 +1,8 @@
 import { EndOfLine, InputBoxOptions, ProgressLocation, QuickPickItem, TextEditor, Uri, ViewColumn, window, workspace, WorkspaceFolder } from 'vscode';
-import { getRadixRegExp } from '.';
+import { getRadixRegExp, parseRadixFloat } from '.';
 import { locale } from '../locales';
 import { NotOpenTextDocumentError, NotOpenWorkspaceError, UserCancelledError } from '../types/Error';
 import { MessageItemHasId } from '../types/MessageItemHasId';
-import { parseRadixFloat } from './common';
 
 export function getEolString(eol: EndOfLine): '\n' | '\r\n' {
     switch (eol) {

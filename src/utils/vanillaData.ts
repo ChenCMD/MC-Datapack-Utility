@@ -27,8 +27,7 @@ import { codeConsole } from '../extension';
 import { AskGitHubData, getGitHubData, ReposGetContentResponseData } from '../types/OctokitWrapper';
 import { FileDataReqContent } from '../types/FileData';
 import { VersionInformation } from '../types/VersionInformation';
-import { setTimeOut } from './common';
-import { download } from './downloader';
+import { download, setTimeOut } from '.';
 
 export async function getVanillaData(
     versionOrLiteral: string,

@@ -25,7 +25,6 @@
  * @version 1.0.0
 */
 
-import { Deque } from '../../../utils/Deque';
 import { OperateTable } from '../types/OperateTable';
 import { QueueElement } from '../types/QueueElement';
 import { formulaToQueue } from '.';
@@ -34,6 +33,7 @@ import { Formula, IfFormula } from '../types/Formula';
 import { codeConsole } from '../../../extension';
 import { GenerateError, CalculateUnfinishedError } from '../../../types/Error';
 import { ScoreOperationConfig } from '../../../types/Config';
+import { Deque } from '../../../utils';
 
 export async function rpnToScoreOperation(formula: Formula | string, config: ScoreOperationConfig, funcs: IfFormula[], opTable: OperateTable, _enteredValues?: Set<string>): Promise<{ resValues: Set<string>, resFormulas: string[] } | undefined> {
     const prefix = config.prefix;

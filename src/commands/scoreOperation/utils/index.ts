@@ -1,10 +1,9 @@
-import { Deque } from '../../../utils/Deque';
 import { QueueElement } from '../types/QueueElement';
 import { listenInput } from '../../../utils/vscodeWrapper';
 import { locale } from '../../../locales';
 import { Formula } from '../types/Formula';
 import { ScoreOperationConfig } from '../../../types/Config';
-import { isNumber } from '../../../utils';
+import { Deque, isNumber } from '../../../utils';
 
 export async function formulaToQueue(value: Formula | string, queue: Deque<QueueElement>, config: ScoreOperationConfig, enteredValues: Set<string>): Promise<boolean> {
     if (typeof value !== 'string') {

@@ -1,4 +1,4 @@
-import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, pathAccessible, readFile, showError, showInfo, stringValidator, writeFile } from '../../utils';
+import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, ObjectSet, pathAccessible, readFile, showError, showInfo, stringValidator, writeFile } from '../../utils';
 import { Config, Variables, makeExtendQuickPickItem, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError } from '../../types';
 import { locale } from '../../locales';
 import { CustomQuestion, GenerateFileData, QuickPickFiles } from './types/QuickPickFiles';
@@ -8,7 +8,6 @@ import { codeConsole, versionInformation } from '../../extension';
 import { TextEncoder } from 'util';
 import path from 'path';
 import rfdc from 'rfdc';
-import { ObjectSet } from '../../utils/ObjectSet';
 
 export async function createDatapack({ env: { dataVersion, dateFormat }, createDatapackTemplate }: Config, generateType?: 'add' | 'create'): Promise<void> {
     try {

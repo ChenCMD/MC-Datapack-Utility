@@ -1,7 +1,7 @@
+import { StringReader } from '.';
 import { arrayToMessage, locale } from '../locales';
 import { JsonObject, JsonValue } from '../types';
 import { ObjectIsNotArrayError, ParsingError, TypeUnmatchedError, UnimplementedError } from '../types/Error';
-import { StringReader } from './StringReader';
 
 export function appendElemFromKey(obj: JsonObject, key: string, elem: JsonValue): [true] | [false, string] {
     try {
