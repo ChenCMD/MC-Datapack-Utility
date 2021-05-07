@@ -1,6 +1,13 @@
 {
     "plugins": [
-        "semantic-release-gitmoji",
+        [
+            "semantic-release-gitmoji",
+            {
+                "releaseRules": {
+                    "patch": [ ":children_crossing:" ]
+                }
+            }
+        ],
         "@semantic-release/changelog",
         [
             "semantic-release-vsce",
