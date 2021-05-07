@@ -8,6 +8,7 @@ import { codeConsole, versionInformation } from '../../extension';
 import { TextEncoder } from 'util';
 import path from 'path';
 import rfdc from 'rfdc';
+import { ObjectSet } from '../../utils/ObjectSet';
 
 export async function createDatapack({ env: { dataVersion, dateFormat }, createDatapackTemplate }: Config, generateType?: 'add' | 'create'): Promise<void> {
     try {
@@ -38,7 +39,7 @@ export async function createDatapack({ env: { dataVersion, dateFormat }, createD
         // テンプレートの選択
         const createItems = await listenGenerateTemplate(vars, createDatapackTemplate);
         // カスタムの質問
-        const customVars = await listenCustomQuestion(createItems.flat(v => v.customQuestion ?? []));
+        const customVars = await listenCustomQuestion(new ObjectSet(createItems.flat(v => v.customQuestion ?? [])));
         // 生成用のデータに加工する
         const items = await toGenerateData(createItems, generatorChildNode.isGeneratePackMcMeta, dataVersion);
         // 生成
@@ -63,7 +64,7 @@ async function listenNamespace(): Promise<string> {
     );
 }
 
-async function listenCustomQuestion(questions: CustomQuestion[]): Promise<Variables> {
+async function listenCustomQuestion(questions: ObjectSet<CustomQuestion>): Promise<Variables> {
     const ans: Variables = {};
     for (const question of questions) {
         let patternChecker: ((str: string) => string | undefined) | undefined = undefined;
