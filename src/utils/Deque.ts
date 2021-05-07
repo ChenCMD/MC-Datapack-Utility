@@ -1,5 +1,5 @@
-import { mod } from '../utils';
-import { ErrorTemplate } from './Error';
+import { mod } from '.';
+import { ErrorTemplate } from '../types/Error';
 
 export class Deque<E> implements IterableIterator<E> {
     private data: Array<E>;

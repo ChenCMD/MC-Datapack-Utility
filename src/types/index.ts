@@ -1,5 +1,5 @@
 export * from './Config';
-export * from './Deque';
+export * from '../utils/Deque';
 export * from './Error';
 export * from './ExtendQuickPickItem';
 export * from './FileData';

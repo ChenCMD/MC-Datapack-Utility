@@ -1,4 +1,4 @@
-import { Deque } from '../../../types/Deque';
+import { Deque } from '../../../utils/Deque';
 import { QueueElement } from '../types/QueueElement';
 import { listenInput } from '../../../utils/vscodeWrapper';
 import { locale } from '../../../locales';

@@ -25,7 +25,7 @@
  * @version 1.0.0
 */
 
-import { Deque } from '../../../types/Deque';
+import { Deque } from '../../../utils/Deque';
 import { OperateTable } from '../types/OperateTable';
 import { QueueElement } from '../types/QueueElement';
 import { formulaToQueue } from '.';
