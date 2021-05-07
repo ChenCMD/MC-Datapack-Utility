@@ -1,3 +1,8 @@
+# [v2.0.3](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.0.2...v2.0.3) (2021-05-07)
+
+## 🔒 Security Issues
+- [`80b3879`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/80b3879)  fix security issue
+
 # [v2.0.2](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.0.1...v2.0.2) (2021-05-04)
 
 ## 🚑 Critical Hotfixes
