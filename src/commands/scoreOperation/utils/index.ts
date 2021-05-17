@@ -13,7 +13,7 @@ export async function formulaToQueue(value: Formula | string, queue: Deque<Queue
         queue.addLast({ value: value.op.identifier, objective: '', type: value.op.type });
         return true;
     }
-    let objective = config.objective;
+    let { objective } = config;
     if (isNumber(value)) {
         queue.addLast({ value, objective, type: 'num' });
     } else {

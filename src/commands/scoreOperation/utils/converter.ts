@@ -36,9 +36,7 @@ import { ScoreOperationConfig } from '../../../types/Config';
 import { Deque } from '../../../utils';
 
 export async function rpnToScoreOperation(formula: Formula | string, config: ScoreOperationConfig, funcs: IfFormula[], opTable: OperateTable, _enteredValues?: Set<string>): Promise<{ resValues: Set<string>, resFormulas: string[] } | undefined> {
-    const prefix = config.prefix;
-    const objective = config.objective;
-    const temp = config.temp;
+    const { prefix, objective, temp } = config;
 
     const enteredValues = _enteredValues ?? new Set<string>();
     const rpnQueue = new Deque<QueueElement>();

@@ -11,8 +11,8 @@ import rfdc from 'rfdc';
 import { Config } from '../../types';
 
 export async function scoreOperation({ scoreOperation: config }: Config): Promise<void> {
-    const { objective, forceInputType, valueScale } = config;
     try {
+        const { objective, forceInputType, valueScale } = config;
         const editor = getTextEditor();
 
         const operateTable = rfdc()(opTable);
