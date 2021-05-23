@@ -1,8 +1,10 @@
 import { DocumentFormattingEditProvider, FormattingOptions, Position, Range, TextDocument, TextEdit } from 'vscode';
-import { Config } from '../types';
+import { Config, getFileType, FileType } from '../types';
 import { Deque, getEolString } from '../utils';
 import { getDatapackRoot, getResourcePath } from '../utils/common';
 import { StringReader } from '../utils/StringReader';
+import fs from 'fs';
+import path from 'path';
 
 export class McfunctionFormatter implements DocumentFormattingEditProvider {
     constructor(private _config: Config) { }
@@ -22,6 +24,7 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
             if (protocol)
                 edits.push(protocol);
 
+            edits.push(...await this.insertUsages(document, indent, eol, !protocol));
             edits.push(TextEdit.insert(new Position(0, 0), eol));
         }
         edits.push(...this.insertIndent(document, indent, eol));
@@ -121,5 +124,75 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
             return TextEdit.insert(new Position(0, 0), `#> ${resourcePath}${eol}`);
 
         return undefined;
+    }
+
+    private async insertUsages(document: TextDocument, indent: string, eol: string, wasInsertPath: boolean): Promise<TextEdit[]> {
+        const rootPath = await getDatapackRoot(document.fileName);
+        if (!rootPath) return [];
+        const resourcePath = getResourcePath(document.uri.fsPath, rootPath, 'function');
+
+        const withins: TextEdit[] = [];
+        /* eslint-disable @typescript-eslint/naming-convention */
+        const usages: Record<FileType, string[]> = {
+            'advancement': [],
+            'dimension': [],
+            'dimension_type': [],
+            'function': [],
+            'loot_table': [],
+            'predicate': [],
+            'recipe': [],
+            'structure': [],
+            'tag/block': [],
+            'tag/entity_type': [],
+            'tag/fluid': [],
+            'tag/function': [],
+            'tag/item': [],
+            'worldgen/biome': [],
+            'worldgen/configured_carver': [],
+            'worldgen/configured_decorator': [],
+            'worldgen/configured_feature': [],
+            'worldgen/configured_structure_feature': [],
+            'worldgen/configured_surface_builder': [],
+            'worldgen/noise_settings': [],
+            'worldgen/processor_list': [],
+            'worldgen/template_pool': []
+        };
+        /* eslint-enable @typescript-eslint/naming-convention */
+
+        const walk = (abs: string, root: string, target: string) => {
+            for (const dir of fs.readdirSync(abs)) {
+                const newAbs = path.join(abs, dir);
+                const stat = fs.statSync(newAbs);
+
+                if (stat.isDirectory()) walk(newAbs, root, target);
+                if (!stat.isFile()) continue;
+
+                const fileType = getFileType(newAbs, root);
+                if (!fileType) continue;
+
+                if (fs.readFileSync(newAbs).includes(target))
+                    usages[fileType].push(getResourcePath(newAbs, root));
+            }
+            return;
+        };
+
+        walk(rootPath, rootPath, resourcePath);
+
+        const pos = new Position(wasInsertPath ? 1 : 0, 0);
+        withins.push(TextEdit.insert(pos, `#${eol}# @within${eol}`));
+        
+        for (const key of Object.keys(usages) as FileType[]) {
+            if (usages[key].length === 0) continue;
+
+            usages[key].sort();
+            withins.push(TextEdit.insert(pos, `# ${indent}${key}${eol}`));
+            
+            for (const elm of usages[key])
+                withins.push(TextEdit.insert(pos, `# ${indent.repeat(2)}${elm}${eol}`));
+        }
+
+        if (withins.length === 1) return [];
+
+        return withins;
     }
 }
