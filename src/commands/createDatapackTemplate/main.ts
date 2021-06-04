@@ -164,7 +164,7 @@ async function singleGenerate(item: GenerateFileData, root: string, vars: Variab
             const res = appendElemFromKey(parsedJson, key, resolveVars(elem, vars));
             if (!res[0]) throw new GenerateError(locale(res[1], filePath, key));
 
-            writeFile(filePath, JSON.stringify(parsedJson, undefined, indent));
+            await writeFile(filePath, JSON.stringify(parsedJson, undefined, indent));
         }
     }
 }
