@@ -84,7 +84,8 @@ export async function getLatestVersions(): Promise<VersionInformation | undefine
         const processedVersionIndex = versions.findIndex(v => v.id === processedVersion);
         const processedVersions = processedVersionIndex >= 0 ? versions.slice(0, processedVersionIndex + 1).map(v => v.id) : [];
         ans = (release && snapshot) ? { latestRelease: release, latestSnapshot: snapshot, processedVersions } : undefined;
-    } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
         codeConsole.appendLine(`[LatestVersions] ${e}`);
     }
     return ans;

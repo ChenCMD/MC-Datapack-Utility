@@ -42,7 +42,8 @@ export async function generateMultiLine(ctx: FeatureContext): Promise<void> {
                     selections.forEach(selection => builder.replace(selection, editData.join('\n')));
             }
         });
-    } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
         if (error instanceof UserCancelledError) return;
         if (error instanceof Error) showError(error.message);
         else showError(error.toString());

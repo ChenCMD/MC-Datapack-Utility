@@ -49,7 +49,8 @@ export async function scoreOperation({ scoreOperation: config }: Config): Promis
                 resFormulas.join('\r\n')
             ].join('\r\n'));
         });
-    } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
         if (error instanceof UserCancelledError || error instanceof NotOpenTextDocumentError) return;
         if (error instanceof Error) showError(error.message);
         else showError(error.toString());

@@ -28,7 +28,7 @@ export async function createFile(uri: Uri, config: Config): Promise<void> {
         const fileType = getFileType(uri.fsPath, datapackRoot);
         if (!fileType) {
             // 取得できない時の処理
-            if (isDatapackRoot(datapackRoot)) {
+            if (await isDatapackRoot(datapackRoot)) {
                 const res = await showError(locale('create-file.unknown-filetype.listen-add', path.basename(datapackRoot)),
                     false, createMessageItemHasIds('yes', 'no'), ['no']);
                 if (res === 'yes') return await createDatapack(config, 'add');
@@ -71,7 +71,8 @@ export async function createFile(uri: Uri, config: Config): Promise<void> {
             vars.nowOpenFileResourcePath = getResourcePath(openFilePath, datapackRoot, nowOpenFileType) ?? '';
             vars.nowOpenFileName = openFilePath.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? '';
             vars.nowOpenFileExtname = openFilePath.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? '';
-        } catch (error) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
             if (!(error instanceof NotOpenTextDocumentError)) throw error;
         }
 
@@ -86,7 +87,8 @@ export async function createFile(uri: Uri, config: Config): Promise<void> {
         await create(filePath, new TextEncoder().encode(resolveVars(fileTemplate.join('\r\n'), vars)));
         // ファイルを開く
         await window.showTextDocument(Uri.file(filePath), { selection });
-    } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
         if (error instanceof UserCancelledError) return;
         if (error instanceof Error) showError(error.message);
         else showError(error.toString());

@@ -43,7 +43,8 @@ export async function createDatapack({ env: { dataVersion, dateFormat }, createD
         const items = await toGenerateData(createItems, generatorChildNode.isGeneratePackMcMeta, dataVersion);
         // 生成
         await generate(items, root, { ...vars, ...customVars });
-    } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
         if (error instanceof UserCancelledError) return;
         if (error instanceof Error) showError(error.message);
         else showError(error.toString());
@@ -127,7 +128,8 @@ async function generate(items: GenerateFileData[], root: string, vars: Variables
         for (const item of items) {
             try {
                 await singleGenerate(item, root, vars);
-            } catch (error) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (error: any) {
                 if (error instanceof Error) showError(error.message);
                 else showError(error.toString());
                 codeConsole.appendLine(error.stack ?? error.toString());

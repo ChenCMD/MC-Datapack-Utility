@@ -7,7 +7,8 @@ export function appendElemFromKey(obj: JsonObject, key: string, elem: JsonValue)
     try {
         walkObjFromJsonKeyPath(obj, new StringReader(key), elem, ['key'], false);
         return [true];
-    } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
         if (error instanceof ObjectIsNotArrayError) return [false, 'error.could-not-append-elem'];
         if (error instanceof TypeUnmatchedError) return [false, 'error.could-not-access-key'];
         throw error;
