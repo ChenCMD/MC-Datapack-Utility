@@ -7,7 +7,7 @@ export const packMcMetaData: GenerateFileData = {
     rel: 'pack.mcmeta',
     content: {
         pack: {
-            pack_format: 6,
+            pack_format: 7,
             description: '%datapackDescription%'
         }
     }
