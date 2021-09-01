@@ -72,21 +72,20 @@ function resolveVersion(versionOrLiteral: string, versionInformation: VersionInf
 }
 
 export async function getLatestVersions(): Promise<VersionInformation | undefined> {
-    let ans: VersionInformation | undefined;
     try {
         codeConsole.appendLine('[LatestVersions] Fetching the latest versions...');
         const str = await Promise.race([
             download('https://launchermeta.mojang.com/mc/game/version_manifest.json'),
             setTimeOut(7000)
         ]);
-        const { latest: { release, snapshot }, versions }: { latest: { release: string, snapshot: string }, versions: { id: string }[] } = JSON.parse(str);
+        const { latest: { release, snapshot }, versions } = JSON.parse(str) as { latest: { release?: string, snapshot?: string }, versions: { id: string }[] };
         const processedVersion = '1.16.2';
         const processedVersionIndex = versions.findIndex(v => v.id === processedVersion);
         const processedVersions = processedVersionIndex >= 0 ? versions.slice(0, processedVersionIndex + 1).map(v => v.id) : [];
-        ans = (release && snapshot) ? { latestRelease: release, latestSnapshot: snapshot, processedVersions } : undefined;
+        return (release && snapshot) ? { latestRelease: release, latestSnapshot: snapshot, processedVersions } : undefined;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (e: any) {
         codeConsole.appendLine(`[LatestVersions] ${e}`);
+        return undefined;
     }
-    return ans;
 }
