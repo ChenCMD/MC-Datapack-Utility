@@ -15,7 +15,7 @@ export async function createDatapack({ env: { dataVersion, dateFormat }, createD
         const generatorChildNode = new (
             generateType
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                ? getGenTypeMap().get(`create-datapack-template.${generateType}`)!
+                ? getGenTypeMap().get(locale(`create-datapack-template.${generateType}`))!
                 : await listenGenerateType()
         )();
         // ディレクトリ
