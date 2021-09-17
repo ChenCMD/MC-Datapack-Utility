@@ -4,7 +4,10 @@
             "semantic-release-gitmoji",
             {
                 "releaseRules": {
-                    "patch": [ ":children_crossing:" ]
+                    "patch": [
+                        ":children_crossing:",
+                        ":arrow_up:"
+                    ]
                 }
             }
         ],
