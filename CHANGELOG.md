@@ -1,3 +1,9 @@
+# [v2.0.5](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.0.4...v2.0.5) (2021-09-17)
+
+## 🐛 Bug Fixes
+- [`05feb6f`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/05feb6f)  Revert &quot;🩹 fix locale involved core system&quot; 
+- [`8eaffa9`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/8eaffa9)  fix build
+
 # [v2.0.4](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.0.3...v2.0.4) (2021-09-01)
 
 # [v2.0.3](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.0.2...v2.0.3) (2021-05-07)
