@@ -42,5 +42,6 @@
     "mcdutil.config.createDatapackTemplate.customTemplate.customQuestion.pattern": "限制结果的正则表达式",
     "mcdutil.config.createDatapackTemplate.customTemplate.customQuestion": "可附加的问题",
     "mcdutil.commands.generateMultiLine.title": "多行生成",
-    "mcdutil.config.createDatapackTemplate.customTemplate.customQuestion.name": "用作替代变量的名称"
+    "mcdutil.config.createDatapackTemplate.customTemplate.customQuestion.name": "用作替代变量的名称",
+    "mcdutil.config.createDatapackTemplate.customTemplate.customQuestion.patternErrorMessage": "当正则未匹配时的自定义错误信息"
 }
