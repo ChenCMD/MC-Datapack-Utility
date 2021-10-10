@@ -47,7 +47,7 @@
     "error.already-exists": "This %0% already exists.",
     "error.cant-divided-by-zero": "The value cannot be divided by zero.",
     "error.could-not-access-key": "Could not access key: \"%1%\" of file: \"%0%\".",
-    "error.could-not-append-elem": "Could not add elem because the key: \"1\" of file: \"0\" is not an array.",
+    "error.could-not-append-elem": "Could not add elem because the key: %1% of file: %0% is not an array.",
     "error.download-timeout": "The download request has timed out.",
     "error.expected-got": "Expected %0% but got %1%",
     "error.input-blank": "The %0% cannot be blank.",
