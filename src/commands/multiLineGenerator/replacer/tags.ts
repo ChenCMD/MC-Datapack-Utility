@@ -25,7 +25,7 @@ export const tagsReplacer: Replacer = async (insertString, _insertCount, { confi
         }
     }
 
-    const { extend: tagType } = await listenPickItem(locale('tags.tag-type'), makeExtendQuickPickItem(tagTypesMap), false);
+    const { extend: tagType } = await listenPickItem(locale('tags.tag-type'), makeExtendQuickPickItem(tagTypesMap, false), false);
     const makeFilePaths = (resourcePath: string) => {
         const [, namespace, file] = resourcePath.match(/^(?:([^:]*):)?(.+)$/) ?? [];
         return roots.map(root => Uri.joinPath(root, 'data', namespace || 'minecraft', tagType, `${file}.json`));
