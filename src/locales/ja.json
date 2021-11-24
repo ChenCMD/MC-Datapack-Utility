@@ -47,7 +47,7 @@
     "error.already-exists": "%0%は既に存在します。",
     "error.cant-divided-by-zero": "値を0で除算することはできません。",
     "error.could-not-access-key": "ファイル: \"%0%\"のkey: \"%1%\"にアクセス出来ませんでした。",
-    "error.could-not-append-elem": "ファイル: \"%0%\"のkey: \"%1%\"は配列ではないためelemを追加出来ませんでした。",
+    "error.could-not-append-elem": "キー：ファイルの％1％：％0％が配列ではないため、elemを追加できませんでした。",
     "error.download-timeout": "ダウンロードの要求がタイムアウトしました。",
     "error.expected-got": "%0%が必要ですが%1%が確認されました",
     "error.input-blank": "%0%を空欄にすることはできません。",
