@@ -13,7 +13,7 @@
     "mcdutil.config.createDatapackTemplate.customTemplate.description": "Explanatory text",
     "mcdutil.config.createDatapackTemplate.customTemplate.detail": "Detailed explanation",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates": "Files/folders generated when selected",
-    "mcdutil.config.createDatapackTemplate.customTemplate.generates.append": "Add elem to key if the target has already been generated in json.",
+    "mcdutil.config.createDatapackTemplate.customTemplate.generates.append": "Add elem to key if the target has already been generated in json. If addFirst is true, insert elem first",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.content": "File contents (It is possible to describe an array of character strings, an object, and an array of objects.)",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj": "The object value is written in the file as it is.",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.content-str": "String (basically one item is interpreted as one line)",

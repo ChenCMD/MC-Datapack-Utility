@@ -404,6 +404,10 @@
 															"type": "null"
 														},
 														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
+													},
+													"addFirst": {
+														"type": "boolean",
+														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
 													}
 												}
 											}

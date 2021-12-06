@@ -1,5 +1,5 @@
 import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, ObjectSet, pathAccessible, readFile, showError, showInfo, stringValidator, writeFile } from '../../utils';
-import { Config, Variables, makeExtendQuickPickItem, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError } from '../../types';
+import { Config, Variables, makeExtendQuickPickItem, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError, JsonObject } from '../../types';
 import { locale } from '../../locales';
 import { CustomQuestion, GenerateFileData, QuickPickFiles } from './types/QuickPickFiles';
 import { dataFolder, packMcMetaData, pickItems } from './utils/data';
@@ -160,10 +160,10 @@ async function singleGenerate(item: GenerateFileData, root: string, vars: Variab
 
             await createFile(filePath, new TextEncoder().encode(contents ?? ''));
         } else if (item.append) {
-            const { key, elem } = item.append;
-            const parsedJson = JSON.parse(await readFile(filePath));
+            const { key, elem, addFirst } = item.append;
+            const parsedJson = JSON.parse(await readFile(filePath)) as JsonObject;
 
-            const res = appendElemFromKey(parsedJson, key, resolveVars(elem, vars));
+            const res = appendElemFromKey(parsedJson, key, resolveVars(elem, vars), addFirst ?? false);
             if (!res[0]) throw new GenerateError(locale(res[1], filePath, key));
 
             await writeFile(filePath, JSON.stringify(parsedJson, undefined, indent));

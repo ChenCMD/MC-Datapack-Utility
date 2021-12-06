@@ -13,7 +13,7 @@
     "mcdutil.config.createDatapackTemplate.customTemplate.description": "説明文",
     "mcdutil.config.createDatapackTemplate.customTemplate.detail": "詳細な説明",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates": "選択時に生成されるファイル/フォルダ",
-    "mcdutil.config.createDatapackTemplate.customTemplate.generates.append": "対象がjsonで既に生成されている場合にkeyにelemを追加します。",
+    "mcdutil.config.createDatapackTemplate.customTemplate.generates.append": "対象がjsonで既に生成されている場合にkeyにelemを追加します。addFirstがtrueの場合、elemを最初に挿入します。",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.content": "ファイルの内容 (文字列の配列,オブジェクト,オブジェクト配列を記載することが可能です。)",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.content-obj": "オブジェクト 値はそのままファイルに記載されます。",
     "mcdutil.config.createDatapackTemplate.customTemplate.generates.content-str": "文字列 (基本的に一つのアイテムは1行として解釈されます)",
