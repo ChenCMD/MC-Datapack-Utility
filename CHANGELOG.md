@@ -1,3 +1,8 @@
+# [v2.1.0](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.0.5...v2.1.0) (2021-12-06)
+
+## ✨ New Features
+- [`3ca8d21`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/3ca8d21)  Add append.addFirst to customTemplate
+
 # [v2.0.5](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.0.4...v2.0.5) (2021-09-17)
 
 ## 🐛 Bug Fixes
