@@ -1,3 +1,8 @@
+# [v2.1.2](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.1...v2.1.2) (2021-12-14)
+
+## 🐛 Bug Fixes
+- [`19443c1`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/19443c1)  appendの行の変数が解決されないのを修正
+
 # [v2.1.1](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.0...v2.1.1) (2021-12-14)
 
 # [v2.1.0](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.0.5...v2.1.0) (2021-12-06)
