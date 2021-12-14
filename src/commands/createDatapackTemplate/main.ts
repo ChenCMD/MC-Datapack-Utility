@@ -161,12 +161,24 @@ async function singleGenerate(item: GenerateFileData, root: string, vars: Variab
             await createFile(filePath, new TextEncoder().encode(contents ?? ''));
         } else if (item.append) {
             const { key, elem, addFirst } = item.append;
-            const parsedJson = JSON.parse(await readFile(filePath)) as JsonObject;
+            const fileContent = await readFile(filePath);
 
-            const res = appendElemFromKey(parsedJson, key, resolveVars(elem, vars), addFirst ?? false);
-            if (!res[0]) throw new GenerateError(locale(res[1], filePath, key));
+            if (/\.json$/.test(filePath)) {
+                const parsedJson = JSON.parse(fileContent) as JsonObject;
 
-            await writeFile(filePath, JSON.stringify(parsedJson, undefined, indent));
+                const res = appendElemFromKey(parsedJson, key, resolveVars(elem, vars), addFirst ?? false);
+                if (!res[0]) throw new GenerateError(locale(res[1], filePath, key));
+
+                await writeFile(filePath, JSON.stringify(parsedJson, undefined, indent));
+            } else {
+                const newContent = [
+                    addFirst ? elem : undefined,
+                    fileContent,
+                    addFirst ? undefined : elem
+                ].filter(v => v);
+
+                await writeFile(filePath, newContent.join('\n'));
+            }
         }
     }
 }
