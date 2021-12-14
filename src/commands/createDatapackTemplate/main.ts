@@ -171,13 +171,10 @@ async function singleGenerate(item: GenerateFileData, root: string, vars: Variab
 
                 await writeFile(filePath, JSON.stringify(parsedJson, undefined, indent));
             } else {
-                const newContent = [
-                    addFirst ? elem : undefined,
-                    fileContent,
-                    addFirst ? undefined : elem
-                ].filter(v => v);
-
-                await writeFile(filePath, newContent.join('\n'));
+                if (addFirst)
+                    await writeFile(filePath, resolveVars(elem, vars) + fileContent);
+                else
+                    await writeFile(filePath, fileContent + resolveVars(elem, vars));
             }
         }
     }
