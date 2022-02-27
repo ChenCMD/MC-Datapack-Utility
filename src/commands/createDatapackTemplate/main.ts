@@ -1,5 +1,5 @@
 import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, ObjectSet, pathAccessible, readFile, showError, showInfo, stringValidator, writeFile } from '../../utils';
-import { Config, Variables, makeExtendQuickPickItem, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError } from '../../types';
+import { Config, Variables, makeExtendQuickPickItem, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError, JsonObject } from '../../types';
 import { locale } from '../../locales';
 import { CustomQuestion, GenerateFileData, QuickPickFiles } from './types/QuickPickFiles';
 import { dataFolder, packMcMetaData, pickItems } from './utils/data';
@@ -15,7 +15,7 @@ export async function createDatapack({ env: { dataVersion, dateFormat }, createD
         const generatorChildNode = new (
             generateType
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                ? getGenTypeMap().get(locale(`create-datapack-template.${generateType}`))!
+                ? getGenTypeMap().get(`create-datapack-template.${generateType}`)!
                 : await listenGenerateType()
         )();
         // ディレクトリ
@@ -43,7 +43,8 @@ export async function createDatapack({ env: { dataVersion, dateFormat }, createD
         const items = await toGenerateData(createItems, generatorChildNode.isGeneratePackMcMeta, dataVersion);
         // 生成
         await generate(items, root, { ...vars, ...customVars });
-    } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
         if (error instanceof UserCancelledError) return;
         if (error instanceof Error) showError(error.message);
         else showError(error.toString());
@@ -127,7 +128,8 @@ async function generate(items: GenerateFileData[], root: string, vars: Variables
         for (const item of items) {
             try {
                 await singleGenerate(item, root, vars);
-            } catch (error) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            } catch (error: any) {
                 if (error instanceof Error) showError(error.message);
                 else showError(error.toString());
                 codeConsole.appendLine(error.stack ?? error.toString());
@@ -158,13 +160,22 @@ async function singleGenerate(item: GenerateFileData, root: string, vars: Variab
 
             await createFile(filePath, new TextEncoder().encode(contents ?? ''));
         } else if (item.append) {
-            const { key, elem } = item.append;
-            const parsedJson = JSON.parse(await readFile(filePath));
+            const { key, elem, addFirst } = item.append;
+            const fileContent = await readFile(filePath);
 
-            const res = appendElemFromKey(parsedJson, key, resolveVars(elem, vars));
-            if (!res[0]) throw new GenerateError(locale(res[1], filePath, key));
+            if (/\.json$/.test(filePath)) {
+                const parsedJson = JSON.parse(fileContent) as JsonObject;
 
-            writeFile(filePath, JSON.stringify(parsedJson, undefined, indent));
+                const res = appendElemFromKey(parsedJson, key, resolveVars(elem, vars), addFirst ?? false);
+                if (!res[0]) throw new GenerateError(locale(res[1], filePath, key));
+
+                await writeFile(filePath, JSON.stringify(parsedJson, undefined, indent));
+            } else {
+                if (addFirst)
+                    await writeFile(filePath, resolveVars(elem, vars) + fileContent);
+                else
+                    await writeFile(filePath, fileContent + resolveVars(elem, vars));
+            }
         }
     }
 }

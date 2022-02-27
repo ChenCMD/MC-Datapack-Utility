@@ -15,4 +15,5 @@ export type ContentType = string[] | JsonObject | JsonObject[];
 export interface AppendElement {
     key: string
     elem: JsonValue
+    addFirst?: boolean
 }

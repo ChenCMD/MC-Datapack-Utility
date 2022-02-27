@@ -17,7 +17,8 @@ export const expressionReplacer: Replacer = async (insertString, insertCount) =>
                 .replace(/x/g, i.toString()));
             ans.push(insertString.replace(/%r/g, replaceData));
         }
-    } catch (e) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
         throw new ParsingError(locale('error.not-expression'));
     }
     return ans;

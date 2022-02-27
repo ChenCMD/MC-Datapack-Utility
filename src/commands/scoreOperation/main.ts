@@ -11,8 +11,8 @@ import rfdc from 'rfdc';
 import { Config } from '../../types';
 
 export async function scoreOperation({ scoreOperation: config }: Config): Promise<void> {
-    const { objective, forceInputType, valueScale } = config;
     try {
+        const { objective, forceInputType, valueScale } = config;
         const editor = getTextEditor();
 
         const operateTable = rfdc()(opTable);
@@ -49,7 +49,8 @@ export async function scoreOperation({ scoreOperation: config }: Config): Promis
                 resFormulas.join('\r\n')
             ].join('\r\n'));
         });
-    } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
         if (error instanceof UserCancelledError || error instanceof NotOpenTextDocumentError) return;
         if (error instanceof Error) showError(error.message);
         else showError(error.toString());

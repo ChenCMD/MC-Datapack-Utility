@@ -3,36 +3,40 @@ import { arrayToMessage, locale } from '../locales';
 import { JsonObject, JsonValue } from '../types';
 import { ObjectIsNotArrayError, ParsingError, TypeUnmatchedError, UnimplementedError } from '../types/Error';
 
-export function appendElemFromKey(obj: JsonObject, key: string, elem: JsonValue): [true] | [false, string] {
+export function appendElemFromKey(obj: JsonObject, key: string, elem: JsonValue, addFirst: boolean): [true] | [false, string] {
     try {
-        walkObjFromJsonKeyPath(obj, new StringReader(key), elem, ['key'], false);
+        walkObjFromJsonKeyPath(obj, new StringReader(key), elem, ['key'], false, addFirst);
         return [true];
-    } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
         if (error instanceof ObjectIsNotArrayError) return [false, 'error.could-not-append-elem'];
         if (error instanceof TypeUnmatchedError) return [false, 'error.could-not-access-key'];
         throw error;
     }
 }
 
-function walkObjFromJsonKeyPath(obj: JsonValue, reader: StringReader, elem: JsonValue, parseTypes: ('key' | 'filter' | 'index')[], allowEmpty: boolean): JsonValue {
+function walkObjFromJsonKeyPath(obj: JsonValue, reader: StringReader, elem: JsonValue, parseTypes: ('key' | 'filter' | 'index')[], allowEmpty: boolean, addFirst: boolean): JsonValue {
     if (parseTypes.includes('key') && canParseKey(reader))
-        return parseKey(obj, reader, elem);
+        return parseKey(obj, reader, elem, addFirst);
     if (parseTypes.includes('filter') && canParseObjectFilter(reader))
-        return parseObjectFilter(obj, reader, elem);
+        return parseObjectFilter(obj, reader, elem, addFirst);
     if (parseTypes.includes('index') && canParseIndex(reader))
-        return parseIndex(obj, reader, elem);
+        return parseIndex(obj, reader, elem, addFirst);
     if (!allowEmpty)
         throw new ParsingError(locale('error.expected-got', arrayToMessage(parseTypes.map(v => locale(`nbt-path.${v}`)), false, 'or'), locale('nothing')));
 
-    if (Array.isArray(obj))
-        obj.push(elem);
-    else
+    if (!Array.isArray(obj))
         throw new ObjectIsNotArrayError();
+    if (addFirst)
+        obj.unshift(elem);
+    else
+        obj.push(elem);
+
     return obj;
 }
 
 
-function parseKey(obj: JsonValue, reader: StringReader, elem: JsonValue): JsonValue {
+function parseKey(obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue {
     // Type check
     if (!obj || typeof obj !== 'object' || Array.isArray(obj)) throw new TypeUnmatchedError();
 
@@ -44,13 +48,13 @@ function parseKey(obj: JsonValue, reader: StringReader, elem: JsonValue): JsonVa
 
 
     if (canParseSep(reader))
-        obj[key] = walkObjFromJsonKeyPath(obj[key], reader.skip(), elem, ['key', 'index'], false);
+        obj[key] = walkObjFromJsonKeyPath(obj[key], reader.skip(), elem, ['key', 'index'], false, addFirst);
     else
-        obj[key] = walkObjFromJsonKeyPath(obj[key], reader, elem, ['filter', 'index'], true);
+        obj[key] = walkObjFromJsonKeyPath(obj[key], reader, elem, ['filter', 'index'], true, addFirst);
     return obj;
 }
 
-function parseObjectFilter(_obj: JsonValue, reader: StringReader, _elem: JsonValue, _isIndexingFilter = false): JsonValue {
+function parseObjectFilter(_obj: JsonValue, reader: StringReader, _elem: JsonValue, _addFirst: boolean, _isIndexingFilter = false): JsonValue {
     reader.skip().skipWhiteSpace();
     throw new UnimplementedError(locale('unimplemented', locale('json-key-path.filter'))); // TODO 未実装処理
     // if (canParseSep(reader))
@@ -59,18 +63,18 @@ function parseObjectFilter(_obj: JsonValue, reader: StringReader, _elem: JsonVal
     //     return undefined;
 }
 
-function parseIndex(obj: JsonValue, reader: StringReader, elem: JsonValue): JsonValue {
+function parseIndex(obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue {
     reader.skip().skipWhiteSpace();
 
     if (canParseObjectFilter(reader))
-        return parseObjectFilter(obj, reader, elem, true);
+        return parseObjectFilter(obj, reader, elem, addFirst, true);
     else if (canParseIndexNumber(reader))
-        return parseIndexNumber(obj, reader, elem);
+        return parseIndexNumber(obj, reader, elem, addFirst);
     else
-        return multiResult(obj, reader, elem);
+        return multiResult(obj, reader, elem, addFirst);
 }
 
-function parseIndexNumber(obj: JsonValue, reader: StringReader, elem: JsonValue): JsonValue {
+function parseIndexNumber(obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue {
     // Type check
     if (!obj || !Array.isArray(obj)) throw new TypeUnmatchedError();
 
@@ -79,21 +83,21 @@ function parseIndexNumber(obj: JsonValue, reader: StringReader, elem: JsonValue)
 
     const index = (value >= 0) ? value : obj.length + value;
     if (canParseSep(reader))
-        obj[index] = walkObjFromJsonKeyPath(obj[index], reader.skip(), elem, ['key', 'index'], false);
+        obj[index] = walkObjFromJsonKeyPath(obj[index], reader.skip(), elem, ['key', 'index'], false, addFirst);
     else
-        obj[index] = walkObjFromJsonKeyPath(obj[index], reader, elem, ['index'], true);
+        obj[index] = walkObjFromJsonKeyPath(obj[index], reader, elem, ['index'], true, addFirst);
     return obj;
 }
 
-function multiResult(obj: JsonValue, reader: StringReader, elem: JsonValue): JsonValue {
+function multiResult(obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue {
     // Type check
     if (!obj || !Array.isArray(obj)) throw new TypeUnmatchedError();
 
     reader.skipWhiteSpace().expect(']').skip();
 
     const walkFunc: (obj: JsonValue, reader: StringReader) => JsonValue = canParseSep(reader)
-        ? (_obj, _reader) => walkObjFromJsonKeyPath(_obj, _reader.skip(), elem, ['key', 'index'], false)
-        : (_obj, _reader) => walkObjFromJsonKeyPath(_obj, _reader, elem, ['index'], true);
+        ? (_obj, _reader) => walkObjFromJsonKeyPath(_obj, _reader.skip(), elem, ['key', 'index'], false, addFirst)
+        : (_obj, _reader) => walkObjFromJsonKeyPath(_obj, _reader, elem, ['index'], true, addFirst);
 
     const res = obj.map(v => walkFunc(v, reader.clone()));
 

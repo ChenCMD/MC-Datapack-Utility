@@ -2,7 +2,7 @@
 	"name": "mc-datapack-utility",
 	"displayName": "MC Datapack Utility",
 	"description": "Extensions that provide multiple features that are useful for developing Minecraft: Java Edition Datapack",
-	"version": "2.0.3",
+	"version": "2.1.0",
 	"icon": "icon.png",
 	"categories": [
 		"Other"
@@ -404,6 +404,10 @@
 															"type": "null"
 														},
 														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
+													},
+													"addFirst": {
+														"type": "boolean",
+														"markdownDescription": "%mcdutil.config.createDatapackTemplate.customTemplate.generates.append%"
 													}
 												}
 											}
@@ -634,8 +638,8 @@
 		}
 	},
 	"devDependencies": {
-		"@semantic-release/changelog": "^5.0.1",
-		"@semantic-release/git": "^9.0.0",
+		"@semantic-release/changelog": "^6.0.0",
+		"@semantic-release/git": "^10.0.0",
 		"@types/dateformat": "^3.0.1",
 		"@types/glob": "^7.1.3",
 		"@types/mocha": "^8.2.2",
@@ -646,10 +650,10 @@
 		"@typescript-eslint/parser": "^3.8.0",
 		"eslint": "^7.25.0",
 		"glob": "^7.1.7",
-		"mocha": "^8.4.0",
-		"semantic-release": "^17.4.2",
+		"mocha": "^9.2.0",
+		"semantic-release": "^19.0.0",
 		"semantic-release-gitmoji": "^1.3.4",
-		"semantic-release-vsce": "^3.3.0",
+		"semantic-release-vsce": "^5.0.0",
 		"ts-loader": "^8.2.0",
 		"typescript": "^4.2.4",
 		"vscode-test": "^1.5.2",

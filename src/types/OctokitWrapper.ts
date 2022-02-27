@@ -1,5 +1,4 @@
 import { Octokit, RestEndpointMethodTypes } from '@octokit/rest';
-import { components } from '@octokit/openapi-types/dist-types/generated/types';
 import { setTimeOut } from '../utils';
 
 type TemporaryType = RestEndpointMethodTypes['repos']['getContent']['parameters'];
@@ -11,7 +10,9 @@ export interface AskGitHubData extends TemporaryType {
     path: string
 }
 
-export type ReposGetContentResponseData = components['schemas']['content-directory'][number];
+type GetElem<T> = T extends unknown[] ? T[number] : T;
+
+export type ReposGetContentResponseData = GetElem<RestEndpointMethodTypes['repos']['getContent']['response']['data']>;
 
 export async function getGitHubData(data: AskGitHubData): Promise<RestEndpointMethodTypes['repos']['getContent']['response']['data']> {
     const octokit = new Octokit();

@@ -88,7 +88,8 @@ function getVSCodeLanguage(): string {
             } else {
                 codeConsole.appendLine(`Have issues parsing VSCODE_NLS_CONFIG: “${process.env.VSCODE_NLS_CONFIG}”`);
             }
-        } catch (ignored) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (ignored: any) {
             codeConsole.appendLine(`Have issues parsing VSCODE_NLS_CONFIG: “${process.env.VSCODE_NLS_CONFIG}”`);
         }
     } else {

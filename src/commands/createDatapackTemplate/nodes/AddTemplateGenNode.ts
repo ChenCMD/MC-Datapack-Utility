@@ -28,7 +28,8 @@ export class AddTemplateGenNode extends AbstractNode {
     async listenDatapackDescription(directory: string): Promise<string> {
         try {
             return JSON.parse(await readFile(path.join(directory, 'pack.mcmeta'))).pack?.description ?? '';
-        } catch (err) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
             if (err instanceof SyntaxError) return '';
             throw err;
         }
