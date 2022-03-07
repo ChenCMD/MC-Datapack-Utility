@@ -4,8 +4,5 @@ import { Replacer } from '../types/Replacer';
 
 export const stringReplacer: Replacer = async (insertString, _, { extensionUri }) => {
     const replaceStrings = await listenInputMultiLine(extensionUri, locale('string.string'));
-    const ans: string[] = [];
-    for (const line of replaceStrings.split('\n'))
-        ans.push(insertString.replace(/%r/g, line));
-    return ans;
+    return replaceStrings.split('\n').map(l => insertString.replace(/%r/g, l));
 };
