@@ -4,7 +4,7 @@ import { listenInput } from '../../../utils';
 import { Replacer } from '../types/Replacer';
 
 export const expressionReplacer: Replacer = async (insertString, insertCount) => {
-    const expression = await listenInput(locale('expression.expression'));
+    const expression = await listenInput(locale('expression.expression'), undefined, '2x + 22');
 
     const ans: string[] = [];
     try {
@@ -18,7 +18,7 @@ export const expressionReplacer: Replacer = async (insertString, insertCount) =>
             ans.push(insertString.replace(/%r/g, replaceData));
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
+    } catch {
         throw new ParsingError(locale('error.not-expression'));
     }
     return ans;
