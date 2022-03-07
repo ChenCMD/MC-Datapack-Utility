@@ -23,12 +23,12 @@ export async function generateMultiLine(ctx: FeatureContext): Promise<void> {
 
         // 挿入する文字列の質問
         const insertString = await listenInput(locale('insert-string'), v => stringValidator(v, { emptyMessage: locale('error.input-blank', locale('insert-string')) }), '%r');
+        // 置換方法の選択
+        const { extend: [replacer, insertCountRequired] } = await listenPickItem('', makeExtendQuickPickItem(getReplacerMap()), false);
         // 挿入する回数
-        const insertCount = selections.length === 1
+        const insertCount = insertCountRequired && selections.length === 1
             ? parseInt(await listenInput(locale('insert-count'), v => numberValidator(v, { min: 1 })))
             : selections.length;
-        // 置換方法の選択
-        const { extend: replacer } = await listenPickItem('', makeExtendQuickPickItem(getReplacerMap()), false);
         // 置換方法毎の処理
         const editData = await replacer(insertString, insertCount, ctx);
         // 置換
