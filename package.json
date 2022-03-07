@@ -489,6 +489,14 @@
 								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
+						"item_modifier": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
 						"loot_table": {
 							"type": "array",
 							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
@@ -545,7 +553,119 @@
 								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
+						"tag/game_event": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
 						"tag/item": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/worldgen/biome": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/worldgen/configured_carver": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/worldgen/configured_decorator": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/worldgen/configured_feature": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/worldgen/configured_structure_feature": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/worldgen/configured_surface_builder": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/worldgen/density_function": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/worldgen/noise": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/worldgen/noise_settings": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/worldgen/placed_feature": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/worldgen/processor_list": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/worldgen/structure_set": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"tag/worldgen/template_pool": {
 							"type": "array",
 							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
@@ -601,6 +721,22 @@
 								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
+						"worldgen/density_function": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"worldgen/noise": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
 						"worldgen/noise_settings": {
 							"type": "array",
 							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
@@ -609,7 +745,23 @@
 								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
 							}
 						},
+						"worldgen/placed_feature": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
 						"worldgen/processor_list": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"worldgen/structure_set": {
 							"type": "array",
 							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
 							"items": {
