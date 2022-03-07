@@ -1,3 +1,13 @@
+# [v2.1.3](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.2...v2.1.3) (2022-03-07)
+
+## 🐛 Bug Fixes
+- [`7cf2626`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/7cf2626)  ファイルタイプが不足しているのを修正、それに伴い設定を追加 
+- [`261a9c8`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/261a9c8)  Fix paddingLength in serialNumberReplacer not work 
+- [`a219160`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/a219160)  multiLinegenerator/tagsReplacerで一部のタグしか利用できないのを修正 
+
+## 🚑 Critical Hotfixes
+- [`a503169`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/a503169)  各種機能が動作しなくなっているのを修正
+
 # [v2.1.2](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.1...v2.1.2) (2021-12-14)
 
 ## 🐛 Bug Fixes
