@@ -54,7 +54,7 @@ export async function listenInput<T extends { toString(): string }>(
 }
 
 export function numberValidator(str: string, { radix = 10, allowFloat, min, max }: { radix?: number, allowFloat?: boolean, min?: number, max?: number } = {}): undefined | string {
-    if (!getRadixRegExp(radix, allowFloat !== false).test(str)) return locale('error.invalid-number');
+    if (!getRadixRegExp(radix, allowFloat ?? true).test(str)) return locale('error.invalid-number');
     if (min && min > parseRadixFloat(str, radix)) return locale('error.number-too-small', min);
     if (max && max < parseRadixFloat(str, radix)) return locale('error.number-too-large', max);
     return undefined;
