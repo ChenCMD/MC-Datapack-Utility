@@ -27,6 +27,28 @@
 import * as path from 'path';
 import minimatch from 'minimatch';
 
+export const tagFileTypes = [
+    'tag/block',
+    'tag/entity_type',
+    'tag/fluid',
+    'tag/function',
+    'tag/game_event',
+    'tag/item',
+    'tag/worldgen/biome',
+    'tag/worldgen/configured_carver',
+    'tag/worldgen/configured_decorator',
+    'tag/worldgen/configured_feature',
+    'tag/worldgen/configured_structure_feature',
+    'tag/worldgen/configured_surface_builder',
+    'tag/worldgen/density_function',
+    'tag/worldgen/noise',
+    'tag/worldgen/noise_settings',
+    'tag/worldgen/placed_feature',
+    'tag/worldgen/processor_list',
+    'tag/worldgen/structure_set',
+    'tag/worldgen/template_pool'
+] as const;
+
 export type FileType =
     | 'advancement'
     | 'dimension'

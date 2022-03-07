@@ -1,14 +1,13 @@
 import path from 'path';
 import { Uri } from 'vscode';
 import { locale } from '../../../locales';
-import { makeExtendQuickPickItem } from '../../../types';
+import { makeExtendQuickPickItem, tagFileTypes } from '../../../types';
 import { Tags } from '../../../types/Tags';
 import { getWorkspaceFolders, listenInput, listenPickItem, pathAccessible, readFile, walkRoot } from '../../../utils';
 import { asyncFilter, asyncMap, asyncSome } from '../../../utils/asyncUtil';
 import { Replacer } from '../types/Replacer';
 
-const tagTypes = ['tags/blocks', 'tags/entity_types', 'tags/fluids', 'tags/functions', 'tags/items'] as const;
-const tagTypesMap = new Map<string, typeof tagTypes[number]>(tagTypes.map(v => [v, v]));
+const tagTypesMap = new Map<string, typeof tagFileTypes[number]>(tagFileTypes.map(v => [v, v]));
 
 export const tagsReplacer: Replacer = async (insertString, _insertCount, { config: ctx }) => {
     const roots: Uri[] = [];
