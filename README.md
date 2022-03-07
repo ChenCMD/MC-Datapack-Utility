@@ -17,6 +17,11 @@ This extension provides several useful features for Datapack development.
   - [Creating a datapack template](#creating-a-datapack-template)
   - [Copy resourcePath](#copy-resourcepath)
   - [Quick file creation](#quick-file-creation)
+  - [Batch input of multiple lines](#batch-input-of-multiple-lines)
+    - [Strings](#strings)
+    - [Datapack tag](#datapack-tag)
+    - [Consecutive values](#consecutive-values)
+    - [Expression](#expression)
   - [Converting formulas to score operation](#converting-formulas-to-score-operation)
 - [Recommendations](#recommendations)
 - [Special Thanks](#special-thanks)
@@ -69,6 +74,53 @@ You can also set the default file contents for each file type from config.
 You can create a file with the contents described by describing it.
 
 ![gif](https://raw.githubusercontent.com/ChenCMD/MC-Datapack-Utility/master/images/createFile.gif)
+
+## Batch input of multiple lines
+
+Having trouble describing multiple lines with some regularity?
+
+Press `Alt + Shift + D -> Alt + Shift + M`.
+This function allows you to generate multiple lines at the cursor position by simply answering a few questions.
+
+Depending on your choice, the method of replacing the `%r` in the first question will change. Here are the types
+
+### Strings
+
+Replace `%r` with any string.
+The input string is interpreted line by line and replaced.
+
+Note that this substitution method behaves differently depending on the number of cursors.
+
+#### Difference in behavior when generating depending on the number of cursors
+
+| Behavior with a single cursor                                           | Behavior with multiple cursors                                                                                                                                                                                                                                             |
+| :---------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Generate as many input lines as there are starting with the cursor line | If the number of input lines and the number of cursors are different:<br/> input content is generated at each location<br/>If the number of input lines and the number of cursors are the same:<br/> input content is generated one line at a time in the order of cursor placement. |
+
+### Datapack tag
+
+Replace `%r` with the data pack tag `values`.
+
+Note that this substitution method behaves differently depending on the number of cursors.
+
+#### Difference in behavior when generating depending on the number of cursors
+
+| Behavior with a single cursor                                             | Behavior with multiple cursors                                                                                                                                                                                                                                   |
+| :------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Generate as many tag elements as there are, starting with the cursor line | If the number of tag elements and the cursor are different:<br/> a tag element is generated at each location<br/>If the number of tag elements and the cursor are the same:<br/> a tag element is generated one line at a time in the order in which the cursor is placed. |
+
+### Consecutive values
+
+Replace `%r` with a constant, continuous value.
+
+Note: If the `Length to pad the value at the beginning` is `-1`, no prefill is performed.
+
+### Expression
+
+Replace `%r` with the value calculated from the expression.
+`Math.min(<a>,<b>)`, `Math.floor(<a>)`, etc. are available.
+
+Note: If the `Length to pad the value at the beginning` is `-1`, no prefill is performed.
 
 ## Converting formulas to score operation
 
