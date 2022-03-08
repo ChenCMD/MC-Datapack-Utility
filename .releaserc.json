@@ -5,6 +5,9 @@
             {
                 "releaseRules": {
                     "patch": [
+                        ":bug:",
+                        ":ambulance:",
+                        ":lock:",
                         ":children_crossing:",
                         ":arrow_up:"
                     ]
