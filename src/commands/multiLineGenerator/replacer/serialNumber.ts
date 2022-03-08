@@ -19,7 +19,7 @@ const operatorMap = new Map<string, OpFunc>([
  * 質問.5 0埋めの桁数
  *
  */
-export const serialNumberReplacer: Replacer = async (_insertString, insertCount) => {
+export const serialNumberReplacer: Replacer = async (insertString, insertCount) => {
     const radix = parseInt(await listenInput(locale('serial-number.radix'), v => numberValidator(v, { min: 2, max: 36, allowFloat: false }), 10));
     const start = parseRadixFloat(await listenInput(locale('serial-number.start'), v => numberValidator(v, { radix }), 0), radix);
     const { label: operator, extend: opFunc } = await listenPickItem(locale('serial-number.operator'), makeExtendQuickPickItem(operatorMap, false), false);
@@ -43,7 +43,6 @@ export const serialNumberReplacer: Replacer = async (_insertString, insertCount)
 
     const maxLength = ans.reduce((a, b) => Math.max(a, b.length), 0);
 
-    return paddingLength !== -1
-        ? ans.map(str => paddingChar.repeat(maxLength - str.length + paddingLength) + str)
-        : ans;
+    return (paddingLength !== -1 ? ans.map(str => paddingChar.repeat(maxLength - str.length + paddingLength) + str) : ans)
+        .map(v => insertString.replace(/%r/g, v));
 };

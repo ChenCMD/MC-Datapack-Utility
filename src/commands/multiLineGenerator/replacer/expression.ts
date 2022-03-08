@@ -22,7 +22,7 @@ export const expressionReplacer: Replacer = async (insertString, insertCount) =>
                 .replace(/[0-9]\(/g, m => `${m.slice(0, 1)}*(`)
                 .replace(/[^a-zA-Z.]x\(/g, m => `${m.slice(0, 2)}*(`)
                 .replace(/[^a-zA-Z.]x/g, m => `${m.slice(0, 1)}${i.toString()}`));
-            ans.push(insertString.replace(/%r/g, replaceData.toString(10)));
+            ans.push(replaceData.toString(10));
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch {
@@ -31,7 +31,6 @@ export const expressionReplacer: Replacer = async (insertString, insertCount) =>
 
     const maxLength = ans.reduce((a, b) => Math.max(a, b.length), 0);
 
-    return paddingLength !== -1
-        ? ans.map(str => paddingChar.repeat(maxLength - str.length + paddingLength) + str)
-        : ans;
+    return (paddingLength !== -1 ? ans.map(str => paddingChar.repeat(maxLength - str.length + paddingLength) + str) : ans)
+        .map(v => insertString.replace(/%r/g, v));
 };
