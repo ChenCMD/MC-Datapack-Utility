@@ -195,6 +195,7 @@ export const fileTypePaths: Record<FileType, string> = {
  */
 export function getFileType(filePath: string, datapackRoot: string): FileType | undefined {
     const dir = path.relative(datapackRoot, filePath).replace(/(\\|$)/g, '/');
+    console.log(dir);
     for (const type of Object.keys(fileTypePaths) as FileType[]) {
         if (minimatch(dir, fileTypePaths[type]))
             return type;
