@@ -48,7 +48,7 @@ export function getDate(format: string): string {
  * @param datapackRoot データパックのルートパス
  */
 export function getResourcePath(filePath: string, datapackRoot: string, fileType?: FileType): string {
-    const fileTypePath = getFilePath(fileType ?? getFileType(filePath, datapackRoot)) ?? '[^/]+';
+    const fileTypePath = getFilePath(fileType ?? getFileType(path.dirname(filePath), datapackRoot)) ?? '[^/]+';
     return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(RegExp(`^data/([^/]+)/${fileTypePath}/(.*)\\.(?:mcfunction|json)$`), '$1:$2');
 }
 

@@ -1,5 +1,6 @@
 import { env, Uri } from 'vscode';
 import { locale } from '../../locales';
+import * as path from 'path';
 import { getFileType } from '../../types/FileTypes';
 import { getDatapackRoot, getResourcePath } from '../../utils/common';
 import { showError } from '../../utils/vscodeWrapper';
@@ -13,7 +14,7 @@ export async function copyResourcePath(fileUri: Uri): Promise<void> {
     }
 
     // ファイルの種類を取得
-    const fileType = getFileType(fileUri.fsPath, datapackRoot);
+    const fileType = getFileType(path.dirname(fileUri.fsPath), datapackRoot);
     if (!fileType) {
         // 取得できない時の処理
         showError(locale('copy-resource-path.unknown-filetype'));
