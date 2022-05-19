@@ -1,3 +1,8 @@
+# [v2.1.5](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.4...v2.1.5) (2022-05-19)
+
+## 🐛 Bug Fixes
+- [`b436f45`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/b436f45)  Unable to get resource path from no name mcfunction Fixes #57 (Issues: [`#57`](https://github.com/ChenCMD/MC-Datapack-Utility/issues/57))
+
 # [v2.1.4](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.3...v2.1.4) (2022-03-08)
 
 ## 🐛 Bug Fixes
