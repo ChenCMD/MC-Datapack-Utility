@@ -1,3 +1,8 @@
+# [v2.1.4](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.3...v2.1.4) (2022-03-08)
+
+## 🐛 Bug Fixes
+- [`68e941e`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/68e941e)  Fix unintended replace in generateMultiLine
+
 # [v2.1.3](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.2...v2.1.3) (2022-03-07)
 
 ## 🐛 Bug Fixes
