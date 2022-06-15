@@ -38,7 +38,7 @@ export async function createDatapack({ env: { dataVersion, dateFormat }, createD
         // テンプレートの選択
         const createItems = await listenGenerateTemplate(vars, createDatapackTemplate);
         // カスタムの質問
-        const customVars = await listenCustomQuestion(new ObjectSet(createItems.flat(v => v.customQuestion ?? [])));
+        const customVars = await listenCustomQuestion(new ObjectSet(createItems.flatMap(v => v.customQuestion ?? [])));
         // 生成用のデータに加工する
         const items = await toGenerateData(createItems, generatorChildNode.isGeneratePackMcMeta, dataVersion);
         // 生成
@@ -90,9 +90,9 @@ async function listenGenerateTemplate(vars: Variables, config: CreateDatapackTem
 }
 
 async function toGenerateData(createItems: QuickPickFiles[], isGeneratePackMcMeta: boolean, dataVersion: string): Promise<GenerateFileData[]> {
-    const ans = createItems.flat(v => v.generates);
+    const ans = createItems.flatMap(v => v.generates);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const funcs = createItems.filter(v => v.func !== undefined).flat(v => v.func!);
+    const funcs = createItems.filter(v => v.func !== undefined).flatMap(v => v.func!);
 
     ans.push(rfdc()(dataFolder));
     if (isGeneratePackMcMeta) ans.push(rfdc()(packMcMetaData));

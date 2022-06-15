@@ -1,4 +1,3 @@
-import '../../utils/methodExtensions';
 import { codeConsole } from '../../extension';
 import { getTextEditor, listenInput, showError } from '../../utils/vscodeWrapper';
 import { rpnToScoreOperation } from './utils/converter';

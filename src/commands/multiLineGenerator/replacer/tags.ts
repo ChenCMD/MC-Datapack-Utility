@@ -42,7 +42,7 @@ export const tagsReplacer: Replacer = async (insertString, _insertCount, { confi
     }
 
     const ans: string[] = [];
-    for (const value of (await asyncMap<string, Tags>(matchFiles, async v => JSON.parse(await readFile(v)))).flat(v => v.values))
+    for (const value of (await asyncMap<string, Tags>(matchFiles, async v => JSON.parse(await readFile(v)))).flatMap(v => v.values))
         ans.push(insertString.replace(/%r/g, typeof value === 'string' ? value : value.id));
     return ans;
 };
