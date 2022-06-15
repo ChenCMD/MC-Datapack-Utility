@@ -4,7 +4,6 @@ export * from './Deque';
 export * from './downloader';
 export * from './file';
 export * from './jsonKeyWalker';
-export * from './methodExtensions';
 export * from './ObjectSet';
 export * from './StringReader';
 export * from './typeGuards';
