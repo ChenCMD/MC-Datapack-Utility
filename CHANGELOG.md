@@ -1,3 +1,8 @@
+# [v2.1.6](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.5...v2.1.6) (2022-06-15)
+
+## 🚑 Critical Hotfixes
+- [`1282dc1`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/1282dc1)  Fix breaking other extensions Fix #62 (Issues: [`#62`](https://github.com/ChenCMD/MC-Datapack-Utility/issues/62))
+
 # [v2.1.5](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.4...v2.1.5) (2022-05-19)
 
 ## 🐛 Bug Fixes
