@@ -75,8 +75,8 @@ export const pickItems: { [key in '#load & #tick' | 'Vanilla data' | 'Folders']:
             generates: [],
             func: [
                 {
-                    owner: 'SPGoding',
-                    repo: 'vanilla-datapack',
+                    owner: 'misode',
+                    repo: 'mcmeta',
                     ref: '%version%-data',
                     path: 'data/minecraft/tags/blocks',
                     rel: (data: ReposGetContentResponseData): string => data.path
@@ -88,8 +88,8 @@ export const pickItems: { [key in '#load & #tick' | 'Vanilla data' | 'Folders']:
             generates: [],
             func: [
                 {
-                    owner: 'SPGoding',
-                    repo: 'vanilla-datapack',
+                    owner: 'misode',
+                    repo: 'mcmeta',
                     ref: '%version%-data',
                     path: 'data/minecraft/tags/entity_types',
                     rel: (data: ReposGetContentResponseData): string => data.path
@@ -101,8 +101,8 @@ export const pickItems: { [key in '#load & #tick' | 'Vanilla data' | 'Folders']:
             generates: [],
             func: [
                 {
-                    owner: 'SPGoding',
-                    repo: 'vanilla-datapack',
+                    owner: 'misode',
+                    repo: 'mcmeta',
                     ref: '%version%-data',
                     path: 'data/minecraft/tags/fluids',
                     rel: (data: ReposGetContentResponseData): string => data.path
@@ -114,8 +114,8 @@ export const pickItems: { [key in '#load & #tick' | 'Vanilla data' | 'Folders']:
             generates: [],
             func: [
                 {
-                    owner: 'SPGoding',
-                    repo: 'vanilla-datapack',
+                    owner: 'misode',
+                    repo: 'mcmeta',
                     ref: '%version%-data',
                     path: 'data/minecraft/tags/items',
                     rel: (data: ReposGetContentResponseData): string => data.path
