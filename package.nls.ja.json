@@ -2,7 +2,7 @@
     "mcdutil.commands.copyResourcePath.title": "リソースパスをコピー",
     "mcdutil.commands.createDatapackTemplate.title": "データパックテンプレートを作成する",
     "mcdutil.commands.createFile.title": "データパックファイルを作成する",
-    "mcdutil.commands.generateMultiLine.title": "複数行の一括生成",
+    "mcdutil.commands.generateMultiLine.title": "複数行の生成",
     "mcdutil.commands.scoreOperation.title": "計算式をscore operationに変換",
     "mcdutil.config.createDatapackTemplate.customTemplate": "**データパックテンプレートを作成する**: カスタムテンプレート",
     "mcdutil.config.createDatapackTemplate.customTemplate.customQuestion": "追加の質問",
