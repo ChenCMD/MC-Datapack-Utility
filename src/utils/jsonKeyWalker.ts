@@ -5,7 +5,7 @@ import { ObjectIsNotArrayError, ParsingError, TypeUnmatchedError, UnimplementedE
 
 export function appendElemFromKey(obj: JsonObject, key: string, elem: JsonValue, addFirst: boolean): [true] | [false, string] {
     try {
-        walkObjFromJsonKeyPath(obj, new StringReader(key), elem, ['key'], false, addFirst);
+        walkObjFromJsonKeyPath(obj, new StringReader(key), elem, ['key', 'index'], false, addFirst);
         return [true];
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -64,6 +64,9 @@ function parseObjectFilter(_obj: JsonValue, reader: StringReader, _elem: JsonVal
 }
 
 function parseIndex(obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue {
+    // Type check
+    if (!obj || typeof obj !== 'object' || !Array.isArray(obj)) throw new TypeUnmatchedError();
+
     reader.skip().skipWhiteSpace();
 
     if (canParseObjectFilter(reader))
