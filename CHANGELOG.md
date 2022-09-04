@@ -1,3 +1,5 @@
+# [v2.1.7](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.6...v2.1.7) (2022-08-09)
+
 # [v2.1.6](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.5...v2.1.6) (2022-06-15)
 
 ## 🚑 Critical Hotfixes
