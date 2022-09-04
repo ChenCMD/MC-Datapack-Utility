@@ -1,3 +1,8 @@
+# [v2.1.8](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.7...v2.1.8) (2022-09-04)
+
+## 🐛 Bug Fixes
+- [`bd7e4e3`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/bd7e4e3)  Fix root array not supported in append.key
+
 # [v2.1.7](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.6...v2.1.7) (2022-08-09)
 
 # [v2.1.6](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.5...v2.1.6) (2022-06-15)
