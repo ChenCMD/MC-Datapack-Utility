@@ -29,7 +29,7 @@
     "mcdutil.config.env.dataVersion": "Version of vanilla data to use",
     "mcdutil.config.env.dateFormat": "Format of the date and time assigned by Date of the generation variable (Format See [here](https://github.com/felixge/node-dateformat#mask-options) for the format)",
     "mcdutil.config.env.detectionDepth": "Depth limit for detecting the root folder of a data pack",
-    "mcdutil.config.env.language": "Languages ​​displayed by MC Datapack Utility",
+    "mcdutil.config.env.language": "Languages displayed by MC Datapack Utility",
     "mcdutil.config.scoreOperation.customOperate": "**Convert formula to Score Operation**: Custom operate table",
     "mcdutil.config.scoreOperation.customOperate.arity": "Its arity count (e.g. the \"+\" has 2 arity)",
     "mcdutil.config.scoreOperation.customOperate.assocLow": "\"L\": left-associative\n\"R\": right-associative",
