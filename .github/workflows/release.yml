@@ -14,21 +14,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Cache Node Modules
-        uses: actions/cache@v1
+        uses: actions/cache@v3
+        id: cache
         with:
-          path: ~/.npm
+          path: ~/node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-            ${{ runner.os }}-
+          restore-keys: ${{ runner.os }}-node-
       - name: Install Dependencies
+        if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
         run: yarn install --frozen-lockfile
 
-      - name: Release
+      - name: Build
         run: |
           rm -rf dist
           npm run build
-          npm run release
+
+      - name: Publish
+        run: npm run release
