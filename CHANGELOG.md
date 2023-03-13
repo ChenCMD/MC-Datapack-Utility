@@ -1,3 +1,8 @@
+# [v2.1.11](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.10...v2.1.11) (2023-03-13)
+
+## 🐛 Bug Fixes
+- [`290ca67`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/290ca67)  Fix get vscode setting language
+
 # [v2.1.10](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.9...v2.1.10) (2023-03-13)
 
 # [v2.1.9](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.8...v2.1.9) (2023-01-03)
