@@ -3,7 +3,7 @@ import { locale } from '../locales';
 import dateFormat from 'dateformat';
 import { FileType, getFilePath, getFileType } from '../types/FileTypes';
 import { DownloadTimeOutError } from '../types/Error';
-import { pathAccessible } from '.';
+import { pathAccessible, readFile } from '.';
 
 export function mod(n: number, m:number): number {
     return (n % m + m) % m;
@@ -47,8 +47,8 @@ export function getDate(format: string): string {
  * @param filePath 取得したいファイルのファイルパス
  * @param datapackRoot データパックのルートパス
  */
-export function getResourcePath(filePath: string, datapackRoot: string, fileType?: FileType): string {
-    const fileTypePath = getFilePath(fileType ?? getFileType(path.dirname(filePath), datapackRoot)) ?? '[^/]+';
+export function getResourcePath(filePath: string, datapackRoot: string, packFormat: number, fileType?: FileType): string {
+    const fileTypePath = getFilePath(fileType ?? getFileType(path.dirname(filePath), datapackRoot, packFormat), packFormat) ?? '[^/]+';
     return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(RegExp(`^data/([^/]+)/${fileTypePath}/(.*)\\.(?:mcfunction|json)$`), '$1:$2');
 }
 
@@ -72,6 +72,15 @@ export async function getDatapackRoot(filePath: string): Promise<string | undefi
     if (await isDatapackRoot(filePath))
         return filePath;
     return getDatapackRoot(path.dirname(filePath));
+}
+
+export async function getPackFormat(datapackRoot: string): Promise<number> {
+    const packMcMetaPath = path.join(datapackRoot, 'pack.mcmeta');
+    if (!await pathAccessible(packMcMetaPath))
+        return 7;
+    const packMcMeta = JSON.parse(await readFile(packMcMetaPath));
+    const pf = packMcMeta.pack.pack_format;
+    return pf;
 }
 
 export async function isDatapackRoot(testPath: string): Promise<boolean> {

@@ -39,6 +39,15 @@ export class CreateTemplateGenNode extends AbstractNode {
         return { name, root };
     }
 
+    async listenPackFormat(): Promise<number> {
+        const rawPf = await listenInput(locale('pack-format'), v => {
+            const num = parseInt(v, 10);
+            if (isNaN(num) || num < 1) return locale('error.invalid-number');
+            return undefined;
+        });
+        return parseInt(rawPf);
+    }
+
     async listenDatapackDescription(): Promise<string> {
         return await listenInput(locale('datapack-description'));
     }
