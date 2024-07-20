@@ -2,16 +2,16 @@
 import { ReposGetContentResponseData } from '../../../types';
 import { GenerateFileData, QuickPickFiles } from '../types/QuickPickFiles';
 
-export const packMcMetaData: GenerateFileData = {
+export const packMcMetaData: (packFormat: number) => GenerateFileData = pack_format => ({
     type: 'file',
     rel: 'pack.mcmeta',
     content: {
         pack: {
-            pack_format: 7,
+            pack_format,
             description: '%datapackDescription%'
         }
     }
-};
+});
 
 export const dataFolder: GenerateFileData = {
     type: 'folder',

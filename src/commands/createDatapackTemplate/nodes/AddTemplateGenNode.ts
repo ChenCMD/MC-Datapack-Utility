@@ -25,6 +25,17 @@ export class AddTemplateGenNode extends AbstractNode {
         return Promise.resolve({ name, root });
     }
 
+    async listenPackFormat(directory: string): Promise<number> {
+        try {
+            const pf = JSON.parse(await readFile(path.join(directory, 'pack.mcmeta'))).pack?.pack_format;
+            if (typeof pf !== 'number')
+                throw new GenerateError(locale('create-datapack-template.no-pack-format'));
+            return pf;
+        } catch (err) {
+            throw new GenerateError(locale('create-datapack-template.no-pack-format'));
+        }
+    }
+
     async listenDatapackDescription(directory: string): Promise<string> {
         try {
             return JSON.parse(await readFile(path.join(directory, 'pack.mcmeta'))).pack?.description ?? '';

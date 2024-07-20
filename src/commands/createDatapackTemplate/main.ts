@@ -22,6 +22,8 @@ export async function createDatapack({ env: { dataVersion, dateFormat }, createD
         const dir = await generatorChildNode.listenGenerateDir();
         // データパック名とroot
         const { name, root } = await generatorChildNode.listenDatapackNameAndRoot(dir);
+        // データパックのpack_format
+        const packFormat = await generatorChildNode.listenPackFormat(root);
         // データパックのdescription
         const datapackDescription = await generatorChildNode.listenDatapackDescription(dir);
         // 名前空間
@@ -32,6 +34,7 @@ export async function createDatapack({ env: { dataVersion, dateFormat }, createD
             dir,
             datapackName: name,
             datapackRoot: root,
+            packFormat: packFormat.toString(),
             datapackDescription,
             namespace
         };
@@ -40,9 +43,9 @@ export async function createDatapack({ env: { dataVersion, dateFormat }, createD
         // カスタムの質問
         const customVars = await listenCustomQuestion(new ObjectSet(createItems.flatMap(v => v.customQuestion ?? [])));
         // 生成用のデータに加工する
-        const items = await toGenerateData(createItems, generatorChildNode.isGeneratePackMcMeta, dataVersion);
+        const items = await toGenerateData(createItems, generatorChildNode.isGeneratePackMcMeta, dataVersion, packFormat);
         // 生成
-        await generate(items, root, { ...vars, ...customVars });
+        await generate(items, root, packFormat, { ...vars, ...customVars });
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         if (error instanceof UserCancelledError) return;
@@ -89,13 +92,13 @@ async function listenGenerateTemplate(vars: Variables, config: CreateDatapackTem
     return await listenPickItem(locale('create-datapack-template.quickpick-placeholder'), items, true);
 }
 
-async function toGenerateData(createItems: QuickPickFiles[], isGeneratePackMcMeta: boolean, dataVersion: string): Promise<GenerateFileData[]> {
+async function toGenerateData(createItems: QuickPickFiles[], isGeneratePackMcMeta: boolean, dataVersion: string, packFormat: number): Promise<GenerateFileData[]> {
     const ans = createItems.flatMap(v => v.generates);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const funcs = createItems.filter(v => v.func !== undefined).flatMap(v => v.func!);
 
     ans.push(rfdc()(dataFolder));
-    if (isGeneratePackMcMeta) ans.push(rfdc()(packMcMetaData));
+    if (isGeneratePackMcMeta) ans.push(packMcMetaData(packFormat));
 
     for (const [i, func] of funcs.entries()) {
         await createProgressBar(
@@ -120,14 +123,14 @@ async function toGenerateData(createItems: QuickPickFiles[], isGeneratePackMcMet
     return ans;
 }
 
-async function generate(items: GenerateFileData[], root: string, vars: Variables): Promise<void> {
+async function generate(items: GenerateFileData[], root: string, packFormat: number, vars: Variables): Promise<void> {
     await createProgressBar(locale('create-datapack-template.progress.title'), async report => {
         const message = locale('create-datapack-template.progress.creating');
         report({ message });
 
         for (const item of items) {
             try {
-                await singleGenerate(item, root, vars);
+                await singleGenerate(item, root, packFormat, vars);
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
             } catch (error: any) {
                 if (error instanceof Error) showError(error.message);
@@ -141,7 +144,7 @@ async function generate(items: GenerateFileData[], root: string, vars: Variables
     });
 }
 
-async function singleGenerate(item: GenerateFileData, root: string, vars: Variables): Promise<void> {
+async function singleGenerate(item: GenerateFileData, root: string, packFormat: number, vars: Variables): Promise<void> {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const filePath = path.join(root, resolveVars(item.rel, vars));
 
@@ -153,7 +156,7 @@ async function singleGenerate(item: GenerateFileData, root: string, vars: Variab
         const indent = ' '.repeat(getIndent(filePath));
 
         if (!await pathAccessible(filePath)) {
-            const singleVars = { fileResourcePath: getResourcePath(filePath, root), ...vars };
+            const singleVars = { fileResourcePath: getResourcePath(filePath, root, packFormat), ...vars };
             const contents = isStringArray(item.content)
                 ? resolveVars(item.content, singleVars).join('\r\n')
                 : JSON.stringify(resolveVars(item.content, singleVars), undefined, indent);

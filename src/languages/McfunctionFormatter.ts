@@ -1,6 +1,6 @@
 import { DocumentFormattingEditProvider, FormattingOptions, Position, Range, TextDocument, TextEdit } from 'vscode';
 import { Config } from '../types';
-import { Deque, getEolString } from '../utils';
+import { Deque, getEolString, getPackFormat } from '../utils';
 import { getDatapackRoot, getResourcePath } from '../utils/common';
 import { StringReader } from '../utils/StringReader';
 
@@ -116,7 +116,10 @@ export class McfunctionFormatter implements DocumentFormattingEditProvider {
 
         if (!rootPath) return undefined;
 
-        const resourcePath = getResourcePath(document.uri.fsPath, rootPath, 'function');
+        // pack_format の取得
+        const packFormat = await getPackFormat(rootPath);
+
+        const resourcePath = getResourcePath(document.uri.fsPath, rootPath, packFormat, 'function');
         if (document.lineAt(0).text !== `#> ${resourcePath}`)
             return TextEdit.insert(new Position(0, 0), `#> ${resourcePath}${eol}`);
 

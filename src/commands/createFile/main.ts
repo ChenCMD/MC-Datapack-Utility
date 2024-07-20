@@ -1,6 +1,6 @@
 import { Range, Uri, window } from 'vscode';
 import { pathAccessible, createFile as create } from '../../utils/file';
-import { getDatapackRoot, getDate, getNamespace, getResourcePath, isDatapackRoot } from '../../utils/common';
+import { getDatapackRoot, getDate, getNamespace, getPackFormat, getResourcePath, isDatapackRoot } from '../../utils/common';
 import { getTextEditor, listenInput, showError } from '../../utils/vscodeWrapper';
 import path = require('path');
 import { locale } from '../../locales';
@@ -24,8 +24,11 @@ export async function createFile(uri: Uri, config: Config): Promise<void> {
             return;
         }
 
+        // pack_format の取得
+        const packFormat = await getPackFormat(datapackRoot);
+
         // ファイルの種類を取得
-        const fileType = getFileType(uri.fsPath, datapackRoot);
+        const fileType = getFileType(uri.fsPath, datapackRoot, packFormat);
         if (!fileType) {
             // 取得できない時の処理
             if (await isDatapackRoot(datapackRoot)) {
@@ -55,7 +58,7 @@ export async function createFile(uri: Uri, config: Config): Promise<void> {
             datapackName: path.basename(datapackRoot),
             namespace: getNamespace(filePath, datapackRoot),
 
-            fileResourcePath: getResourcePath(filePath, datapackRoot, fileType),
+            fileResourcePath: getResourcePath(filePath, datapackRoot, packFormat, fileType),
             fileName,
             fileType,
             fileExtname,
@@ -66,9 +69,9 @@ export async function createFile(uri: Uri, config: Config): Promise<void> {
 
         try {
             const openFilePath = getTextEditor().document.uri.fsPath;
-            const nowOpenFileType = getFileType(path.dirname(openFilePath), datapackRoot);
+            const nowOpenFileType = getFileType(path.dirname(openFilePath), datapackRoot, packFormat);
             vars.nowOpenFileType = nowOpenFileType ?? '';
-            vars.nowOpenFileResourcePath = getResourcePath(openFilePath, datapackRoot, nowOpenFileType) ?? '';
+            vars.nowOpenFileResourcePath = getResourcePath(openFilePath, datapackRoot, packFormat, nowOpenFileType) ?? '';
             vars.nowOpenFileName = openFilePath.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? '';
             vars.nowOpenFileExtname = openFilePath.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? '';
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
