@@ -26,7 +26,7 @@
 		"url": "https://github.com/ChenCMD/MC-Datapack-Utility/issues"
 	},
 	"engines": {
-		"vscode": "^1.56.0"
+		"vscode": "^1.75.0"
 	},
 	"scripts": {
 		"compile": "webpack --mode development",
@@ -43,12 +43,7 @@
 		"rfdc": "^1.3.0"
 	},
 	"activationEvents": [
-		"workspaceContains:**/pack.mcmeta",
-		"onCommand:mcdutil.commands.createDatapackTemplate",
-		"onCommand:mcdutil.commands.createFile",
-		"onCommand:mcdutil.commands.scoreOperation",
-		"onCommand:mcdutil.commands.copyResourcePath",
-		"onCommand:mcdutil.commands.generateMultiLine"
+		"workspaceContains:**/pack.mcmeta"
 	],
 	"contributes": {
 		"languages": [
