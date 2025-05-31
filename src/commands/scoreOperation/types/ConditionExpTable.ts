@@ -1,5 +1,5 @@
-import { Formula } from './Formula';
-import { ElementBase, TableBase } from './TableBase';
+import { Formula } from './Formula'
+import { ElementBase, TableBase } from './TableBase'
 
 export interface ConditionExp {
     front: string | Formula
@@ -13,7 +13,7 @@ export interface ConditionExpElement extends ElementBase {
     replaceTo: string
 }
 
-export type ConditionExpTable = TableBase<ConditionExpElement>;
+export type ConditionExpTable = TableBase<ConditionExpElement>
 
 export const conditionExpTable: ConditionExpTable = {
     '<': {
@@ -56,4 +56,4 @@ export const conditionExpTable: ConditionExpTable = {
         type: 'state',
         replaceTo: ''
     }
-};
+}

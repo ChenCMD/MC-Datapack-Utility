@@ -32,4 +32,4 @@ export const dummyVersionInformation: VersionInformation = {
     latestRelease: '',
     latestSnapshot: '',
     processedVersions: []
-};
+}

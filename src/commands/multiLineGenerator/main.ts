@@ -1,9 +1,9 @@
-import { codeConsole } from '../../extension';
-import { locale } from '../../locales';
-import { makeExtendQuickPickItem, UserCancelledError } from '../../types';
-import { FeatureContext } from '../../types/FeatureContext';
-import { getTextEditor, numberValidator, listenInput, listenPickItem, showError, stringValidator } from '../../utils';
-import { replacerMap } from './replacer';
+import { codeConsole } from '../../extension'
+import { locale } from '../../locales'
+import { makeExtendQuickPickItem, UserCancelledError } from '../../types'
+import { FeatureContext } from '../../types/FeatureContext'
+import { getTextEditor, numberValidator, listenInput, listenPickItem, showError, stringValidator } from '../../utils'
+import { replacerMap } from './replacer'
 
 /*
  * 質問.1 挿入する文字列
@@ -18,35 +18,35 @@ import { replacerMap } from './replacer';
  */
 export const generateMultiLine = async (ctx: FeatureContext): Promise<void> => {
     try {
-        const textEditor = getTextEditor();
-        const { selections } = textEditor;
+        const textEditor = getTextEditor()
+        const { selections } = textEditor
 
         // 挿入する文字列の質問
-        const insertString = await listenInput(locale('insert-string'), v => stringValidator(v, { emptyMessage: locale('error.input-blank', locale('insert-string')) }), '%r');
+        const insertString = await listenInput(locale('insert-string'), v => stringValidator(v, { emptyMessage: locale('error.input-blank', locale('insert-string')) }), '%r')
         // 置換方法の選択
-        const { extend: [replacer, insertCountRequired] } = await listenPickItem('', makeExtendQuickPickItem(replacerMap), false);
+        const { extend: [replacer, insertCountRequired] } = await listenPickItem('', makeExtendQuickPickItem(replacerMap), false)
         // 挿入する回数
         const insertCount = insertCountRequired && selections.length === 1
             ? parseInt(await listenInput(locale('insert-count'), v => numberValidator(v, { min: 1 })))
-            : selections.length;
+            : selections.length
         // 置換方法毎の処理
-        const editData = await replacer(insertString, insertCount, ctx);
+        const editData = await replacer(insertString, insertCount, ctx)
         // 置換
         textEditor.edit(builder => {
             if (selections.length === 1) {
-                builder.replace(selections[0], editData.join('\n'));
+                builder.replace(selections[0], editData.join('\n'))
             } else {
                 if (selections.length === editData.length)
-                    selections.forEach((selection, i) => builder.replace(selection, editData[i]));
+                    selections.forEach((selection, i) => builder.replace(selection, editData[i]))
                 else
-                    selections.forEach(selection => builder.replace(selection, editData.join('\n')));
+                    selections.forEach(selection => builder.replace(selection, editData.join('\n')))
             }
-        });
+        })
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-        if (error instanceof UserCancelledError) return;
-        if (error instanceof Error) showError(error.message);
-        else showError(error.toString());
-        codeConsole.appendLine(error.stack ?? error.toString());
+        if (error instanceof UserCancelledError) return
+        if (error instanceof Error) showError(error.message)
+        else showError(error.toString())
+        codeConsole.appendLine(error.stack ?? error.toString())
     }
-};
+}

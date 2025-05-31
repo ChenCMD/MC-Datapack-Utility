@@ -23,47 +23,47 @@
  * SOFTWARE.
  */
 
-import dateFormat from 'dateformat';
-import { codeConsole } from '../extension';
-import { Locale } from '../types/Locale';
-import enLocale from './en.json';
+import dateFormat from 'dateformat'
+import { codeConsole } from '../extension'
+import { Locale } from '../types/Locale'
+import enLocale from './en.json'
 
 const locales: {
     [key: string]: Locale
 } = {
     '': enLocale,
     en: enLocale
-};
+}
 
-let language = '';
+let language = ''
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const locale = (key: string, ...params: any[]): string => {
-    const value: string | undefined = locales[language][key] ?? locales.en[key];
+    const value: string | undefined = locales[language][key] ?? locales.en[key]
 
-    return resolveLocalePlaceholders(value, params) ?? (codeConsole.appendLine(`Unknown locale key “${key}”`), '');
-};
+    return resolveLocalePlaceholders(value, params) ?? (codeConsole.appendLine(`Unknown locale key “${key}”`), '')
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function resolveLocalePlaceholders(val: string | undefined, params?: any[]): string | undefined {
     return val?.replace(/%\d+%/g, match => {
-        const index = parseInt(match.slice(1, -1));
-        return params?.[index] !== undefined ? params[index].toString() : match;
-    });
+        const index = parseInt(match.slice(1, -1))
+        return params?.[index] !== undefined ? params[index].toString() : match
+    })
 }
 
 const setupLanguage = async (code: string) => {
-    locales[code] = await import(`./${code}.json`);
-    language = code;
-    setupDateLocate();
-    codeConsole.appendLine(`loading ${code}`);
-};
+    locales[code] = await import(`./${code}.json`)
+    language = code
+    setupDateLocate()
+    codeConsole.appendLine(`loading ${code}`)
+}
 
 export const loadLocale = async (setting: string, defaultLocaleCode: string): Promise<void> => {
-    const specifiedLanguage = setting.toLowerCase() === 'default' ? defaultLocaleCode : setting;
+    const specifiedLanguage = setting.toLowerCase() === 'default' ? defaultLocaleCode : setting
     if (language !== specifiedLanguage)
-        await setupLanguage(specifiedLanguage);
-};
+        await setupLanguage(specifiedLanguage)
+}
 
 const setupDateLocate = () => {
     const dayNames = [
@@ -81,7 +81,7 @@ const setupDateLocate = () => {
         locale('day-name.thursday'),
         locale('day-name.friday'),
         locale('day-name.saturday')
-    ];
+    ]
     const monthNames = [
         locale('month-name-abridge.jan'),
         locale('month-name-abridge.feb'),
@@ -107,19 +107,19 @@ const setupDateLocate = () => {
         locale('month-name.october'),
         locale('month-name.november'),
         locale('month-name.december')
-    ];
+    ]
     const timeNames = [
         locale('time-name-abridge.ante-meridiem'),
         locale('time-name-abridge.post-meridiem'),
         locale('time-name.ante-meridiem'),
         locale('time-name.post-meridiem')
-    ];
+    ]
     dateFormat.i18n = {
         dayNames,
         monthNames,
         timeNames: [...timeNames, ...timeNames.map(v => v.toUpperCase())]
-    };
-};
+    }
+}
 
 /**
  * Convert an array to human-readable message.
@@ -141,19 +141,19 @@ const setupDateLocate = () => {
  */
 export const arrayToMessage = (arr: string | string[], quoted = true, conjunction: 'and' | 'or' = 'and'): string => {
     if (typeof arr === 'string')
-        arr = [arr];
-    const getPart = (str: string) => quoted ? locale('punc.quote', str) : str;
+        arr = [arr]
+    const getPart = (str: string) => quoted ? locale('punc.quote', str) : str
     switch (arr.length) {
         case 0:
-            return locale('nothing');
+            return locale('nothing')
         case 1:
-            return getPart(arr[0]);
+            return getPart(arr[0])
         case 2:
-            return getPart(arr[0]) + locale(`conjunction.${conjunction}_2`) + getPart(arr[1]);
+            return getPart(arr[0]) + locale(`conjunction.${conjunction}_2`) + getPart(arr[1])
         default:
-            arr = arr.map(v => getPart(v));
-            const forwardMes = arr.slice(0, -1).join(locale(`conjunction.${conjunction}_3+_1`));
-            const backMes = arr[arr.length - 1];
-            return forwardMes + locale(`conjunction.${conjunction}_3+_2`) + backMes;
+            arr = arr.map(v => getPart(v))
+            const forwardMes = arr.slice(0, -1).join(locale(`conjunction.${conjunction}_3+_1`))
+            const backMes = arr[arr.length - 1]
+            return forwardMes + locale(`conjunction.${conjunction}_3+_2`) + backMes
     }
-};
+}

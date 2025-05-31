@@ -1,7 +1,7 @@
-import { WorkspaceConfiguration } from 'vscode';
-import { QuickPickFiles } from '../commands/createDatapackTemplate/types/QuickPickFiles';
-import { Template } from '../commands/createFile/types/Template';
-import { OperateElement } from '../commands/scoreOperation/types/OperateTable';
+import { WorkspaceConfiguration } from 'vscode'
+import { QuickPickFiles } from '../commands/createDatapackTemplate/types/QuickPickFiles'
+import { Template } from '../commands/createFile/types/Template'
+import { OperateElement } from '../commands/scoreOperation/types/OperateTable'
 
 export interface Config {
     env: EnvironmentConfig
@@ -71,7 +71,7 @@ export const defaultConfig: Config = {
     mcfFormatter: {
         doInsertIMPDocument: false
     }
-};
+}
 
 export const constructConfig = (custom: WorkspaceConfiguration, base = defaultConfig): Config => {
     const config = {
@@ -90,8 +90,8 @@ export const constructConfig = (custom: WorkspaceConfiguration, base = defaultCo
         mcfFormatter: {
             ...base.mcfFormatter, ...custom.mcfFormatter || {}
         }
-    };
-    console.log('config loaded.');
-    console.log(JSON.stringify(config));
-    return config;
-};
+    }
+    console.log('config loaded.')
+    console.log(JSON.stringify(config))
+    return config
+}

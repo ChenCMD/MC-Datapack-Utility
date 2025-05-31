@@ -24,10 +24,10 @@
  * SOFTWARE.
  */
 
-import * as path from 'path';
-import minimatch from 'minimatch';
-import { showError } from '../utils';
-import { locale } from '../locales';
+import * as path from 'path'
+import minimatch from 'minimatch'
+import { showError } from '../utils'
+import { locale } from '../locales'
 
 export const tagFileTypes = [
     'tag/block',
@@ -49,7 +49,7 @@ export const tagFileTypes = [
     'tag/worldgen/processor_list',
     'tag/worldgen/structure_set',
     'tag/worldgen/template_pool'
-] as const;
+] as const
 
 export type FileType =
     | 'advancement'
@@ -92,7 +92,7 @@ export type FileType =
     | 'worldgen/placed_feature'
     | 'worldgen/processor_list'
     | 'worldgen/structure_set'
-    | 'worldgen/template_pool';
+    | 'worldgen/template_pool'
 
 export const fileTypeFolderNameBefore24w21a: { [key in FileType]: string } = {
     // common
@@ -140,7 +140,7 @@ export const fileTypeFolderNameBefore24w21a: { [key in FileType]: string } = {
     'worldgen/processor_list': 'worldgen/processor_list',
     'worldgen/structure_set': 'worldgen/structure_set',
     'worldgen/template_pool': 'worldgen/template_pool'
-};
+}
 
 export const fileTypePathsBefore24w21a: Record<FileType, string> = {
     // common
@@ -188,7 +188,7 @@ export const fileTypePathsBefore24w21a: Record<FileType, string> = {
     'worldgen/processor_list': 'data/*/worldgen/processor_list/**',
     'worldgen/structure_set': 'data/*/worldgen/structure_set/**',
     'worldgen/template_pool': 'data/*/worldgen/template_pool/**'
-};
+}
 
 export const fileTypeFolderName: { [key in FileType]: string } = {
     // common
@@ -236,7 +236,7 @@ export const fileTypeFolderName: { [key in FileType]: string } = {
     'worldgen/processor_list': 'worldgen/processor_list',
     'worldgen/structure_set': 'worldgen/structure_set',
     'worldgen/template_pool': 'worldgen/template_pool'
-};
+}
 
 export const fileTypePaths: Record<FileType, string> = {
     // common
@@ -284,7 +284,7 @@ export const fileTypePaths: Record<FileType, string> = {
     'worldgen/processor_list': 'data/*/worldgen/processor_list/**',
     'worldgen/structure_set': 'data/*/worldgen/structure_set/**',
     'worldgen/template_pool': 'data/*/worldgen/template_pool/**'
-};
+}
 
 /**
  * ファイルの種類を取得します
@@ -292,30 +292,30 @@ export const fileTypePaths: Record<FileType, string> = {
  * @param datapackRoot データパックのルートパス
  */
 export function getFileType(filePath: string, datapackRoot: string, packFormat: number): FileType | undefined {
-    const dir = path.relative(datapackRoot, filePath).replace(/(\\|$)/g, '/');
+    const dir = path.relative(datapackRoot, filePath).replace(/(\\|$)/g, '/')
     const paths = packFormat >= 45 ? fileTypePaths
-        : fileTypePathsBefore24w21a;
+        : fileTypePathsBefore24w21a
     const otherPaths = {
         ...(packFormat >= 1 && packFormat < 45 ? {} : fileTypePathsBefore24w21a),
         ...(packFormat >= 45 /* && packFormat < ?? */ ? {} : fileTypePaths)
-    };
+    }
     for (const type of Object.keys(paths) as FileType[]) {
         if (minimatch(dir, paths[type], { dot: true }))
-            return type;
+            return type
     }
     for (const type of Object.keys(otherPaths) as (keyof typeof otherPaths)[]) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         if (minimatch(dir, otherPaths[type]!, { dot: true })) {
-            showError(locale('maybe-wrong-pack-format'));
-            return undefined;
+            showError(locale('maybe-wrong-pack-format'))
+            return undefined
         }
     }
-    return undefined;
+    return undefined
 }
 
 export function getFilePath(fileType: FileType | undefined, packFormat: number): string | undefined {
-    if (!fileType) return undefined;
+    if (!fileType) return undefined
     const folderNames = packFormat >= 45 ? fileTypeFolderName
-        : fileTypeFolderNameBefore24w21a;
-    return folderNames[fileType];
+        : fileTypeFolderNameBefore24w21a
+    return folderNames[fileType]
 }

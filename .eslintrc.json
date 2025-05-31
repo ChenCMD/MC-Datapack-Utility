@@ -14,7 +14,10 @@
     ],
     "rules": {
         "@typescript-eslint/naming-convention": "warn",
-        "@typescript-eslint/semi": "warn",
+        "@typescript-eslint/semi": [
+            "warn",
+            "never"
+        ],
         "no-case-declarations": "off",
         "curly": [
             "warn",

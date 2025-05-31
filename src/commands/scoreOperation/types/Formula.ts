@@ -1,5 +1,5 @@
-import { ConditionExp } from './ConditionExpTable';
-import { OperateElement } from './OperateTable';
+import { ConditionExp } from './ConditionExpTable'
+import { OperateElement } from './OperateTable'
 
 export interface Formula {
     front: string | Formula

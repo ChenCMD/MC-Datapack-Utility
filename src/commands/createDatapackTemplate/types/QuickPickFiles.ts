@@ -1,6 +1,6 @@
-import { QuickPickItem } from 'vscode';
-import { FileData, FileDataReqContent } from '../../../types/FileData';
-import { AskGitHubData, ReposGetContentResponseData } from '../../../types/OctokitWrapper';
+import { QuickPickItem } from 'vscode'
+import { FileData, FileDataReqContent } from '../../../types/FileData'
+import { AskGitHubData, ReposGetContentResponseData } from '../../../types/OctokitWrapper'
 
 export interface QuickPickFiles extends QuickPickItem {
     generates: GenerateFileData[]
@@ -8,7 +8,7 @@ export interface QuickPickFiles extends QuickPickItem {
     customQuestion?: CustomQuestion[]
 }
 
-export type GenerateFileData = GenFileData | GenFolderData;
+export type GenerateFileData = GenFileData | GenFolderData
 
 interface GenFileData extends FileDataReqContent {
     type: 'file'

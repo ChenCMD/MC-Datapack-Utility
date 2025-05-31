@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { ReposGetContentResponseData } from '../../../types';
-import { GenerateFileData, QuickPickFiles } from '../types/QuickPickFiles';
+import { ReposGetContentResponseData } from '../../../types'
+import { GenerateFileData, QuickPickFiles } from '../types/QuickPickFiles'
 
 export const packMcMetaData: (packFormat: number) => GenerateFileData = pack_format => ({
     type: 'file',
@@ -11,12 +11,12 @@ export const packMcMetaData: (packFormat: number) => GenerateFileData = pack_for
             description: '%datapackDescription%'
         }
     }
-});
+})
 
 export const dataFolder: GenerateFileData = {
     type: 'folder',
     rel: 'data/'
-};
+}
 
 export const pickItems: { [key in '#load & #tick' | 'Vanilla data' | 'Folders']: QuickPickFiles[] } = {
     '#load & #tick': [
@@ -233,4 +233,4 @@ export const pickItems: { [key in '#load & #tick' | 'Vanilla data' | 'Folders']:
             ]
         }
     ]
-};
+}

@@ -1,6 +1,6 @@
-import { ElementBase, TableBase } from './TableBase';
+import { ElementBase, TableBase } from './TableBase'
 
-export type OperateTable = TableBase<OperateElement>;
+export type OperateTable = TableBase<OperateElement>
 
 export interface OperateElement extends ElementBase {
     identifier: string
@@ -152,4 +152,4 @@ export const opTable: OperateTable = {
             namely: 'if'
         }
     }
-};
+}
