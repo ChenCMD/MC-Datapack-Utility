@@ -10,4 +10,4 @@ export const createMessageItemHasIds = (...ids: string[]): MessageItemHasId[] =>
     for (const id of ids)
         messages.push({ title: locale(id), id });
     return messages;
-}
+};

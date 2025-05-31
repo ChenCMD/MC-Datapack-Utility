@@ -24,4 +24,4 @@ export const copyResourcePath = async (fileUri: Uri): Promise<void> => {
     }
 
     env.clipboard.writeText(getResourcePath(fileUri.fsPath, datapackRoot, packFormat, fileType));
-}
+};

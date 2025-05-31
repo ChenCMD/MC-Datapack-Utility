@@ -119,7 +119,7 @@ const formulaToString = (formula: Formula | string): string => {
     if (typeof formula === 'string')
         return formula;
     return `${formulaToString(formula.front)} ${formula.op.identifier} ${formulaToString(formula.back)}`;
-}
+};
 
 const conditionAssembling = (exp: string[], isTrue: boolean, opTable: OperateTable, funcs: IfFormula[], scale: number): ConditionExp[] => {
     if (exp.includes('&&')) {
@@ -136,4 +136,4 @@ const conditionAssembling = (exp: string[], isTrue: boolean, opTable: OperateTab
             splitter = i;
     }
     return [{ front: formulaAnalyzer(exp.slice(0, splitter), opTable, funcs, scale), op: conditionExpTable[exp[splitter]], back: formulaAnalyzer(exp.slice(splitter + 1), opTable, funcs, scale), default: (exp[1] === '!=') ? !isTrue : isTrue }];
-}
+};

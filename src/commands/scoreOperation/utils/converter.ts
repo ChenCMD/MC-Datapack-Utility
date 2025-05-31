@@ -121,7 +121,7 @@ export const rpnToScoreOperation = async (formula: Formula | string, config: Sco
         }
     }
     return { resValues, resFormulas };
-}
+};
 
 export async function rpnCalculate(rpnExp: string, opTable: OperateTable, config: ScoreOperationConfig): Promise<string | number | undefined> {
     // 切り分け実行

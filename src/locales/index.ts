@@ -42,7 +42,7 @@ export const locale = (key: string, ...params: any[]): string => {
     const value: string | undefined = locales[language][key] ?? locales.en[key];
 
     return resolveLocalePlaceholders(value, params) ?? (codeConsole.appendLine(`Unknown locale key “${key}”`), '');
-}
+};
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function resolveLocalePlaceholders(val: string | undefined, params?: any[]): string | undefined {
@@ -57,13 +57,13 @@ const setupLanguage = async (code: string) => {
     language = code;
     setupDateLocate();
     codeConsole.appendLine(`loading ${code}`);
-}
+};
 
 export const loadLocale = async (setting: string, defaultLocaleCode: string): Promise<void> => {
     const specifiedLanguage = setting.toLowerCase() === 'default' ? defaultLocaleCode : setting;
     if (language !== specifiedLanguage)
         await setupLanguage(specifiedLanguage);
-}
+};
 
 const setupDateLocate = () => {
     const dayNames = [
@@ -119,7 +119,7 @@ const setupDateLocate = () => {
         monthNames,
         timeNames: [...timeNames, ...timeNames.map(v => v.toUpperCase())]
     };
-}
+};
 
 /**
  * Convert an array to human-readable message.
@@ -156,4 +156,4 @@ export const arrayToMessage = (arr: string | string[], quoted = true, conjunctio
             const backMes = arr[arr.length - 1];
             return forwardMes + locale(`conjunction.${conjunction}_3+_2`) + backMes;
     }
-}
+};

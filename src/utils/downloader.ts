@@ -1,7 +1,6 @@
 import https from 'https';
 
-export const download = async (uri: string): Promise<string> => {
-    return await new Promise((resolve, reject) => {
+export const download = async (uri: string): Promise<string> => await new Promise((resolve, reject) => {
         https.get(uri, res => {
             let body = '';
             res.on('data', chunk => {
@@ -13,4 +12,3 @@ export const download = async (uri: string): Promise<string> => {
             });
         }).end();
     });
-}

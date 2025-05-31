@@ -94,4 +94,4 @@ export const constructConfig = (custom: WorkspaceConfiguration, base = defaultCo
     console.log('config loaded.');
     console.log(JSON.stringify(config));
     return config;
-}
+};

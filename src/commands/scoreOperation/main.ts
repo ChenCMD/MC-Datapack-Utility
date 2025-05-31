@@ -55,4 +55,4 @@ export const scoreOperation = async ({ scoreOperation: config }: Config): Promis
         else showError(error.toString());
         codeConsole.appendLine(error.stack ?? error.toString());
     }
-}
+};

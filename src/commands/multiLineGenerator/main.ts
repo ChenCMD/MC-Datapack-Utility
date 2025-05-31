@@ -49,4 +49,4 @@ export const generateMultiLine = async (ctx: FeatureContext): Promise<void> => {
         else showError(error.toString());
         codeConsole.appendLine(error.stack ?? error.toString());
     }
-}
+};

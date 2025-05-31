@@ -44,7 +44,7 @@ export const activate = ({ extensionUri, subscriptions }: ExtensionContext): voi
 
     // 拡張機能がアクティベートされた時にコンテキストメニューの項目を表示する
     commands.executeCommand('setContext', 'mcdutil.showContextMenu', true);
-}
+};
 
 async function updateConfig(event: ConfigurationChangeEvent, cb: (config: Config) => void | Promise<void>): Promise<void> {
     if (event.affectsConfiguration('mcdutil')) {
@@ -55,4 +55,4 @@ async function updateConfig(event: ConfigurationChangeEvent, cb: (config: Config
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-export const deactivate = (): void => { }
+export const deactivate = (): void => { };

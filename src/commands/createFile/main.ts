@@ -97,4 +97,4 @@ export const createFile = async (uri: Uri, config: Config): Promise<void> => {
         else showError(error.toString());
         codeConsole.appendLine(error.stack ?? error.toString());
     }
-}
+};

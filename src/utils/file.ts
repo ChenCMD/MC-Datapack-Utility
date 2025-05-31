@@ -2,9 +2,7 @@ import { Uri, FileSystemError, workspace } from 'vscode';
 import fs, { promises as fsp } from 'fs';
 import path from 'path';
 
-const flatPath = (pathOrUri: string | Uri): Uri => {
-    return pathOrUri instanceof Uri ? pathOrUri : Uri.file(pathOrUri);
-}
+const flatPath = (pathOrUri: string | Uri): Uri => pathOrUri instanceof Uri ? pathOrUri : Uri.file(pathOrUri);
 
 /**
  * ファイルを作成します
@@ -17,7 +15,7 @@ export const createFile = async (filePath: string | Uri, content: Uint8Array): P
         throw FileSystemError.FileExists(filePath);
     else
         await workspace.fs.writeFile(flatPath(filePath), content);
-}
+};
 
 /**
  * ディレクトリを作成します
@@ -25,7 +23,7 @@ export const createFile = async (filePath: string | Uri, content: Uint8Array): P
  */
 export const createDir = async (dirPath: string | Uri): Promise<void> => {
     await workspace.fs.createDirectory(flatPath(dirPath));
-}
+};
 
 /**
  * パスが存在するか、アクセス可能かを判別します
@@ -53,11 +51,9 @@ export const createDir = async (dirPath: string | Uri): Promise<void> => {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-export const pathAccessible = async (testPath: string | Uri): Promise<boolean> => {
-    return await fsp.access(flatPath(testPath).fsPath)
+export const pathAccessible = async (testPath: string | Uri): Promise<boolean> => await fsp.access(flatPath(testPath).fsPath)
         .then(() => true)
         .catch(() => false);
-}
 
 /**
  * @license
@@ -83,19 +79,15 @@ export const pathAccessible = async (testPath: string | Uri): Promise<boolean> =
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-export const readFile = async (targetPath: string | Uri): Promise<string> => {
-    return await new Promise((resolve, reject) => {
+export const readFile = async (targetPath: string | Uri): Promise<string> => await new Promise((resolve, reject) => {
         let data = '';
         fs.createReadStream(flatPath(targetPath).fsPath, { encoding: 'utf-8', highWaterMark: 128 * 1024 })
             .on('data', chunk => data += chunk)
             .on('end', () => resolve(data))
             .on('error', reject);
     });
-}
 
-export const writeFile = async (targetPath: string | Uri, content: string): Promise<void> => {
-    return await fsp.writeFile(flatPath(targetPath).fsPath, content);
-}
+export const writeFile = async (targetPath: string | Uri, content: string): Promise<void> => await fsp.writeFile(flatPath(targetPath).fsPath, content);
 
 /**
  * @license

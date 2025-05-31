@@ -69,7 +69,7 @@ const resolveVersion = (versionOrLiteral: string, versionInformation: VersionInf
         default:
             return versionOrLiteral;
     }
-}
+};
 
 export async function getLatestVersions(): Promise<VersionInformation | undefined> {
     try {

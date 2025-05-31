@@ -52,19 +52,17 @@ export const createDatapack = async ({ env: { dataVersion, dateFormat }, createD
         else showError(error.toString());
         codeConsole.appendLine(error.stack ?? error.toString());
     }
-}
+};
 
 const listenGenerateType = async (): Promise<GenNodes> => {
     const res = await listenPickItem('', makeExtendQuickPickItem(genNodeTypeMap), false);
     return res.extend;
-}
+};
 
-const listenNamespace = async (): Promise<string> => {
-    return await listenInput(
+const listenNamespace = async (): Promise<string> => await listenInput(
         locale('create-datapack-template.namespace-name'),
         v => stringValidator(v, { invalidCharRegex: /[^a-z0-9./_-]/g, emptyMessage: locale('error.input-blank', locale('create-datapack-template.namespace-name')) })
     );
-}
 
 const listenCustomQuestion = async (questions: ObjectSet<CustomQuestion>): Promise<Variables> => {
     const ans: Variables = {};
@@ -79,7 +77,7 @@ const listenCustomQuestion = async (questions: ObjectSet<CustomQuestion>): Promi
         ans[question.name] = await listenInput(question.question, patternChecker);
     }
     return ans;
-}
+};
 
 const listenGenerateTemplate = async (vars: Variables, config: CreateDatapackTemplateConfig): Promise<QuickPickFiles[]> => {
     const items: QuickPickFiles[] = [];
@@ -89,7 +87,7 @@ const listenGenerateTemplate = async (vars: Variables, config: CreateDatapackTem
     items.push(...config.customTemplate);
     items.forEach(v => v.label = resolveVars(v.label, vars));
     return await listenPickItem(locale('create-datapack-template.quickpick-placeholder'), items, true);
-}
+};
 
 const toGenerateData = async (createItems: QuickPickFiles[], isGeneratePackMcMeta: boolean, dataVersion: string, packFormat: number): Promise<GenerateFileData[]> => {
     const ans = createItems.flatMap(v => v.generates);
@@ -120,7 +118,7 @@ const toGenerateData = async (createItems: QuickPickFiles[], isGeneratePackMcMet
     }
 
     return ans;
-}
+};
 
 const generate = async (items: GenerateFileData[], root: string, packFormat: number, vars: Variables): Promise<void> => {
     await createProgressBar(locale('create-datapack-template.progress.title'), async report => {
@@ -141,7 +139,7 @@ const generate = async (items: GenerateFileData[], root: string, packFormat: num
         }
         showInfo(locale('create-datapack-template.complete'));
     });
-}
+};
 
 const singleGenerate = async (item: GenerateFileData, root: string, packFormat: number, vars: Variables): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -180,4 +178,4 @@ const singleGenerate = async (item: GenerateFileData, root: string, packFormat: 
             }
         }
     }
-}
+};

@@ -26,4 +26,4 @@ export const formulaToQueue = async (value: Formula | string, queue: Deque<Queue
     }
     enteredValues.add(value);
     return true;
-}
+};

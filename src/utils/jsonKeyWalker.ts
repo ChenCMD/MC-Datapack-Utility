@@ -52,7 +52,7 @@ const parseKey = (obj: JsonValue, reader: StringReader, elem: JsonValue, addFirs
     else
         obj[key] = walkObjFromJsonKeyPath(obj[key], reader, elem, ['filter', 'index'], true, addFirst);
     return obj;
-}
+};
 
 const parseObjectFilter = (_obj: JsonValue, reader: StringReader, _elem: JsonValue, _addFirst: boolean, _isIndexingFilter = false): JsonValue => {
     reader.skip().skipWhiteSpace();
@@ -61,7 +61,7 @@ const parseObjectFilter = (_obj: JsonValue, reader: StringReader, _elem: JsonVal
     //     obj = walkObjFromJsonKeyPath(obj, reader, ['key'], false);
     // else
     //     return undefined;
-}
+};
 
 const parseIndex = (obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue => {
     // Type check
@@ -75,7 +75,7 @@ const parseIndex = (obj: JsonValue, reader: StringReader, elem: JsonValue, addFi
         return parseIndexNumber(obj, reader, elem, addFirst);
     else
         return multiResult(obj, reader, elem, addFirst);
-}
+};
 
 const parseIndexNumber = (obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue => {
     // Type check
@@ -90,7 +90,7 @@ const parseIndexNumber = (obj: JsonValue, reader: StringReader, elem: JsonValue,
     else
         obj[index] = walkObjFromJsonKeyPath(obj[index], reader, elem, ['index'], true, addFirst);
     return obj;
-}
+};
 
 const multiResult = (obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue => {
     // Type check
@@ -108,7 +108,7 @@ const multiResult = (obj: JsonValue, reader: StringReader, elem: JsonValue, addF
         return res;
     else
         throw new TypeUnmatchedError();
-}
+};
 
 type Checker = (reader: StringReader) => boolean;
 

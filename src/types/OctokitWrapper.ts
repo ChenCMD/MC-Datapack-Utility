@@ -26,4 +26,4 @@ export const getGitHubData = async (data: AskGitHubData): Promise<RestEndpointMe
         setTimeOut(7000)
     ]);
     return files.data;
-}
+};
