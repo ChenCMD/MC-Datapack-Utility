@@ -3,7 +3,7 @@ import { locale } from '../../locales';
 import { makeExtendQuickPickItem, UserCancelledError } from '../../types';
 import { FeatureContext } from '../../types/FeatureContext';
 import { getTextEditor, numberValidator, listenInput, listenPickItem, showError, stringValidator } from '../../utils';
-import { getReplacerMap } from './replacer';
+import { replacerMap } from './replacer';
 
 /*
  * 質問.1 挿入する文字列
@@ -24,7 +24,7 @@ export const generateMultiLine = async (ctx: FeatureContext): Promise<void> => {
         // 挿入する文字列の質問
         const insertString = await listenInput(locale('insert-string'), v => stringValidator(v, { emptyMessage: locale('error.input-blank', locale('insert-string')) }), '%r');
         // 置換方法の選択
-        const { extend: [replacer, insertCountRequired] } = await listenPickItem('', makeExtendQuickPickItem(getReplacerMap()), false);
+        const { extend: [replacer, insertCountRequired] } = await listenPickItem('', makeExtendQuickPickItem(replacerMap), false);
         // 挿入する回数
         const insertCount = insertCountRequired && selections.length === 1
             ? parseInt(await listenInput(locale('insert-count'), v => numberValidator(v, { min: 1 })))

@@ -3,7 +3,7 @@ import { Config, Variables, makeExtendQuickPickItem, GenerateError, resolveVars,
 import { locale } from '../../locales';
 import { CustomQuestion, GenerateFileData, QuickPickFiles } from './types/QuickPickFiles';
 import { dataFolder, packMcMetaData, pickItems } from './utils/data';
-import { GenNodes, getGenTypeMap } from './nodes';
+import { GenNodes, genNodeTypeMap } from './nodes';
 import { codeConsole, versionInformation } from '../../extension';
 import { TextEncoder } from 'util';
 import path from 'path';
@@ -14,8 +14,7 @@ export const createDatapack = async ({ env: { dataVersion, dateFormat }, createD
         // 生成する種類
         const generatorChildNode = new (
             generateType
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                ? getGenTypeMap().get(`create-datapack-template.${generateType}`)!
+                ? genNodeTypeMap[`create-datapack-template.${generateType}`]
                 : await listenGenerateType()
         )();
         // ディレクトリ
@@ -56,7 +55,7 @@ export const createDatapack = async ({ env: { dataVersion, dateFormat }, createD
 }
 
 const listenGenerateType = async (): Promise<GenNodes> => {
-    const res = await listenPickItem('', makeExtendQuickPickItem(getGenTypeMap()), false);
+    const res = await listenPickItem('', makeExtendQuickPickItem(genNodeTypeMap), false);
     return res.extend;
 }
 
