@@ -300,12 +300,12 @@ export function getFileType(filePath: string, datapackRoot: string, packFormat: 
         ...(packFormat >= 45 /* && packFormat < ?? */ ? {} : fileTypePaths)
     };
     for (const type of Object.keys(paths) as FileType[]) {
-        if (minimatch(dir, paths[type]))
+        if (minimatch(dir, paths[type], { dot: true }))
             return type;
     }
     for (const type of Object.keys(otherPaths) as (keyof typeof otherPaths)[]) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        if (minimatch(dir, otherPaths[type]!)) {
+        if (minimatch(dir, otherPaths[type]!, { dot: true })) {
             showError(locale('maybe-wrong-pack-format'));
             return undefined;
         }
