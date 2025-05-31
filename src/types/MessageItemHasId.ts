@@ -5,7 +5,7 @@ export interface MessageItemHasId extends MessageItem {
     id: string
 }
 
-export function createMessageItemHasIds(...ids: string[]): MessageItemHasId[] {
+export const createMessageItemHasIds = (...ids: string[]): MessageItemHasId[] => {
     const messages: MessageItemHasId[] = [];
     for (const id of ids)
         messages.push({ title: locale(id), id });

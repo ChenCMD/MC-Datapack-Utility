@@ -5,7 +5,7 @@ import { getFileType } from '../../types/FileTypes';
 import { getDatapackRoot, getPackFormat, getResourcePath } from '../../utils/common';
 import { showError } from '../../utils/vscodeWrapper';
 
-export async function copyResourcePath(fileUri: Uri): Promise<void> {
+export const copyResourcePath = async (fileUri: Uri): Promise<void> => {
     // Datapack内か確認
     const datapackRoot = await getDatapackRoot(fileUri.fsPath);
     if (!datapackRoot) {

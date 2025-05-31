@@ -16,7 +16,7 @@ import { getReplacerMap } from './replacer';
  * 選択場所が二つ以上 -> その場にreplace
  *
  */
-export async function generateMultiLine(ctx: FeatureContext): Promise<void> {
+export const generateMultiLine = async (ctx: FeatureContext): Promise<void> => {
     try {
         const textEditor = getTextEditor();
         const { selections } = textEditor;

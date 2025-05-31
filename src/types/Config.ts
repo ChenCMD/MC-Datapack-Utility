@@ -73,7 +73,7 @@ export const defaultConfig: Config = {
     }
 };
 
-export function constructConfig(custom: WorkspaceConfiguration, base = defaultConfig): Config {
+export const constructConfig = (custom: WorkspaceConfiguration, base = defaultConfig): Config => {
     const config = {
         env: {
             ...base.env, ...custom.env || {}

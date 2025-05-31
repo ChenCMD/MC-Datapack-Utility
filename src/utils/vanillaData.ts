@@ -58,7 +58,7 @@ export async function getVanillaData(
     return ans;
 }
 
-function resolveVersion(versionOrLiteral: string, versionInformation: VersionInformation | undefined) {
+const resolveVersion = (versionOrLiteral: string, versionInformation: VersionInformation | undefined) => {
     if (!versionInformation)
         return '1.16.4';
     switch (versionOrLiteral.toLowerCase()) {

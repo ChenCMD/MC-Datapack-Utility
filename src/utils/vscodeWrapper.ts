@@ -29,7 +29,7 @@ export function getWorkspaceFolders(allowUndefined?: boolean): readonly Workspac
     return workspaceFolders;
 }
 
-export function getIndent(path: string): number {
+export const getIndent = (path: string): number => {
     const config = workspace.getConfiguration('editor.tabSize', Uri.file(path));
     return config.get<number>('tabSize', 4);
 }

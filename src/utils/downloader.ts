@@ -1,6 +1,6 @@
 import https from 'https';
 
-export async function download(uri: string): Promise<string> {
+export const download = async (uri: string): Promise<string> => {
     return await new Promise((resolve, reject) => {
         https.get(uri, res => {
             let body = '';

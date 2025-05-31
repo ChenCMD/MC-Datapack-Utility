@@ -14,7 +14,7 @@ import { createMessageItemHasIds } from '../../types/MessageItemHasId';
 import { createDatapack } from '../createDatapackTemplate/main';
 import { Config } from '../../types';
 
-export async function createFile(uri: Uri, config: Config): Promise<void> {
+export const createFile = async (uri: Uri, config: Config): Promise<void> => {
     try {
         // Datapack内か確認
         const datapackRoot = await getDatapackRoot(uri.fsPath);

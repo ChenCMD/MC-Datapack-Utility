@@ -38,7 +38,7 @@ const locales: {
 let language = '';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function locale(key: string, ...params: any[]): string {
+export const locale = (key: string, ...params: any[]): string => {
     const value: string | undefined = locales[language][key] ?? locales.en[key];
 
     return resolveLocalePlaceholders(value, params) ?? (codeConsole.appendLine(`Unknown locale key “${key}”`), '');
@@ -52,20 +52,20 @@ export function resolveLocalePlaceholders(val: string | undefined, params?: any[
     });
 }
 
-async function setupLanguage(code: string) {
+const setupLanguage = async (code: string) => {
     locales[code] = await import(`./${code}.json`);
     language = code;
     setupDateLocate();
     codeConsole.appendLine(`loading ${code}`);
 }
 
-export async function loadLocale(setting: string, defaultLocaleCode: string): Promise<void> {
+export const loadLocale = async (setting: string, defaultLocaleCode: string): Promise<void> => {
     const specifiedLanguage = setting.toLowerCase() === 'default' ? defaultLocaleCode : setting;
     if (language !== specifiedLanguage)
         await setupLanguage(specifiedLanguage);
 }
 
-function setupDateLocate() {
+const setupDateLocate = () => {
     const dayNames = [
         locale('day-name-abridge.sun'),
         locale('day-name-abridge.mon'),
@@ -139,7 +139,7 @@ function setupDateLocate() {
  * arrayToMessage(['A', 'B'], false) // "A{conjunction.and_2}B"
  * arrayToMessage(['A', 'B', 'C'], false) // "A{conjunction.and_3+_1}B{conjunction.and_3+_2}C"
  */
-export function arrayToMessage(arr: string | string[], quoted = true, conjunction: 'and' | 'or' = 'and'): string {
+export const arrayToMessage = (arr: string | string[], quoted = true, conjunction: 'and' | 'or' = 'and'): string => {
     if (typeof arr === 'string')
         arr = [arr];
     const getPart = (str: string) => quoted ? locale('punc.quote', str) : str;

@@ -9,7 +9,7 @@ import { TextEncoder } from 'util';
 import path from 'path';
 import rfdc from 'rfdc';
 
-export async function createDatapack({ env: { dataVersion, dateFormat }, createDatapackTemplate }: Config, generateType?: 'add' | 'create'): Promise<void> {
+export const createDatapack = async ({ env: { dataVersion, dateFormat }, createDatapackTemplate }: Config, generateType?: 'add' | 'create'): Promise<void> => {
     try {
         // 生成する種類
         const generatorChildNode = new (
@@ -55,19 +55,19 @@ export async function createDatapack({ env: { dataVersion, dateFormat }, createD
     }
 }
 
-async function listenGenerateType(): Promise<GenNodes> {
+const listenGenerateType = async (): Promise<GenNodes> => {
     const res = await listenPickItem('', makeExtendQuickPickItem(getGenTypeMap()), false);
     return res.extend;
 }
 
-async function listenNamespace(): Promise<string> {
+const listenNamespace = async (): Promise<string> => {
     return await listenInput(
         locale('create-datapack-template.namespace-name'),
         v => stringValidator(v, { invalidCharRegex: /[^a-z0-9./_-]/g, emptyMessage: locale('error.input-blank', locale('create-datapack-template.namespace-name')) })
     );
 }
 
-async function listenCustomQuestion(questions: ObjectSet<CustomQuestion>): Promise<Variables> {
+const listenCustomQuestion = async (questions: ObjectSet<CustomQuestion>): Promise<Variables> => {
     const ans: Variables = {};
     for (const question of questions) {
         let patternChecker: ((str: string) => string | undefined) | undefined = undefined;
@@ -82,7 +82,7 @@ async function listenCustomQuestion(questions: ObjectSet<CustomQuestion>): Promi
     return ans;
 }
 
-async function listenGenerateTemplate(vars: Variables, config: CreateDatapackTemplateConfig): Promise<QuickPickFiles[]> {
+const listenGenerateTemplate = async (vars: Variables, config: CreateDatapackTemplateConfig): Promise<QuickPickFiles[]> => {
     const items: QuickPickFiles[] = [];
     if (config.defaultLoadAndTick) items.push(...rfdc()(pickItems['#load & #tick']));
     if (config.defaultVanillaData) items.push(...rfdc()(pickItems['Vanilla data']));
@@ -92,7 +92,7 @@ async function listenGenerateTemplate(vars: Variables, config: CreateDatapackTem
     return await listenPickItem(locale('create-datapack-template.quickpick-placeholder'), items, true);
 }
 
-async function toGenerateData(createItems: QuickPickFiles[], isGeneratePackMcMeta: boolean, dataVersion: string, packFormat: number): Promise<GenerateFileData[]> {
+const toGenerateData = async (createItems: QuickPickFiles[], isGeneratePackMcMeta: boolean, dataVersion: string, packFormat: number): Promise<GenerateFileData[]> => {
     const ans = createItems.flatMap(v => v.generates);
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const funcs = createItems.filter(v => v.func !== undefined).flatMap(v => v.func!);
@@ -123,7 +123,7 @@ async function toGenerateData(createItems: QuickPickFiles[], isGeneratePackMcMet
     return ans;
 }
 
-async function generate(items: GenerateFileData[], root: string, packFormat: number, vars: Variables): Promise<void> {
+const generate = async (items: GenerateFileData[], root: string, packFormat: number, vars: Variables): Promise<void> => {
     await createProgressBar(locale('create-datapack-template.progress.title'), async report => {
         const message = locale('create-datapack-template.progress.creating');
         report({ message });
@@ -144,7 +144,7 @@ async function generate(items: GenerateFileData[], root: string, packFormat: num
     });
 }
 
-async function singleGenerate(item: GenerateFileData, root: string, packFormat: number, vars: Variables): Promise<void> {
+const singleGenerate = async (item: GenerateFileData, root: string, packFormat: number, vars: Variables): Promise<void> => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const filePath = path.join(root, resolveVars(item.rel, vars));
 

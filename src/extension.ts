@@ -16,7 +16,7 @@ const mcfunctionFormatter = new McfunctionFormatter(config);
 /**
  * @param {vscode.ExtensionContext} context
  */
-export function activate({ extensionUri, subscriptions }: ExtensionContext): void {
+export const activate = ({ extensionUri, subscriptions }: ExtensionContext): void => {
     const vscodeLanguage = env.language ?? 'en';
 
     getLatestVersions().then(info => versionInformation = info);
@@ -55,4 +55,4 @@ async function updateConfig(event: ConfigurationChangeEvent, cb: (config: Config
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-export function deactivate(): void { }
+export const deactivate = (): void => { }
