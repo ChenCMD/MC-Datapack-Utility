@@ -9,7 +9,7 @@ import { IfFormula } from './types/Formula';
 import rfdc from 'rfdc';
 import { Config } from '../../types';
 
-export async function scoreOperation({ scoreOperation: config }: Config): Promise<void> {
+export const scoreOperation = async ({ scoreOperation: config }: Config): Promise<void> => {
     try {
         const { objective, forceInputType, valueScale } = config;
         const editor = getTextEditor();

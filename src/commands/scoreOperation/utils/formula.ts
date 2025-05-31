@@ -115,13 +115,13 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
     return { front: formulaAnalyzer(_exp, opTable, funcs, scale), op, back: formulaAnalyzer(exp, opTable, funcs, scale) };
 }
 
-function formulaToString(formula: Formula | string): string {
+const formulaToString = (formula: Formula | string): string => {
     if (typeof formula === 'string')
         return formula;
     return `${formulaToString(formula.front)} ${formula.op.identifier} ${formulaToString(formula.back)}`;
 }
 
-function conditionAssembling(exp: string[], isTrue: boolean, opTable: OperateTable, funcs: IfFormula[], scale: number): ConditionExp[] {
+const conditionAssembling = (exp: string[], isTrue: boolean, opTable: OperateTable, funcs: IfFormula[], scale: number): ConditionExp[] => {
     if (exp.includes('&&')) {
         const index = exp.indexOf('&&');
         return [...conditionAssembling(exp.slice(0, index), isTrue, opTable, funcs, scale), ...conditionAssembling(exp.slice(index + 1), isTrue, opTable, funcs, scale)];

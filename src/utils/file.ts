@@ -2,7 +2,7 @@ import { Uri, FileSystemError, workspace } from 'vscode';
 import fs, { promises as fsp } from 'fs';
 import path from 'path';
 
-function flatPath(pathOrUri: string | Uri): Uri {
+const flatPath = (pathOrUri: string | Uri): Uri => {
     return pathOrUri instanceof Uri ? pathOrUri : Uri.file(pathOrUri);
 }
 
@@ -12,7 +12,7 @@ function flatPath(pathOrUri: string | Uri): Uri {
  * @param content 内容
  * @throws FileSystemError ファイルが既に存在する場合
  */
-export async function createFile(filePath: string | Uri, content: Uint8Array): Promise<void> {
+export const createFile = async (filePath: string | Uri, content: Uint8Array): Promise<void> => {
     if (await pathAccessible(filePath))
         throw FileSystemError.FileExists(filePath);
     else
@@ -23,7 +23,7 @@ export async function createFile(filePath: string | Uri, content: Uint8Array): P
  * ディレクトリを作成します
  * @param dirPath ディレクトリパス
  */
-export async function createDir(dirPath: string | Uri): Promise<void> {
+export const createDir = async (dirPath: string | Uri): Promise<void> => {
     await workspace.fs.createDirectory(flatPath(dirPath));
 }
 
@@ -53,7 +53,7 @@ export async function createDir(dirPath: string | Uri): Promise<void> {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-export async function pathAccessible(testPath: string | Uri): Promise<boolean> {
+export const pathAccessible = async (testPath: string | Uri): Promise<boolean> => {
     return await fsp.access(flatPath(testPath).fsPath)
         .then(() => true)
         .catch(() => false);
@@ -83,7 +83,7 @@ export async function pathAccessible(testPath: string | Uri): Promise<boolean> {
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-export async function readFile(targetPath: string | Uri): Promise<string> {
+export const readFile = async (targetPath: string | Uri): Promise<string> => {
     return await new Promise((resolve, reject) => {
         let data = '';
         fs.createReadStream(flatPath(targetPath).fsPath, { encoding: 'utf-8', highWaterMark: 128 * 1024 })
@@ -93,7 +93,7 @@ export async function readFile(targetPath: string | Uri): Promise<string> {
     });
 }
 
-export async function writeFile(targetPath: string | Uri, content: string): Promise<void> {
+export const writeFile = async (targetPath: string | Uri, content: string): Promise<void> => {
     return await fsp.writeFile(flatPath(targetPath).fsPath, content);
 }
 

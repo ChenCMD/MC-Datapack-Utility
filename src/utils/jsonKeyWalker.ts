@@ -36,7 +36,7 @@ function walkObjFromJsonKeyPath(obj: JsonValue, reader: StringReader, elem: Json
 }
 
 
-function parseKey(obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue {
+const parseKey = (obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue => {
     // Type check
     if (!obj || typeof obj !== 'object' || Array.isArray(obj)) throw new TypeUnmatchedError();
 
@@ -54,7 +54,7 @@ function parseKey(obj: JsonValue, reader: StringReader, elem: JsonValue, addFirs
     return obj;
 }
 
-function parseObjectFilter(_obj: JsonValue, reader: StringReader, _elem: JsonValue, _addFirst: boolean, _isIndexingFilter = false): JsonValue {
+const parseObjectFilter = (_obj: JsonValue, reader: StringReader, _elem: JsonValue, _addFirst: boolean, _isIndexingFilter = false): JsonValue => {
     reader.skip().skipWhiteSpace();
     throw new UnimplementedError(locale('unimplemented', locale('json-key-path.filter'))); // TODO 未実装処理
     // if (canParseSep(reader))
@@ -63,7 +63,7 @@ function parseObjectFilter(_obj: JsonValue, reader: StringReader, _elem: JsonVal
     //     return undefined;
 }
 
-function parseIndex(obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue {
+const parseIndex = (obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue => {
     // Type check
     if (!obj || typeof obj !== 'object' || !Array.isArray(obj)) throw new TypeUnmatchedError();
 
@@ -77,7 +77,7 @@ function parseIndex(obj: JsonValue, reader: StringReader, elem: JsonValue, addFi
         return multiResult(obj, reader, elem, addFirst);
 }
 
-function parseIndexNumber(obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue {
+const parseIndexNumber = (obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue => {
     // Type check
     if (!obj || !Array.isArray(obj)) throw new TypeUnmatchedError();
 
@@ -92,7 +92,7 @@ function parseIndexNumber(obj: JsonValue, reader: StringReader, elem: JsonValue,
     return obj;
 }
 
-function multiResult(obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue {
+const multiResult = (obj: JsonValue, reader: StringReader, elem: JsonValue, addFirst: boolean): JsonValue => {
     // Type check
     if (!obj || !Array.isArray(obj)) throw new TypeUnmatchedError();
 

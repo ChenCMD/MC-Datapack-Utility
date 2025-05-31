@@ -5,7 +5,7 @@ import { Formula } from '../types/Formula';
 import { ScoreOperationConfig } from '../../../types/Config';
 import { Deque, isNumber } from '../../../utils';
 
-export async function formulaToQueue(value: Formula | string, queue: Deque<QueueElement>, config: ScoreOperationConfig, enteredValues: Set<string>): Promise<boolean> {
+export const formulaToQueue = async (value: Formula | string, queue: Deque<QueueElement>, config: ScoreOperationConfig, enteredValues: Set<string>): Promise<boolean> => {
     if (typeof value !== 'string') {
         const res1 = await formulaToQueue(value.front, queue, config, enteredValues);
         const res2 = await formulaToQueue(value.back, queue, config, enteredValues);

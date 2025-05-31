@@ -14,7 +14,7 @@ type GetElem<T> = T extends unknown[] ? T[number] : T;
 
 export type ReposGetContentResponseData = GetElem<RestEndpointMethodTypes['repos']['getContent']['response']['data']>;
 
-export async function getGitHubData(data: AskGitHubData): Promise<RestEndpointMethodTypes['repos']['getContent']['response']['data']> {
+export const getGitHubData = async (data: AskGitHubData): Promise<RestEndpointMethodTypes['repos']['getContent']['response']['data']> => {
     const octokit = new Octokit();
     const files = await Promise.race([
         octokit.repos.getContent({

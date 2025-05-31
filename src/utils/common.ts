@@ -5,11 +5,11 @@ import { FileType, getFilePath, getFileType } from '../types/FileTypes';
 import { DownloadTimeOutError } from '../types/Error';
 import { pathAccessible, readFile } from '.';
 
-export function mod(n: number, m:number): number {
+export const mod = (n: number, m:number): number => {
     return (n % m + m) % m;
 }
 
-export function parseRadixFloat(str: string, radix = 10): number {
+export const parseRadixFloat = (str: string, radix = 10): number => {
     const radixChars = getRadixChars(radix);
     const [, intParts, floatParts] = new RegExp(`^([${radixChars}]*)(?:\\.([${radixChars}]*))?`).exec(str) ?? [];
     const intRes = parseInt(intParts, radix);
@@ -21,16 +21,16 @@ export function parseRadixFloat(str: string, radix = 10): number {
     return intRes + floatRes;
 }
 
-export function getRadixRegExp(radix: number, allowFloat: boolean): RegExp {
+export const getRadixRegExp = (radix: number, allowFloat: boolean): RegExp => {
     return new RegExp(`^(\\+|-)?[${allowFloat ? '.' : ''}${getRadixChars(radix)}${getRadixChars(radix).toUpperCase()}]+$`);
 }
 
-function getRadixChars(radix: number): string {
+const getRadixChars = (radix: number): string => {
     const radixStrings = '0123456789abcdefghijklmnopqrstuvwxyz';
     return radixStrings.slice(0, radix);
 }
 
-export async function setTimeOut(millisecond: number): Promise<never> {
+export const setTimeOut = async (millisecond: number): Promise<never> => {
     // eslint-disable-next-line brace-style
     return await new Promise((_, reject) => setTimeout(
         () => reject(new DownloadTimeOutError(locale('error.download-timeout'))),
@@ -38,7 +38,7 @@ export async function setTimeOut(millisecond: number): Promise<never> {
     ));
 }
 
-export function getDate(format: string): string {
+export const getDate = (format: string): string => {
     return dateFormat(Date.now(), format);
 }
 
@@ -47,7 +47,7 @@ export function getDate(format: string): string {
  * @param filePath 取得したいファイルのファイルパス
  * @param datapackRoot データパックのルートパス
  */
-export function getResourcePath(filePath: string, datapackRoot: string, packFormat: number, fileType?: FileType): string {
+export const getResourcePath = (filePath: string, datapackRoot: string, packFormat: number, fileType?: FileType): string => {
     const fileTypePath = getFilePath(fileType ?? getFileType(path.dirname(filePath), datapackRoot, packFormat), packFormat) ?? '[^/]+';
     return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(RegExp(`^data/([^/]+)/${fileTypePath}/(.*)\\.(?:mcfunction|json)$`), '$1:$2');
 }
@@ -57,7 +57,7 @@ export function getResourcePath(filePath: string, datapackRoot: string, packForm
  * @param filePath 取得したいファイルのファイルパス
  * @param datapackRoot データパックのルートパス
  */
-export function getNamespace(filePath: string, datapackRoot: string): string {
+export const getNamespace = (filePath: string, datapackRoot: string): string => {
     return path.relative(datapackRoot, filePath).replace(/\\/g, '/').replace(/^data\/([^/]+)\/.*$/, '$1');
 }
 
@@ -74,7 +74,7 @@ export async function getDatapackRoot(filePath: string): Promise<string | undefi
     return getDatapackRoot(path.dirname(filePath));
 }
 
-export async function getPackFormat(datapackRoot: string): Promise<number> {
+export const getPackFormat = async (datapackRoot: string): Promise<number> => {
     const packMcMetaPath = path.join(datapackRoot, 'pack.mcmeta');
     if (!await pathAccessible(packMcMetaPath))
         return 7;
@@ -83,6 +83,6 @@ export async function getPackFormat(datapackRoot: string): Promise<number> {
     return pf;
 }
 
-export async function isDatapackRoot(testPath: string): Promise<boolean> {
+export const isDatapackRoot = async (testPath: string): Promise<boolean> => {
     return await pathAccessible(path.join(testPath, 'pack.mcmeta')) && await pathAccessible(path.join(testPath, 'data'));
 }

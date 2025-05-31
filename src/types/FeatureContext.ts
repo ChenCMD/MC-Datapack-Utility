@@ -9,7 +9,7 @@ interface RequiredContext {
     extensionUri: Uri
 }
 
-export function createFeatureContext(context: Partial<FeatureContext> & RequiredContext): FeatureContext {
+export const createFeatureContext = (context: Partial<FeatureContext> & RequiredContext): FeatureContext => {
     return {
         config: context.config || defaultConfig,
         extensionUri: context.extensionUri
