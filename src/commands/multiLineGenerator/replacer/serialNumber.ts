@@ -3,13 +3,12 @@ import { makeExtendQuickPickItem } from '../../../types';
 import { numberValidator, listenInput, listenPickItem, parseRadixFloat, stringValidator } from '../../../utils';
 import { Replacer } from '../types/Replacer';
 
-type OpFunc = (a: number, b: number) => number;
-const operatorMap = new Map<string, OpFunc>([
-    ['+', (a, b) => a + b],
-    ['-', (a, b) => a - b],
-    ['*', (a, b) => a * b],
-    ['/', (a, b) => a / b]
-]);
+const operatorMap = {
+    '+': (a: number, b: number) => a + b,
+    '-': (a: number, b: number) => a - b,
+    '*': (a: number, b: number) => a * b,
+    '/': (a: number, b: number) => a / b
+} as const;
 
 /*
  * 質問.1 基数

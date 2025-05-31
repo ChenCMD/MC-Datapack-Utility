@@ -7,7 +7,7 @@ import { getWorkspaceFolders, listenInput, listenPickItem, pathAccessible, readF
 import { asyncFilter, asyncMap, asyncSome } from '../../../utils/asyncUtil';
 import { Replacer } from '../types/Replacer';
 
-const tagTypesMap = new Map<string, typeof tagFileTypes[number]>(tagFileTypes.map(v => [v, v]));
+const tagTypesMap = Object.fromEntries(tagFileTypes.map(v => [v, v]));
 
 export const tagsReplacer: Replacer = async (insertString, _insertCount, { config: ctx }) => {
     const roots: Uri[] = [];
