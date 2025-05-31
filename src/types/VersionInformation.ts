@@ -23,13 +23,13 @@
  * SOFTWARE.
  */
 export interface VersionInformation {
-    latestSnapshot: string,
-    latestRelease: string,
-    processedVersions: string[]
+  latestSnapshot: string,
+  latestRelease: string,
+  processedVersions: string[]
 }
 
 export const dummyVersionInformation: VersionInformation = {
-    latestRelease: '',
-    latestSnapshot: '',
-    processedVersions: []
-};
+  latestRelease: '',
+  latestSnapshot: '',
+  processedVersions: []
+}

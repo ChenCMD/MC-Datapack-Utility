@@ -9,5 +9,6 @@
     "git.branchProtection": [
         "release",
         "master"
-    ]
+    ],
+    "editor.tabSize": 2
 }

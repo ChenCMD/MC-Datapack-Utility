@@ -1,5 +1,5 @@
-import { FileType } from '../../../types/FileTypes';
+import { FileType } from '../../../types/FileTypes'
 
 export type Template = {
-    [key in FileType]?: string[]
-};
+  [key in FileType]?: string[]
+}

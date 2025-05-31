@@ -23,69 +23,69 @@
  * SOFTWARE.
  */
 
-import { codeConsole } from '../extension';
-import { AskGitHubData, getGitHubData, ReposGetContentResponseData } from '../types/OctokitWrapper';
-import { FileDataReqContent } from '../types/FileData';
-import { VersionInformation } from '../types/VersionInformation';
-import { download, setTimeOut } from '.';
+import { codeConsole } from '../extension'
+import { AskGitHubData, getGitHubData, ReposGetContentResponseData } from '../types/OctokitWrapper'
+import { FileDataReqContent } from '../types/FileData'
+import { VersionInformation } from '../types/VersionInformation'
+import { download, setTimeOut } from '.'
 
 export async function getVanillaData(
-    versionOrLiteral: string,
-    versionInfo: VersionInformation | undefined,
-    askGitHubData: AskGitHubData,
-    relProcessingFunc: (data: ReposGetContentResponseData) => string,
-    elementFunc: (index: number, max: number) => void
+  versionOrLiteral: string,
+  versionInfo: VersionInformation | undefined,
+  askGitHubData: AskGitHubData,
+  relProcessingFunc: (data: ReposGetContentResponseData) => string,
+  elementFunc: (index: number, max: number) => void
 ): Promise<FileDataReqContent[]> {
-    askGitHubData.ref = askGitHubData.ref.replace(/%version%/, resolveVersion(versionOrLiteral, versionInfo));
+  askGitHubData.ref = askGitHubData.ref.replace(/%version%/, resolveVersion(versionOrLiteral, versionInfo))
 
-    const files = await getGitHubData(askGitHubData);
-    const ans: FileDataReqContent[] = [];
+  const files = await getGitHubData(askGitHubData)
+  const ans: FileDataReqContent[] = []
 
-    if (!Array.isArray(files)) return [];
+  if (!Array.isArray(files)) return []
 
-    for (const [i, file] of files.filter(v => v.download_url !== null).entries()) {
-        const content = await Promise.race([
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            download(file.download_url!),
-            setTimeOut(7000)
-        ]);
-        ans.push({
-            rel: relProcessingFunc(file),
-            content: content.split('\n')
-        });
-        elementFunc(i, files.length);
-    }
-    return ans;
+  for (const [i, file] of files.filter(v => v.download_url !== null).entries()) {
+    const content = await Promise.race([
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      download(file.download_url!),
+      setTimeOut(7000)
+    ])
+    ans.push({
+      rel: relProcessingFunc(file),
+      content: content.split('\n')
+    })
+    elementFunc(i, files.length)
+  }
+  return ans
 }
 
 const resolveVersion = (versionOrLiteral: string, versionInformation: VersionInformation | undefined) => {
-    if (!versionInformation)
-        return '1.16.4';
-    switch (versionOrLiteral.toLowerCase()) {
-        case 'latest snapshot':
-            return versionInformation.latestSnapshot;
-        case 'latest release':
-            return versionInformation.latestRelease;
-        default:
-            return versionOrLiteral;
-    }
+  if (!versionInformation)
+    return '1.16.4'
+  switch (versionOrLiteral.toLowerCase()) {
+    case 'latest snapshot':
+      return versionInformation.latestSnapshot
+    case 'latest release':
+      return versionInformation.latestRelease
+    default:
+      return versionOrLiteral
+  }
 }
 
 export async function getLatestVersions(): Promise<VersionInformation | undefined> {
-    try {
-        codeConsole.appendLine('[LatestVersions] Fetching the latest versions...');
-        const str = await Promise.race([
-            download('https://launchermeta.mojang.com/mc/game/version_manifest.json'),
-            setTimeOut(7000)
-        ]);
-        const { latest: { release, snapshot }, versions } = JSON.parse(str) as { latest: { release?: string, snapshot?: string }, versions: { id: string }[] };
-        const processedVersion = '1.16.2';
-        const processedVersionIndex = versions.findIndex(v => v.id === processedVersion);
-        const processedVersions = processedVersionIndex >= 0 ? versions.slice(0, processedVersionIndex + 1).map(v => v.id) : [];
-        return (release && snapshot) ? { latestRelease: release, latestSnapshot: snapshot, processedVersions } : undefined;
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (e: any) {
-        codeConsole.appendLine(`[LatestVersions] ${e}`);
-        return undefined;
-    }
+  try {
+    codeConsole.appendLine('[LatestVersions] Fetching the latest versions...')
+    const str = await Promise.race([
+      download('https://launchermeta.mojang.com/mc/game/version_manifest.json'),
+      setTimeOut(7000)
+    ])
+    const { latest: { release, snapshot }, versions } = JSON.parse(str) as { latest: { release?: string, snapshot?: string }, versions: { id: string }[] }
+    const processedVersion = '1.16.2'
+    const processedVersionIndex = versions.findIndex(v => v.id === processedVersion)
+    const processedVersions = processedVersionIndex >= 0 ? versions.slice(0, processedVersionIndex + 1).map(v => v.id) : []
+    return (release && snapshot) ? { latestRelease: release, latestSnapshot: snapshot, processedVersions } : undefined
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (e: any) {
+    codeConsole.appendLine(`[LatestVersions] ${e}`)
+    return undefined
+  }
 }

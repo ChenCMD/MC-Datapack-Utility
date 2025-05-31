@@ -1,6 +1,6 @@
 export interface Tags {
-    values: (string | {
-        id: string
-        required: boolean
-    })[]
+  values: (string | {
+    id: string
+    required: boolean
+  })[]
 }
