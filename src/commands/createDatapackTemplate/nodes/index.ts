@@ -5,10 +5,10 @@ export * from './AddTemplateGenNode'
 export * from './CreateTemplateGenNode'
 
 export type GenNodes =
-    | typeof AddTemplateGenNode
-    | typeof CreateTemplateGenNode
+  | typeof AddTemplateGenNode
+  | typeof CreateTemplateGenNode
 
 export const genNodeTypeMap = {
-    'create-datapack-template.add':  AddTemplateGenNode,
-    'create-datapack-template.create': CreateTemplateGenNode
+  'create-datapack-template.add':  AddTemplateGenNode,
+  'create-datapack-template.create': CreateTemplateGenNode
 } as const

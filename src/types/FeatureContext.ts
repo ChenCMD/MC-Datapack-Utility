@@ -2,14 +2,14 @@ import { Uri } from 'vscode'
 import { Config, defaultConfig } from './Config'
 
 export interface FeatureContext extends RequiredContext {
-    config: Config
+  config: Config
 }
 
 interface RequiredContext {
-    extensionUri: Uri
+  extensionUri: Uri
 }
 
 export const createFeatureContext = (context: Partial<FeatureContext> & RequiredContext): FeatureContext => ({
-        config: context.config || defaultConfig,
-        extensionUri: context.extensionUri
-    })
+    config: context.config || defaultConfig,
+    extensionUri: context.extensionUri
+  })

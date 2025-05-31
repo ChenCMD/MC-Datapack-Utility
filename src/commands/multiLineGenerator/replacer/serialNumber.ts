@@ -4,10 +4,10 @@ import { numberValidator, listenInput, listenPickItem, parseRadixFloat, stringVa
 import { Replacer } from '../types/Replacer'
 
 const operatorMap = {
-    '+': (a: number, b: number) => a + b,
-    '-': (a: number, b: number) => a - b,
-    '*': (a: number, b: number) => a * b,
-    '/': (a: number, b: number) => a / b
+  '+': (a: number, b: number) => a + b,
+  '-': (a: number, b: number) => a - b,
+  '*': (a: number, b: number) => a * b,
+  '/': (a: number, b: number) => a / b
 } as const
 
 /*
@@ -19,29 +19,29 @@ const operatorMap = {
  *
  */
 export const serialNumberReplacer: Replacer = async (insertString, insertCount) => {
-    const radix = parseInt(await listenInput(locale('serial-number.radix'), v => numberValidator(v, { min: 2, max: 36, allowFloat: false }), 10))
-    const start = parseRadixFloat(await listenInput(locale('serial-number.start'), v => numberValidator(v, { radix }), 0), radix)
-    const { label: operator, extend: opFunc } = await listenPickItem(locale('serial-number.operator'), makeExtendQuickPickItem(operatorMap, false), false)
-    const step = parseRadixFloat(await listenInput(locale('serial-number.step'), v => {
-        const res = numberValidator(v, { radix })
-        if (res) return res
-        if (operator === '/' && parseRadixFloat(v, radix) === 0) return locale('error.cant-divided-by-zero')
-        return undefined
-    }, 1), radix)
-    const paddingLength = parseInt(await listenInput(locale('serial-number.padding-length'), v => numberValidator(v, { radix, min: -1 }), -1), radix)
-    const paddingChar = paddingLength >= 1
-        ? await listenInput(locale('serial-number.padding-char'), v => stringValidator(v, { minLength: 1, maxLength: 1 }))
-        : '0'
+  const radix = parseInt(await listenInput(locale('serial-number.radix'), v => numberValidator(v, { min: 2, max: 36, allowFloat: false }), 10))
+  const start = parseRadixFloat(await listenInput(locale('serial-number.start'), v => numberValidator(v, { radix }), 0), radix)
+  const { label: operator, extend: opFunc } = await listenPickItem(locale('serial-number.operator'), makeExtendQuickPickItem(operatorMap, false), false)
+  const step = parseRadixFloat(await listenInput(locale('serial-number.step'), v => {
+    const res = numberValidator(v, { radix })
+    if (res) return res
+    if (operator === '/' && parseRadixFloat(v, radix) === 0) return locale('error.cant-divided-by-zero')
+    return undefined
+  }, 1), radix)
+  const paddingLength = parseInt(await listenInput(locale('serial-number.padding-length'), v => numberValidator(v, { radix, min: -1 }), -1), radix)
+  const paddingChar = paddingLength >= 1
+    ? await listenInput(locale('serial-number.padding-char'), v => stringValidator(v, { minLength: 1, maxLength: 1 }))
+    : '0'
 
-    const ans: string[] = []
-    let replaceValue = start
-    for (let i = 0; i < insertCount; i++) {
-        ans.push(replaceValue.toString(radix))
-        replaceValue = opFunc(replaceValue, step)
-    }
+  const ans: string[] = []
+  let replaceValue = start
+  for (let i = 0; i < insertCount; i++) {
+    ans.push(replaceValue.toString(radix))
+    replaceValue = opFunc(replaceValue, step)
+  }
 
-    const maxLength = ans.reduce((a, b) => Math.max(a, b.length), 0)
+  const maxLength = ans.reduce((a, b) => Math.max(a, b.length), 0)
 
-    return (paddingLength !== -1 ? ans.map(str => paddingChar.repeat(maxLength - str.length + paddingLength) + str) : ans)
-        .map(v => insertString.replace(/%r/g, v))
+  return (paddingLength !== -1 ? ans.map(str => paddingChar.repeat(maxLength - str.length + paddingLength) + str) : ans)
+    .map(v => insertString.replace(/%r/g, v))
 }

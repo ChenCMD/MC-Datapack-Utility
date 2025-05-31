@@ -11,10 +11,10 @@ const flatPath = (pathOrUri: string | Uri): Uri => pathOrUri instanceof Uri ? pa
  * @throws FileSystemError ファイルが既に存在する場合
  */
 export const createFile = async (filePath: string | Uri, content: Uint8Array): Promise<void> => {
-    if (await pathAccessible(filePath))
-        throw FileSystemError.FileExists(filePath)
-    else
-        await workspace.fs.writeFile(flatPath(filePath), content)
+  if (await pathAccessible(filePath))
+    throw FileSystemError.FileExists(filePath)
+  else
+    await workspace.fs.writeFile(flatPath(filePath), content)
 }
 
 /**
@@ -22,7 +22,7 @@ export const createFile = async (filePath: string | Uri, content: Uint8Array): P
  * @param dirPath ディレクトリパス
  */
 export const createDir = async (dirPath: string | Uri): Promise<void> => {
-    await workspace.fs.createDirectory(flatPath(dirPath))
+  await workspace.fs.createDirectory(flatPath(dirPath))
 }
 
 /**
@@ -52,8 +52,8 @@ export const createDir = async (dirPath: string | Uri): Promise<void> => {
  * SOFTWARE.
  */
 export const pathAccessible = async (testPath: string | Uri): Promise<boolean> => await fsp.access(flatPath(testPath).fsPath)
-        .then(() => true)
-        .catch(() => false)
+    .then(() => true)
+    .catch(() => false)
 
 /**
  * @license
@@ -80,12 +80,12 @@ export const pathAccessible = async (testPath: string | Uri): Promise<boolean> =
  * SOFTWARE.
  */
 export const readFile = async (targetPath: string | Uri): Promise<string> => await new Promise((resolve, reject) => {
-        let data = ''
-        fs.createReadStream(flatPath(targetPath).fsPath, { encoding: 'utf-8', highWaterMark: 128 * 1024 })
-            .on('data', chunk => data += chunk)
-            .on('end', () => resolve(data))
-            .on('error', reject)
-    })
+    let data = ''
+    fs.createReadStream(flatPath(targetPath).fsPath, { encoding: 'utf-8', highWaterMark: 128 * 1024 })
+      .on('data', chunk => data += chunk)
+      .on('end', () => resolve(data))
+      .on('error', reject)
+  })
 
 export const writeFile = async (targetPath: string | Uri, content: string): Promise<void> => await fsp.writeFile(flatPath(targetPath).fsPath, content)
 
@@ -114,21 +114,21 @@ export const writeFile = async (targetPath: string | Uri, content: string): Prom
  * SOFTWARE.
  */
 export async function walkRoot(
-    workspaceRoot: Uri,
-    abs: string,
-    cb: (abs: string, stat: fs.Stats) => void,
-    depth = Infinity
+  workspaceRoot: Uri,
+  abs: string,
+  cb: (abs: string, stat: fs.Stats) => void,
+  depth = Infinity
 ): Promise<void> {
-    if (depth <= 0) return
+  if (depth <= 0) return
 
-    const promises: Promise<void>[] = []
-    for (const name of await fsp.readdir(abs)) {
-        const newAbs = path.join(abs, name)
-        const stat = await fsp.stat(newAbs)
-        if (stat.isDirectory()) {
-            cb(newAbs, stat)
-            promises.push(walkRoot(workspaceRoot, newAbs, cb, depth - 1))
-        }
+  const promises: Promise<void>[] = []
+  for (const name of await fsp.readdir(abs)) {
+    const newAbs = path.join(abs, name)
+    const stat = await fsp.stat(newAbs)
+    if (stat.isDirectory()) {
+      cb(newAbs, stat)
+      promises.push(walkRoot(workspaceRoot, newAbs, cb, depth - 1))
     }
-    return void Promise.all(promises)
+  }
+  return void Promise.all(promises)
 }

@@ -26,6 +26,6 @@
 type SkippedPosition = number | { index: number, length?: number }
 
 export interface IndexMapping {
-    start?: number
-    skipAt?: SkippedPosition[]
+  start?: number
+  skipAt?: SkippedPosition[]
 }

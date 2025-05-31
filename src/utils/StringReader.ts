@@ -30,261 +30,261 @@ import { ParsingError } from '../types/Error'
 import { IndexMapping } from '../types/IndexMapping'
 
 export class StringReader {
-    constructor(
-        public string: string,
-        public cursor: number = 0,
-        public end: number = string.length
-    ) { }
+  constructor(
+    public string: string,
+    public cursor: number = 0,
+    public end: number = string.length
+  ) { }
 
-    get passedString(): string {
-        return this.string.slice(0, this.cursor)
+  get passedString(): string {
+    return this.string.slice(0, this.cursor)
+  }
+
+  get remainingString(): string {
+    return this.string.slice(this.cursor, this.end)
+  }
+
+  clone(): StringReader {
+    const ans = new StringReader(this.string, this.cursor, this.end)
+    return ans
+  }
+
+  canRead(length = 1): boolean {
+    return this.cursor + length <= this.end
+  }
+
+  /**
+   * Peeks a character at the current cursor.
+   * @param offset The index to offset from cursor. @default 0
+   */
+  peek(offset = 0): string {
+    return this.string.charAt(this.cursor + offset)
+  }
+
+  /**
+   * Skips the current character.
+   * @param step The step to skip. @default 1
+   */
+  skip(step = 1): this {
+    this.cursor += step
+    return this
+  }
+
+  read(): string {
+    return this.string.charAt(this.cursor++)
+  }
+
+  skipSpace(): this {
+    while (this.canRead() && StringReader.isSpace(this.peek())) this.skip()
+    return this
+  }
+
+  skipWhiteSpace(): this {
+    while (this.canRead() && StringReader.isWhiteSpace(this.peek())) this.skip()
+    return this
+  }
+
+  /**
+   * @throws {ParsingError} When the value is NaN or have non-number char at the beginning.
+   */
+  readNumber(): string {
+    let str = ''
+    while (this.canRead() && StringReader.canInNumber(this.peek())) {
+      if (this.peek() === '.' && this.peek(1) === '.') break
+      str += this.read()
     }
-
-    get remainingString(): string {
-        return this.string.slice(this.cursor, this.end)
+    if (str) {
+      const num = Number(str)
+      if (isNaN(num)) throw new ParsingError(locale('error.expected-got', locale('number'), locale('punc.quote', str)))
+      return str
+    } else {
+      const value = this.peek()
+      if (value) throw new ParsingError(locale('error.expected-got', locale('number'), locale('punc.quote', this.peek())))
+      throw new ParsingError(locale('error.expected-got', locale('number'), locale('nothing')))
     }
+  }
 
-    clone(): StringReader {
-        const ans = new StringReader(this.string, this.cursor, this.end)
-        return ans
+  /**
+   * @throws {ParsingError} When the value is float or exceeds the range.
+   */
+  readInt(): number {
+    const str = this.readNumber()
+    const num = parseInt(str)
+    // num is float.
+    if (str.includes('.')) throw new ParsingError(locale('error.expected-got', locale('integer'), str))
+
+    return num
+  }
+
+  /**
+   * @param out Stores a mapping from in-string indices to real indices.
+   */
+  readUnquotedString(out: { mapping: IndexMapping } = { mapping: {} }): string {
+    let ans = ''
+    out.mapping.start = this.cursor
+    while (this.canRead() && StringReader.canInUnquotedString(this.peek())) ans += this.read()
+    return ans
+  }
+
+  /**
+   * @throws {ParsingError} If it's not an legal quoted string.
+   * @param out Stores a mapping from in-string indices to real indices.
+   * @param isReadingJson Whether to read the whole JSON string, including quotes and escaping characters.
+   */
+  readQuotedString(out: { mapping: IndexMapping } = { mapping: {} }, looseEscapeCheck = false): string {
+    let ans = ''
+    if (!this.canRead()) {
+      out.mapping.start = this.cursor
+      return ''
     }
-
-    canRead(length = 1): boolean {
-        return this.cursor + length <= this.end
+    const quote = this.peek()
+    if (StringReader.isQuote(quote)) {
+      this.skip()
+      ans += this.readUntilQuote(quote, out, looseEscapeCheck)
+    } else {
+      throw new ParsingError(locale('error.expected-got', locale('quote'), locale('punc.quote', quote)))
     }
+    return ans
+  }
 
-    /**
-     * Peeks a character at the current cursor.
-     * @param offset The index to offset from cursor. @default 0
-     */
-    peek(offset = 0): string {
-        return this.string.charAt(this.cursor + offset)
-    }
-
-    /**
-     * Skips the current character.
-     * @param step The step to skip. @default 1
-     */
-    skip(step = 1): this {
-        this.cursor += step
-        return this
-    }
-
-    read(): string {
-        return this.string.charAt(this.cursor++)
-    }
-
-    skipSpace(): this {
-        while (this.canRead() && StringReader.isSpace(this.peek())) this.skip()
-        return this
-    }
-
-    skipWhiteSpace(): this {
-        while (this.canRead() && StringReader.isWhiteSpace(this.peek())) this.skip()
-        return this
-    }
-
-    /**
-     * @throws {ParsingError} When the value is NaN or have non-number char at the beginning.
-     */
-    readNumber(): string {
-        let str = ''
-        while (this.canRead() && StringReader.canInNumber(this.peek())) {
-            if (this.peek() === '.' && this.peek(1) === '.') break
-            str += this.read()
-        }
-        if (str) {
-            const num = Number(str)
-            if (isNaN(num)) throw new ParsingError(locale('error.expected-got', locale('number'), locale('punc.quote', str)))
-            return str
+  /**
+   * @throws {ParsingError}
+   * @param terminator Ending quote. Will not be included in the result.
+   * @param out Stores a mapping from in-string indices to real indices.
+   */
+  private readUntilQuote(terminator: '"' | '\'', out: { mapping: IndexMapping }, looseEscapeCheck: boolean) {
+    const start = this.cursor
+    const escapeChar = '\\'
+    let ans = ''
+    let escaped = false
+    out.mapping.start = start
+    while (this.canRead()) {
+      const c = this.read()
+      if (escaped) {
+        if (looseEscapeCheck || c === escapeChar || c === terminator) {
+          out.mapping.skipAt = out.mapping.skipAt || []
+          out.mapping.skipAt.push(ans.length)
+          ans += c
+          escaped = false
         } else {
-            const value = this.peek()
-            if (value) throw new ParsingError(locale('error.expected-got', locale('number'), locale('punc.quote', this.peek())))
-            throw new ParsingError(locale('error.expected-got', locale('number'), locale('nothing')))
+          this.cursor = start
+          throw new ParsingError(locale('unexpected-escape', locale('punc.quote', c)))
         }
+      } else {
+        if (c === escapeChar) escaped = true
+        if (c === terminator) return ans
+        ans += c
+      }
     }
+    this.cursor = start
+    throw new ParsingError(locale('error.expected-got', locale('ending-quote', locale('punc.quote', terminator)), locale('nothing')))
+  }
 
-    /**
-     * @throws {ParsingError} When the value is float or exceeds the range.
-     */
-    readInt(): number {
-        const str = this.readNumber()
-        const num = parseInt(str)
-        // num is float.
-        if (str.includes('.')) throw new ParsingError(locale('error.expected-got', locale('integer'), str))
+  /**
+   * @param terminator Ending character. Will not be included in the result.
+   */
+  readUntilOrEnd(...terminators: string[]): string {
+    let ans = ''
+    while (this.canRead()) {
+      const c = this.peek()
+      if (terminators.includes(c)) return ans
+      else ans += c
 
-        return num
+      this.skip()
     }
+    return ans
+  }
 
-    /**
-     * @param out Stores a mapping from in-string indices to real indices.
-     */
-    readUnquotedString(out: { mapping: IndexMapping } = { mapping: {} }): string {
-        let ans = ''
-        out.mapping.start = this.cursor
-        while (this.canRead() && StringReader.canInUnquotedString(this.peek())) ans += this.read()
-        return ans
+  readLine(): string {
+    return this.readUntilOrEnd('\r', '\n')
+  }
+
+  /**
+   * @throws {ParsingError} If it's not an legal quoted string.
+   * @param out Stores a mapping from in-string indices to real indices.
+   * @param isReadingJson Whether to read the whole JSON string, including quotes and escaping characters.
+   */
+  readString(out: { mapping: IndexMapping } = { mapping: {} }, looseEscapeCheck = false): string {
+    if (!this.canRead()) {
+      out.mapping.start = this.cursor
+      return ''
     }
+    const c = this.peek()
+    if (StringReader.isQuote(c)) return this.readQuotedString(out, looseEscapeCheck)
+    return this.readUnquotedString(out)
+  }
 
-    /**
-     * @throws {ParsingError} If it's not an legal quoted string.
-     * @param out Stores a mapping from in-string indices to real indices.
-     * @param isReadingJson Whether to read the whole JSON string, including quotes and escaping characters.
-     */
-    readQuotedString(out: { mapping: IndexMapping } = { mapping: {} }, looseEscapeCheck = false): string {
-        let ans = ''
-        if (!this.canRead()) {
-            out.mapping.start = this.cursor
-            return ''
-        }
-        const quote = this.peek()
-        if (StringReader.isQuote(quote)) {
-            this.skip()
-            ans += this.readUntilQuote(quote, out, looseEscapeCheck)
-        } else {
-            throw new ParsingError(locale('error.expected-got', locale('quote'), locale('punc.quote', quote)))
-        }
-        return ans
-    }
+  /**
+   * @deprecated
+   * @throws {ParsingError}
+   */
+  readBoolean(): boolean {
+    const string = this.readString()
+    if (string === 'true') return true
+    if (string === 'false') return false
+    throw new ParsingError(locale('error.expected-got', locale('boolean'), locale('punc.quote', string)))
 
-    /**
-     * @throws {ParsingError}
-     * @param terminator Ending quote. Will not be included in the result.
-     * @param out Stores a mapping from in-string indices to real indices.
-     */
-    private readUntilQuote(terminator: '"' | '\'', out: { mapping: IndexMapping }, looseEscapeCheck: boolean) {
-        const start = this.cursor
-        const escapeChar = '\\'
-        let ans = ''
-        let escaped = false
-        out.mapping.start = start
-        while (this.canRead()) {
-            const c = this.read()
-            if (escaped) {
-                if (looseEscapeCheck || c === escapeChar || c === terminator) {
-                    out.mapping.skipAt = out.mapping.skipAt || []
-                    out.mapping.skipAt.push(ans.length)
-                    ans += c
-                    escaped = false
-                } else {
-                    this.cursor = start
-                    throw new ParsingError(locale('unexpected-escape', locale('punc.quote', c)))
-                }
-            } else {
-                if (c === escapeChar) escaped = true
-                if (c === terminator) return ans
-                ans += c
-            }
-        }
-        this.cursor = start
-        throw new ParsingError(locale('error.expected-got', locale('ending-quote', locale('punc.quote', terminator)), locale('nothing')))
-    }
+  }
 
-    /**
-     * @param terminator Ending character. Will not be included in the result.
-     */
-    readUntilOrEnd(...terminators: string[]): string {
-        let ans = ''
-        while (this.canRead()) {
-            const c = this.peek()
-            if (terminators.includes(c)) return ans
-            else ans += c
+  /**
+   * @throws {ParsingError} (tolerable) When the next char can't match the expected one.
+   */
+  expect(c: string): this {
+    if (!this.canRead()) throw new ParsingError(locale('error.expected-got', locale('punc.quote', c), locale('nothing')))
+    if (this.peek() !== c) throw new ParsingError(locale('error.expected-got', locale('punc.quote', c), locale('punc.quote', this.peek())))
+    return this
+  }
 
-            this.skip()
-        }
-        return ans
-    }
+  readRemaining(): string {
+    const ans = this.remainingString
+    this.cursor = this.end
+    return ans
+  }
 
-    readLine(): string {
-        return this.readUntilOrEnd('\r', '\n')
-    }
+  lastLine(textDoc: TextDocument): this {
+    const pos = textDoc.positionAt(this.cursor)
+    this.cursor = textDoc.offsetAt(new Position(pos.line - 1, 0))
+    return this
+  }
 
-    /**
-     * @throws {ParsingError} If it's not an legal quoted string.
-     * @param out Stores a mapping from in-string indices to real indices.
-     * @param isReadingJson Whether to read the whole JSON string, including quotes and escaping characters.
-     */
-    readString(out: { mapping: IndexMapping } = { mapping: {} }, looseEscapeCheck = false): string {
-        if (!this.canRead()) {
-            out.mapping.start = this.cursor
-            return ''
-        }
-        const c = this.peek()
-        if (StringReader.isQuote(c)) return this.readQuotedString(out, looseEscapeCheck)
-        return this.readUnquotedString(out)
-    }
+  nextLine(textDoc: TextDocument): this {
+    const pos = textDoc.positionAt(this.cursor)
+    this.cursor = textDoc.offsetAt(new Position(pos.line + 1, 0))
+    return this
+  }
 
-    /**
-     * @deprecated
-     * @throws {ParsingError}
-     */
-    readBoolean(): boolean {
-        const string = this.readString()
-        if (string === 'true') return true
-        if (string === 'false') return false
-        throw new ParsingError(locale('error.expected-got', locale('boolean'), locale('punc.quote', string)))
+  static canInNumber(c: string): boolean {
+    // '+' is illegal in number because Mojang wrote so...
+    // https://github.com/Mojang/brigadier/blob/master/src/main/java/com/mojang/brigadier/StringReader.java#L88
+    // But it IS legal in NBT numbers, because Mojang used `readUnquotedString` to parse primitive tags in NBT parser.
+    return (
+      c === '0' || c === '1' || c === '2' || c === '3' ||
+      c === '4' || c === '5' || c === '6' || c === '7' ||
+      c === '8' || c === '9' || c === '-' || c === '.'
+    )
+  }
 
-    }
+  static isSpace(c: string): boolean {
+    return c === ' ' || c === '\t'
+  }
 
-    /**
-     * @throws {ParsingError} (tolerable) When the next char can't match the expected one.
-     */
-    expect(c: string): this {
-        if (!this.canRead()) throw new ParsingError(locale('error.expected-got', locale('punc.quote', c), locale('nothing')))
-        if (this.peek() !== c) throw new ParsingError(locale('error.expected-got', locale('punc.quote', c), locale('punc.quote', this.peek())))
-        return this
-    }
+  static isWhiteSpace(c: string): boolean {
+    return c === ' ' || c === '\t' || c === '\r' || c === '\n' || c === '\r\n'
+  }
 
-    readRemaining(): string {
-        const ans = this.remainingString
-        this.cursor = this.end
-        return ans
-    }
+  static isLineSeparator(c: string): boolean {
+    return c === '\r\n' || c === '\r' || c === '\n'
+  }
 
-    lastLine(textDoc: TextDocument): this {
-        const pos = textDoc.positionAt(this.cursor)
-        this.cursor = textDoc.offsetAt(new Position(pos.line - 1, 0))
-        return this
-    }
+  /**
+   * Whether the string can be used in unquoted string or not.
+   * @param string A string.
+   */
+  static canInUnquotedString(string: string): boolean {
+    return /^[0-9a-zA-Z_\-.+]+$/.test(string)
+  }
 
-    nextLine(textDoc: TextDocument): this {
-        const pos = textDoc.positionAt(this.cursor)
-        this.cursor = textDoc.offsetAt(new Position(pos.line + 1, 0))
-        return this
-    }
-
-    static canInNumber(c: string): boolean {
-        // '+' is illegal in number because Mojang wrote so...
-        // https://github.com/Mojang/brigadier/blob/master/src/main/java/com/mojang/brigadier/StringReader.java#L88
-        // But it IS legal in NBT numbers, because Mojang used `readUnquotedString` to parse primitive tags in NBT parser.
-        return (
-            c === '0' || c === '1' || c === '2' || c === '3' ||
-            c === '4' || c === '5' || c === '6' || c === '7' ||
-            c === '8' || c === '9' || c === '-' || c === '.'
-        )
-    }
-
-    static isSpace(c: string): boolean {
-        return c === ' ' || c === '\t'
-    }
-
-    static isWhiteSpace(c: string): boolean {
-        return c === ' ' || c === '\t' || c === '\r' || c === '\n' || c === '\r\n'
-    }
-
-    static isLineSeparator(c: string): boolean {
-        return c === '\r\n' || c === '\r' || c === '\n'
-    }
-
-    /**
-     * Whether the string can be used in unquoted string or not.
-     * @param string A string.
-     */
-    static canInUnquotedString(string: string): boolean {
-        return /^[0-9a-zA-Z_\-.+]+$/.test(string)
-    }
-
-    static isQuote(c: string): c is '"' | '\'' {
-        return c === '"' || c === '\''
-    }
+  static isQuote(c: string): c is '"' | '\'' {
+    return c === '"' || c === '\''
+  }
 }

@@ -1,41 +1,41 @@
 {
-    "plugins": [
-        [
-            "semantic-release-gitmoji",
-            {
-                "releaseRules": {
-                    "patch": [
-                        ":bug:",
-                        ":ambulance:",
-                        ":lock:",
-                        ":children_crossing:",
-                        ":arrow_up:"
-                    ]
-                }
-            }
-        ],
-        "@semantic-release/changelog",
-        [
-            "semantic-release-vsce",
-            {
-                "packageVsix": "mc-datapack-utility.vsix"
-            }
-        ],
-        [
-            "@semantic-release/github",
-            {
-                "assets": "mc-datapack-utility.vsix",
-                "releasedLabels": [
-                    ":rocket: released"
-                ]
-            }
-        ],
-        [
-            "@semantic-release/git",
-            {
-                "message": "🔖 v${nextRelease.version}\n\nhttps://github.com/ChenCMD/MC-Datapack-Utility/releases/tag/${nextRelease.gitTag}"
-            }
-        ]
+  "plugins": [
+    [
+      "semantic-release-gitmoji",
+      {
+        "releaseRules": {
+          "patch": [
+            ":bug:",
+            ":ambulance:",
+            ":lock:",
+            ":children_crossing:",
+            ":arrow_up:"
+          ]
+        }
+      }
     ],
-    "branches": "release"
+    "@semantic-release/changelog",
+    [
+      "semantic-release-vsce",
+      {
+        "packageVsix": "mc-datapack-utility.vsix"
+      }
+    ],
+    [
+      "@semantic-release/github",
+      {
+        "assets": "mc-datapack-utility.vsix",
+        "releasedLabels": [
+          ":rocket: released"
+        ]
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "message": "🔖 v${nextRelease.version}\n\nhttps://github.com/ChenCMD/MC-Datapack-Utility/releases/tag/${nextRelease.gitTag}"
+      }
+    ]
+  ],
+  "branches": "release"
 }

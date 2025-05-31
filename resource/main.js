@@ -30,8 +30,8 @@ const btnSubmit = document.getElementById('submit');
 const btnCancel = document.getElementById('cancel');
 
 txtMessages.addEventListener('keydown', event => {
-    if (event.ctrlKey && event.key === 'Enter') btnSubmit.click();
-    if (event.key === 'Escape') btnCancel.click();
+  if (event.ctrlKey && event.key === 'Enter') btnSubmit.click();
+  if (event.key === 'Escape') btnCancel.click();
 });
 
 btnSubmit.addEventListener('click', () => post('submit', txtMessages.value));
