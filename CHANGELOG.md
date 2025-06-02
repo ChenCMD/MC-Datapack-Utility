@@ -1,3 +1,10 @@
+# [v2.1.13](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.12...v2.1.13) (2025-06-02)
+
+## 🐛 Bug Fixes
+- [`7b3648d`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/7b3648d)  Fix mcdutil.commands.createFile doesn&#x27;t work on folders starting with a period 
+- [`232e914`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/232e914)  Fix createDatapackTemplate from 1.21 and later are not supported. 
+- [`1efd39a`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/1efd39a)  Fix no translation text exists for pack-format other than Japanese
+
 # [v2.1.12](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.11...v2.1.12) (2024-07-20)
 
 # [v2.1.11](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.10...v2.1.11) (2023-03-13)
