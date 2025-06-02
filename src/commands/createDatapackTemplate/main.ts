@@ -38,7 +38,7 @@ export const createDatapack = async ({ env: { dataVersion, dateFormat }, createD
       namespace
     }
     // テンプレートの選択
-    const createItems = await listenGenerateTemplate(vars, createDatapackTemplate)
+    const createItems = await listenGenerateTemplate(vars, createDatapackTemplate, packFormat)
     // カスタムの質問
     const customVars = await listenCustomQuestion(new ObjectSet(createItems.flatMap(v => v.customQuestion ?? [])))
     // 生成用のデータに加工する
@@ -60,9 +60,9 @@ const listenGenerateType = async (): Promise<GenNodes> => {
 }
 
 const listenNamespace = async (): Promise<string> => await listenInput(
-    locale('create-datapack-template.namespace-name'),
-    v => stringValidator(v, { invalidCharRegex: /[^a-z0-9./_-]/g, emptyMessage: locale('error.input-blank', locale('create-datapack-template.namespace-name')) })
-  )
+  locale('create-datapack-template.namespace-name'),
+  v => stringValidator(v, { invalidCharRegex: /[^a-z0-9./_-]/g, emptyMessage: locale('error.input-blank', locale('create-datapack-template.namespace-name')) })
+)
 
 const listenCustomQuestion = async (questions: ObjectSet<CustomQuestion>): Promise<Variables> => {
   const ans: Variables = {}
@@ -79,11 +79,14 @@ const listenCustomQuestion = async (questions: ObjectSet<CustomQuestion>): Promi
   return ans
 }
 
-const listenGenerateTemplate = async (vars: Variables, config: CreateDatapackTemplateConfig): Promise<QuickPickFiles[]> => {
+const listenGenerateTemplate = async (vars: Variables, config: CreateDatapackTemplateConfig, packFormat: number): Promise<QuickPickFiles[]> => {
   const items: QuickPickFiles[] = []
-  if (config.defaultLoadAndTick) items.push(...rfdc()(pickItems['#load & #tick']))
-  if (config.defaultVanillaData) items.push(...rfdc()(pickItems['Vanilla data']))
-  if (config.defaultFolder) items.push(...rfdc()(pickItems['Folders']))
+  if (config.defaultLoadAndTick || config.defaultVanillaData || config.defaultFolder) {
+    const defaultItems = rfdc()(pickItems(packFormat))
+    if (config.defaultLoadAndTick) items.push(...defaultItems['#load & #tick'])
+    if (config.defaultVanillaData) items.push(...defaultItems['Vanilla data'])
+    if (config.defaultFolder) items.push(...defaultItems['Folders'])
+  }
   items.push(...config.customTemplate)
   items.forEach(v => v.label = resolveVars(v.label, vars))
   return await listenPickItem(locale('create-datapack-template.quickpick-placeholder'), items, true)

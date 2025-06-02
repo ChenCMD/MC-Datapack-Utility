@@ -67,223 +67,118 @@ export type FileType =
   | 'tag/function'
   | 'tag/game_event'
   | 'tag/item'
-  | 'tag/worldgen/biome'
-  | 'tag/worldgen/configured_carver'
-  | 'tag/worldgen/configured_decorator'
-  | 'tag/worldgen/configured_feature'
-  | 'tag/worldgen/configured_structure_feature'
-  | 'tag/worldgen/configured_surface_builder'
-  | 'tag/worldgen/density_function'
-  | 'tag/worldgen/noise'
-  | 'tag/worldgen/noise_settings'
-  | 'tag/worldgen/placed_feature'
-  | 'tag/worldgen/processor_list'
-  | 'tag/worldgen/structure_set'
-  | 'tag/worldgen/template_pool'
   | 'worldgen/biome'
   | 'worldgen/configured_carver'
-  | 'worldgen/configured_decorator'
   | 'worldgen/configured_feature'
-  | 'worldgen/configured_structure_feature'
   | 'worldgen/configured_surface_builder'
   | 'worldgen/density_function'
+  | 'worldgen/flat_level_generator_preset'
+  | 'worldgen/multi_noise_biome_source_parameter_list'
   | 'worldgen/noise'
   | 'worldgen/noise_settings'
   | 'worldgen/placed_feature'
   | 'worldgen/processor_list'
+  | 'worldgen/structure'
   | 'worldgen/structure_set'
   | 'worldgen/template_pool'
+  | 'worldgen/world_preset'
+  | 'tag/worldgen/biome'
+  | 'tag/worldgen/flat_level_generator_preset'
+  | 'tag/worldgen/structure'
+  | 'tag/worldgen/world_preset'
 
-export const fileTypeFolderNameBefore24w21a: { [key in FileType]: string } = {
-  // common
-  advancement: 'advancements',
-  dimension: 'dimension',
-  dimension_type: 'dimension_type',
-  function: 'functions',
-  item_modifier: 'item_modifiers',
-  loot_table: 'loot_tables',
-  predicate: 'predicates',
-  recipe: 'recipes',
-  structure: 'structures',
-  // tag
-  'tag/block': 'tags/blocks',
-  'tag/entity_type': 'tags/entity_types',
-  'tag/fluid': 'tags/fluids',
-  'tag/function': 'tags/functions',
-  'tag/game_event': 'tags/game_event',
-  'tag/item': 'tags/items',
-  // tag/worldgen
-  'tag/worldgen/biome': 'tags/worldgen/biome',
-  'tag/worldgen/configured_carver': 'tags/worldgen/configured_carver',
-  'tag/worldgen/configured_decorator': 'tags/worldgen/configured_decorator',
-  'tag/worldgen/configured_feature': 'tags/worldgen/configured_feature',
-  'tag/worldgen/configured_structure_feature': 'tags/worldgen/configured_structure_feature',
-  'tag/worldgen/configured_surface_builder': 'tags/worldgen/configured_surface_builder',
-  'tag/worldgen/density_function': 'tags/worldgen/density_function',
-  'tag/worldgen/noise': 'tags/worldgen/noise',
-  'tag/worldgen/noise_settings': 'tags/worldgen/noise_settings',
-  'tag/worldgen/placed_feature': 'tags/worldgen/placed_feature',
-  'tag/worldgen/processor_list': 'tags/worldgen/processor_list',
-  'tag/worldgen/structure_set': 'tags/worldgen/structure_set',
-  'tag/worldgen/template_pool': 'tags/worldgen/template_pool',
-  // worldgen
-  'worldgen/biome': 'worldgen/biome',
-  'worldgen/configured_carver': 'worldgen/configured_carver',
-  'worldgen/configured_decorator': 'worldgen/configured_decorator',
-  'worldgen/configured_feature': 'worldgen/configured_feature',
-  'worldgen/configured_structure_feature': 'worldgen/configured_structure_feature',
-  'worldgen/configured_surface_builder': 'worldgen/configured_surface_builder',
-  'worldgen/density_function': 'worldgen/density_function',
-  'worldgen/noise': 'worldgen/noise',
-  'worldgen/noise_settings': 'worldgen/noise_settings',
-  'worldgen/placed_feature': 'worldgen/placed_feature',
-  'worldgen/processor_list': 'worldgen/processor_list',
-  'worldgen/structure_set': 'worldgen/structure_set',
-  'worldgen/template_pool': 'worldgen/template_pool'
+type VersionMapping = { version: number | { from: number, to: number }, name: string }
+type FileTypeMetaData = { extension: string, versionMappings: VersionMapping[] }
+
+const versions = {
+  '17w43a': 4,
+  '17w48a': 4,
+  '17w49a': 4,
+  '17w49b': 4,
+  '18w19a': 4,
+  '18w43a': 4,
+  '19w38a': 4,
+  '20w28a': 5,
+  '20w29a': 5,
+  '1.16-pre1': 5,
+  '20w46a': 7,
+  '20w49a': 7,
+  '21w42a': 8,
+  '1.18-pre1': 8,
+  '22w07a': 8,
+  '1.18.2-pre1': 9,
+  '1.18.2': 8,
+  '22w11a': 10,
+  '1.19.4-pre1': 12,
+  '24w18a': 42,
+  '24w19a': 43,
+  '24w20a': 44,
+  '24w21a': 45
 }
 
-export const fileTypePathsBefore24w21a: Record<FileType, string> = {
+const fileTypeMetaDataMap: Record<FileType, FileTypeMetaData> = {
   // common
-  advancement: 'data/*/advancements/**',
-  dimension: 'data/*/dimension/**',
-  dimension_type: 'data/*/dimension_type/**',
-  function: 'data/*/functions/**',
-  item_modifier: 'data/*/item_modifiers/**',
-  loot_table: 'data/*/loot_tables/**',
-  predicate: 'data/*/predicates/**',
-  recipe: 'data/*/recipes/**',
-  structure: 'data/*/structures/**',
-  // tag
-  'tag/block': 'data/*/tags/blocks/**',
-  'tag/entity_type': 'data/*/tags/entity_types/**',
-  'tag/fluid': 'data/*/tags/fluids/**',
-  'tag/function': 'data/*/tags/functions/**',
-  'tag/game_event': 'data/*/tags/game_events/**',
-  'tag/item': 'data/*/tags/items/**',
-  // tag/worldgen
-  'tag/worldgen/biome': 'data/*/tags/worldgen/biome/**',
-  'tag/worldgen/configured_carver': 'data/*/tags/worldgen/configured_carver/**',
-  'tag/worldgen/configured_decorator': 'data/*/tags/worldgen/configured_decorator/**',
-  'tag/worldgen/configured_feature': 'data/*/tags/worldgen/configured_feature/**',
-  'tag/worldgen/configured_structure_feature': 'data/*/tags/worldgen/configured_structure_feature/**',
-  'tag/worldgen/configured_surface_builder': 'data/*/tags/worldgen/configured_surface_builder/**',
-  'tag/worldgen/density_function': 'data/*/tags/worldgen/density_function/**',
-  'tag/worldgen/noise': 'data/*/tags/worldgen/noise/**',
-  'tag/worldgen/noise_settings': 'data/*/tags/worldgen/noise_settings/**',
-  'tag/worldgen/placed_feature': 'data/*/tags/worldgen/placed_feature/**',
-  'tag/worldgen/processor_list': 'data/*/tags/worldgen/processor_list/**',
-  'tag/worldgen/structure_set': 'data/*/tags/worldgen/structure_set/**',
-  'tag/worldgen/template_pool': 'data/*/tags/worldgen/template_pool/**',
+  advancement: { extension: 'json', versionMappings: [{ version: versions['24w21a'], name: 'advancement' }, { version: { from: versions['17w43a'], to: versions['24w20a'] }, name: 'advancements' }] },
+  dimension: { extension: 'json', versionMappings: [{ version: versions['1.16-pre1'], name: 'dimension' }] },
+  dimension_type: { extension: 'json', versionMappings: [{ version: versions['1.16-pre1'], name: 'dimension_type' }] },
+  function: { extension: 'mcfunction', versionMappings: [{ version: versions['24w21a'], name: 'function' }, { version: { from: versions['17w43a'], to: versions['24w20a'] }, name: 'functions' }] },
+  item_modifier: { extension: 'json', versionMappings: [{ version: versions['24w21a'], name: 'item_modifier' }, { version: { from: versions['20w46a'], to: versions['24w20a'] }, name: 'item_modifiers' }] },
+  loot_table: { extension: 'json', versionMappings: [{ version: versions['24w21a'], name: 'loot_table' }, { version: { from: versions['17w43a'], to: versions['24w20a'] }, name: 'loot_tables' }] },
+  predicate: { extension: 'json', versionMappings: [{ version: versions['24w21a'], name: 'predicate' }, { version: { from: versions['19w38a'], to: versions['24w20a'] }, name: 'predicates' }] },
+  recipe: { extension: 'json', versionMappings: [{ version: versions['24w21a'], name: 'recipe' }, { version: { from: versions['17w48a'], to: versions['24w20a'] }, name: 'recipes' }] },
+  structure: { extension: 'nbt', versionMappings: [{ version: versions['24w21a'], name: 'structure' }, { version: { from: versions['17w43a'], to: versions['24w20a'] }, name: 'structures' }] },
+  // tag/common
+  'tag/block': { extension: 'json', versionMappings: [{ version: versions['24w19a'], name: 'tags/block' }, { version: { from: versions['17w49a'], to: versions['24w18a'] }, name: 'tags/blocks', }] },
+  'tag/entity_type': { extension: 'json', versionMappings: [{ version: versions['24w19a'], name: 'tags/entity_type' }, { version: { from: versions['18w43a'], to: versions['24w18a'] }, name: 'tags/entity_types', }] },
+  'tag/fluid': { extension: 'json', versionMappings: [{ version: versions['24w19a'], name: 'tags/fluid' }, { version: { from: versions['18w19a'], to: versions['24w18a'] }, name: 'tags/fluids', }] },
+  'tag/function': { extension: 'json', versionMappings: [{ version: versions['24w21a'], name: 'tags/function' }, { version: { from: versions['17w49b'], to: versions['24w20a'] }, name: 'tags/functions', }] },
+  'tag/game_event': { extension: 'json', versionMappings: [{ version: versions['24w19a'], name: 'tags/game_event' }, { version: { from: versions['20w49a'], to: versions['24w18a'] }, name: 'tags/game_events', }] },
+  'tag/item': { extension: 'json', versionMappings: [{ version: versions['24w19a'], name: 'tags/item' }, { version: { from: versions['17w49a'], to: versions['24w18a'] }, name: 'tags/items', }] },
   // worldgen
-  'worldgen/biome': 'data/*/worldgen/biome/**',
-  'worldgen/configured_carver': 'data/*/worldgen/configured_carver/**',
-  'worldgen/configured_decorator': 'data/*/worldgen/configured_decorator/**',
-  'worldgen/configured_feature': 'data/*/worldgen/configured_feature/**',
-  'worldgen/configured_structure_feature': 'data/*/worldgen/configured_structure_feature/**',
-  'worldgen/configured_surface_builder': 'data/*/worldgen/configured_surface_builder/**',
-  'worldgen/density_function': 'data/*/worldgen/density_function/**',
-  'worldgen/noise': 'data/*/worldgen/noise/**',
-  'worldgen/noise_settings': 'data/*/worldgen/noise_settings/**',
-  'worldgen/placed_feature': 'data/*/worldgen/placed_feature/**',
-  'worldgen/processor_list': 'data/*/worldgen/processor_list/**',
-  'worldgen/structure_set': 'data/*/worldgen/structure_set/**',
-  'worldgen/template_pool': 'data/*/worldgen/template_pool/**'
+  'worldgen/biome': { extension: 'json', versionMappings: [{ version: versions['20w28a'], name: 'worldgen/biome' }] },
+  'worldgen/configured_carver': { extension: 'json', versionMappings: [{ version: versions['20w28a'], name: 'worldgen/configured_carver' }] },
+  'worldgen/configured_feature': { extension: 'json', versionMappings: [{ version: versions['20w28a'], name: 'worldgen/configured_feature' }] },
+  'worldgen/configured_surface_builder': { extension: 'json', versionMappings: [{ version: versions['20w28a'], name: 'worldgen/configured_surface_builder' }] },
+  'worldgen/density_function': { extension: 'json', versionMappings: [{ version: versions['1.18.2-pre1'], name: 'worldgen/density_function' }] },
+  'worldgen/flat_level_generator_preset': { extension: 'json', versionMappings: [{ version: versions['22w11a'], name: 'worldgen/flat_level_generator_preset' }] },
+  'worldgen/multi_noise_biome_source_parameter_list': { extension: 'json', versionMappings: [{ version: versions['1.19.4-pre1'], name: 'worldgen/multi_noise_biome_source_parameter_list' }] },
+  'worldgen/noise': { extension: 'json', versionMappings: [{ version: versions['21w42a'], name: 'worldgen/noise' }] },
+  'worldgen/noise_settings': { extension: 'json', versionMappings: [{ version: versions['20w29a'], name: 'worldgen/noise_settings' }] },
+  'worldgen/placed_feature': { extension: 'json', versionMappings: [{ version: versions['1.18-pre1'], name: 'worldgen/placed_feature' }] },
+  'worldgen/processor_list': { extension: 'json', versionMappings: [{ version: versions['20w28a'], name: 'worldgen/processor_list' }] },
+  'worldgen/structure': { extension: 'json', versionMappings: [{ version: versions['22w11a'], name: 'worldgen/structure' }, { version: { from: versions['20w28a'], to: versions['1.18.2'] }, name: 'worldgen/configured_structure_feature' }] },
+  'worldgen/structure_set': { extension: 'json', versionMappings: [{ version: versions['1.18.2-pre1'], name: 'worldgen/structure_set' }] },
+  'worldgen/template_pool': { extension: 'json', versionMappings: [{ version: versions['20w28a'], name: 'worldgen/template_pool' }] },
+  'worldgen/world_preset': { extension: 'json', versionMappings: [{ version: versions['22w11a'], name: 'worldgen/world_preset' }] },
+  // tag/worldgen
+  'tag/worldgen/biome': { extension: 'json', versionMappings: [{ version: versions['22w07a'], name: 'tags/worldgen/biome' }] },
+  'tag/worldgen/flat_level_generator_preset': { extension: 'json', versionMappings: [{ version: versions['22w11a'], name: 'tags/worldgen/flat_level_generator_preset' }] },
+  'tag/worldgen/structure': { extension: 'json', versionMappings: [{ version: versions['22w11a'], name: 'tags/worldgen/structure' }] },
+  'tag/worldgen/world_preset': { extension: 'json', versionMappings: [{ version: versions['22w11a'], name: 'tags/worldgen/world_preset' }] },
 }
 
-export const fileTypeFolderName: { [key in FileType]: string } = {
-  // common
-  advancement: 'advancement',
-  dimension: 'dimension',
-  dimension_type: 'dimension_type',
-  function: 'function',
-  item_modifier: 'item_modifier',
-  loot_table: 'loot_table',
-  predicate: 'predicate',
-  recipe: 'recipe',
-  structure: 'structure',
-  // tag
-  'tag/block': 'tags/block',
-  'tag/entity_type': 'tags/entity_type',
-  'tag/fluid': 'tags/fluid',
-  'tag/function': 'tags/function',
-  'tag/game_event': 'tags/game_event',
-  'tag/item': 'tags/item',
-  // tag/worldgen
-  'tag/worldgen/biome': 'tags/worldgen/biome',
-  'tag/worldgen/configured_carver': 'tags/worldgen/configured_carver',
-  'tag/worldgen/configured_decorator': 'tags/worldgen/configured_decorator',
-  'tag/worldgen/configured_feature': 'tags/worldgen/configured_feature',
-  'tag/worldgen/configured_structure_feature': 'tags/worldgen/configured_structure_feature',
-  'tag/worldgen/configured_surface_builder': 'tags/worldgen/configured_surface_builder',
-  'tag/worldgen/density_function': 'tags/worldgen/density_function',
-  'tag/worldgen/noise': 'tags/worldgen/noise',
-  'tag/worldgen/noise_settings': 'tags/worldgen/noise_settings',
-  'tag/worldgen/placed_feature': 'tags/worldgen/placed_feature',
-  'tag/worldgen/processor_list': 'tags/worldgen/processor_list',
-  'tag/worldgen/structure_set': 'tags/worldgen/structure_set',
-  'tag/worldgen/template_pool': 'tags/worldgen/template_pool',
-  // worldgen
-  'worldgen/biome': 'worldgen/biome',
-  'worldgen/configured_carver': 'worldgen/configured_carver',
-  'worldgen/configured_decorator': 'worldgen/configured_decorator',
-  'worldgen/configured_feature': 'worldgen/configured_feature',
-  'worldgen/configured_structure_feature': 'worldgen/configured_structure_feature',
-  'worldgen/configured_surface_builder': 'worldgen/configured_surface_builder',
-  'worldgen/density_function': 'worldgen/density_function',
-  'worldgen/noise': 'worldgen/noise',
-  'worldgen/noise_settings': 'worldgen/noise_settings',
-  'worldgen/placed_feature': 'worldgen/placed_feature',
-  'worldgen/processor_list': 'worldgen/processor_list',
-  'worldgen/structure_set': 'worldgen/structure_set',
-  'worldgen/template_pool': 'worldgen/template_pool'
+function isIncludeVersion(version: VersionMapping, packFormat: number): boolean {
+  return (typeof version.version === 'number')
+    ? version.version <= packFormat
+    : version.version.from <= packFormat && packFormat <= version.version.to
 }
 
-export const fileTypePaths: Record<FileType, string> = {
-  // common
-  advancement: 'data/*/advancement/**',
-  dimension: 'data/*/dimension/**',
-  dimension_type: 'data/*/dimension_type/**',
-  function: 'data/*/function/**',
-  item_modifier: 'data/*/item_modifier/**',
-  loot_table: 'data/*/loot_table/**',
-  predicate: 'data/*/predicate/**',
-  recipe: 'data/*/recipe/**',
-  structure: 'data/*/structure/**',
-  // tag
-  'tag/block': 'data/*/tags/block/**',
-  'tag/entity_type': 'data/*/tags/entity_type/**',
-  'tag/fluid': 'data/*/tags/fluid/**',
-  'tag/function': 'data/*/tags/function/**',
-  'tag/game_event': 'data/*/tags/game_event/**',
-  'tag/item': 'data/*/tags/item/**',
-  // tag/worldgen
-  'tag/worldgen/biome': 'data/*/tags/worldgen/biome/**',
-  'tag/worldgen/configured_carver': 'data/*/tags/worldgen/configured_carver/**',
-  'tag/worldgen/configured_decorator': 'data/*/tags/worldgen/configured_decorator/**',
-  'tag/worldgen/configured_feature': 'data/*/tags/worldgen/configured_feature/**',
-  'tag/worldgen/configured_structure_feature': 'data/*/tags/worldgen/configured_structure_feature/**',
-  'tag/worldgen/configured_surface_builder': 'data/*/tags/worldgen/configured_surface_builder/**',
-  'tag/worldgen/density_function': 'data/*/tags/worldgen/density_function/**',
-  'tag/worldgen/noise': 'data/*/tags/worldgen/noise/**',
-  'tag/worldgen/noise_settings': 'data/*/tags/worldgen/noise_settings/**',
-  'tag/worldgen/placed_feature': 'data/*/tags/worldgen/placed_feature/**',
-  'tag/worldgen/processor_list': 'data/*/tags/worldgen/processor_list/**',
-  'tag/worldgen/structure_set': 'data/*/tags/worldgen/structure_set/**',
-  'tag/worldgen/template_pool': 'data/*/tags/worldgen/template_pool/**',
-  // worldgen
-  'worldgen/biome': 'data/*/worldgen/biome/**',
-  'worldgen/configured_carver': 'data/*/worldgen/configured_carver/**',
-  'worldgen/configured_decorator': 'data/*/worldgen/configured_decorator/**',
-  'worldgen/configured_feature': 'data/*/worldgen/configured_feature/**',
-  'worldgen/configured_structure_feature': 'data/*/worldgen/configured_structure_feature/**',
-  'worldgen/configured_surface_builder': 'data/*/worldgen/configured_surface_builder/**',
-  'worldgen/density_function': 'data/*/worldgen/density_function/**',
-  'worldgen/noise': 'data/*/worldgen/noise/**',
-  'worldgen/noise_settings': 'data/*/worldgen/noise_settings/**',
-  'worldgen/placed_feature': 'data/*/worldgen/placed_feature/**',
-  'worldgen/processor_list': 'data/*/worldgen/processor_list/**',
-  'worldgen/structure_set': 'data/*/worldgen/structure_set/**',
-  'worldgen/template_pool': 'data/*/worldgen/template_pool/**'
+function getFileTypeFromRel(relativePath: string, packFormat: number): FileType | undefined {
+  const [matchedFileType, matchedFileTypeMetaData] = (Object.entries(fileTypeMetaDataMap) as [FileType, FileTypeMetaData][])
+    .find(([, metaData]) => metaData.versionMappings.some(v => minimatch(relativePath, `data/*/${v.name}/**`, { dot: true })))
+    ?? [undefined, undefined]
+
+  if (!matchedFileType)
+    return undefined
+
+  const currentVersion = matchedFileTypeMetaData.versionMappings.find(v => minimatch(relativePath, `data/*/${v.name}/**`, { dot: true }))
+  const targetVersion = matchedFileTypeMetaData.versionMappings.find(v => isIncludeVersion(v, packFormat))
+  if (!currentVersion || !targetVersion || currentVersion.name !== targetVersion.name) {
+    showError(locale('maybe-wrong-pack-format', { fileType: matchedFileType, packFormat }))
+    return undefined
+  }
+
+  return matchedFileType
 }
 
 /**
@@ -293,29 +188,25 @@ export const fileTypePaths: Record<FileType, string> = {
  */
 export function getFileType(filePath: string, datapackRoot: string, packFormat: number): FileType | undefined {
   const dir = path.relative(datapackRoot, filePath).replace(/(\\|$)/g, '/')
-  const paths = packFormat >= 45 ? fileTypePaths
-    : fileTypePathsBefore24w21a
-  const otherPaths = {
-    ...(packFormat >= 1 && packFormat < 45 ? {} : fileTypePathsBefore24w21a),
-    ...(packFormat >= 45 /* && packFormat < ?? */ ? {} : fileTypePaths)
-  }
-  for (const type of Object.keys(paths) as FileType[]) {
-    if (minimatch(dir, paths[type], { dot: true }))
-      return type
-  }
-  for (const type of Object.keys(otherPaths) as (keyof typeof otherPaths)[]) {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    if (minimatch(dir, otherPaths[type]!, { dot: true })) {
-      showError(locale('maybe-wrong-pack-format'))
-      return undefined
-    }
-  }
-  return undefined
+  return getFileTypeFromRel(dir, packFormat)
 }
 
 export function getFilePath(fileType: FileType | undefined, packFormat: number): string | undefined {
   if (!fileType) return undefined
-  const folderNames = packFormat >= 45 ? fileTypeFolderName
-    : fileTypeFolderNameBefore24w21a
-  return folderNames[fileType]
+  return fileTypeMetaDataMap[fileType].versionMappings.find(v => isIncludeVersion(v, packFormat))?.name
+}
+
+export function migrateFilePath(relativePath: string, packFormat: number): string | undefined {
+  const fileType = getFileTypeFromRel(relativePath, packFormat)
+  if (!fileType) return relativePath
+
+  const metaData = fileTypeMetaDataMap[fileType]
+
+  const currentVersion = metaData.versionMappings.find(v => minimatch(relativePath, `data/*/${v.name}/**`, { dot: true }))
+  if (!currentVersion) return relativePath
+
+  const targetVersion = metaData.versionMappings.find(v => isIncludeVersion(v, packFormat))
+  if (!targetVersion) return undefined
+
+  return relativePath.replace(RegExp(`data/([^/]+)/${currentVersion.name}/(.*)`), `data/$1/${targetVersion.name}/$2`)
 }
