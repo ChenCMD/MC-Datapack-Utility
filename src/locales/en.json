@@ -106,6 +106,7 @@
   "nothing": "nothing",
   "number": "a number",
   "operator": "operator",
+  "pack-format": "pack_format of datapack",
   "parsing-error": "Illegal expression: %0%…",
   "punc.quote": "“%0%”",
   "quote": "a quote (“'” or “\"”)",
