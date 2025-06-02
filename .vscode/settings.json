@@ -5,5 +5,10 @@
     "search.exclude": {
         "**/dist": true
     },
-    "typescript.tsdk": "node_modules\\typescript\\lib"
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "git.branchProtection": [
+        "release",
+        "master"
+    ],
+    "editor.tabSize": 2
 }

@@ -16,7 +16,7 @@ We are using the [SPGoding](https://github.com/SPGoding) website together for tr
 #### Steps
 1. Go to the [localization website](https://l10n.spgoding.com/).
 1. [Register](https://l10n.spgoding.com/accounts/register) by linking your GitHub account (recommended), or using your email.
-    - Note that the username and email will be shown in the repository's git commit log. If you don't feel like you want to disclose your own email address, feel free to [contact SPGoding](https://github.com/SPGoding/datapack-language-server/wiki/Contact-SPGoding) to get an account with a fake email address.
+  - Note that the username and email will be shown in the repository's git commit log. If you don't feel like you want to disclose your own email address, feel free to [contact SPGoding](https://github.com/SPGoding/datapack-language-server/wiki/Contact-SPGoding) to get an account with a fake email address.
 1. See two components of MCDU [here](https://l10n.spgoding.com/projects/mc-datapack-utility).
 1. Start translating!
 

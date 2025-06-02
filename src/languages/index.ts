@@ -1,1 +1,1 @@
-export * from './McfunctionFormatter';
+export * from './McfunctionFormatter'

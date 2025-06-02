@@ -18,10 +18,10 @@ This extension provides several useful features for Datapack development.
   - [Copy resourcePath](#copy-resourcepath)
   - [Quick file creation](#quick-file-creation)
   - [Batch input of multiple lines](#batch-input-of-multiple-lines)
-    - [Strings](#strings)
-    - [Datapack tag](#datapack-tag)
-    - [Consecutive values](#consecutive-values)
-    - [Expression](#expression)
+  - [Strings](#strings)
+  - [Datapack tag](#datapack-tag)
+  - [Consecutive values](#consecutive-values)
+  - [Expression](#expression)
   - [Converting formulas to score operation](#converting-formulas-to-score-operation)
 - [Recommendations](#recommendations)
 - [Special Thanks](#special-thanks)
@@ -93,7 +93,7 @@ Note that this substitution method behaves differently depending on the number o
 
 #### Difference in behavior when generating depending on the number of cursors
 
-| Behavior with a single cursor                                           | Behavior with multiple cursors                                                                                                                                                                                                                                             |
+| Behavior with a single cursor                       | Behavior with multiple cursors                                                                                                                       |
 | :---------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Generate as many input lines as there are starting with the cursor line | If the number of input lines and the number of cursors are different:<br/> input content is generated at each location<br/>If the number of input lines and the number of cursors are the same:<br/> input content is generated one line at a time in the order of cursor placement. |
 
@@ -105,7 +105,7 @@ Note that this substitution method behaves differently depending on the number o
 
 #### Difference in behavior when generating depending on the number of cursors
 
-| Behavior with a single cursor                                             | Behavior with multiple cursors                                                                                                                                                                                                                                   |
+| Behavior with a single cursor                       | Behavior with multiple cursors                                                                                                                   |
 | :------------------------------------------------------------------------ | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Generate as many tag elements as there are, starting with the cursor line | If the number of tag elements and the cursor are different:<br/> a tag element is generated at each location<br/>If the number of tag elements and the cursor are the same:<br/> a tag element is generated one line at a time in the order in which the cursor is placed. |
 
