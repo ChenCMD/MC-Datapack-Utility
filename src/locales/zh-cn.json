@@ -90,6 +90,7 @@
   "no": "否",
   "nothing": "空",
   "number": "一个数字",
+  "pack-format": "数据包的格式",
   "parsing-error": "非法的表达式：%0%……",
   "punc.quote": "“%0%”",
   "quote": "一个引号(“'”或“\"”)",

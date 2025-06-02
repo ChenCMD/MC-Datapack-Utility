@@ -67,6 +67,7 @@
   "month-name.october": "October",
   "month-name.september": "September",
   "no": "否",
+  "pack-format": "資料包的格式版本",
   "parsing-error": "非法的表達式：%0%……",
   "rename": "重新命名",
   "reselect": "重新選擇",
