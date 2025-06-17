@@ -79,6 +79,11 @@
 				"command": "mcdutil.commands.generateMultiLine",
 				"title": "%mcdutil.commands.generateMultiLine.title%",
 				"category": "Datapack"
+			},
+			{
+				"command": "mcdutil.commands.packTrailer",
+				"title": "コールグラフを表示 [要g18n]",
+				"category": "Datapack"
 			}
 		],
 		"keybindings": [
@@ -95,6 +100,10 @@
 				"command": "mcdutil.commands.generateMultiLine",
 				"key": "Alt+Shift+D Alt+Shift+M",
 				"when": "editorTextFocus == true && editorReadonly == false"
+			},
+			{
+				"command": "mcdutil.commands.packTrailer",
+				"key": "Alt+Shift+D Alt+Shift+P"
 			}
 		],
 		"menus": {
@@ -806,5 +815,6 @@
 		"vscode-test": "^1.5.2",
 		"webpack": "^5.36.2",
 		"webpack-cli": "^4.7.0"
-	}
+	},
+	"packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

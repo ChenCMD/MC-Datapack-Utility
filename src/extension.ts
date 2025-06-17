@@ -1,5 +1,5 @@
 import { ExtensionContext, commands, window, workspace, ConfigurationChangeEvent, languages, env } from 'vscode'
-import { copyResourcePath, createDatapack, createFile, generateMultiLine, scoreOperation } from './commands'
+import { copyResourcePath, createDatapack, createFile, generateMultiLine, packTrailer, scoreOperation } from './commands'
 import { McfunctionFormatter } from './languages'
 import { loadLocale } from './locales'
 import { Config, constructConfig } from './types/Config'
@@ -32,6 +32,7 @@ export const activate = ({ extensionUri, subscriptions }: ExtensionContext): voi
   disposable.push(commands.registerCommand('mcdutil.commands.scoreOperation', () => scoreOperation(config)))
   disposable.push(commands.registerCommand('mcdutil.commands.copyResourcePath', copyResourcePath))
   disposable.push(commands.registerCommand('mcdutil.commands.generateMultiLine', () => generateMultiLine(ctx)))
+  disposable.push(commands.registerCommand('mcdutil.commands.packTrailer', () => packTrailer))
 
   disposable.push(languages.registerDocumentFormattingEditProvider('mcfunction', mcfunctionFormatter))
 
