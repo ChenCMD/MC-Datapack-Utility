@@ -1,0 +1,2 @@
+
+type ParserValueMap = [string, string][]

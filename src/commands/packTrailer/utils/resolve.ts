@@ -1,4 +1,5 @@
 
+// ResourceLocationらしき文字列について、そのnamespaceとpathを抽出する
 export function resolveResourceLocation(loc: string): ResourceLocation | undefined {
   if (loc === '') return { namespace: 'minecraft', path: [] }
   const match = loc.match(/^(?:([a-z0-9_\-.]*):)?([a-z0-9_\-./]*)$/)

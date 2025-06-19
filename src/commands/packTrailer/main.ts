@@ -1,13 +1,11 @@
 import * as vscode from 'vscode'
 
 export const packTrailer = (): void => {
-  // Create and show panel
   const panel = vscode.window.createWebviewPanel(
     'packTrailer',
     'Datapackのコールグラフ',
     {
-      viewColumn: vscode.ViewColumn.Beside,
-      preserveFocus: false
+      viewColumn: vscode.ViewColumn.Beside
     },
     {
       enableFindWidget: true,
@@ -15,7 +13,6 @@ export const packTrailer = (): void => {
     }
   )
 
-  // And set its HTML content
   panel.webview.html = getWebviewContent()
 }
 

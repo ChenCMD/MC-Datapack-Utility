@@ -2,6 +2,7 @@ import { resolveResourceLocation } from '../utils/resolve'
 
 function testResolveResourceLocation() {
   const cases : [string, ResourceLocation | undefined][] = [
+    // 例の一部は https://minecraft.wiki/w/Resource_location を参考にした
     ['bar:code', { namespace: 'bar', path: ['code'] }],
     ['minecraft:zombie', { namespace: 'minecraft', path: ['zombie'] }],
     ['diamond', { namespace: 'minecraft', path: ['diamond'] }],
