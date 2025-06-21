@@ -32,7 +32,7 @@ export const activate = ({ extensionUri, subscriptions }: ExtensionContext): voi
   disposable.push(commands.registerCommand('mcdutil.commands.scoreOperation', () => scoreOperation(config)))
   disposable.push(commands.registerCommand('mcdutil.commands.copyResourcePath', copyResourcePath))
   disposable.push(commands.registerCommand('mcdutil.commands.generateMultiLine', () => generateMultiLine(ctx)))
-  disposable.push(commands.registerCommand('mcdutil.commands.packTrailer', () => packTrailer))
+  disposable.push(commands.registerCommand('mcdutil.commands.packTrailer', packTrailer))
 
   disposable.push(languages.registerDocumentFormattingEditProvider('mcfunction', mcfunctionFormatter))
 

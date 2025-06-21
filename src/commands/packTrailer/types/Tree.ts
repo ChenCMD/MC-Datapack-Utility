@@ -19,3 +19,89 @@ interface LiteralNode extends GeneralNode {
 interface RootNode extends GeneralNode {
   type: 'root'
 }
+
+type NumberArgumentProperty = {
+  min?: number
+  max?: number
+}
+
+type StringArgumentProperty = {
+  type: 'word' | 'phrase' | 'greedy'
+}
+
+type EntityArgumentProperty = {
+  type: 'entities' | 'players'
+  amount: 'single' | 'multiple'
+}
+
+type ResourceArgumentProperty = {
+  registry:
+  | 'minecraft:attribute'
+  | 'minecraft:damage_type'
+  | 'minecraft:enchantment'
+  | 'minecraft:entity_type'
+  | 'minecraft:mob_effect'
+  | 'minecraft:point_of_interest_type'
+  | 'minecraft:worldgen/biome'
+  | 'minecraft:worldgen/configured_feature'
+  | 'minecraft:worldgen/structure'
+  | 'minecraft:worldgen/template_pool'
+}
+
+type ScoreHolderArgumentProperty = {
+  amount: 'single' | 'multiple'
+}
+
+type TimeArgumentProperty = {
+  min: number
+}
+
+export type ParserType =
+  | 'brigadier:bool'
+  | 'brigadier:double'
+  | 'brigadier:float'
+  | 'brigadier:integer'
+  | 'brigadier:string'
+  | 'minecraft:angle'
+  | 'minecraft:block_pos'
+  | 'minecraft:block_predicate'
+  | 'minecraft:block_state'
+  | 'minecraft:color'
+  | 'minecraft:column_pos'
+  | 'minecraft:component'
+  | 'minecraft:dimension'
+  | 'minecraft:entity'
+  | 'minecraft:entity_anchor'
+  | 'minecraft:function'
+  | 'minecraft:game_profile'
+  | 'minecraft:gamemode'
+  | 'minecraft:heightmap'
+  | 'minecraft:int_range'
+  | 'minecraft:item_predicate'
+  | 'minecraft:item_slot'
+  | 'minecraft:item_stack'
+  | 'minecraft:message'
+  | 'minecraft:nbt_compound_tag'
+  | 'minecraft:nbt_path'
+  | 'minecraft:nbt_tag'
+  | 'minecraft:objective'
+  | 'minecraft:objective_criteria'
+  | 'minecraft:operation'
+  | 'minecraft:particle'
+  | 'minecraft:resource'
+  | 'minecraft:resource_key'
+  | 'minecraft:resource_location'
+  | 'minecraft:resource_or_tag'
+  | 'minecraft:resource_or_tag_key'
+  | 'minecraft:rotation'
+  | 'minecraft:score_holder'
+  | 'minecraft:scoreboard_slot'
+  | 'minecraft:style'
+  | 'minecraft:swizzle'
+  | 'minecraft:team'
+  | 'minecraft:template_mirror'
+  | 'minecraft:template_rotation'
+  | 'minecraft:time'
+  | 'minecraft:uuid'
+  | 'minecraft:vec2'
+  | 'minecraft:vec3'
