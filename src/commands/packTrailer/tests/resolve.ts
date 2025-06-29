@@ -1,3 +1,4 @@
+import { ResourceLocation } from '../types/ResourceLocation'
 import { resolveResourceLocation } from '../utils/resolve'
 
 function testResolveResourceLocation() {

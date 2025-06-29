@@ -1,5 +1,14 @@
 import * as vscode from 'vscode'
 import { getTextEditor, showError } from '../../utils'
+import { GraphSection } from './types/MermaidHelper'
+import { getRelative } from './utils/accumulate'
+import { CallBiMap } from './types/CallBiMap'
+
+/*
+  コールグラフを作成する機能。
+  1. データパック全探索と呼び出し関係の抽出
+  2. Mermaid を用いて Webview に表示
+*/
 
 export const packTrailer = (): void => {
   const currentEditor = getTextEditor(true)
@@ -23,10 +32,19 @@ export const packTrailer = (): void => {
 
   // const res = parseMCFunction(currentEditor.document, dispatcher, ['name'])
   
-  panel.webview.html = getWebviewContent('hi')
+  const known : CallBiMap = new CallBiMap()
+  known.register('function$main:io', 'function$callee:1')
+  known.register('storage$caller:1', 'function$main:io')
+  known.register('storage$caller:2', 'function$main:io')
+  known.register('storage$caller:2', 'function$caller:2')
+  known.register('storage$caller:3', 'function$caller:2')
+  known.register('storage$caller:3', 'function$caller:3')
+  known.register('function$callee:1', 'function$callee:2')
+  known.register('function$callee:2', 'function$callee:3')
+  panel.webview.html = getWebviewContent(getRelative(known, 'function$main:io', 2))
 }
 
-function getWebviewContent(body: string) {
+function getWebviewContent(section: GraphSection): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,8 +53,16 @@ function getWebviewContent(body: string) {
   <title>Datapack Trailer</title>
 </head>
 <body>
-  <img src="https://media.giphy.com/media/JIX9t2j0ZTN9S/giphy.gif" width="300" />
-  ${body}
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+  <pre class="mermaid">
+    graph LR;
+      ${Array.from(section.def).join('\n')}
+
+      ${Array.from(section.rel).join('\n')}
+  </pre>
 </body>
 </html>`
 }

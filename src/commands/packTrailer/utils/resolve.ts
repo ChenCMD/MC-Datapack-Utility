@@ -1,3 +1,4 @@
+import { ResourceLocation } from '../types/ResourceLocation'
 
 // TODO: TAG_PREFIX や PATH_SEPARATOR をソフトコーディング
 const LOCATION_FORMAT = /^(#?)(?:([a-z0-9_\-.]*):)?([a-z0-9_\-./]*)$/
