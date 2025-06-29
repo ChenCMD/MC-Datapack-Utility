@@ -1,35 +1,25 @@
-import { resolveResourceLocation } from '../utils/resolve'
 import { GraphDefinition } from './MermaidHelper'
-import { ResourceLocation, toString } from './ResourceLocation'
+import { ParserType } from './ParserType'
 
-const callKinds = {
-  'function': 'rectangle',
-  'storage': 'cylinder',
-  'unknown': 'triangle'
+const callKinds : {
+  [key in ParserType | `${ParserType}/${string}`]?: string
+} = {
+  'minecraft:function': 'rectangle',
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  'minecraft:resource_location/storage': 'cylinder'
 }
 
 type CallKind = keyof typeof callKinds
 
-/**
- * `KIND$`以降の部分は ResourceLocation であることを期待する。
- */
 export type CallNode = `${CallKind}$${string}`
 
 function isCallKind(kind: string): kind is CallKind {
   return kind in callKinds
 }
 
-export function unfoldCallNode(node: CallNode): [CallKind, ResourceLocation] {
-  const [kind, raw] = node.split('$')
-  if (!isCallKind(kind))
-    throw new Error(`Invalid call kind: ${kind}`)
-
-  const rl = resolveResourceLocation(raw) // 毎回 resolve するのは無駄かも
-  if (!rl) throw new Error(`Invalid resource location: ${raw}`)
-  return [kind, rl]
-}
-
 export function asMermaidNode(node: CallNode): GraphDefinition {
-  const [kind, rl] = unfoldCallNode(node)
-  return `${node}@{ label: '${toString(rl)}', shape: '${callKinds[kind]}' }`
+  const [kind, info] = node.split('$')
+  if (isCallKind(kind))
+    return `${node}@{ label: '${info}', shape: '${callKinds[kind]}' }`
+  return `${node}@{ label: '${info}', shape: 'triangle' }`
 }
