@@ -2,8 +2,9 @@ import path from 'path'
 import { locale } from '../../../locales'
 import { createMessageItemHasIds } from '../../../types/MessageItemHasId'
 import { getDatapackRoot, isDatapackRoot } from '../../../utils/common'
-import { listenDir, listenInput, showWarning, stringValidator } from '../../../utils/vscodeWrapper'
+import { listenDir, listenInput, showInfo, showWarning, stringValidator } from '../../../utils/vscodeWrapper'
 import { AbstractNode } from '../types/AbstractNode'
+import { commands, Uri } from 'vscode'
 
 export class CreateTemplateGenNode extends AbstractNode {
   readonly isGeneratePackMcMeta = true
@@ -50,5 +51,16 @@ export class CreateTemplateGenNode extends AbstractNode {
 
   async listenDatapackDescription(): Promise<string> {
     return await listenInput(locale('datapack-description'))
+  }
+
+  async noticeGenerated(directory: string): Promise<void> {
+    const res = await showInfo(
+      locale('create-datapack-template.complete-create'),
+      false,
+      createMessageItemHasIds('open', 'no')
+    )
+
+    if (res === 'open')
+      await commands.executeCommand('vscode.openFolder', Uri.file(directory), { forceNewWindow: true })
   }
 }

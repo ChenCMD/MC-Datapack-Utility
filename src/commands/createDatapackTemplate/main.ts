@@ -1,4 +1,4 @@
-import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, ObjectSet, pathAccessible, readFile, showError, showInfo, stringValidator, writeFile } from '../../utils'
+import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, ObjectSet, pathAccessible, readFile, showError, stringValidator, writeFile } from '../../utils'
 import { Config, Variables, makeExtendQuickPickItem, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError, JsonObject } from '../../types'
 import { locale } from '../../locales'
 import { CustomQuestion, GenerateFileData, QuickPickFiles } from './types/QuickPickFiles'
@@ -45,6 +45,9 @@ export const createDatapack = async ({ env: { dataVersion, dateFormat }, createD
     const items = await toGenerateData(createItems, generatorChildNode.isGeneratePackMcMeta, dataVersion, packFormat)
     // 生成
     await generate(items, root, packFormat, { ...vars, ...customVars })
+    // 完了の通知
+    await generatorChildNode.noticeGenerated(root)
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error instanceof UserCancelledError) return
@@ -140,7 +143,6 @@ const generate = async (items: GenerateFileData[], root: string, packFormat: num
         report({ increment: 100 / items.length, message })
       }
     }
-    showInfo(locale('create-datapack-template.complete'))
   })
 }
 
