@@ -1,3 +1,8 @@
+# [v2.2.0](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.13...v2.2.0) (2025-08-08)
+
+## ✨ New Features
+- [`926faf5`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/926faf5)  Add an open dialog when generating a datapack from a template (Issues: [`#76`](https://github.com/ChenCMD/MC-Datapack-Utility/issues/76))
+
 # [v2.1.13](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.12...v2.1.13) (2025-06-02)
 
 ## 🐛 Bug Fixes
