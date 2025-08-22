@@ -210,3 +210,15 @@ export function migrateFilePath(relativePath: string, packFormat: number): strin
 
   return relativePath.replace(RegExp(`data/([^/]+)/${currentVersion.name}/(.*)`), `data/$1/${targetVersion.name}/$2`)
 }
+
+/**
+ * ファイルの種類とそのディレクトリの一覧を取得する
+ */
+export function getFileTypeDirs(packFormat: number): [FileType, string][] {
+  return Object.entries(fileTypeMetaDataMap)
+    .map(([fileType, { versionMappings }]) : [FileType, string | undefined] => [
+      fileType as FileType,
+      versionMappings.find(v => isIncludeVersion(v, packFormat))?.name
+    ])
+    .filter(([, name]) => name !== undefined) as [FileType, string][]
+}

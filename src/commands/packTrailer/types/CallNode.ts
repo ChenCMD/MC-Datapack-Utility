@@ -1,25 +1,13 @@
-import { GraphDefinition } from './MermaidHelper'
+import { EscapedChar, makeEscapedChar } from './EscapedChar'
 import { ParserType } from './ParserType'
 
-const callKinds : {
-  [key in ParserType | `${ParserType}/${string}`]?: string
-} = {
-  'minecraft:function': 'rectangle',
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  'minecraft:resource_location/storage': 'cylinder'
+export type CallNode = `${ParserType}$${EscapedChar}` & { readonly _brand: 'CallNode' }
+
+export function makeCallNode(type: ParserType, arg: string): CallNode {
+  return `${type}$${makeEscapedChar(arg)}` as CallNode
 }
 
-type CallKind = keyof typeof callKinds
-
-export type CallNode = `${CallKind}$${string}`
-
-function isCallKind(kind: string): kind is CallKind {
-  return kind in callKinds
-}
-
-export function asMermaidNode(node: CallNode): GraphDefinition {
-  const [kind, info] = node.split('$')
-  if (isCallKind(kind))
-    return `${node}@{ label: '${info}', shape: '${callKinds[kind]}' }`
-  return `${node}@{ label: '${info}', shape: 'triangle' }`
+export type CallPair = {
+  from: CallNode
+  to: CallNode
 }
