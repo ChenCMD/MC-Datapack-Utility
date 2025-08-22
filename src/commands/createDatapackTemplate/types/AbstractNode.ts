@@ -8,4 +8,6 @@ export abstract class AbstractNode {
   abstract listenPackFormat(directory: string): Promise<number>
 
   abstract listenDatapackDescription(directory: string): Promise<string>
+
+  abstract noticeGenerated(directory: string): Promise<void>
 }

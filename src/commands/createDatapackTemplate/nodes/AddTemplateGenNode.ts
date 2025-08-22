@@ -3,7 +3,7 @@ import { locale } from '../../../locales'
 import { GenerateError } from '../../../types/Error'
 import { isDatapackRoot } from '../../../utils/common'
 import { readFile } from '../../../utils/file'
-import { listenDir } from '../../../utils/vscodeWrapper'
+import { listenDir, showInfo } from '../../../utils/vscodeWrapper'
 import { AbstractNode } from '../types/AbstractNode'
 
 export class AddTemplateGenNode extends AbstractNode {
@@ -44,5 +44,9 @@ export class AddTemplateGenNode extends AbstractNode {
       if (err instanceof SyntaxError) return ''
       throw err
     }
+  }
+
+  async noticeGenerated(): Promise<void> {
+    await showInfo(locale('create-datapack-template.complete'))
   }
 }
