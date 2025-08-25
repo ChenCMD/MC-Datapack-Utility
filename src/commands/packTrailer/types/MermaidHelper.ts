@@ -1,6 +1,6 @@
-import { CallNode } from './CallNode'
+import { CallNode, getLabel, getType } from './CallNode'
 import { EscapedChar } from './EscapedChar'
-import { ParserType } from './ParserType'
+import { isFileType, ParserType } from './ParserType'
 
 // https://mermaid.js.org/syntax/flowchart.html#complete-list-of-new-shapes, 2025/08/22
 type GraphShape =
@@ -52,8 +52,9 @@ type GraphShape =
 
 export type GraphDefinition = `${CallNode}@{ label: ${EscapedChar}, shape: ${GraphShape} }`
 export type GraphRelation = `${CallNode} --> ${CallNode}`
+type GraphClick = `click ${CallNode} callback "Jump to ${string}"`
 
-export type GraphSection = {
+export type Graph = {
   /** definitions */
   def: Set<GraphDefinition>
 
@@ -61,7 +62,7 @@ export type GraphSection = {
   rel: Set<GraphRelation>
 
   /** click events */
-  // click: Set<string>
+  click: Set<GraphClick>
 }
 
 function getShape(type: string): GraphShape {
@@ -76,7 +77,15 @@ function getShape(type: string): GraphShape {
 }
 
 export function makeGraphDefinition(node: CallNode): GraphDefinition {
-  const [type, label] = node.split('$')
+  return `${node}@{ label: "${getLabel(node)}", shape: "${getShape(getType(node))}" }` as GraphDefinition
+}
 
-  return `${node}@{ label: "${label}", shape: "${getShape(type)}" }` as GraphDefinition
+export function makeGraphRelation(from: CallNode, to: CallNode): GraphRelation {
+  return `${from} --> ${to}`
+}
+
+export function makeGraphClick(nodes: CallNode[]): GraphClick[] {
+  return nodes
+    .filter(node => isFileType(getType(node)))
+    .map(node => `click ${node} callback "Jump to ${getLabel(node)}"` as GraphClick)
 }

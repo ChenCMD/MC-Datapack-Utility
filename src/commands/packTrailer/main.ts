@@ -1,17 +1,18 @@
 import * as vscode from 'vscode'
-import { getDatapackRoot, getPackFormat, getResourcePath, getTextEditor, pathAccessible, readFile, showError, StringReader } from '../../utils'
-import { GraphSection } from './types/MermaidHelper'
+import { getDatapackRoot, getPackFormat, getResourcePath, getTextEditor, pathAccessible, readFile, showError } from '../../utils'
+import { Graph } from './types/MermaidHelper'
 import { CallBiMap, getRelative, register } from './types/CallBiMap'
 import { CallPair, makeCallNode } from './types/CallNode'
-import { FileType, getFileType, getFileTypeDirs } from '../../types'
+import { FileType, getFilePath, getFileType, getFileTypeDirs } from '../../types'
 import { parseFile } from './parsers'
 
-export const packTrailer = async (): Promise<void> => {
+export async function packTrailer(subscriptions: vscode.Disposable[]): Promise<void> {
   const currentEditor = getTextEditor(true)
   if (!currentEditor) {
     showError('現在開いているエディタがありません。')
     return
   }
+  const currentViewColumn = currentEditor.viewColumn
   
   const datapackRoot = await getDatapackRoot(currentEditor.document.uri.fsPath)
   if (!datapackRoot) {
@@ -34,20 +35,28 @@ export const packTrailer = async (): Promise<void> => {
   const panel = vscode.window.createWebviewPanel(
     'packTrailer',
     'Datapackのコールグラフ',
-    {
-      viewColumn: vscode.ViewColumn.Two,
-      preserveFocus: true,
-    },
-    {
-      enableFindWidget: true,
-      enableScripts: true
-    }
+    { viewColumn: vscode.ViewColumn.Beside },
+    { enableScripts: true }
   )
 
   panel.webview.html = getWebviewContent(graph)
+
+  panel.webview.onDidReceiveMessage(async message => {
+    if (message.command === 'jump') {
+      const [, type, namespace, path] = (message.id as string).match(/([^$]+)\$([^:]+):(.+)/) ?? []
+      const postfix = type === 'function' ? 'mcfunction' : 'json'
+      const uri = vscode.Uri.file(`${datapackRoot}/data/${namespace}/${getFilePath(type as FileType, packFormat)}/${path}.${postfix}`)
+      console.log(uri.toString())
+      await vscode.window.showTextDocument(
+        await vscode.workspace.openTextDocument(uri),
+        currentViewColumn
+      )
+    }
+  }, undefined, subscriptions)
+  console.log(panel.webview.html)
 }
 
-function getWebviewContent(section: GraphSection): string {
+function getWebviewContent(graph: Graph): string {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,13 +67,21 @@ function getWebviewContent(section: GraphSection): string {
 <body>
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({ startOnLoad: true });
+    mermaid.initialize({ startOnLoad: true, securityLevel: 'loose' });
+
+    const vscode = acquireVsCodeApi();
+
+    window.callback = function (id) {
+      vscode.postMessage({ command: 'jump', id });
+    };
   </script>
   <pre class="mermaid">
-    graph LR
-      ${Array.from(section.def).join('\n')}
+    flowchart LR
+      ${Array.from(graph.def).join('\n      ')}
 
-      ${Array.from(section.rel).join('\n')}
+      ${Array.from(graph.rel).join('\n      ')}
+
+      ${Array.from(graph.click).join('\n      ')}
 
       linkStyle default stroke: white
   </pre>
@@ -98,7 +115,7 @@ async function crawlWithFileType(dir: vscode.Uri, ft: FileType, resourceLocation
     if (info === vscode.FileType.File) {
       const from = makeCallNode(ft, `${resourceLocation}${e.substring(0, e.lastIndexOf('.'))}`)
 
-      accum.push(...parseFile(new StringReader(await readFile(vscode.Uri.joinPath(dir, e))), ft)
+      accum.push(...parseFile(await readFile(vscode.Uri.joinPath(dir, e)), ft)
         .map(to => ({ from, to }))
       )
       continue

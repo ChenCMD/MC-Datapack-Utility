@@ -1,5 +1,5 @@
 import { CallNode, CallPair } from './CallNode'
-import { GraphSection, makeGraphDefinition, GraphDefinition, GraphRelation } from './MermaidHelper'
+import { Graph, makeGraphDefinition, GraphRelation, makeGraphClick, makeGraphRelation } from './MermaidHelper'
 
 export type CallBiMap = {
   ofFrom: { [from: CallNode]: CallNode[] }
@@ -22,25 +22,31 @@ export function getCallees(map: CallBiMap, node: CallNode): CallNode[] {
 
 export function getCallers(map: CallBiMap, node: CallNode): CallNode[] {
   return map.ofTo[node] || []
-}/** 停止性は `depth` が保証。時間がかかるなら並列処理するかも。 */
+}
 
-export function getRelative(map: CallBiMap, node: CallNode, depth: number): GraphSection {
-  if (depth <= 0 || !Number.isSafeInteger(depth)) return { def: new Set([makeGraphDefinition(node)]), rel: new Set() }
+export function getRelative(map: CallBiMap, node: CallNode, depth: number): Graph {
+  const [nodes, rels] = _getRelative(map, node, depth)
 
-  const defs: GraphDefinition[] = [makeGraphDefinition(node)]
+  return { def: new Set(nodes.map(makeGraphDefinition)), rel: new Set(rels), click: new Set(makeGraphClick(nodes)) }
+}
+
+/** 停止性は `depth` が保証。時間がかかるなら並列処理するかも。 */
+function _getRelative(map: CallBiMap, node: CallNode, depth: number): [CallNode[], GraphRelation[]] {
+  if (depth <= 0 || !Number.isSafeInteger(depth)) return [[node], []]
+
+  const nodes: CallNode[] = [node]
   const rels: GraphRelation[] = []
   for (const callee of getCallees(map, node)) {
-    const { def, rel } = getRelative(map, callee, depth - 1)
-    defs.push(...def)
-    rels.push(...rel, `${node} --> ${callee}`)
+    const [childNodes, childRels] = _getRelative(map, callee, depth - 1)
+    nodes.push(...childNodes)
+    rels.push(...childRels, makeGraphRelation(node, callee))
   }
 
   for (const caller of getCallers(map, node)) {
-    const { def, rel } = getRelative(map, caller, depth - 1)
-    defs.push(...def)
-    rels.push(...rel, `${caller} --> ${node}`)
+    const [childNodes, childRels] = _getRelative(map, caller, depth - 1)
+    nodes.push(...childNodes)
+    rels.push(...childRels, makeGraphRelation(caller, node))
   }
 
-  return { def: new Set(defs), rel: new Set(rels) }
+  return [nodes, rels]
 }
-
