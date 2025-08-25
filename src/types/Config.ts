@@ -1,5 +1,5 @@
 import { WorkspaceConfiguration } from 'vscode'
-import { QuickPickFiles } from '../commands/createDatapackTemplate/types/QuickPickFiles'
+import { QuickPickFiles } from '../commands/legacyCreateDatapackTemplate/types/QuickPickFiles'
 import { Template } from '../commands/createFile/types/Template'
 import { OperateElement } from '../commands/scoreOperation/types/OperateTable'
 

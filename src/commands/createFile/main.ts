@@ -11,7 +11,7 @@ import { resolveVars, Variables } from '../../types/Variables'
 import { codeConsole } from '../../extension'
 import { GenerateError, NotOpenTextDocumentError, UserCancelledError } from '../../types/Error'
 import { createMessageItemHasIds } from '../../types/MessageItemHasId'
-import { createDatapack } from '../createDatapackTemplate/main'
+import { createDatapack } from '../legacyCreateDatapackTemplate/main'
 import { Config } from '../../types'
 
 export const createFile = async (uri: Uri, config: Config): Promise<void> => {

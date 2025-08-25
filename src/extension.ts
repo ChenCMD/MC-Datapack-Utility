@@ -1,5 +1,5 @@
 import { ExtensionContext, commands, window, workspace, ConfigurationChangeEvent, languages, env } from 'vscode'
-import { copyResourcePath, createDatapack, createFile, generateMultiLine, scoreOperation } from './commands'
+import { copyResourcePath, legacyCreateDatapack, createFile, generateMultiLine, scoreOperation } from './commands'
 import { McfunctionFormatter } from './languages'
 import { loadLocale } from './locales'
 import { Config, constructConfig } from './types/Config'
@@ -27,7 +27,7 @@ export const activate = ({ extensionUri, subscriptions }: ExtensionContext): voi
 
   const ctx = createFeatureContext({ extensionUri, config })
 
-  disposable.push(commands.registerCommand('mcdutil.commands.createDatapackTemplate', () => createDatapack(config)))
+  disposable.push(commands.registerCommand('mcdutil.commands.createDatapackTemplate', () => legacyCreateDatapack(config)))
   disposable.push(commands.registerCommand('mcdutil.commands.createFile', uri => createFile(uri, config)))
   disposable.push(commands.registerCommand('mcdutil.commands.scoreOperation', () => scoreOperation(config)))
   disposable.push(commands.registerCommand('mcdutil.commands.copyResourcePath', copyResourcePath))
