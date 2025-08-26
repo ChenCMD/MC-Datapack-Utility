@@ -1,12 +1,11 @@
-import * as vscode from 'vscode'
-import { getDatapackRoot, getPackFormat, getResourcePath, getTextEditor, pathAccessible, readFile, showError } from '../../utils'
-import { Graph } from './types/MermaidHelper'
-import { CallBiMap, getRelative, register } from './types/CallBiMap'
-import { CallPair, makeCallNode } from './types/CallNode'
-import { FileType, getFilePath, getFileType, getFileTypeDirs } from '../../types'
+import { getDatapackRoot, getPackFormat, getTextEditor, pathAccessible, readFile, showError } from '../../utils'
+import { Graph, makeGraph } from './types/MermaidHelper'
+import { CallJungle, makeCallJungle, makeCallNode } from './types/CallNode'
+import { FileType, getFilePath, getFileTypeDirs } from '../../types'
 import { parseFile } from './parsers'
+import { Disposable, window, ViewColumn, Uri, workspace, FileType as FileInfo } from 'vscode'
 
-export async function packTrailer(subscriptions: vscode.Disposable[]): Promise<void> {
+export async function packTrailer(subscriptions: Disposable[]): Promise<void> {
   const currentEditor = getTextEditor(true)
   if (!currentEditor) {
     showError('現在開いているエディタがありません。')
@@ -20,40 +19,29 @@ export async function packTrailer(subscriptions: vscode.Disposable[]): Promise<v
     return
   }
   const packFormat = await getPackFormat(datapackRoot)
+  const graph = makeGraph(await crawlOnRoot(datapackRoot, packFormat))
 
-  const callMap = await crawlOnRoot(datapackRoot, packFormat)
-
-  const fileType = getFileType(currentEditor.document.uri.fsPath, datapackRoot, packFormat)
-  if (!fileType) {
-    showError('不明なファイルタイプです。')
-    return
-  }
-  const resourceLocation = getResourcePath(currentEditor.document.uri.fsPath, datapackRoot, packFormat, fileType)
-  const rootNode = makeCallNode(fileType, resourceLocation)
-  const graph = getRelative(callMap, rootNode, 2)
-
-  const panel = vscode.window.createWebviewPanel(
+  const panel = window.createWebviewPanel(
     'packTrailer',
     'Datapackのコールグラフ',
-    { viewColumn: vscode.ViewColumn.Beside },
+    { viewColumn: ViewColumn.Beside },
     { enableScripts: true }
   )
 
   panel.webview.html = getWebviewContent(graph)
-
+  console.log(panel.webview.html)
   panel.webview.onDidReceiveMessage(async message => {
     if (message.command === 'jump') {
-      const [, type, namespace, path] = (message.id as string).match(/([^$]+)\$([^:]+):(.+)/) ?? []
+      const [, type, namespace, path] = (message.id as string).match(/[^!]*!([^$]+)\$#?([^:]+):(.+)/) ?? ['', '', '', '']
       const postfix = type === 'function' ? 'mcfunction' : 'json'
-      const uri = vscode.Uri.file(`${datapackRoot}/data/${namespace}/${getFilePath(type as FileType, packFormat)}/${path}.${postfix}`)
-      console.log(uri.toString())
-      await vscode.window.showTextDocument(
-        await vscode.workspace.openTextDocument(uri),
+      const uri = Uri.file(`${datapackRoot}/data/${namespace}/${getFilePath(type as FileType, packFormat)}/${path}.${postfix}`)
+
+      await window.showTextDocument(
+        await workspace.openTextDocument(uri),
         currentViewColumn
       )
     }
   }, undefined, subscriptions)
-  console.log(panel.webview.html)
 }
 
 function getWebviewContent(graph: Graph): string {
@@ -77,54 +65,53 @@ function getWebviewContent(graph: Graph): string {
   </script>
   <pre class="mermaid">
     flowchart LR
-      ${Array.from(graph.def).join('\n      ')}
+      ${Array.from(graph.def).join('\n')}
 
-      ${Array.from(graph.rel).join('\n      ')}
+      ${Array.from(graph.rel).join('\n')}
 
-      ${Array.from(graph.click).join('\n      ')}
+      ${Array.from(graph.click).join('\n')}
 
-      linkStyle default stroke: white
+      linkStyle default stroke: cyan
   </pre>
 </body>
 </html>`
 }
 
-async function crawlOnRoot(datapackRoot: string, packFormat: number) : Promise<CallBiMap> {
-  const map: CallBiMap = { ofFrom: {}, ofTo: {} }
+async function crawlOnRoot(datapackRoot: string, packFormat: number) : Promise<CallJungle> {
+  const jungle = makeCallJungle()
 
-  const root = vscode.Uri.file(datapackRoot)
-  const data = vscode.Uri.joinPath(root, 'data')
-  for (const [namespace, info] of await vscode.workspace.fs.readDirectory(data)) {
-    if (info !== vscode.FileType.Directory) continue
+  const root = Uri.file(datapackRoot)
+  const data = Uri.joinPath(root, 'data')
+  for (const [namespace, info] of await workspace.fs.readDirectory(data)) {
+    if (info !== FileInfo.Directory) continue
 
     for (const [fc, typeDir] of getFileTypeDirs(packFormat)) {
-      const dir = vscode.Uri.joinPath(data, namespace, typeDir)
+      const dir = Uri.joinPath(data, namespace, typeDir)
       if (!await pathAccessible(dir)) continue
 
-      register(map, ...await crawlWithFileType(dir, fc, `${namespace}:`))
+      jungle.join(await crawlWithFileType(dir, fc, `${namespace}:`))
     }
   }
 
-  return map
+  return jungle
 }
 
-async function crawlWithFileType(dir: vscode.Uri, ft: FileType, resourceLocation: string): Promise<CallPair[]> {
-  const accum : CallPair[] = []
+async function crawlWithFileType(dir: Uri, ft: FileType, resourceLocation: string): Promise<CallJungle> {
+  const jungle = makeCallJungle()
 
-  for (const [e, info] of await vscode.workspace.fs.readDirectory(dir)) {
-    if (info === vscode.FileType.File) {
-      const from = makeCallNode(ft, `${resourceLocation}${e.substring(0, e.lastIndexOf('.'))}`)
-
-      accum.push(...parseFile(await readFile(vscode.Uri.joinPath(dir, e)), ft)
-        .map(to => ({ from, to }))
-      )
+  for (const [e, info] of await workspace.fs.readDirectory(dir)) {
+    if (info === FileInfo.File) {
+      jungle.join(parseFile(
+        await readFile(Uri.joinPath(dir, e)), ft,
+        makeCallNode(ft, `${resourceLocation}${e.substring(0, e.lastIndexOf('.'))}`)
+      ))
       continue
     }
-    if (info === vscode.FileType.Directory) {
-      accum.push(...await crawlWithFileType(vscode.Uri.joinPath(dir, e), ft, `${resourceLocation}${e}/`))
+    if (info === FileInfo.Directory) {
+      jungle.join(await crawlWithFileType(Uri.joinPath(dir, e), ft, `${resourceLocation}${e}/`))
       continue
     }
   }
 
-  return accum
+  return jungle
 }
