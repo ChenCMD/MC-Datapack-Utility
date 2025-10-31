@@ -29,8 +29,8 @@ export function getWorkspaceFolders(allowUndefined?: boolean): readonly Workspac
   return workspaceFolders
 }
 
-export const getIndent = (path: string): number => {
-  const config = workspace.getConfiguration('editor.tabSize', Uri.file(path))
+export const getIndent = (uri: Uri): number => {
+  const config = workspace.getConfiguration('editor.tabSize', uri)
   return config.get<number>('tabSize', 4)
 }
 

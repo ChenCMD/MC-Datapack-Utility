@@ -24,10 +24,11 @@
  * SOFTWARE.
  */
 
-import * as path from 'path'
 import minimatch from 'minimatch'
 import { showError } from '../utils'
 import { locale } from '../locales'
+import { Uri } from 'vscode'
+import { UriUtils } from '../utils/uri'
 
 export const tagFileTypes = [
   'tag/block',
@@ -186,8 +187,8 @@ function getFileTypeFromRel(relativePath: string, packFormat: number): FileType 
  * @param filePath 取得したいファイルのファイルパス
  * @param datapackRoot データパックのルートパス
  */
-export function getFileType(filePath: string, datapackRoot: string, packFormat: number): FileType | undefined {
-  const dir = path.relative(datapackRoot, filePath).replace(/(\\|$)/g, '/')
+export function getFileType(filePath: Uri, datapackRoot: Uri, packFormat: number): FileType | undefined {
+  const dir = UriUtils.relativePath(datapackRoot, filePath).replace(/(\\|$)/g, '/')
   return getFileTypeFromRel(dir, packFormat)
 }
 

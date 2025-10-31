@@ -1,13 +1,15 @@
+import { Uri } from 'vscode'
+
 export abstract class AbstractNode {
   abstract readonly isGeneratePackMcMeta: boolean
 
-  abstract listenGenerateDir(): Promise<string>
+  abstract listenGenerateDir(): Promise<Uri>
 
-  abstract listenDatapackNameAndRoot(directory: string): Promise<{ name: string; root: string }>
+  abstract listenDatapackNameAndRoot(directory: Uri): Promise<{ name: string; root: Uri }>
 
-  abstract listenPackFormat(directory: string): Promise<number>
+  abstract listenPackFormat(directory: Uri): Promise<number>
 
-  abstract listenDatapackDescription(directory: string): Promise<string>
+  abstract listenDatapackDescription(directory: Uri): Promise<string>
 
-  abstract noticeGenerated(directory: string): Promise<void>
+  abstract noticeGenerated(directory: Uri): Promise<void>
 }

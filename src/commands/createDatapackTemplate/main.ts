@@ -1,4 +1,4 @@
-import { appendElemFromKey, createDir, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, ObjectSet, pathAccessible, readFile, showError, stringValidator, writeFile } from '../../utils'
+import { appendElemFromKey, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, isStringArray, listenInput, listenPickItem, ObjectSet, pathAccessible, readFile, showError, stringValidator, writeFile } from '../../utils'
 import { Config, Variables, makeExtendQuickPickItem, GenerateError, resolveVars, CreateDatapackTemplateConfig, UserCancelledError, JsonObject } from '../../types'
 import { locale } from '../../locales'
 import { CustomQuestion, GenerateFileData, QuickPickFiles } from './types/QuickPickFiles'
@@ -6,8 +6,9 @@ import { dataFolder, packMcMetaData, pickItems } from './utils/data'
 import { GenNodes, genNodeTypeMap } from './nodes'
 import { codeConsole, versionInformation } from '../../extension'
 import { TextEncoder } from 'util'
-import path from 'path'
 import rfdc from 'rfdc'
+import { Uri, workspace } from 'vscode'
+import { UriUtils } from '../../utils/uri'
 
 export const createDatapack = async ({ env: { dataVersion, dateFormat }, createDatapackTemplate }: Config, generateType?: 'add' | 'create'): Promise<void> => {
   try {
@@ -30,9 +31,9 @@ export const createDatapack = async ({ env: { dataVersion, dateFormat }, createD
     // 変数の作成
     const vars: Variables = {
       date: getDate(dateFormat),
-      dir,
+      dir: dir.fsPath,
       datapackName: name,
-      datapackRoot: root,
+      datapackRoot: root.fsPath,
       packFormat: packFormat.toString(),
       datapackDescription,
       namespace
@@ -126,7 +127,7 @@ const toGenerateData = async (createItems: QuickPickFiles[], isGeneratePackMcMet
   return ans
 }
 
-const generate = async (items: GenerateFileData[], root: string, packFormat: number, vars: Variables): Promise<void> => {
+const generate = async (items: GenerateFileData[], root: Uri, packFormat: number, vars: Variables): Promise<void> => {
   await createProgressBar(locale('create-datapack-template.progress.title'), async report => {
     const message = locale('create-datapack-template.progress.creating')
     report({ message })
@@ -146,40 +147,39 @@ const generate = async (items: GenerateFileData[], root: string, packFormat: num
   })
 }
 
-const singleGenerate = async (item: GenerateFileData, root: string, packFormat: number, vars: Variables): Promise<void> => {
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  const filePath = path.join(root, resolveVars(item.rel, vars))
+const singleGenerate = async (item: GenerateFileData, root: Uri, packFormat: number, vars: Variables): Promise<void> => {
+  const fileUri = UriUtils.joinPath(root, resolveVars(item.rel, vars))
 
   if (item.type === 'folder') {
-    await createDir(filePath)
+    await workspace.fs.createDirectory(fileUri)
     return
   }
   if (item.type === 'file') {
-    const indent = ' '.repeat(getIndent(filePath))
+    const indent = ' '.repeat(getIndent(fileUri))
 
-    if (!await pathAccessible(filePath)) {
-      const singleVars = { fileResourcePath: getResourcePath(filePath, root, packFormat), ...vars }
+    if (!await pathAccessible(fileUri)) {
+      const singleVars = { fileResourcePath: getResourcePath(fileUri, root, packFormat), ...vars }
       const contents = isStringArray(item.content)
         ? resolveVars(item.content, singleVars).join('\r\n')
         : JSON.stringify(resolveVars(item.content, singleVars), undefined, indent)
 
-      await createFile(filePath, new TextEncoder().encode(contents ?? ''))
+      await createFile(fileUri, new TextEncoder().encode(contents ?? ''))
     } else if (item.append) {
       const { key, elem, addFirst } = item.append
-      const fileContent = await readFile(filePath)
+      const fileContent = await readFile(fileUri)
 
-      if (/\.json$/.test(filePath)) {
+      if (fileUri.path.endsWith('.json')) {
         const parsedJson = JSON.parse(fileContent) as JsonObject
 
         const res = appendElemFromKey(parsedJson, key, resolveVars(elem, vars), addFirst ?? false)
-        if (!res[0]) throw new GenerateError(locale(res[1], filePath, key))
+        if (!res[0]) throw new GenerateError(locale(res[1], fileUri.fsPath, key))
 
-        await writeFile(filePath, JSON.stringify(parsedJson, undefined, indent))
+        await writeFile(fileUri, JSON.stringify(parsedJson, undefined, indent))
       } else {
         if (addFirst)
-          await writeFile(filePath, resolveVars(elem, vars) + fileContent)
+          await writeFile(fileUri, resolveVars(elem, vars) + fileContent)
         else
-          await writeFile(filePath, fileContent + resolveVars(elem, vars))
+          await writeFile(fileUri, fileContent + resolveVars(elem, vars))
       }
     }
   }

@@ -2,7 +2,6 @@ import { Range, Uri, window } from 'vscode'
 import { pathAccessible, createFile as create } from '../../utils/file'
 import { getDatapackRoot, getDate, getNamespace, getPackFormat, getResourcePath, isDatapackRoot } from '../../utils/common'
 import { getTextEditor, listenInput, showError } from '../../utils/vscodeWrapper'
-import path = require('path')
 import { locale } from '../../locales'
 import { getFileTemplate } from './utils'
 import { TextEncoder } from 'util'
@@ -13,11 +12,12 @@ import { GenerateError, NotOpenTextDocumentError, UserCancelledError } from '../
 import { createMessageItemHasIds } from '../../types/MessageItemHasId'
 import { createDatapack } from '../createDatapackTemplate/main'
 import { Config } from '../../types'
+import { UriUtils } from '../../utils/uri'
 
 export const createFile = async (uri: Uri, config: Config): Promise<void> => {
   try {
     // Datapack内か確認
-    const datapackRoot = await getDatapackRoot(uri.fsPath)
+    const datapackRoot = await getDatapackRoot(uri)
     if (!datapackRoot) {
       const res = await showError(locale('create-file.not-datapack'), false, createMessageItemHasIds('yes', 'no'), ['no'])
       if (res === 'yes') return await createDatapack(config, 'create')
@@ -28,11 +28,11 @@ export const createFile = async (uri: Uri, config: Config): Promise<void> => {
     const packFormat = await getPackFormat(datapackRoot)
 
     // ファイルの種類を取得
-    const fileType = getFileType(uri.fsPath, datapackRoot, packFormat)
+    const fileType = getFileType(uri, datapackRoot, packFormat)
     if (!fileType) {
       // 取得できない時の処理
       if (await isDatapackRoot(datapackRoot)) {
-        const res = await showError(locale('create-file.unknown-filetype.listen-add', path.basename(datapackRoot)),
+        const res = await showError(locale('create-file.unknown-filetype.listen-add', UriUtils.basename(datapackRoot)),
           false, createMessageItemHasIds('yes', 'no'), ['no'])
         if (res === 'yes') return await createDatapack(config, 'add')
       }
@@ -47,15 +47,15 @@ export const createFile = async (uri: Uri, config: Config): Promise<void> => {
     const fileName = await listenInput(locale('create-file.file-name', fileType), async v => {
       const invalidChar = v.match(/[^a-z0-9./_-]/g)
       if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '))
-      if (await pathAccessible(path.join(uri.fsPath, `${v}.${fileExtname}`))) return locale('error.already-exists', `${v}.${fileExtname}`)
+      if (await pathAccessible(UriUtils.joinPath(uri, `${v}.${fileExtname}`))) return locale('error.already-exists', `${v}.${fileExtname}`)
       return undefined
     })
 
     // リソースパスの生成とファイルテンプレートの取得
-    const filePath = path.join(uri.fsPath, `${fileName}.${fileExtname}`)
+    const filePath = UriUtils.joinPath(uri, `${fileName}.${fileExtname}`)
 
     const vars: Variables = {
-      datapackName: path.basename(datapackRoot),
+      datapackName: UriUtils.basename(datapackRoot),
       namespace: getNamespace(filePath, datapackRoot),
 
       fileResourcePath: getResourcePath(filePath, datapackRoot, packFormat, fileType),
@@ -68,12 +68,12 @@ export const createFile = async (uri: Uri, config: Config): Promise<void> => {
     }
 
     try {
-      const openFilePath = getTextEditor().document.uri.fsPath
-      const nowOpenFileType = getFileType(path.dirname(openFilePath), datapackRoot, packFormat)
+      const openFilePath = getTextEditor().document.uri
+      const nowOpenFileType = getFileType(UriUtils.dirname(openFilePath), datapackRoot, packFormat)
       vars.nowOpenFileType = nowOpenFileType ?? ''
       vars.nowOpenFileResourcePath = getResourcePath(openFilePath, datapackRoot, packFormat, nowOpenFileType) ?? ''
-      vars.nowOpenFileName = openFilePath.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? ''
-      vars.nowOpenFileExtname = openFilePath.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? ''
+      vars.nowOpenFileName = openFilePath.path.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? ''
+      vars.nowOpenFileExtname = openFilePath.path.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? ''
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (!(error instanceof NotOpenTextDocumentError)) throw error
@@ -89,7 +89,7 @@ export const createFile = async (uri: Uri, config: Config): Promise<void> => {
     // 生成
     await create(filePath, new TextEncoder().encode(resolveVars(fileTemplate.join('\r\n'), vars)))
     // ファイルを開く
-    await window.showTextDocument(Uri.file(filePath), { selection })
+    await window.showTextDocument(filePath, { selection })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     if (error instanceof UserCancelledError) return

@@ -13,7 +13,38 @@
     "plugin:@typescript-eslint/recommended"
   ],
   "rules": {
-    "@typescript-eslint/naming-convention": "warn",
+    "@typescript-eslint/naming-convention": [
+      "warn",
+      {
+        "selector": "default",
+        "format": [
+          "camelCase"
+        ],
+        "leadingUnderscore": "allow",
+        "trailingUnderscore": "allow"
+      },
+      {
+        "selector": "variable",
+        "format": [
+          "camelCase",
+          "UPPER_CASE"
+        ],
+        "leadingUnderscore": "allow",
+        "trailingUnderscore": "allow"
+      },
+      {
+        "selector": "typeLike",
+        "format": [
+          "PascalCase"
+        ]
+      },
+      {
+        "selector": "enumMember",
+        "format": [
+          "PascalCase"
+        ]
+      }
+    ],
     "@typescript-eslint/semi": [
       "warn",
       "never"
@@ -34,7 +65,7 @@
         "exceptRange": true
       }
     ],
-    "no-shadow": "warn",
+    "no-shadow": "off",
     "array-bracket-newline": [
       "warn",
       "consistent"

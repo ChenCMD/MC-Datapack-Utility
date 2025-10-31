@@ -1,38 +1,38 @@
-import path from 'path'
 import { locale } from '../../../locales'
 import { createMessageItemHasIds } from '../../../types/MessageItemHasId'
 import { getDatapackRoot, isDatapackRoot } from '../../../utils/common'
 import { listenDir, listenInput, showInfo, showWarning, stringValidator } from '../../../utils/vscodeWrapper'
 import { AbstractNode } from '../types/AbstractNode'
 import { commands, Uri } from 'vscode'
+import { UriUtils } from '../../../utils/uri'
 
 export class CreateTemplateGenNode extends AbstractNode {
   readonly isGeneratePackMcMeta = true
 
-  async listenGenerateDir(): Promise<string> {
+  async listenGenerateDir(): Promise<Uri> {
     const dir = await listenDir(
       locale('create-datapack-template.dialog-title-directory'),
       locale('select')
-    ).then(v => v.fsPath)
+    )
 
     const datapackRoot = await getDatapackRoot(dir)
     if (datapackRoot) {
-      const warningMessage = locale('create-datapack-template.inside-datapack', path.basename(datapackRoot))
+      const warningMessage = locale('create-datapack-template.inside-datapack', UriUtils.basename(datapackRoot))
       const result = await showWarning(warningMessage, false, createMessageItemHasIds('yes', 'reselect', 'no'), ['no'])
       if (result === 'reselect') return await this.listenGenerateDir()
     }
     return dir
   }
 
-  async listenDatapackNameAndRoot(directory: string): Promise<{ name: string; root: string }> {
+  async listenDatapackNameAndRoot(directory: Uri): Promise<{ name: string; root: Uri }> {
     const name = await listenInput(
       locale('datapack-name'),
       v => stringValidator(v, { invalidCharRegex: /[\\/:*?"<>|]/g, emptyMessage: locale('error.input-blank', locale('datapack-name')) })
     )
-    const root = path.join(directory, name)
+    const root = UriUtils.joinPath(directory, name)
 
     if (await isDatapackRoot(root)) {
-      const warningMessage = locale('create-datapack-template.duplicate-datapack', path.basename(root))
+      const warningMessage = locale('create-datapack-template.duplicate-datapack', UriUtils.basename(root))
       const result = await showWarning(warningMessage, false, createMessageItemHasIds('yes', 'rename', 'no'), ['no'])
       if (result === 'rename') return await this.listenDatapackNameAndRoot(directory)
     }
@@ -53,7 +53,7 @@ export class CreateTemplateGenNode extends AbstractNode {
     return await listenInput(locale('datapack-description'))
   }
 
-  async noticeGenerated(directory: string): Promise<void> {
+  async noticeGenerated(directory: Uri): Promise<void> {
     const res = await showInfo(
       locale('create-datapack-template.complete-create'),
       false,
@@ -61,6 +61,6 @@ export class CreateTemplateGenNode extends AbstractNode {
     )
 
     if (res === 'open')
-      await commands.executeCommand('vscode.openFolder', Uri.file(directory), { forceNewWindow: true })
+      await commands.executeCommand('vscode.openFolder', directory, { forceNewWindow: true })
   }
 }
