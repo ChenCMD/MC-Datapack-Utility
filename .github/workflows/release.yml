@@ -8,6 +8,7 @@ env:
   GIT_AUTHOR_EMAIL: ${{ secrets.GIT_AUTHOR_EMAIL }}
   GIT_AUTHOR_NAME: ${{ secrets.GIT_AUTHOR_NAME }}
   VSCE_PAT: ${{ secrets.VSCE_TOKEN }}
+  OVSX_PAT: ${{ secrets.OVSX_TOKEN }}
 jobs:
   release:
     name: Release
