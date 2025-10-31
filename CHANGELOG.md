@@ -1,3 +1,8 @@
+# [v2.2.2](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.2.1...v2.2.2) (2025-10-31)
+
+## 🐛 Bug Fixes
+- [`61a40a8`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/61a40a8)  Fix to be released in OpenVSX
+
 # [v2.2.1](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.2.0...v2.2.1) (2025-10-31)
 
 # [v2.2.0](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.1.13...v2.2.0) (2025-08-08)
