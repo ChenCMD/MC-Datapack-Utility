@@ -73,8 +73,9 @@ export const getPackFormat = async (datapackRoot: Uri): Promise<number> => {
   if (!await pathAccessible(packMcMetaUri))
     return 7
   const packMcMeta = JSON.parse(await readFile(packMcMetaUri))
-  const pf = packMcMeta.pack.pack_format
-  return pf
+  const pf = packMcMeta.pack.max_format ?? packMcMeta.pack.pack_format
+  // New formats can be [major, minor];
+  return Array.isArray(pf) ? pf[0] : pf
 }
 
 export const isDatapackRoot = async (testPath: Uri): Promise<boolean> =>
