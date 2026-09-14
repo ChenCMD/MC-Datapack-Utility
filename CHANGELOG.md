@@ -1,3 +1,8 @@
+# [v2.2.3](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.2.2...v2.2.3) (2026-09-14)
+
+## 🐛 Bug Fixes
+- [`ca82a6f`](https://github.com/ChenCMD/MC-Datapack-Utility/commit/ca82a6f)  Fix pack.mcmeta reading of pack format (#104) (Issues: [`#104`](https://github.com/ChenCMD/MC-Datapack-Utility/issues/104))
+
 # [v2.2.2](https://github.com/ChenCMD/MC-Datapack-Utility/compare/v2.2.1...v2.2.2) (2025-10-31)
 
 ## 🐛 Bug Fixes
