@@ -52,63 +52,7 @@ export const tagFileTypes = [
   'tag/worldgen/template_pool'
 ] as const
 
-export type FileType =
-  | 'advancement'
-  | 'dimension'
-  | 'dimension_type'
-  | 'function'
-  | 'item_modifier'
-  | 'loot_table'
-  | 'predicate'
-  | 'recipe'
-  | 'structure'
-  | 'damage_type'
-  | 'chat_type'
-  | 'cat_variant'
-  | 'banner_pattern'
-  | 'chicken_variant'
-  | 'cow_variant'
-  | 'dialog'
-  | 'enchantment'
-  | 'enchantment_provider'
-  | 'frog_variant'
-  | 'instrument'
-  | 'painting_variant'
-  | 'pig_variant'
-  | 'test_environment'
-  | 'test_instance'
-  | 'timeline'
-  | 'trial_spawner'
-  | 'trim_material'
-  | 'trim_pattern'
-  | 'wolf_sound_variant'
-  | 'wolf_variant'
-  | 'zombie_nautilus_variant'
-  | 'tag/block'
-  | 'tag/entity_type'
-  | 'tag/fluid'
-  | 'tag/function'
-  | 'tag/game_event'
-  | 'tag/item'
-  | 'worldgen/biome'
-  | 'worldgen/configured_carver'
-  | 'worldgen/configured_feature'
-  | 'worldgen/configured_surface_builder'
-  | 'worldgen/density_function'
-  | 'worldgen/flat_level_generator_preset'
-  | 'worldgen/multi_noise_biome_source_parameter_list'
-  | 'worldgen/noise'
-  | 'worldgen/noise_settings'
-  | 'worldgen/placed_feature'
-  | 'worldgen/processor_list'
-  | 'worldgen/structure'
-  | 'worldgen/structure_set'
-  | 'worldgen/template_pool'
-  | 'worldgen/world_preset'
-  | 'tag/worldgen/biome'
-  | 'tag/worldgen/flat_level_generator_preset'
-  | 'tag/worldgen/structure'
-  | 'tag/worldgen/world_preset'
+export type FileType = keyof typeof fileTypeMetaDataMap
 
 type VersionMapping = { version: number | { from: number, to: number }, name: string }
 type FileTypeMetaData = { extension: string, versionMappings: VersionMapping[] }
@@ -139,7 +83,7 @@ const versions = {
   '24w21a': 45
 }
 
-const fileTypeMetaDataMap: Record<FileType, FileTypeMetaData> = {
+const fileTypeMetaDataMap = {
   // common
   advancement: { extension: 'json', versionMappings: [{ version: versions['24w21a'], name: 'advancement' }, { version: { from: versions['17w43a'], to: versions['24w20a'] }, name: 'advancements' }] },
   dimension: { extension: 'json', versionMappings: [{ version: versions['1.16-pre1'], name: 'dimension' }] },
@@ -178,7 +122,7 @@ const fileTypeMetaDataMap: Record<FileType, FileTypeMetaData> = {
   'tag/worldgen/flat_level_generator_preset': { extension: 'json', versionMappings: [{ version: versions['22w11a'], name: 'tags/worldgen/flat_level_generator_preset' }] },
   'tag/worldgen/structure': { extension: 'json', versionMappings: [{ version: versions['22w11a'], name: 'tags/worldgen/structure' }] },
   'tag/worldgen/world_preset': { extension: 'json', versionMappings: [{ version: versions['22w11a'], name: 'tags/worldgen/world_preset' }] },
-}
+} satisfies Record<string, FileTypeMetaData>
 
 function isIncludeVersion(version: VersionMapping, packFormat: number): boolean {
   return (typeof version.version === 'number')
