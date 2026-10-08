@@ -31,7 +31,7 @@
 	"scripts": {
 		"compile": "webpack --mode development",
 		"build": "webpack --mode production",
-		"watch": "webpack --mode none --watch/",
+		"watch": "webpack --mode none --watch",
 		"lint": "eslint --fix src/**/*.ts",
 		"release": "semantic-release"
 	},

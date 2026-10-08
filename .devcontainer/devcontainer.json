@@ -1,0 +1,31 @@
+{
+  "name": "MC Datapack Utility",
+  "dockerComposeFile": ["compose.yaml", "compose.host.yaml"],
+  "service": "devcontainer",
+  "remoteUser": "node",
+  "updateRemoteUserUID": true,
+  "workspaceFolder": "/workspaces/MC-Datapack-Utility",
+  "containerEnv": {
+    "HOME": "/home/node",
+    "GH_CONFIG_DIR": "/home/node/.config/gh",
+    "HISTFILE": "/home/node/.bash_history",
+    "TZ": "Asia/Tokyo"
+  },
+  "initializeCommand": ["node", ".devcontainer/scripts/initialize.cjs", "${devcontainerId}"],
+  "postCreateCommand": "bash .devcontainer/scripts/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": ["dbaeumer.vscode-eslint"],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash"
+      }
+    }
+  },
+  "forwardPorts": [1455],
+  "portsAttributes": {
+    "1455": {
+      "label": "Codex login callback",
+      "onAutoForward": "silent"
+    }
+  }
+}

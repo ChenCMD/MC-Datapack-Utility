@@ -1,0 +1,4 @@
+#!/bin/sh
+# The inherited Chrome DevTools MCP uses this path. Chromium runs inside the
+# development container; its own sandbox requires unavailable user namespaces.
+exec /usr/bin/chromium --no-sandbox "$@"
