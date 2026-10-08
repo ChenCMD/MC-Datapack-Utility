@@ -1,0 +1,17 @@
+services:
+  devcontainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sleep infinity
+    init: true
+    shm_size: 1g
+    environment:
+      HOME: /home/node
+      GH_CONFIG_DIR: /home/node/.config/gh
+      HISTFILE: /home/node/.bash_history
+      TZ: Asia/Tokyo
+    volumes:
+      - type: bind
+        source: ..
+        target: /workspaces/MC-Datapack-Utility

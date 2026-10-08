@@ -3,3 +3,5 @@ out
 node_modules
 .vscode-test/
 *.vsix
+.devcontainer/compose.host.yaml
+.devcontainer/**/__pycache__/

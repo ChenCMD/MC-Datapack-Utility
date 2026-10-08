@@ -1,0 +1,15 @@
+{
+  "codex": {
+    "initialFiles": ["config.toml", "*.config.toml", "auth.json", "hooks.json", "notify.sh"],
+    "stateDirectories": ["sessions", "archived_sessions", "memories", "memory", "tmp", "log", "logs", "cache", "packages", "app-server-control", "app-server-daemon", "ipc", "shell_snapshots", "thread-writer-locks", "tui-thread-reference-capabilities"],
+    "stateFiles": ["history.jsonl", "session_index.jsonl", "installation_id", "version.json", "models_cache.json"],
+    "localPaths": ["skills/.system"]
+  },
+  "claude": {
+    "initialFiles": ["settings.json", "settings.local.json", ".credentials.json", ".mcp.json"],
+    "stateDirectories": ["projects", "sessions", "session-env", "todos", "tasks", "plans", "backups", "debug", "file-history", "shell-snapshots", "cache", "memory", "memories", "statsig", "telemetry", "ide", "paste-cache", "downloads"],
+    "stateFiles": ["history.jsonl", "stats-cache.json", ".claude.json", ".last-cleanup", ".last-update-result.json"],
+    "localPaths": []
+  },
+  "statePatterns": ["*.sqlite*", "*.db", "*.db-*", "*.lock", "*.sock", "*.tmp*"]
+}

@@ -13,7 +13,7 @@
 			},
 			"group": "build",
 			"label": "npm: watch",
-			"detail": "webpack --mode none --watch/"
+			"detail": "webpack --mode none --watch"
 		},
 		{
 			"type": "npm",
