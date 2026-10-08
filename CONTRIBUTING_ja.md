@@ -47,7 +47,7 @@ pnpm build
 pnpm package
 ```
 
-ツールチェーンの変更を反映するには DevContainer を Rebuild してください。pnpm とそのネイティブ実行ファイルは、永続ホームの外の `/opt/corepack` に事前配置します。ホーム・依存関係のボリュームは保持します。作成／Rebuild 時は `reset-node-modules.py` で `.pnpm-store` 以外の依存の生成物を削除し、ロックファイルを固定して再生成します。これにより、残った旧 Yarn のパッケージが間接的な optional 依存としてバンドルに入ることを防ぎます。ルートがシンボリックリンクの場合や入れ子のマウントがある場合は拒否し、依存のリンク先は削除しません。`yarn.lock` は `pnpm-lock.yaml` に置き換わります。`pnpm lint` は検査のみ、`pnpm lint:fix` は自動修正を行います。TypeScript は typescript-eslint の対応範囲内の 6 を使い、VS Code API の型定義は拡張機能の最小対応バージョンに合わせて 1.75 を使います。
+ツールチェーンの変更を反映するには DevContainer を Rebuild してください。pnpm とそのネイティブ実行ファイルは、永続ホームの外の `/opt/corepack` に事前配置します。ホーム・依存関係のボリュームは保持します。作成／Rebuild 時は `reset-node-modules.py` で `.pnpm-store` 以外の依存の生成物を削除し、ロックファイルを固定して再生成します。これにより、残った旧 Yarn のパッケージが間接的な optional 依存としてバンドルに入ることを防ぎます。ルートがシンボリックリンクの場合や入れ子のマウントがある場合は拒否し、依存のリンク先は削除しません。`yarn.lock` は `pnpm-lock.yaml` に置き換わります。pnpm のバージョンは Corepack が管理し、`pmOnFail: ignore` で GitHub の依存スキャンが解析できない環境用文書の追加を防ぎます。ロックファイルはプロジェクト用の単一文書に保ってください。`pnpm lint` は検査のみ、`pnpm lint:fix` は自動修正を行います。TypeScript は typescript-eslint の対応範囲内の 6 を使い、VS Code API の型定義は拡張機能の最小対応バージョンに合わせて 1.75 を使います。
 
 `esbuild` で拡張機能と各言語の JSON を1つの CommonJS ファイルにまとめ、VS Code 1.75 の拡張ホストで使える Node 16 を対象にします。`compile` は型チェックとソースマップの生成、`build` は型チェックと圧縮を行います。`watch` はバンドラーと TypeScript の検査を同時に実行し、VS Code の監視タスクは両方の診断を表示します。VSIX 作成時は `vscode:prepublish` で production ビルドを実行します。実行時の依存はバンドル済みなので、依存関係の列挙は無効にします（`vsce.dependencies: false`）。`pnpm test` は圧縮済みバンドルでの言語読み込みと数式置換を確認します。数式置換の既存の `eval` には esbuild が警告を出しますが、今回の移行ではその挙動を維持します。
 

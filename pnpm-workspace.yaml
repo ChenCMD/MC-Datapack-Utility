@@ -1,3 +1,6 @@
+# Corepack pins pnpm; keep GitHub-compatible single-document lockfiles.
+pmOnFail: ignore
+
 # Delay new registry releases for seven days, including locked dependencies.
 minimumReleaseAge: 10080
 minimumReleaseAgeStrict: true
