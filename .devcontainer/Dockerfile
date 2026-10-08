@@ -4,6 +4,12 @@ USER root
 
 ENV HOME=/home/node
 
+# Keep the v1 lockfile workflow independent of the base image's Yarn version.
+RUN npm install --global --prefix /opt/mcdu-yarn yarn@1.22.22 \
+    && ln -sf /opt/mcdu-yarn/bin/yarn /usr/local/bin/yarn \
+    && ln -sf /opt/mcdu-yarn/bin/yarnpkg /usr/local/bin/yarnpkg \
+    && test "$(yarn --version)" = "1.22.22"
+
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
       ca-certificates chromium curl gh jq python3 ripgrep rsync \
