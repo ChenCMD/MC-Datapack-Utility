@@ -5,3 +5,4 @@ node_modules
 *.vsix
 .devcontainer/compose.host.yaml
 .devcontainer/**/__pycache__/
+.pnpm-store/

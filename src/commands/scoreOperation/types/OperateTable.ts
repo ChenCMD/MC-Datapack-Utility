@@ -7,7 +7,7 @@ export interface OperateElement extends ElementBase {
   order: number
   arity: number
   assocLow: '' | 'L' | 'R'
-  // eslint-disable-next-line @typescript-eslint/ban-types
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   fn?: Function
   destination?: Destination
 }

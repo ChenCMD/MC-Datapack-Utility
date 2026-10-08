@@ -18,7 +18,6 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
     if (!exp[0])
       return front
 
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const toBeOp = exp.shift()!
     const op = opTable[toBeOp]
     if (!op) throw new GenerateError(locale('error.not-exist', locale('operator'), toBeOp))
@@ -54,7 +53,6 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
 
       if (!exp[0]) return formulaAnalyzer(sub, opTable, funcs, scale)
 
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       const toBeOp = exp.shift()!
       const op = opTable[toBeOp]
       if (!op) throw new GenerateError(locale('error.not-exist', locale('operator'), toBeOp))
@@ -107,7 +105,6 @@ export function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfF
   if (!exp[0])
     return formulaAnalyzer(_exp, opTable, funcs, scale)
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const toBeOp = exp.shift()!
   const op = opTable[toBeOp]
   if (!op) throw new GenerateError(locale('error.not-exist', locale('operator'), toBeOp))

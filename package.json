@@ -26,14 +26,20 @@
 		"url": "https://github.com/ChenCMD/MC-Datapack-Utility/issues"
 	},
 	"engines": {
-		"vscode": "^1.75.0"
+		"vscode": "^1.75.0",
+		"node": ">=24.10.0 <25"
 	},
 	"scripts": {
-		"compile": "webpack --mode development",
-		"build": "webpack --mode production",
-		"watch": "webpack --mode none --watch",
-		"lint": "eslint --fix src/**/*.ts",
-		"release": "semantic-release"
+		"compile": "pnpm run typecheck && node scripts/esbuild.mjs",
+		"build": "pnpm run typecheck && node scripts/esbuild.mjs --production",
+		"watch": "node scripts/esbuild.mjs --watch",
+		"lint": "eslint src",
+		"release": "semantic-release",
+		"lint:fix": "eslint src --fix",
+		"typecheck": "tsc --noEmit",
+		"package": "vsce package",
+		"vscode:prepublish": "pnpm run build",
+		"test": "node --test scripts/build.test.mjs"
 	},
 	"main": "dist/extension.js",
 	"dependencies": {
@@ -786,26 +792,28 @@
 		}
 	},
 	"devDependencies": {
-		"@semantic-release/changelog": "^6.0.0",
-		"@semantic-release/git": "^10.0.0",
+		"@eslint/js": "^10.0.1",
+		"@semantic-release/changelog": "^7.0.0",
+		"@semantic-release/git": "^11.0.1",
+		"@stylistic/eslint-plugin": "^5.10.0",
 		"@types/dateformat": "^3.0.1",
-		"@types/glob": "^7.1.3",
-		"@types/mocha": "^8.2.2",
-		"@types/node": "^14.14.44",
-		"@types/rfdc": "^1.1.0",
-		"@types/vscode": "^1.56.0",
-		"@typescript-eslint/eslint-plugin": "^3.8.0",
-		"@typescript-eslint/parser": "^3.8.0",
-		"eslint": "^7.25.0",
-		"glob": "^7.1.7",
-		"mocha": "^9.2.0",
+		"@types/minimatch": "^3.0.5",
+		"@types/node": "^24.19.0",
+		"@types/vscode": "~1.75.1",
+		"@vscode/vsce": "^4.0.0",
+		"esbuild": "^0.28.2",
+		"eslint": "^10.11.0",
+		"globals": "^17.13.0",
 		"semantic-release": "^25.0.1",
-		"semantic-release-gitmoji": "^1.3.4",
-		"semantic-release-vsce": "^6.0.13",
-		"ts-loader": "^8.2.0",
-		"typescript": "^5.8.3",
-		"vscode-test": "^1.5.2",
-		"webpack": "^5.36.2",
-		"webpack-cli": "^4.7.0"
+		"semantic-release-gitmoji": "^1.6.9",
+		"semantic-release-vsce": "^6.1.8",
+		"typescript": "~6.0.3",
+		"typescript-eslint": "^8.71.0",
+		"@semantic-release/github": "^12.0.2"
+	},
+	"packageManager": "pnpm@12.8.2",
+	"vsce": {
+		"dependencies": false,
+		"yarn": false
 	}
 }

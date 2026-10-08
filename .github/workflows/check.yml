@@ -1,28 +1,25 @@
-name: Release
+name: Check
 on:
+  pull_request:
   push:
-    branches:
-      - release
+    branches: [master]
+permissions:
+  contents: read
 jobs:
-  release:
-    name: Release
+  check:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
-
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
         with:
           node-version-file: .node-version
           package-manager-cache: false
-
       - name: Enable Corepack
         run: |
           npm install --global --force corepack@0.34.6
           corepack enable
           corepack install
           pnpm --version
-
       - name: Locate pnpm store
         id: pnpm-store
         run: printf 'path=%s\n' "$(pnpm store path --silent)" >> "$GITHUB_OUTPUT"
@@ -33,18 +30,11 @@ jobs:
           path: ${{ steps.pnpm-store.outputs.path }}
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-pnpm-
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build
-        run: pnpm build
-
-      - name: Publish
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          GIT_AUTHOR_EMAIL: ${{ secrets.GIT_AUTHOR_EMAIL }}
-          GIT_AUTHOR_NAME: ${{ secrets.GIT_AUTHOR_NAME }}
-          VSCE_PAT: ${{ secrets.VSCE_TOKEN }}
-          OVSX_PAT: ${{ secrets.OVSX_TOKEN }}
-        run: pnpm release
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm test
+      - run: pnpm build
+      - run: pnpm package --out /tmp/mc-datapack-utility.vsix
+      - run: node --test .devcontainer/tests/initialize.test.cjs
+      - run: python3 -m unittest discover -s .devcontainer/tests -p 'test_*.py'

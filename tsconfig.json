@@ -1,20 +1,24 @@
 {
 	"compilerOptions": {
-		"module": "commonjs",
-		"target": "es6",
+		"module": "Node16",
+		"target": "ES2021",
 		"outDir": "out",
 		"lib": [
-			"es6",
-			"ES2019"
+			"ES2021"
 		],
 		"sourceMap": true,
 		"rootDir": "src",
 		"esModuleInterop": true,
 		"resolveJsonModule": true,
-		"strict": true ,
+		"strict": true,
 		"noImplicitReturns": true,
 		"noFallthroughCasesInSwitch": true,
-		"noUnusedParameters": true
+		"noUnusedParameters": true,
+		"moduleResolution": "Node16",
+		"types": [
+			"node",
+			"vscode"
+		]
 	},
 	"exclude": [
 		"node_modules",

@@ -24,7 +24,6 @@ export const expressionReplacer: Replacer = async (insertString, insertCount) =>
         .replace(/[^a-zA-Z.]x/g, m => `${m.slice(0, 1)}${i.toString()}`))
       ans.push(replaceData.toString(10))
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch {
     throw new ParsingError(locale('error.not-expression'))
   }

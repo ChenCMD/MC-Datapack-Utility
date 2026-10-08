@@ -54,5 +54,4 @@ async function updateConfig(event: ConfigurationChangeEvent, cb: (config: Config
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-function
 export const deactivate = (): void => { }

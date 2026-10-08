@@ -98,7 +98,6 @@ const listenGenerateTemplate = async (vars: Variables, config: CreateDatapackTem
 
 const toGenerateData = async (createItems: QuickPickFiles[], isGeneratePackMcMeta: boolean, dataVersion: string, packFormat: number): Promise<GenerateFileData[]> => {
   const ans = createItems.flatMap(v => v.generates)
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const funcs = createItems.filter(v => v.func !== undefined).flatMap(v => v.func!)
 
   ans.push(rfdc()(dataFolder))

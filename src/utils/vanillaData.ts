@@ -45,7 +45,6 @@ export async function getVanillaData(
 
   for (const [i, file] of files.filter(v => v.download_url !== null).entries()) {
     const content = await Promise.race([
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       download(file.download_url!),
       setTimeOut(7000)
     ])
