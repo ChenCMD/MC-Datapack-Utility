@@ -10,5 +10,6 @@
         "release",
         "master"
     ],
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "npm.packageManager": "pnpm"
 }

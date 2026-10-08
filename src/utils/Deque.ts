@@ -167,8 +167,8 @@ export class Deque<E> implements IterableIterator<E> {
     this.addFirst(...element)
   }
 
-  remove(): E;
-  remove(removeElement: E): boolean;
+  remove(): E
+  remove(removeElement: E): boolean
   remove(removeElement?: E): boolean | E {
     return removeElement ? this.removeFirstOccurrence(removeElement) : this.removeFirst()
   }

@@ -32,7 +32,7 @@ export class AddTemplateGenNode extends AbstractNode {
       if (typeof pf !== 'number')
         throw new GenerateError(locale('create-datapack-template.no-pack-format'))
       return pf
-    } catch (err) {
+    } catch {
       throw new GenerateError(locale('create-datapack-template.no-pack-format'))
     }
   }

@@ -1,0 +1,16 @@
+# Corepack pins pnpm; keep GitHub-compatible single-document lockfiles.
+pmOnFail: ignore
+
+# Delay new registry releases for seven days, including locked dependencies.
+minimumReleaseAge: 10080
+minimumReleaseAgeStrict: true
+minimumReleaseAgeIgnoreMissingTime: false
+trustLockfile: false
+blockExoticSubdeps: true
+
+# Unknown install scripts fail installation; approve exact versions deliberately.
+strictDepBuilds: true
+allowBuilds:
+  esbuild@0.28.2: true
+  '@vscode/vsce-sign@2.0.5 || 2.1.0': true
+  keytar@7.9.0: true

@@ -1,26 +1,44 @@
-// See https://go.microsoft.com/fwlink/?LinkId=733558
-// for the documentation about the tasks.json format
 {
 	"version": "2.0.0",
 	"tasks": [
 		{
 			"type": "npm",
 			"script": "watch",
-			"problemMatcher": "$ts-webpack",
+			"problemMatcher": [
+				"$tsc-watch",
+				{
+					"owner": "esbuild",
+					"fileLocation": [
+						"relative",
+						"${workspaceFolder}"
+					],
+					"pattern": {
+						"regexp": "^(.+):(\\d+):(\\d+): (error|warning): (.*)$",
+						"file": 1,
+						"line": 2,
+						"column": 3,
+						"severity": 4,
+						"message": 5
+					},
+					"background": {
+						"activeOnStart": true,
+						"beginsPattern": "^\\[esbuild\\] build started$",
+						"endsPattern": "^\\[esbuild\\] build finished$"
+					}
+				}
+			],
 			"isBackground": true,
 			"presentation": {
 				"reveal": "never"
 			},
 			"group": "build",
-			"label": "npm: watch",
-			"detail": "webpack --mode none --watch"
+			"label": "npm: watch"
 		},
 		{
 			"type": "npm",
 			"script": "lint",
 			"problemMatcher": "$eslint-stylish",
-			"label": "npm: lint",
-			"detail": "eslint src --ext ts"
+			"label": "npm: lint"
 		},
 		{
 			"type": "npm",
@@ -29,17 +47,15 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"problemMatcher": [],
-			"label": "npm: compile",
-			"detail": "webpack --mode none"
+			"problemMatcher": "$tsc",
+			"label": "npm: compile"
 		},
 		{
 			"type": "npm",
 			"script": "build",
 			"group": "build",
-			"problemMatcher": [],
-			"label": "npm: build",
-			"detail": "webpack --mode production"
+			"problemMatcher": "$tsc",
+			"label": "npm: build"
 		}
 	]
 }

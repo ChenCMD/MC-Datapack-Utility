@@ -30,5 +30,8 @@ PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND:-:}"
 BASHRC
 fi
 
-yarn install --frozen-lockfile --non-interactive
-yarn compile
+# A reused Yarn volume may contain undeclared optional dependencies. Recreate
+# generated modules while retaining the volume and pnpm's downloaded packages.
+python3 .devcontainer/scripts/reset-node-modules.py
+pnpm install --frozen-lockfile
+pnpm compile

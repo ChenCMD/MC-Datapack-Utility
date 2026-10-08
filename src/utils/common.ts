@@ -28,7 +28,6 @@ const getRadixChars = (radix: number): string => {
 }
 
 export const setTimeOut = async (millisecond: number): Promise<never> =>
-  // eslint-disable-next-line brace-style
   await new Promise((_, reject) => setTimeout(
     () => reject(new DownloadTimeOutError(locale('error.download-timeout'))),
     millisecond

@@ -30,7 +30,38 @@ MC Datapack Utilityは複数の言語をサポートしています。
 
 Docker（Compose を含む）、ホストの Node.js 18 以上、VS Code の Dev Containers 拡張機能を用意し、このフォルダーで `Dev Containers: Reopen in Container` を実行してください。Windows ネイティブ・WSL・macOS・Linux のホームパスを Node.js で解決します。ホストに Python や Bash、Claude / Codex のインストールは不要です。Windows / macOS の実機では未検証です。
 
-コンテナには Node.js 24、Yarn Classic、Claude Code、Codex CLI、GitHub CLI、Git、ripgrep、jq、Python、Chromium が入ります。作成時に `yarn install --frozen-lockfile` と `yarn compile` を実行します。ワークスペースは `/workspaces/MC-Datapack-Utility`、コンテナのホームは `/home/node` です。ホームと `node_modules` は別々の名前付きボリュームで永続化します。
+コンテナには Node.js 24、pnpm 12.8.2 (Corepack)、Claude Code、Codex CLI、GitHub CLI、Git、ripgrep、jq、Python、Chromium が入ります。作成時に `pnpm install --frozen-lockfile` と `pnpm compile` を実行します。ワークスペースは `/workspaces/MC-Datapack-Utility`、コンテナのホームは `/home/node` です。ホームと `node_modules` は別々の名前付きボリュームで永続化します。
+
+### 開発ツールと検証
+
+ローカル開発には Node.js 24.x の 24.10 以上（`.node-version`）と、`package.json` に固定した pnpm 12.8.2 を使います。DevContainer と CI は Corepack 0.34.6 を導入します。既存のローカル Yarn 環境から移行する場合は、生成物の `node_modules` ディレクトリを削除してからインストールしてください。DevContainer 内では Rebuild を使い、依存ボリュームを安全に初期化してください。ローカルの Node に Corepack がある場合は、次の手順で開始してください。
+
+```bash
+corepack enable
+corepack install
+pnpm install --frozen-lockfile
+pnpm typecheck
+pnpm lint
+pnpm test
+pnpm build
+pnpm package
+```
+
+ツールチェーンの変更を反映するには DevContainer を Rebuild してください。pnpm とそのネイティブ実行ファイルは、永続ホームの外の `/opt/corepack` に事前配置します。ホーム・依存関係のボリュームは保持します。作成／Rebuild 時は `reset-node-modules.py` で `.pnpm-store` 以外の依存の生成物を削除し、ロックファイルを固定して再生成します。これにより、残った旧 Yarn のパッケージが間接的な optional 依存としてバンドルに入ることを防ぎます。ルートがシンボリックリンクの場合や入れ子のマウントがある場合は拒否し、依存のリンク先は削除しません。`yarn.lock` は `pnpm-lock.yaml` に置き換わります。pnpm のバージョンは Corepack が管理し、`pmOnFail: ignore` で GitHub の依存スキャンが解析できない環境用文書の追加を防ぎます。ロックファイルはプロジェクト用の単一文書に保ってください。`pnpm lint` は検査のみ、`pnpm lint:fix` は自動修正を行います。TypeScript は typescript-eslint の対応範囲内の 6 を使い、VS Code API の型定義は拡張機能の最小対応バージョンに合わせて 1.75 を使います。
+
+`esbuild` で拡張機能と各言語の JSON を1つの CommonJS ファイルにまとめ、VS Code 1.75 の拡張ホストで使える Node 16 を対象にします。`compile` は型チェックとソースマップの生成、`build` は型チェックと圧縮を行います。`watch` はバンドラーと TypeScript の検査を同時に実行し、VS Code の監視タスクは両方の診断を表示します。VSIX 作成時は `vscode:prepublish` で production ビルドを実行します。実行時の依存はバンドル済みなので、依存関係の列挙は無効にします（`vsce.dependencies: false`）。`pnpm test` は圧縮済みバンドルでの言語読み込みと数式置換を確認します。数式置換の既存の `eval` には esbuild が警告を出しますが、今回の移行ではその挙動を維持します。
+
+Check CI はロックファイルを固定したインストール、型・lint の検査、バンドルの回帰テスト、production ビルド、VSIX 作成、DevContainer の初期化・同期テストを実行します。Release CI も同じツールチェーンを使い、ビルド前に毎回インストールします。キャッシュ対象は `pnpm store path` の結果から取得し、GitHub Actions はコミットに固定します。公開は `release` ブランチだけで行い、公開用の認証情報はそのステップにだけ渡します。コンテナの Rebuild と GUI デバッグは別途手動で確認してください。
+
+### 依存関係のサプライチェーン対策
+
+`pnpm-workspace.yaml` では公開から7日以上経過したレジストリのバージョンだけを導入します（`minimumReleaseAge: 10080`）。ロックファイルに記録済みのバージョンも対象です。公開日時が不明な場合や、指定範囲に7日以上経過したバージョンがない場合は失敗します。対応する古いバージョンを選ぶか、時間の経過を待ってください。更新を通すためにこの検査を無効化したり、広い除外設定を加えたりしないでください。
+
+インストールスクリプトは明示的な判断が必要で、未判断のものがあると失敗します（`strictDepBuilds: true`）。`allowBuilds` では esbuild・拡張機能の署名サポート・keytar の指定バージョンだけを許可します。新しいバージョンを許可する前にスクリプトの変更内容を確認してください。間接依存からの git・tarball の取り込みを制限し、ロックファイルにもポリシーの検証を適用します（`trustLockfile: false`）。マニフェスト・ポリシー・ロックファイルをまとめてコミットし、マージ前に `pnpm install --frozen-lockfile` を確認してください。
+
+対策の対象は pnpm が管理する依存と CI のアクション参照です。全パッケージの安全性を保証するものではなく、ベースイメージや別途導入するエージェント CLI は対象外です。Check CI はビルド・パッケージングの挙動を確認し、依存のソースコードの安全性を検証するものではありません。
+
+参照: [VS Code のバンドル手順](https://code.visualstudio.com/api/working-with-extensions/bundling-extension)、[pnpm の依存ポリシー](https://pnpm.io/settings/dependency-resolution)、[pnpm のビルドスクリプト許可](https://pnpm.io/settings/build)。
 
 ### ホストの AI 設定を取り込む
 
@@ -69,6 +100,6 @@ gh auth setup-git
 
 既存の `Run Extension` も利用できます。別のデータパックはコンテナからアクセスできるフォルダーを開いてください。`resource/` もワークスペースに含まれ、Webview の CSS / JavaScript を参照できます。GitHub API・raw ファイル・Mojang のバージョン情報を取得する機能には外部ネットワーク接続が必要です。
 
-`yarn watch` で変更を監視できます。現在のリポジトリには `Extension Tests` が参照するスイートがないため、デバッグには `Run Extension` 構成を使ってください。同期処理の検証は `node --test .devcontainer/tests/initialize.test.cjs` と `python3 -m unittest discover -s .devcontainer/tests -p 'test_*.py'` で実行できます。Python の検証はコンテナ内で行えます。所有権の回帰テスト `.devcontainer/tests/test-volume-ownership.sh` は、root の使い捨て Linux コンテナ内で実行してください。入れ子の bind mount 検証には `CAP_SYS_ADMIN` が必要ですが、開発コンテナ自身には追加しません。
+`pnpm watch` で変更を監視できます。実体のない `Extension Tests` 構成と未使用のテストランナー依存は削除しました。拡張機能の手動検証には `Run Extension` 構成を使ってください。同期処理の検証は `node --test .devcontainer/tests/initialize.test.cjs` と `python3 -m unittest discover -s .devcontainer/tests -p 'test_*.py'` で実行できます。Python の検証はコンテナ内で行えます。所有権の回帰テスト `.devcontainer/tests/test-volume-ownership.sh` は、root の使い捨て Linux コンテナ内で実行してください。入れ子の bind mount 検証には `CAP_SYS_ADMIN` が必要ですが、開発コンテナ自身には追加しません。
 
 参照: [GitNexus のホスト設定取り込み](https://github.com/abhigyanpatwari/GitNexus/blob/main/.devcontainer/README.md)、[VS Code の拡張機能デバッグ](https://code.visualstudio.com/api/advanced-topics/remote-extensions#_debugging-in-a-custom-development-container)、[Claude の DevContainer](https://code.claude.com/docs/en/devcontainer)、[Codex の認証保存](https://developers.openai.com/codex/auth/)。
