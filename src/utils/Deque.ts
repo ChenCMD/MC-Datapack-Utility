@@ -1,4 +1,4 @@
-import { mod } from '.'
+import { mod } from './math'
 import { ErrorTemplate } from '../types/Error'
 
 export class Deque<E> implements IterableIterator<E> {

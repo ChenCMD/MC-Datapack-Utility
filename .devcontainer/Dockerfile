@@ -13,7 +13,7 @@ RUN npm install --global --prefix /usr/local --force corepack@0.34.6 \
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-      ca-certificates chromium curl gh jq python3 ripgrep rsync \
+      ca-certificates chromium curl gh jq python3 ripgrep rsync xvfb xauth libasound2t64 libnss3 libatk-bridge2.0-0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Keep CLI executables in the image rather than the persistent home.

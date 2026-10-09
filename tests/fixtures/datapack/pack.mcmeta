@@ -1,0 +1,6 @@
+{
+  "pack": {
+    "pack_format": 7,
+    "description": "Offline regression fixture for Minecraft 1.17 datapacks"
+  }
+}

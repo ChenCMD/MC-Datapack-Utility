@@ -6,3 +6,5 @@ node_modules
 .devcontainer/compose.host.yaml
 .devcontainer/**/__pycache__/
 .pnpm-store/
+
+.devcontainer/host-settings/

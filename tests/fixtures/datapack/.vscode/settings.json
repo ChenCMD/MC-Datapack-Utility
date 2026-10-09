@@ -1,0 +1,6 @@
+{
+  "mcdutil.env.language": "en",
+  "mcdutil.scoreOperation.isAlwaysSpecifyObject": false,
+  "mcdutil.scoreOperation.forceInputType": "Always Selection",
+  "mcdutil.mcfFormatter.doInsertIMPDocument": false
+}

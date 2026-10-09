@@ -49,9 +49,9 @@ pnpm package
 
 ツールチェーンの変更を反映するには DevContainer を Rebuild してください。pnpm とそのネイティブ実行ファイルは、永続ホームの外の `/opt/corepack` に事前配置します。ホーム・依存関係のボリュームは保持します。作成／Rebuild 時は `reset-node-modules.py` で `.pnpm-store` 以外の依存の生成物を削除し、ロックファイルを固定して再生成します。これにより、残った旧 Yarn のパッケージが間接的な optional 依存としてバンドルに入ることを防ぎます。ルートがシンボリックリンクの場合や入れ子のマウントがある場合は拒否し、依存のリンク先は削除しません。`yarn.lock` は `pnpm-lock.yaml` に置き換わります。pnpm のバージョンは Corepack が管理し、`pmOnFail: ignore` で GitHub の依存スキャンが解析できない環境用文書の追加を防ぎます。ロックファイルはプロジェクト用の単一文書に保ってください。`pnpm lint` は検査のみ、`pnpm lint:fix` は自動修正を行います。TypeScript は typescript-eslint の対応範囲内の 6 を使い、VS Code API の型定義は拡張機能の最小対応バージョンに合わせて 1.75 を使います。
 
-`esbuild` で拡張機能と各言語の JSON を1つの CommonJS ファイルにまとめ、VS Code 1.75 の拡張ホストで使える Node 16 を対象にします。`compile` は型チェックとソースマップの生成、`build` は型チェックと圧縮を行います。`watch` はバンドラーと TypeScript の検査を同時に実行し、VS Code の監視タスクは両方の診断を表示します。VSIX 作成時は `vscode:prepublish` で production ビルドを実行します。実行時の依存はバンドル済みなので、依存関係の列挙は無効にします（`vsce.dependencies: false`）。`pnpm test` は圧縮済みバンドルでの言語読み込みと数式置換を確認します。数式置換の既存の `eval` には esbuild が警告を出しますが、今回の移行ではその挙動を維持します。
+`esbuild` で拡張機能と各言語の JSON を1つの CommonJS ファイルにまとめ、VS Code 1.75 の拡張ホストで使える Node 16 を対象にします。`compile` は型チェックとソースマップの生成、`build` は型チェックと圧縮を行います。`watch` はバンドラーと TypeScript の検査を同時に実行し、VS Code の監視タスクは両方の診断を表示します。VSIX 作成時は `vscode:prepublish` で production ビルドを実行します。実行時の依存はバンドル済みなので、依存関係の列挙は無効にします（`vsce.dependencies: false`）。`pnpm test` は圧縮済みバンドルでの言語読み込み・数式置換・スコア変換と、VS Code に依存しないスコア処理を確認します。数式置換の既存の `eval` には esbuild が警告を出しますが、今回の移行ではその挙動を維持します。
 
-Check CI はロックファイルを固定したインストール、型・lint の検査、バンドルの回帰テスト、production ビルド、VSIX 作成、DevContainer の初期化・同期テストを実行します。Release CI も同じツールチェーンを使い、ビルド前に毎回インストールします。キャッシュ対象は `pnpm store path` の結果から取得し、GitHub Actions はコミットに固定します。公開は `release` ブランチだけで行い、公開用の認証情報はそのステップにだけ渡します。コンテナの Rebuild と GUI デバッグは別途手動で確認してください。
+Check CI はロックファイルを固定したインストール、`pnpm check`、production ビルドを使った実 VS Code の統合テスト、VSIX 作成を実行します。Release CI も検査と統合テストを通してから公開します。VS Code 1.75 と stable の両方を確認します。キャッシュ対象は `pnpm store path` の結果から取得し、GitHub Actions はコミットに固定します。公開は `release` ブランチだけで行い、公開用の認証情報はそのステップにだけ渡します。コンテナの Rebuild と GUI デバッグは別途手動で確認してください。
 
 ### 依存関係のサプライチェーン対策
 
@@ -65,7 +65,7 @@ Check CI はロックファイルを固定したインストール、型・lint 
 
 ### ホストの AI 設定を取り込む
 
-ホスト初期化は `.devcontainer/scripts/initialize.cjs` が担当します。未作成の `~/.codex`、`~/.claude`、`~/.agents` を作り、ホストのパスだけを記録した `.devcontainer/compose.host.yaml` を生成します。このファイルは Git・Docker ビルド対象外です。既存の設定や指示ファイルは変更せず、認証情報の一時ファイルも作りません。
+ホスト初期化は `.devcontainer/scripts/initialize.cjs` が担当します。未作成の `~/.codex`、`~/.claude`、`~/.agents` を作り、ホストのパスだけを記録した `.devcontainer/compose.host.yaml` を生成します。このファイルは Git・Docker ビルド対象外です。既存の設定や指示ファイルは変更せず、ホスト直下の `.claude.json`・`CLAUDE.md`・`AGENTS.md` は `.devcontainer/host-settings/` に更新時のスナップショットを作ります。ディレクトリは 700、ファイルは 600（POSIX）、Git・Docker ビルド対象外です。このディレクトリを読み取り専用でマウントするため、元ファイルの置き換え保存がコンテナの再起動を壊しません。通常の stop/start では同期せず、初期化でスナップショットを更新します。 保存先と入れ子のマウント先がシンボリックリンクやディレクトリ以外の場合は初期化を停止します。一時ファイルは一意名で排他的に作成し、置き換えに失敗した場合はその一時ファイルを削除します。以前の固定名 `.tmp` ファイルは変更しません。
 
 ホストの AI ディレクトリは `/mnt/host-settings/` に読み取り専用でマウントし、コンテナ内の Python スクリプトでコピーします。エージェント自身の保存先にホストのファイルを直接マウントしないため、ファイルの置換保存にも対応できます。
 
@@ -100,6 +100,13 @@ gh auth setup-git
 
 既存の `Run Extension` も利用できます。別のデータパックはコンテナからアクセスできるフォルダーを開いてください。`resource/` もワークスペースに含まれ、Webview の CSS / JavaScript を参照できます。GitHub API・raw ファイル・Mojang のバージョン情報を取得する機能には外部ネットワーク接続が必要です。
 
-`pnpm watch` で変更を監視できます。実体のない `Extension Tests` 構成と未使用のテストランナー依存は削除しました。拡張機能の手動検証には `Run Extension` 構成を使ってください。同期処理の検証は `node --test .devcontainer/tests/initialize.test.cjs` と `python3 -m unittest discover -s .devcontainer/tests -p 'test_*.py'` で実行できます。Python の検証はコンテナ内で行えます。所有権の回帰テスト `.devcontainer/tests/test-volume-ownership.sh` は、root の使い捨て Linux コンテナ内で実行してください。入れ子の bind mount 検証には `CAP_SYS_ADMIN` が必要ですが、開発コンテナ自身には追加しません。
+`pnpm watch` で変更を監視できます。拡張機能の手動検証には `Run Extension` 構成、自動の拡張ホスト検証には `pnpm test:integration` を使ってください。同期処理の検証は `node --test .devcontainer/tests/initialize.test.cjs` と `python3 -m unittest discover -s .devcontainer/tests -p 'test_*.py'` で実行できます。Python の検証はコンテナ内で行えます。所有権の回帰テスト `.devcontainer/tests/test-volume-ownership.sh` は、root の使い捨て Linux コンテナ内で実行してください。入れ子の bind mount 検証には `CAP_SYS_ADMIN` が必要ですが、開発コンテナ自身には追加しません。
 
 参照: [GitNexus のホスト設定取り込み](https://github.com/abhigyanpatwari/GitNexus/blob/main/.devcontainer/README.md)、[VS Code の拡張機能デバッグ](https://code.visualstudio.com/api/advanced-topics/remote-extensions#_debugging-in-a-custom-development-container)、[Claude の DevContainer](https://code.claude.com/docs/en/devcontainer)、[Codex の認証保存](https://developers.openai.com/codex/auth/)。
+
+
+## 機能テストとリファクタリング
+
+[開発ガイド](docs/development.md) に機能の境界、期待値のサンプル、既知の問題、検証範囲をまとめています。[AGENTS.md](AGENTS.md) は AI が同じ入口と変更ルールを参照するための文書です。画面が不要な確認は `pnpm check` でまとめて実行できます。
+
+実際の VS Code の起動・選択範囲の変換・クリップボードの確認には `pnpm test:integration` を使います。画面のない Linux では `xvfb-run -a pnpm test:integration` とします。`VSCODE_TEST_VERSION=1.75.0` で対応下限も確認できます。統合テストは production ビルドを使いますが、Minecraft 内での実行は検証していません。Check と Release の CI は検査・統合テストを通してからパッケージ作成・公開へ進みます。
