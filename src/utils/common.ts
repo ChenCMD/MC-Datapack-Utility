@@ -6,7 +6,7 @@ import { pathAccessible, readFile } from '.'
 import { Uri } from 'vscode'
 import { UriUtils } from './uri'
 
-export const mod = (n: number, m: number): number => (n % m + m) % m
+export { mod } from './math'
 
 export const parseRadixFloat = (str: string, radix = 10): number => {
   const radixChars = getRadixChars(radix)

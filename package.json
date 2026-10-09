@@ -39,7 +39,10 @@
 		"typecheck": "tsc --noEmit",
 		"package": "vsce package",
 		"vscode:prepublish": "pnpm run build",
-		"test": "node --test scripts/build.test.mjs"
+		"test": "node --test scripts/*.test.mjs",
+		"test:integration": "pnpm build && node scripts/test-integration.mjs",
+		"test:devcontainer": "node --test .devcontainer/tests/initialize.test.cjs && python3 -m unittest discover -s .devcontainer/tests -p 'test_*.py'",
+		"check": "pnpm typecheck && pnpm lint && pnpm test && pnpm test:devcontainer"
 	},
 	"main": "dist/extension.js",
 	"dependencies": {
@@ -795,11 +798,13 @@
 		"@eslint/js": "^10.0.1",
 		"@semantic-release/changelog": "^7.0.0",
 		"@semantic-release/git": "^11.0.1",
+		"@semantic-release/github": "^12.0.2",
 		"@stylistic/eslint-plugin": "^5.10.0",
 		"@types/dateformat": "^3.0.1",
 		"@types/minimatch": "^3.0.5",
 		"@types/node": "^24.19.0",
 		"@types/vscode": "~1.75.1",
+		"@vscode/test-electron": "3.1.0",
 		"@vscode/vsce": "^4.0.0",
 		"esbuild": "^0.28.2",
 		"eslint": "^10.11.0",
@@ -808,8 +813,7 @@
 		"semantic-release-gitmoji": "^1.6.9",
 		"semantic-release-vsce": "^6.1.8",
 		"typescript": "~6.0.3",
-		"typescript-eslint": "^8.71.0",
-		"@semantic-release/github": "^12.0.2"
+		"typescript-eslint": "^8.71.0"
 	},
 	"packageManager": "pnpm@12.8.2",
 	"vsce": {

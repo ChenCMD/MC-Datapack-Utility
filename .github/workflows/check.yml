@@ -8,6 +8,11 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        vscode: ['1.75.0', stable]
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
@@ -31,10 +36,8 @@ jobs:
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-pnpm-
       - run: pnpm install --frozen-lockfile
-      - run: pnpm typecheck
-      - run: pnpm lint
-      - run: pnpm test
-      - run: pnpm build
+      - run: pnpm check
+      - run: xvfb-run -a pnpm test:integration
+        env:
+          VSCODE_TEST_VERSION: ${{ matrix.vscode }}
       - run: pnpm package --out /tmp/mc-datapack-utility.vsix
-      - run: node --test .devcontainer/tests/initialize.test.cjs
-      - run: python3 -m unittest discover -s .devcontainer/tests -p 'test_*.py'

@@ -1,0 +1,154 @@
+[
+  {
+    "name": "assignment",
+    "expression": "a = 1",
+    "expected": {
+      "constants": [
+        "scoreboard players set $MCDUtil_1 _ 1"
+      ],
+      "commands": [
+        "scoreboard players operation $MCDUtil_Temp_1 _ = $MCDUtil_1 _",
+        "scoreboard players operation a _ = $MCDUtil_Temp_1 _"
+      ]
+    }
+  },
+  {
+    "name": "precedence",
+    "expression": "a = b + 2 * 3",
+    "expected": {
+      "constants": [
+        "scoreboard players set $MCDUtil_2 _ 2",
+        "scoreboard players set $MCDUtil_3 _ 3"
+      ],
+      "commands": [
+        "scoreboard players operation $MCDUtil_Temp_1 _ = $MCDUtil_2 _",
+        "scoreboard players operation $MCDUtil_Temp_1 _ *= $MCDUtil_3 _",
+        "scoreboard players operation $MCDUtil_Temp_2 _ = b _",
+        "scoreboard players operation $MCDUtil_Temp_2 _ += $MCDUtil_Temp_1 _",
+        "scoreboard players operation a _ = $MCDUtil_Temp_2 _"
+      ]
+    }
+  },
+  {
+    "name": "parentheses",
+    "expression": "a = ( b + 2 ) * 3",
+    "expected": {
+      "constants": [
+        "scoreboard players set $MCDUtil_2 _ 2",
+        "scoreboard players set $MCDUtil_3 _ 3"
+      ],
+      "commands": [
+        "scoreboard players operation $MCDUtil_Temp_1 _ = b _",
+        "scoreboard players operation $MCDUtil_Temp_1 _ += $MCDUtil_2 _",
+        "scoreboard players operation $MCDUtil_Temp_1 _ *= $MCDUtil_3 _",
+        "scoreboard players operation a _ = $MCDUtil_Temp_1 _"
+      ]
+    }
+  },
+  {
+    "name": "compound assignment",
+    "expression": "a += 1",
+    "expected": {
+      "constants": [
+        "scoreboard players set $MCDUtil_1 _ 1"
+      ],
+      "commands": [
+        "scoreboard players operation $MCDUtil_Temp_1 _ = $MCDUtil_1 _",
+        "scoreboard players operation a _ += $MCDUtil_Temp_1 _"
+      ]
+    }
+  },
+  {
+    "name": "unary minus",
+    "expression": "- 2 + 3",
+    "expected": {
+      "constants": [
+        "scoreboard players set $MCDUtil_0 _ 0",
+        "scoreboard players set $MCDUtil_2 _ 2",
+        "scoreboard players set $MCDUtil_3 _ 3"
+      ],
+      "commands": [
+        "scoreboard players operation $MCDUtil_Temp_1 _ = $MCDUtil_2 _",
+        "scoreboard players operation $MCDUtil_Temp_1 _ += $MCDUtil_3 _",
+        "scoreboard players operation $MCDUtil_Temp_2 _ = $MCDUtil_0 _",
+        "scoreboard players operation $MCDUtil_Temp_2 _ -= $MCDUtil_Temp_1 _"
+      ]
+    }
+  },
+  {
+    "name": "hex literal",
+    "expression": "a = 0x10",
+    "expected": {
+      "constants": [
+        "scoreboard players set $MCDUtil_0x10 _ 16"
+      ],
+      "commands": [
+        "scoreboard players operation $MCDUtil_Temp_1 _ = $MCDUtil_16 _",
+        "scoreboard players operation a _ = $MCDUtil_Temp_1 _"
+      ]
+    }
+  },
+  {
+    "name": "conditional",
+    "expression": "a = if( b > 1 , 2 , 3 )",
+    "expected": {
+      "constants": [
+        "scoreboard players set $MCDUtil_1 _ 1",
+        "scoreboard players set $MCDUtil_2 _ 2",
+        "scoreboard players set $MCDUtil_3 _ 3"
+      ],
+      "commands": [
+        "scoreboard players operation $MCDUtil_Temp_1 _ = b _",
+        "scoreboard players operation $MCDUtil_if_1_0 _ = $MCDUtil_Temp_1 _",
+        "scoreboard players operation $MCDUtil_Temp_1 _ = $MCDUtil_1 _",
+        "scoreboard players operation $MCDUtil_if_1_1 _ = $MCDUtil_Temp_1 _",
+        "execute if score $MCDUtil_if_1_1 _ > $MCDUtil_if_1_2 _ run scoreboard players operation $MCDUtil_Temp_1 _ = $MCDUtil_2 _",
+        "execute if score $MCDUtil_if_1_1 _ > $MCDUtil_if_1_2 _ run scoreboard players operation $MCDUtil_if_1 _ = $MCDUtil_Temp_1 _",
+        "execute unless score $MCDUtil_if_1_1 _ > $MCDUtil_if_1_2 _ run scoreboard players operation $MCDUtil_Temp_1 _ = $MCDUtil_3 _",
+        "execute unless score $MCDUtil_if_1_1 _ > $MCDUtil_if_1_2 _ run scoreboard players operation $MCDUtil_if_1 _ = $MCDUtil_Temp_1 _",
+        "",
+        "scoreboard players operation $MCDUtil_Temp_1 _ = $MCDUtil_if_1 _",
+        "scoreboard players operation a _ = $MCDUtil_Temp_1 _"
+      ]
+    }
+  },
+  {
+    "name": "scale",
+    "expression": "a = 2",
+    "config": {
+      "valueScale": 10
+    },
+    "expected": {
+      "constants": [
+        "scoreboard players set $MCDUtil_2 _ 2",
+        "scoreboard players set $MCDUtil_10 _ 10"
+      ],
+      "commands": [
+        "scoreboard players operation $MCDUtil_Temp_1 _ = $MCDUtil_2 _",
+        "scoreboard players operation $MCDUtil_Temp_1 _ *= $MCDUtil_10 _",
+        "scoreboard players operation $MCDUtil_Temp_2 _ = a _",
+        "scoreboard players operation $MCDUtil_Temp_2 _ *= $MCDUtil_10 _",
+        "scoreboard players operation $MCDUtil_Temp_2 _ = $MCDUtil_Temp_1 _"
+      ]
+    }
+  },
+  {
+    "name": "custom names",
+    "expression": "a = b + 1",
+    "config": {
+      "prefix": "$test_",
+      "objective": "demo",
+      "temp": "tmp_"
+    },
+    "expected": {
+      "constants": [
+        "scoreboard players set $test_1 demo 1"
+      ],
+      "commands": [
+        "scoreboard players operation $test_tmp_1 demo = b demo",
+        "scoreboard players operation $test_tmp_1 demo += $test_1 demo",
+        "scoreboard players operation a demo = $test_tmp_1 demo"
+      ]
+    }
+  }
+]
