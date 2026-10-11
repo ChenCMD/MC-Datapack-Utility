@@ -136,6 +136,17 @@ exports.run = async function run() {
   assert.deepEqual(cancelled.errors, [])
   assert.equal(await fileSupport.pathAccessible(vscode.Uri.joinPath(functionFolder, 'cancelled.mcfunction')), false)
   console.log('PASS real file creation, cursor placement, duplicate protection, and cancellation')
+  for (const name of ['', '../escape', '/absolute', 'nested//sample', 'nested/../sample']) {
+    const invalid = await createResource(functionFolder, name)
+    assert.match(invalid.validation, /error.invalid-file-name/)
+    assert.equal(invalid.opened, 0)
+    assert.deepEqual(invalid.errors, [])
+  }
+  await vscode.workspace.fs.createDirectory(vscode.Uri.joinPath(functionFolder, 'nested'))
+  const nested = await createResource(functionFolder, 'nested/a.b-c_d')
+  assert.equal(nested.opened, 1)
+  assert.deepEqual(nested.errors, [])
+  assert.equal(vscode.window.activeTextEditor.document.getText(), '# example:nested/a.b-c_d 2026-10-11\r\nsay nested/a.b-c_d\r\n')
 
   const deniedEvents = new vscode.EventEmitter()
   const denied = vscode.workspace.registerFileSystemProvider('mcdu-denied', {

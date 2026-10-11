@@ -49,6 +49,7 @@
   "error.could-not-append-elem": "由于文件%0%中的键%1%不是数组，无法新增元素。",
   "error.download-timeout": "下载请求已超时。",
   "error.expected-got": "希望得到%0%，但获得了%1%",
+  "error.invalid-file-name": "请输入各路径段均非空的相对文件名；不能使用「.」或「..」。",
   "error.unexpected-character": "%0%不可使用。",
   "formula-to-score-operation.complete-text": "只要你想，你可以同时更改SCORE HOLDER的名称和SCORE OBJECT的名称",
   "formula-to-score-operation.formula": "公式",
