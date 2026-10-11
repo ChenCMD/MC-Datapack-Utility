@@ -15,7 +15,7 @@ export function resolveVars<T extends string | string[] | JsonValue>(obj: T, var
   const walkObj = (_obj: JsonObject): JsonObject => {
     const process = (elem: JsonValue): JsonValue => {
       if (Array.isArray(elem)) return elem.map(v => process(v)) // JsonValue[]
-      if (typeof elem === 'object') return walkObj(elem as JsonObject) // JsonObject
+      if (isJsonObject(elem)) return walkObj(elem) // JsonObject
       if (typeof elem === 'string') return resolve(elem) // string
       return elem
     }
