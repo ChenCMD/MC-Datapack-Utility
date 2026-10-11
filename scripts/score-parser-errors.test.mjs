@@ -57,6 +57,7 @@ test('custom functions accept exactly their configured number of arguments', asy
   assert.equal(executeScores(await convert('a = sum( 2 , 3 )', operators)).get('a _'), 5)
   assert.equal(executeScores(await convert('a = constant( )', operators)).get('a _'), 1)
   assert.equal(executeScores(await convert('a = sum( pick( 2 , 3 ) , 4 )', operators)).get('a _'), 5)
-  for (const expression of ['a = sum( 2 )', 'a = sum( 2 , 3 , 4 )', 'a = constant( 2 )', 'a = pick(  , 3 )'])
+  for (const expression of ['a = sum( 2 )', 'a = sum( 2 , 3 , 4 )', 'a = constant( 2 )',
+    'a = pick(  , 3 )', 'a = pick( \t , 3 )'])
     await assert.rejects(convert(expression, operators), /formula-to-score-operation.illegal-formula/)
 })
