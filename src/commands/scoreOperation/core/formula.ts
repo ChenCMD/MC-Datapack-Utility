@@ -76,7 +76,7 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
         current = []
       } else current.push(token)
     }
-    if (nested.length > 0 || func.arity > 0) subArr.push(current)
+    if (nested.some(token => token.trim() !== '') || func.arity > 0) subArr.push(current)
     if (depth !== 0 || subArr.length !== func.arity || subArr.some(arg => arg.length === 0 || arg.every(token => token.trim() === '')))
       throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
 
