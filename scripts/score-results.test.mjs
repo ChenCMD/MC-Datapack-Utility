@@ -55,6 +55,25 @@ test('equivalent literal spellings share one initialized constant', async () => 
   assert.equal(executeScores(result).get('a _'), 32)
 })
 
+for (const [expression, initial, expected] of [
+  ['a = 2', [], 20], ['a += 2', [['a', '_', 5]], 25],
+  ['a -= 2', [['a', '_', 5]], -15], ['a *= 2', [['a', '_', 5]], 100],
+  ['a /= 2', [['a', '_', 60]], 3], ['a %= 2', [['a', '_', 25]], 5],
+  ['( a ) = 2', [], 20], ['a = a + 1', [['a', '_', 2]], 30]
+]) {
+  test(`scaling preserves the assignment destination: ${expression}`, async () => {
+    assert.equal(executeScores(await convert(expression, { valueScale: 10 }), initial).get('a _'), expected)
+  })
+}
+test('scaling retains prompted source and destination objectives', async () => {
+  const result = await convert('a = b + 1', { valueScale: 10, isAlwaysSpecifyObject: true, objective: 'internal' }, {
+    requestObjective: async message => message.endsWith(':b') ? 'source' : 'destination'
+  })
+  const scores = executeScores(result, [['b', 'source', 2]])
+  assert.equal(scores.get('a destination'), 30)
+  assert.equal(scores.get('b source'), 2)
+})
+
 for (const [operator, compare] of [
   ['>', b => b > 1], ['>=', b => b >= 1], ['<', b => b < 1],
   ['<=', b => b <= 1], ['==', b => b === 1], ['!=', b => b !== 1]
