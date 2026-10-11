@@ -28,6 +28,7 @@ exports.run = async function run() {
 
   const scoreConfig = vscode.workspace.getConfiguration('mcdutil.scoreOperation')
   const previousScale = scoreConfig.inspect('valueScale')?.workspaceValue
+  const previousCustomOperate = scoreConfig.inspect('customOperate')?.workspaceValue
   try {
     for (const name of ['assignment', 'hex literal', 'conditional', 'conditional scale', 'unary minus', 'scale', 'prototype score names']) {
       const fixture = fixtures.find(item => item.name === name);
@@ -48,7 +49,25 @@ exports.run = async function run() {
       ].join('\n'));
       console.log(`PASS score command replaces the real editor selection: ${name}`);
     }
+    await scoreConfig.update('customOperate', [{ identifier: 'product(', type: 'fn', order: 18, assocLow: 'R', arity: 2,
+      destination: { args: ['left', 'right'], namely: 'left * right' } }], vscode.ConfigurationTarget.Workspace)
+    for (const scale of [1, 10]) {
+      await scoreConfig.update('valueScale', scale, vscode.ConfigurationTarget.Workspace)
+      const expression = 'a = product( 2 + 3 , 4 )'
+      const document = await vscode.workspace.openTextDocument({ language: 'mcfunction', content: expression })
+      const editor = await vscode.window.showTextDocument(document)
+      editor.selection = new vscode.Selection(document.positionAt(0), document.positionAt(expression.length))
+      await vscode.commands.executeCommand('mcdutil.commands.scoreOperation')
+      const output = await eventually(() => document.getText(), text => text !== expression)
+      const lines = output.split(/\r?\n/)
+      const { executeScores } = require('../helpers/scoreboard.cjs')
+      const scores = executeScores({ resValues: new Set(lines.filter(line => line.startsWith('scoreboard players set '))),
+        resFormulas: lines.filter(line => line.startsWith('scoreboard players operation ') || line.startsWith('execute ')) })
+      assert.equal(scores.get('a _'), 20 * scale * scale)
+      console.log(`PASS custom function preserves grouped arguments at scale ${scale}`)
+    }
   } finally {
+    await scoreConfig.update('customOperate', previousCustomOperate, vscode.ConfigurationTarget.Workspace)
     await scoreConfig.update('valueScale', previousScale, vscode.ConfigurationTarget.Workspace)
   }
 

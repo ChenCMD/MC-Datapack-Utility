@@ -5,17 +5,24 @@ import { ConditionExp, conditionExpTable } from '../types/ConditionExpTable'
 import type { ScoreOperationPorts } from './ports'
 import { isNumber } from '../../../utils/typeGuards'
 
+type FormulaToken = string | { formula: Formula | string }
+
 export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
   const { locale } = ports
 
-  function getOperator(table: OperateTable, token: string): OperateElement | undefined {
-    return Object.prototype.hasOwnProperty.call(table, token) ? table[token] : undefined
+  function getOperator(table: OperateTable, token: FormulaToken): OperateElement | undefined {
+    return typeof token === 'string' && Object.prototype.hasOwnProperty.call(table, token) ? table[token] : undefined
   }
 
-  function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfFormula[], scale: number): Formula | string {
+  function analyze(exp: FormulaToken[], opTable: OperateTable, funcs: IfFormula[], scale: number): Formula | string {
     const first = exp.shift()
     if (!first)
       throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
+
+    if (typeof first !== 'string') {
+      const grouped = typeof first.formula === 'string' ? first.formula : { ...first.formula, op: { ...first.formula.op, order: opTable['('].order } }
+      return assemble(grouped, exp, opTable, funcs, scale)
+    }
 
     const func = getOperator(opTable, first)
 
@@ -35,8 +42,9 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
         while (exp[operandStart] === '+' || exp[operandStart] === '-') operandStart++
         if (!exp[operandStart])
           throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
-        const operandEnd = exp[operandStart].endsWith('(') ? closingIndex(exp, operandStart) + 1 : operandStart + 1
-        const operand = formulaAnalyzer(exp.splice(0, operandEnd), opTable, funcs, scale)
+        const operandToken = exp[operandStart]
+        const operandEnd = typeof operandToken === 'string' && operandToken.endsWith('(') ? closingIndex(exp, operandStart) + 1 : operandStart + 1
+        const operand = analyze(exp.splice(0, operandEnd), opTable, funcs, scale)
         if (getOperator(opTable, exp[0])?.identifier?.endsWith('='))
           throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
         const signed = func.identifier === '+' ? operand : { front: '0', op: { ...opTable['-'], order: opTable['('].order }, back: operand }
@@ -47,10 +55,10 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
         const sub = exp.slice(0, lastClose)
         exp = exp.slice(lastClose + 1)
         const isGroupedDestination = getOperator(opTable, exp[0])?.identifier?.endsWith('=')
-        if (isGroupedDestination && sub.some(token => token === '+' || token === '-' || (token !== '(' && token.endsWith('('))))
+        if (isGroupedDestination && sub.some(token => token === '+' || token === '-' || (typeof token === 'string' && token !== '(' && token.endsWith('('))))
           throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
         const innerScale = isGroupedDestination ? 1 : scale
-        const inner = formulaAnalyzer(sub, opTable, funcs, innerScale)
+        const inner = analyze(sub, opTable, funcs, innerScale)
         const grouped = typeof inner === 'string' ? inner : { ...inner, op: { ...inner.op, order: opTable['('].order } }
         return assemble(grouped, exp, opTable, funcs, scale)
       case ')':
@@ -67,11 +75,11 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
     if (getOperator(opTable, exp[0])?.identifier?.endsWith('='))
       throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
 
-    const subArr: string[][] = []
-    let current: string[] = []
+    const subArr: FormulaToken[][] = []
+    let current: FormulaToken[] = []
     let depth = 0
     for (const token of nested) {
-      if (token.endsWith('(')) depth++
+      if (typeof token === 'string' && token.endsWith('(')) depth++
       else if (token === ')') depth--
       if (depth < 0)
         throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
@@ -80,48 +88,58 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
         current = []
       } else current.push(token)
     }
-    if (nested.some(token => token.trim() !== '') || func.arity > 0) subArr.push(current)
-    if (depth !== 0 || subArr.length !== func.arity || subArr.some(arg => arg.length === 0 || arg.every(token => token.trim() === '')))
+    if (nested.some(token => typeof token !== 'string' || token.trim() !== '') || func.arity > 0) subArr.push(current)
+    if (depth !== 0 || subArr.length !== func.arity || subArr.some(arg => arg.length === 0 || arg.every(token => typeof token === 'string' && token.trim() === '')))
       throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
 
     if (!func.destination)
       throw new ParsingError(locale('parsing-error', func.identifier))
 
-    const nameElem = func.destination.namely.split(' ')
+    const destination = func.destination
+    const nameElem = destination.namely.split(' ')
     if (func.identifier === 'if(') {
-      funcs.push({ condition: conditionAssembling(subArr[0], true, opTable, funcs, scale), then: formulaAnalyzer(subArr[1], opTable, funcs, scale), else: formulaAnalyzer(subArr[2], opTable, funcs, scale) })
+      funcs.push({ condition: conditionAssembling(subArr[0], true, opTable, funcs, scale), then: analyze(subArr[1], opTable, funcs, scale), else: analyze(subArr[2], opTable, funcs, scale) })
       nameElem[0] = `$MCDUtil_${nameElem[0]}_${funcs.length}`
     }
 
-    func.destination.args.forEach((e, j) => {
-      for (let argIndex = nameElem.indexOf(e); argIndex !== -1; argIndex = nameElem.indexOf(e, argIndex + 1))
-        nameElem[argIndex] = formulaToString(formulaAnalyzer(subArr[j], opTable, funcs, scale))
+    // Parse each referenced argument once and insert its tree as one grouped operand.
+    // This preserves precedence and avoids applying valueScale again to its leaves.
+    const argumentsByIndex = new Map<number, Formula | string>()
+    const expanded: FormulaToken[] = nameElem.map(token => {
+      const index = destination.args.indexOf(token)
+      if (index === -1) return token
+      if (!argumentsByIndex.has(index))
+        argumentsByIndex.set(index, analyze([...subArr[index]], opTable, funcs, scale))
+      return { formula: argumentsByIndex.get(index)! }
     })
-    const _exp = ['(', ...nameElem, ')']
+    const _exp: FormulaToken[] = ['(', ...expanded, ')']
 
     // Conditional branches already contain scaled values; their result score is an internal reference.
     const resultScale = func.identifier === 'if(' ? 1 : scale
-    return assemble(formulaAnalyzer(_exp, opTable, funcs, resultScale), exp, opTable, funcs, scale)
+    return assemble(analyze(_exp, opTable, funcs, resultScale), exp, opTable, funcs, scale)
   }
 
-  function closingIndex(tokens: string[], start = 0): number {
+  function closingIndex(tokens: FormulaToken[], start = 0): number {
     let depth = 0
     for (let index = start; index < tokens.length; index++) {
-      if (tokens[index].endsWith('(')) depth++
-      else if (tokens[index] === ')') depth--
+      const token = tokens[index]
+      if (typeof token === 'string' && token.endsWith('(')) depth++
+      else if (token === ')') depth--
       if (depth === 0) return index
     }
     throw new ParsingError(locale('too-much', '\'(\''))
   }
 
-  function assemble(front: Formula | string, exp: string[], opTable: OperateTable, funcs: IfFormula[], scale: number): Formula | string {
+  function assemble(front: Formula | string, exp: FormulaToken[], opTable: OperateTable, funcs: IfFormula[], scale: number): Formula | string {
     if (!exp[0]) return front
     const toBeOp = exp.shift()!
+    if (typeof toBeOp !== 'string')
+      throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
     const op = getOperator(opTable, toBeOp)
     if (!op) throw new GenerateError(locale('error.not-exist', locale('operator'), toBeOp))
     if (op.type === 'state' || op.arity !== 2)
       throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
-    const back = formulaAnalyzer(exp, opTable, funcs, scale)
+    const back = analyze(exp, opTable, funcs, scale)
     // Assignment is emitted after the right-hand expression.
     if (op.identifier.endsWith('=')) {
       if (typeof front !== 'string' || isNumber(front))
@@ -140,13 +158,7 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
     }
   }
 
-  const formulaToString = (formula: Formula | string): string => {
-    if (typeof formula === 'string')
-      return formula
-    return `${formulaToString(formula.front)} ${formula.op.identifier} ${formulaToString(formula.back)}`
-  }
-
-  const conditionAssembling = (exp: string[], isTrue: boolean, opTable: OperateTable, funcs: IfFormula[], scale: number): ConditionExp[] => {
+  const conditionAssembling = (exp: FormulaToken[], isTrue: boolean, opTable: OperateTable, funcs: IfFormula[], scale: number): ConditionExp[] => {
     if (exp.includes('&&')) {
       const index = exp.indexOf('&&')
       return [...conditionAssembling(exp.slice(0, index), isTrue, opTable, funcs, scale), ...conditionAssembling(exp.slice(index + 1), isTrue, opTable, funcs, scale)]
@@ -157,11 +169,12 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
     }
     let splitter = 0
     for (let i = 0; i < exp.length; i++) {
-      if (Object.prototype.hasOwnProperty.call(conditionExpTable, exp[i]))
+      const token = exp[i]
+      if (typeof token === 'string' && Object.prototype.hasOwnProperty.call(conditionExpTable, token))
         splitter = i
     }
-    return [{ front: formulaAnalyzer(exp.slice(0, splitter), opTable, funcs, scale), op: conditionExpTable[exp[splitter]], back: formulaAnalyzer(exp.slice(splitter + 1), opTable, funcs, scale), default: (exp[1] === '!=') ? !isTrue : isTrue }]
+    return [{ front: analyze(exp.slice(0, splitter), opTable, funcs, scale), op: conditionExpTable[exp[splitter] as string], back: analyze(exp.slice(splitter + 1), opTable, funcs, scale), default: (exp[1] === '!=') ? !isTrue : isTrue }]
   }
 
-  return { formulaAnalyzer }
+  return { formulaAnalyzer: (exp: string[], opTable: OperateTable, funcs: IfFormula[], scale: number) => analyze(exp, opTable, funcs, scale) }
 }
