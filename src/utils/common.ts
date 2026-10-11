@@ -1,6 +1,7 @@
 import { locale } from '../locales'
 import dateFormat from 'dateformat'
-import { FileType, getFilePath, getFileType } from '../types/FileTypes'
+import { FileType, getFileType } from '../types/FileTypes'
+import { resourcePathFromRelative, namespaceFromRelative } from '../core/datapack/resourcePaths'
 import { DownloadTimeOutError } from '../types/Error'
 import { pathAccessible, readFile } from '.'
 import { Uri } from 'vscode'
@@ -42,8 +43,8 @@ export const getDate = (format: string): string => dateFormat(Date.now(), format
  * @param datapackRoot データパックのルートパス
  */
 export const getResourcePath = (filePath: Uri, datapackRoot: Uri, packFormat: number, fileType?: FileType): string => {
-  const fileTypePath = getFilePath(fileType ?? getFileType(UriUtils.dirname(filePath), datapackRoot, packFormat), packFormat) ?? '[^/]+'
-  return UriUtils.relativePath(datapackRoot, filePath).replace(/\\/g, '/').replace(RegExp(`^data/([^/]+)/${fileTypePath}/(.*)\\.(?:mcfunction|json)$`), '$1:$2')
+  const type = fileType ?? getFileType(UriUtils.dirname(filePath), datapackRoot, packFormat)
+  return resourcePathFromRelative(UriUtils.relativePath(datapackRoot, filePath), packFormat, type)
 }
 
 /**
@@ -52,7 +53,7 @@ export const getResourcePath = (filePath: Uri, datapackRoot: Uri, packFormat: nu
  * @param datapackRoot データパックのルートパス
  */
 export const getNamespace = (filePath: Uri, datapackRoot: Uri): string =>
-  UriUtils.relativePath(datapackRoot, filePath).replace(/\\/g, '/').replace(/^data\/([^/]+)\/.*$/, '$1')
+  namespaceFromRelative(UriUtils.relativePath(datapackRoot, filePath))
 
 /**
  * データパックのルートパスを取得します

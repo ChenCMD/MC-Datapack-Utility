@@ -1,0 +1,146 @@
+[
+  {
+    "name": "legacy nested function",
+    "path": "data/example/functions/nested/run.mcfunction",
+    "packFormat": 7,
+    "type": "function",
+    "resource": "example:nested/run",
+    "namespace": "example",
+    "migrated": "data/example/functions/nested/run.mcfunction"
+  },
+  {
+    "name": "modern function",
+    "path": "data/example/function/run.mcfunction",
+    "packFormat": 45,
+    "type": "function",
+    "resource": "example:run",
+    "namespace": "example",
+    "migrated": "data/example/function/run.mcfunction"
+  },
+  {
+    "name": "legacy function with new format",
+    "path": "data/example/functions/run.mcfunction",
+    "packFormat": 45,
+    "type": null,
+    "resource": "example:run",
+    "namespace": "example",
+    "migrated": "data/example/functions/run.mcfunction"
+  },
+  {
+    "name": "modern function with old format",
+    "path": "data/example/function/run.mcfunction",
+    "packFormat": 7,
+    "type": null,
+    "resource": "example:run",
+    "namespace": "example",
+    "migrated": "data/example/function/run.mcfunction"
+  },
+  {
+    "name": "legacy block tag",
+    "path": "data/example/tags/blocks/test.json",
+    "packFormat": 42,
+    "type": "tag/block",
+    "resource": "example:test",
+    "namespace": "example",
+    "migrated": "data/example/tags/blocks/test.json"
+  },
+  {
+    "name": "modern block tag",
+    "path": "data/example/tags/block/test.json",
+    "packFormat": 43,
+    "type": "tag/block",
+    "resource": "example:test",
+    "namespace": "example",
+    "migrated": "data/example/tags/block/test.json"
+  },
+  {
+    "name": "legacy function tag",
+    "path": "data/example/tags/functions/load.json",
+    "packFormat": 44,
+    "type": "tag/function",
+    "resource": "example:load",
+    "namespace": "example",
+    "migrated": "data/example/tags/functions/load.json"
+  },
+  {
+    "name": "modern function tag",
+    "path": "data/example/tags/function/load.json",
+    "packFormat": 45,
+    "type": "tag/function",
+    "resource": "example:load",
+    "namespace": "example",
+    "migrated": "data/example/tags/function/load.json"
+  },
+  {
+    "name": "recipe",
+    "path": "data/example/recipes/crafting/test.json",
+    "packFormat": 7,
+    "type": "recipe",
+    "resource": "example:crafting/test",
+    "namespace": "example",
+    "migrated": "data/example/recipes/crafting/test.json"
+  },
+  {
+    "name": "worldgen nested type",
+    "path": "data/example/worldgen/biome/test.json",
+    "packFormat": 7,
+    "type": "worldgen/biome",
+    "resource": "example:test",
+    "namespace": "example",
+    "migrated": "data/example/worldgen/biome/test.json"
+  },
+  {
+    "name": "structure extension",
+    "path": "data/example/structures/test.nbt",
+    "packFormat": 7,
+    "type": "structure",
+    "resource": "data/example/structures/test.nbt",
+    "namespace": "example",
+    "migrated": "data/example/structures/test.nbt"
+  },
+  {
+    "name": "unknown directory",
+    "path": "data/example/custom/test.json",
+    "packFormat": 7,
+    "type": null,
+    "resource": "example:test",
+    "namespace": "example",
+    "migrated": "data/example/custom/test.json"
+  },
+  {
+    "name": "outside datapack",
+    "path": "notes/test.txt",
+    "packFormat": 7,
+    "type": null,
+    "resource": "notes/test.txt",
+    "namespace": "notes/test.txt",
+    "migrated": "notes/test.txt"
+  },
+  {
+    "name": "function directory",
+    "path": "data/example/functions",
+    "packFormat": 7,
+    "type": "function",
+    "resource": "data/example/functions",
+    "namespace": "example",
+    "migrated": "data/example/functions"
+  },
+  {
+    "name": "dotfile",
+    "path": "data/example/functions/.hidden.mcfunction",
+    "packFormat": 7,
+    "type": "function",
+    "resource": "example:.hidden",
+    "namespace": "example",
+    "migrated": "data/example/functions/.hidden.mcfunction"
+  },
+  {
+    "name": "windows separators",
+    "path": "data\\example\\functions\\nested\\run.mcfunction",
+    "packFormat": 7,
+    "type": "function",
+    "resource": "example:nested/run",
+    "namespace": "example",
+    "migrated": "data\\example\\functions\\nested\\run.mcfunction"
+  }
+]
