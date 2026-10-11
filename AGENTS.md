@@ -6,6 +6,7 @@ Read `docs/development.md` before changing behavior. It maps features, verificat
 
 - `src/extension.ts`: activation, configuration changes, command registration.
 - `src/commands/*/main.ts`: VS Code interaction and command orchestration.
+- `src/commands/createFile/core/`: host-independent creation workflow with explicit storage, input, date, and editor ports.
 - `src/commands/scoreOperation/core/`: host-independent parser/converter with injected effects.
 - `src/commands/scoreOperation/utils/`: existing adapter API wired to VS Code, localization, and logging.
 - `src/core/datapack/`: host-independent file-type metadata, relative-path classification, resource-path calculation.
