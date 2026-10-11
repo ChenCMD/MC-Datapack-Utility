@@ -46,3 +46,11 @@ test('own custom operator entries remain recognized even when named like prototy
     assert.deepEqual(analyze(`left ${name} right`, operators), { front: 'left', op: operator, back: 'right' })
   }
 })
+
+test('prototype score names combine with scaled conditional results', async () => {
+  const result = await convert('constructor = if( toString > 1 , valueOf , hasOwnProperty ) + 1', 10)
+  for (const value of [0, 2]) {
+    const initial = [['toString', '_', value], ['valueOf', '_', 4], ['hasOwnProperty', '_', 5]]
+    assert.equal(executeScores(result, initial).get('constructor _'), value > 1 ? 50 : 60)
+  }
+})

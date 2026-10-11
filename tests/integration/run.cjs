@@ -29,7 +29,7 @@ exports.run = async function run() {
   const scoreConfig = vscode.workspace.getConfiguration('mcdutil.scoreOperation')
   const previousScale = scoreConfig.inspect('valueScale')?.workspaceValue
   try {
-    for (const name of ['assignment', 'hex literal', 'conditional', 'unary minus', 'scale', 'prototype score names']) {
+    for (const name of ['assignment', 'hex literal', 'conditional', 'conditional scale', 'unary minus', 'scale', 'prototype score names']) {
       const fixture = fixtures.find(item => item.name === name);
       await scoreConfig.update('valueScale', fixture.config?.valueScale ?? 1, vscode.ConfigurationTarget.Workspace);
       const document = await vscode.workspace.openTextDocument({ language: 'mcfunction', content: fixture.expression });
