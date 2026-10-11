@@ -127,10 +127,13 @@ function isIncludeVersion(version: VersionMapping, packFormat: number): boolean 
 }
 
 export function createFileTypeResolver(reportWrongFormat: (fileType: FileType, packFormat: number) => void = () => {}) {
-  function getFileTypeFromRel(relativePath: string, packFormat: number): FileType | undefined {
-    const [matchedFileType, matchedFileTypeMetaData] = (Object.entries(fileTypeMetaDataMap) as [FileType, FileTypeMetaData][])
+  function matchFileType(relativePath: string) {
+    return (Object.entries(fileTypeMetaDataMap) as [FileType, FileTypeMetaData][])
       .find(([, metaData]) => metaData.versionMappings.some(v => minimatch(relativePath, `data/*/${v.name}/**`, { dot: true })))
-      ?? [undefined, undefined]
+  }
+
+  function getFileTypeFromRel(relativePath: string, packFormat: number): FileType | undefined {
+    const [matchedFileType, matchedFileTypeMetaData] = matchFileType(relativePath) ?? [undefined, undefined]
 
     if (!matchedFileType)
       return undefined
@@ -151,18 +154,20 @@ export function createFileTypeResolver(reportWrongFormat: (fileType: FileType, p
   }
 
   function migrateFilePath(relativePath: string, packFormat: number): string | undefined {
-    const fileType = getFileTypeFromRel(relativePath, packFormat)
-    if (!fileType) return relativePath
+    if (relativePath.includes('\\')) return relativePath
 
-    const metaData = fileTypeMetaDataMap[fileType]
+    // Template paths may use a folder name from a different pack format.
+    const lookupPath = relativePath.endsWith('/') ? relativePath : `${relativePath}/`
+    const [, metaData] = matchFileType(lookupPath) ?? [undefined, undefined]
+    if (!metaData) return relativePath
 
-    const currentVersion = metaData.versionMappings.find(v => minimatch(relativePath, `data/*/${v.name}/**`, { dot: true }))
+    const currentVersion = metaData.versionMappings.find(v => minimatch(lookupPath, `data/*/${v.name}/**`, { dot: true }))
     if (!currentVersion) return relativePath
 
     const targetVersion = metaData.versionMappings.find(v => isIncludeVersion(v, packFormat))
     if (!targetVersion) return undefined
 
-    return relativePath.replace(RegExp(`data/([^/]+)/${currentVersion.name}/(.*)`), `data/$1/${targetVersion.name}/$2`)
+    return relativePath.replace(RegExp(`^(data/[^/]+/)${currentVersion.name}(?=/|$)`), `$1${targetVersion.name}`)
   }
   return { getFileTypeFromRel, getFilePath, migrateFilePath }
 }

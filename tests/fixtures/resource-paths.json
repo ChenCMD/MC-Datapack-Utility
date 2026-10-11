@@ -24,7 +24,7 @@
     "type": null,
     "resource": "example:run",
     "namespace": "example",
-    "migrated": "data/example/functions/run.mcfunction"
+    "migrated": "data/example/function/run.mcfunction"
   },
   {
     "name": "modern function with old format",
@@ -33,7 +33,7 @@
     "type": null,
     "resource": "example:run",
     "namespace": "example",
-    "migrated": "data/example/function/run.mcfunction"
+    "migrated": "data/example/functions/run.mcfunction"
   },
   {
     "name": "legacy block tag",
