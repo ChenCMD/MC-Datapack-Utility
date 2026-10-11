@@ -95,7 +95,9 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
     })
     const _exp = ['(', ...nameElem, ')']
 
-    return assemble(formulaAnalyzer(_exp, opTable, funcs, scale), exp, opTable, funcs, scale)
+    // Conditional branches already contain scaled values; their result score is an internal reference.
+    const resultScale = func.identifier === 'if(' ? 1 : scale
+    return assemble(formulaAnalyzer(_exp, opTable, funcs, resultScale), exp, opTable, funcs, scale)
   }
 
   function closingIndex(tokens: string[], start = 0): number {
