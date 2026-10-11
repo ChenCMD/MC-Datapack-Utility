@@ -3,10 +3,9 @@ import { getTextEditor, listenInput, showError } from '../../utils/vscodeWrapper
 import { rpnToScoreOperation } from './utils/converter'
 import { formulaAnalyzer } from './utils/formula'
 import { locale } from '../../locales'
-import { opTable } from './types/OperateTable'
+import { createOperateTable } from './core/operateTable'
 import { NotOpenTextDocumentError, UserCancelledError } from '../../types/Error'
 import { IfFormula } from './types/Formula'
-import rfdc from 'rfdc'
 import { Config } from '../../types'
 
 export const scoreOperation = async ({ scoreOperation: config }: Config): Promise<void> => {
@@ -14,10 +13,7 @@ export const scoreOperation = async ({ scoreOperation: config }: Config): Promis
     const { objective, forceInputType, valueScale } = config
     const editor = getTextEditor()
 
-    const operateTable = rfdc()(opTable)
-    config.customOperate.forEach(e => {
-      operateTable[e.identifier] = e
-    })
+    const operateTable = createOperateTable(config.customOperate)
 
     let text = ''
     if (forceInputType !== 'Always InputBox') text = editor.document.getText(editor.selection)
