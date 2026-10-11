@@ -91,6 +91,15 @@ test('filename cancellation creates no file and reports no error', async () => {
     await assert.rejects(access(join(directory,'sample.mcfunction')))
   })
 })
+
+test('create command places cursor after expanded names and removes uppercase marker', async () => {
+  await withPack({}, async directory => {
+    const cursorConfig = { ...config, createFile: { fileTemplate: { function: ['say %fileName% %CURSOR%tail'] } } }
+    await createFile(uri(directory), cursorConfig)
+    assert.equal(await readFile(join(directory, 'sample.mcfunction'), 'utf8'), 'say sample tail')
+    assert.deepEqual(state.opened[0].options.selection.position, [0, 11, 0, 11])
+  })
+})
 test('existing files are rejected by validation and retain their bytes', async () => {
   await withPack({},async directory=>{
     const file=join(directory,'sample.mcfunction');await writeFile(file,'keep this content')

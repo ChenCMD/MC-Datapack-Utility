@@ -115,7 +115,7 @@ exports.run = async function run() {
       locale: (key, ...params) => [key, ...params].join(':'),
       showError: message => effects.errors.push(message), log: message => effects.logs.push(message)
     })
-    await command(folder, fileConfig)
+    await command(folder, options.config || fileConfig)
     return effects
   }
   const generated = vscode.Uri.joinPath(functionFolder, 'generated.mcfunction')
@@ -127,6 +127,15 @@ exports.run = async function run() {
   assert.equal(vscode.window.activeTextEditor.document.uri.toString(), generated.toString())
   assert.equal(vscode.window.activeTextEditor.selection.start.line, 2)
   assert.equal(vscode.window.activeTextEditor.selection.start.character, 0)
+  const cursorConfig = { ...fileConfig, createFile: { fileTemplate: {
+    function: ['header', 'say %fileName% %CURSOR%tail']
+  } } }
+  const expandedCursor = await createResource(functionFolder, 'cursor-position', { config: cursorConfig })
+  assert.equal(expandedCursor.opened, 1)
+  assert.deepEqual(expandedCursor.errors, [])
+  assert.equal(vscode.window.activeTextEditor.document.getText(), 'header\r\nsay cursor-position tail')
+  assert.equal(vscode.window.activeTextEditor.selection.start.line, 1)
+  assert.equal(vscode.window.activeTextEditor.selection.start.character, 20)
   const duplicate = await createResource(functionFolder, 'generated')
   assert.match(duplicate.validation, /error.already-exists/)
   assert.equal(duplicate.opened, 0)
