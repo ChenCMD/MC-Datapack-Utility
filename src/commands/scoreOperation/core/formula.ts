@@ -64,22 +64,21 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
       throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
 
     const subArr: string[][] = []
-    const separation = { new: 0, old: 0 }
-    let _str: string
-
-    // exp =  f( f( f( 1 , 2 ) , f( 3 , 4 ) ) , 5 )
-    // nested = ['f('  'f('  '1'  ','  '2'  ')'  ','  'f('  '3'  ','  '4'  ')'  ')'  ','  '5']
-    let i = 0
-    while (i < func.arity - 1) {
-      separation.new = nested.indexOf(',', separation.old)
-      _str = nested.slice(separation.old, separation.new).join(' ')
-      subArr[i] = _str.split(' ')
-      if (_str.split('(').length === _str.split(')').length
-        && _str.lastIndexOf('(') <= _str.lastIndexOf(')'))
-        i++
-      separation.old = separation.new + 1
+    let current: string[] = []
+    let depth = 0
+    for (const token of nested) {
+      if (token.endsWith('(')) depth++
+      else if (token === ')') depth--
+      if (depth < 0)
+        throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
+      if (token === ',' && depth === 0) {
+        subArr.push(current)
+        current = []
+      } else current.push(token)
     }
-    subArr.push(nested.slice(separation.new + 1))
+    if (nested.length > 0 || func.arity > 0) subArr.push(current)
+    if (depth !== 0 || subArr.length !== func.arity || subArr.some(arg => arg.length === 0 || arg.every(token => token === '')))
+      throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
 
     if (!func.destination)
       throw new ParsingError(locale('parsing-error', func.identifier))

@@ -52,6 +52,15 @@ exports.run = async function run() {
     await scoreConfig.update('valueScale', previousScale, vscode.ConfigurationTarget.Workspace)
   }
 
+  for (const expression of ['a = if( ( b > 1 ) )', 'a = if( b > 1 , 2 , 3 , 4 )']) {
+    const document = await vscode.workspace.openTextDocument({ language: 'mcfunction', content: expression })
+    const editor = await vscode.window.showTextDocument(document)
+    editor.selection = new vscode.Selection(document.positionAt(0), document.positionAt(expression.length))
+    await vscode.commands.executeCommand('mcdutil.commands.scoreOperation')
+    assert.equal(document.getText(), expression, 'invalid input must preserve the editor content')
+    console.log(`PASS malformed score expression returns without editing: ${expression}`)
+  }
+
   const uri = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, 'data/example/functions/sample.mcfunction')
   const formattingFixtures = require('../fixtures/formatter.json')
   const formattingConfig = vscode.workspace.getConfiguration('mcdutil.mcfFormatter')
