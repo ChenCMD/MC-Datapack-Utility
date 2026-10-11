@@ -1,9 +1,10 @@
 import type { Config } from '../../../types/Config'
-import { resolveVars, Variables } from '../../../core/templates/variables'
+import type { Variables } from '../../../core/templates/variables'
 import { GenerateError, NotOpenTextDocumentError, UserCancelledError } from '../../../types/Error'
 import { getFileTemplate } from '../utils'
 import { TextEncoder } from 'util'
-import type { CreateFilePorts, CursorPosition } from './ports'
+import type { CreateFilePorts } from './ports'
+import { renderFileTemplate } from './template'
 
 export function createFileCommand<U extends { path: string }>(ports: CreateFilePorts<U>) {
   const { getDatapackRoot, getPackFormat, getFileType, isDatapackRoot, getDate,
@@ -78,14 +79,10 @@ export function createFileCommand<U extends { path: string }>(ports: CreateFileP
       }
 
       const fileTemplate = getFileTemplate(config.createFile.fileTemplate, fileType)
-      let selection: CursorPosition | undefined
-      fileTemplate.forEach((v, i) => {
-        const res = v.search(/%cursor%/i)
-        if (res !== -1) selection = { line: i, character: res }
-      })
+      const { content, selection } = renderFileTemplate(fileTemplate, vars)
 
       // 生成
-      await create(filePath, new TextEncoder().encode(resolveVars(fileTemplate.join('\r\n'), vars)))
+      await create(filePath, new TextEncoder().encode(content))
       // ファイルを開く
       await openFile(filePath, selection)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
