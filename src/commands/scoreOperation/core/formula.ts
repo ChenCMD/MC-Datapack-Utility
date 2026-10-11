@@ -3,6 +3,7 @@ import { OperateTable } from '../types/OperateTable'
 import { GenerateError, ParsingError } from '../../../types/Error'
 import { ConditionExp, conditionExpTable } from '../types/ConditionExpTable'
 import type { ScoreOperationPorts } from './ports'
+import { isNumber } from '../../../utils/typeGuards'
 
 export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
   const { locale } = ports
@@ -16,7 +17,8 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
 
     // firstがopTableに登録されていなければ、ただの文字列であると考える
     if (!func) {
-      const front = (scale === 1) ? first : { front: first, op: { ...opTable['*'], order: opTable['('].order }, back: scale.toString() }
+      const isDestination = opTable[exp[0]]?.identifier?.endsWith('=')
+      const front = (scale === 1 || isDestination) ? first : { front: first, op: { ...opTable['*'], order: opTable['('].order }, back: scale.toString() }
       return assemble(front, exp, opTable, funcs, scale)
     }
 
@@ -31,6 +33,8 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
           throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
         const operandEnd = exp[operandStart].endsWith('(') ? closingIndex(exp, operandStart) + 1 : operandStart + 1
         const operand = formulaAnalyzer(exp.splice(0, operandEnd), opTable, funcs, scale)
+        if (opTable[exp[0]]?.identifier?.endsWith('='))
+          throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
         const signed = func.identifier === '+' ? operand : { front: '0', op: { ...opTable['-'], order: opTable['('].order }, back: operand }
         return assemble(signed, exp, opTable, funcs, scale)
       // 括弧の時は深くする
@@ -38,7 +42,8 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
         const lastClose = closingIndex(['(', ...exp]) - 1
         const sub = exp.slice(0, lastClose)
         exp = exp.slice(lastClose + 1)
-        const inner = formulaAnalyzer(sub, opTable, funcs, scale)
+        const innerScale = opTable[exp[0]]?.identifier?.endsWith('=') ? 1 : scale
+        const inner = formulaAnalyzer(sub, opTable, funcs, innerScale)
         const grouped = typeof inner === 'string' ? inner : { ...inner, op: { ...inner.op, order: opTable['('].order } }
         return assemble(grouped, exp, opTable, funcs, scale)
       case ')':
@@ -108,7 +113,13 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
       throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
     const back = formulaAnalyzer(exp, opTable, funcs, scale)
     // Assignment is emitted after the right-hand expression.
-    if (op.identifier.endsWith('=')) return { front: back, op, back: front }
+    if (op.identifier.endsWith('=')) {
+      if (typeof front !== 'string' || isNumber(front))
+        throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
+      return { front: back, op, back: front }
+    }
+    if (typeof back !== 'string' && back.op.identifier.endsWith('='))
+      throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
     return combine(front, op, back)
 
     function combine(left: Formula | string, operator: Formula['op'], right: Formula | string): Formula {

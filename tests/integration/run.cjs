@@ -26,23 +26,30 @@ exports.run = async function run() {
   }
   console.log('PASS extension activation and five command registrations')
 
-  for (const name of ['assignment', 'hex literal', 'conditional', 'unary minus']) {
-    const fixture = fixtures.find(item => item.name === name);
-    const document = await vscode.workspace.openTextDocument({ language: 'mcfunction', content: fixture.expression });
-    const editor = await vscode.window.showTextDocument(document);
-    editor.selection = new vscode.Selection(document.positionAt(0), document.positionAt(fixture.expression.length));
-    await vscode.commands.executeCommand('mcdutil.commands.scoreOperation');
-    const output = await eventually(() => document.getText(), text => text !== fixture.expression);
-    const english = require('../../src/locales/en.json');
-    assert.equal(output.replace(/\r\n/g, '\n'), [
-      `# ${fixture.expression}`,
-      `# ${english['formula-to-score-operation.complete-text']}`,
-      'scoreboard objectives add _ dummy',
-      ...fixture.expected.constants,
-      '',
-      ...fixture.expected.commands
-    ].join('\n'));
-    console.log(`PASS score command replaces the real editor selection: ${name}`);
+  const scoreConfig = vscode.workspace.getConfiguration('mcdutil.scoreOperation')
+  const previousScale = scoreConfig.inspect('valueScale')?.workspaceValue
+  try {
+    for (const name of ['assignment', 'hex literal', 'conditional', 'unary minus', 'scale']) {
+      const fixture = fixtures.find(item => item.name === name);
+      await scoreConfig.update('valueScale', fixture.config?.valueScale ?? 1, vscode.ConfigurationTarget.Workspace);
+      const document = await vscode.workspace.openTextDocument({ language: 'mcfunction', content: fixture.expression });
+      const editor = await vscode.window.showTextDocument(document);
+      editor.selection = new vscode.Selection(document.positionAt(0), document.positionAt(fixture.expression.length));
+      await vscode.commands.executeCommand('mcdutil.commands.scoreOperation');
+      const output = await eventually(() => document.getText(), text => text !== fixture.expression);
+      const english = require('../../src/locales/en.json');
+      assert.equal(output.replace(/\r\n/g, '\n'), [
+        `# ${fixture.expression}`,
+        `# ${english['formula-to-score-operation.complete-text']}`,
+        'scoreboard objectives add _ dummy',
+        ...fixture.expected.constants,
+        '',
+        ...fixture.expected.commands
+      ].join('\n'));
+      console.log(`PASS score command replaces the real editor selection: ${name}`);
+    }
+  } finally {
+    await scoreConfig.update('valueScale', previousScale, vscode.ConfigurationTarget.Workspace)
   }
 
   const uri = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, 'data/example/functions/sample.mcfunction')
