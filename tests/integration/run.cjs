@@ -81,6 +81,22 @@ exports.run = async function run() {
     await vscode.env.clipboard.writeText('integration sentinel')
     await vscode.commands.executeCommand('mcdutil.commands.copyResourcePath', uri)
     await eventually(() => vscode.env.clipboard.readText(), text => text === 'example:sample')
+    const resourceFixtures = require('../fixtures/resource-paths.json')
+    const names = ['legacy nested function', 'modern function', 'legacy block tag', 'modern block tag', 'modern function tag', 'recipe', 'worldgen nested type']
+    for (const name of names) {
+      const fixture = resourceFixtures.find(item => item.name === name)
+      const root = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, `resource-pack-${fixture.packFormat}`)
+      await vscode.workspace.fs.createDirectory(vscode.Uri.joinPath(root, 'data'))
+      await vscode.workspace.fs.writeFile(vscode.Uri.joinPath(root, 'pack.mcmeta'), Buffer.from(JSON.stringify({ pack: { pack_format: fixture.packFormat, description: 'Integration fixture' } })))
+      const path = fixture.path.split('/')
+      await vscode.workspace.fs.createDirectory(vscode.Uri.joinPath(root, ...path.slice(0, -1)))
+      const file = vscode.Uri.joinPath(root, ...path)
+      await vscode.workspace.fs.writeFile(file, Buffer.from(file.path.endsWith('.mcfunction') ? 'say fixture\n' : '{}\n'))
+      await vscode.env.clipboard.writeText('integration sentinel')
+      await vscode.commands.executeCommand('mcdutil.commands.copyResourcePath', file)
+      await eventually(() => vscode.env.clipboard.readText(), text => text === fixture.resource)
+      console.log(`PASS resource path clipboard: ${fixture.name}`)
+    }
   } finally {
     await vscode.env.clipboard.writeText(originalClipboard)
   }

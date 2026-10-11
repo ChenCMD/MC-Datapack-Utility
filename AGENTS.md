@@ -8,6 +8,9 @@ Read `docs/development.md` before changing behavior. It maps features, verificat
 - `src/commands/*/main.ts`: VS Code interaction and command orchestration.
 - `src/commands/scoreOperation/core/`: host-independent parser/converter with injected effects.
 - `src/commands/scoreOperation/utils/`: existing adapter API wired to VS Code, localization, and logging.
+- `src/core/datapack/`: host-independent file-type metadata, relative-path classification, resource-path calculation.
+- `src/core/templates/variables.ts`: variable expansion; JSON objects are mutated in place.
+- `src/types/FileTypes.ts`, `src/types/Variables.ts`, `src/utils/common.ts`: existing URI/UI adapters and compatibility exports.
 - `src/languages/McfunctionFormatter.ts`: VS Code formatting adapter and resource-path lookup.
 - `src/languages/core/formatter.ts`: host-independent line formatting and edit planning.
 - `tests/fixtures/`: checked-in examples and expected baseline behavior.
