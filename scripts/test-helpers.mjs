@@ -23,7 +23,7 @@ export async function bundledExports(entryPoint, stubs = {}) {
         builder.onResolve({ filter: /.*/ }, args => {
           if (Object.hasOwn(stubs, args.path)) return { path: args.path, namespace: 'stub' }
         })
-        builder.onLoad({ filter: /.*/, namespace: 'stub' }, args => ({ contents: stubs[args.path] }))
+        builder.onLoad({ filter: /.*/, namespace: 'stub' }, args => ({ contents: stubs[args.path], resolveDir: root }))
       }
     }]
   })
