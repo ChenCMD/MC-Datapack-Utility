@@ -136,7 +136,29 @@ def translate_value(value, host_home, home):
     return value
 
 
-def translate_paths(data, host_home, home, *, toml=False):
+def source_casing(suffix, source_home):
+    """Recover Windows filename spelling without following source symlinks."""
+    if source_home is None:
+        return suffix
+    cursor = source_home
+    names = []
+    for component in suffix.split("/"):
+        if component in {"", "."}:
+            names.append(component)
+            continue
+        try:
+            matches = [child for child in cursor.iterdir()
+                       if child.name.casefold() == component.casefold()]
+        except OSError:
+            return suffix
+        if len(matches) != 1 or matches[0].is_symlink():
+            return suffix
+        cursor = matches[0]
+        names.append(cursor.name)
+    return "/".join(names)
+
+
+def translate_paths(data, host_home, home, *, toml=False, source_home=None):
     try:
         text = data.decode("utf-8")
     except UnicodeDecodeError:
@@ -172,6 +194,8 @@ def translate_paths(data, host_home, home, *, toml=False):
                     if windows:
                         suffix = suffix.replace("\\", "/")
                     if re.fullmatch(r"[\w./@+\-]*", suffix) and ".." not in suffix.split("/"):
+                        if windows:
+                            suffix = source_casing(suffix, source_home)
                         return str(home) + suffix
             return item
         return {key: entry(key, item) for key, item in value.items()}
@@ -232,13 +256,13 @@ def atomic_write(destination, data, mode=0o600, before_replace=None):
         Path(name).unlink(missing_ok=True)
 
 
-def copy_file(source, destination, host_home, home, private=False, data=None, before_replace=None):
+def copy_file(source, destination, host_home, home, private=False, data=None, before_replace=None, source_home=None):
     safe_destination(home, destination.relative_to(home))
     destination.parent.mkdir(parents=True, exist_ok=True)
     if data is None:
         data = source.read_bytes()
         if not private:
-            data = translate_paths(data, host_home, home, toml=destination.suffix == ".toml")
+            data = translate_paths(data, host_home, home, toml=destination.suffix == ".toml", source_home=source_home)
     mode = 0o600 if private else stat.S_IMODE(source.stat().st_mode) | stat.S_IWUSR
     atomic_write(destination, data, mode, before_replace)
 
@@ -416,7 +440,7 @@ def sync(source_home, home, host_home=""):
                 continue
             if not destination.exists():
                 copy_file(resolved, destination, host_home, home,
-                          private=relative.name in {"auth.json", ".credentials.json"})
+                          private=relative.name in {"auth.json", ".credentials.json"}, source_home=source_home)
                 if relative.name == ".claude.json":
                     destination.chmod(0o600)
         atomic_write(marker, b"")
@@ -468,7 +492,7 @@ def sync(source_home, home, host_home=""):
             except ValueError:
                 journal.forget(name, owned)
             continue
-        data = translate_paths(source.read_bytes(), host_home, home, toml=relative.suffix == ".toml")
+        data = translate_paths(source.read_bytes(), host_home, home, toml=relative.suffix == ".toml", source_home=source_home)
         expected_mode = stat.S_IMODE(source.stat().st_mode) | stat.S_IWUSR
         if (destination.is_file() and name in owned and destination.read_bytes() == data
                 and stat.S_IMODE(destination.stat().st_mode) == expected_mode):

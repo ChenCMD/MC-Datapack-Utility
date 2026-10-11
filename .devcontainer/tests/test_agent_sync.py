@@ -118,6 +118,28 @@ class AgentSyncTests(unittest.TestCase):
         self.assertEqual(actual["mcpServers"]["local"]["env"], expected)
         self.assertEqual(actual["mcpServers"]["local"]["headers"], headers)
 
+    def test_windows_environment_paths_use_source_filename_casing(self):
+        host = r"C:\Users\dev"
+        settings = {"env": {"CONFIG_PATH": host + r"\.CLAUDE\Skills\Config.json"}}
+        self.write(self.source, ".claude/.mcp.json", json.dumps(settings))
+        self.write(self.source, ".claude/skills/config.json", '{"ready": true}')
+        module.sync(self.source, self.home, host)
+        imported = json.loads((self.home / ".claude/.mcp.json").read_text())
+        self.assertEqual(imported["env"]["CONFIG_PATH"], str(self.home / ".claude/skills/config.json"))
+        self.assertEqual(json.loads(Path(imported["env"]["CONFIG_PATH"]).read_text()), {"ready": True})
+
+    def test_source_casing_preserves_unresolved_ambiguous_and_linked_paths(self):
+        self.write(self.source, ".claude/skills/config.json", "fixture")
+        self.assertEqual(module.source_casing("/.CLAUDE/./Skills/", self.source), "/.claude/./skills/")
+        missing = "/.CLAUDE/Skills/missing.json"
+        self.assertEqual(module.source_casing(missing, self.source), missing)
+        self.write(self.source, ".claude/skills/CONFIG.JSON", "ambiguous")
+        ambiguous = "/.CLAUDE/Skills/Config.json"
+        self.assertEqual(module.source_casing(ambiguous, self.source), ambiguous)
+        (self.source / ".claude/link").symlink_to(self.source / ".claude/skills", target_is_directory=True)
+        linked = "/.CLAUDE/Link/config.json"
+        self.assertEqual(module.source_casing(linked, self.source), linked)
+
     def test_posix_environment_paths_translate_with_component_boundaries(self):
         host = "/Users/Some Developer"
         env = {"CONFIG_PATH": host + "/.claude/skills/config.json",
