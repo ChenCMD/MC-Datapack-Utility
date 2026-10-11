@@ -22,7 +22,7 @@ const migrations = [
   ['tags/functions', 'tags/function', 45],
   ['tags/game_events', 'tags/game_event', 43],
   ['tags/items', 'tags/item', 43],
-  ['worldgen/configured_structure_feature', 'worldgen/structure', 10, 8]
+  ['worldgen/configured_structure_feature', 'worldgen/structure', 10]
 ]
 
 for (const [label, migrate] of [
@@ -30,21 +30,19 @@ for (const [label, migrate] of [
   ['adapter', adapter.migrateFilePath]
 ]) {
   test(`${label}: resource folders migrate across their metadata boundaries`, () => {
-    for (const [legacy, modern, boundary, legacyFormat = boundary - 1] of migrations) {
+    for (const [legacy, modern, boundary] of migrations) {
       for (const suffix of ['', '/', '/nested/.hidden.json', '/nested/run.mcfunction', '/nested/test.nbt']) {
         const oldPath = `data/%namespace%/${legacy}${suffix}`
         const newPath = `data/%namespace%/${modern}${suffix}`
         assert.equal(migrate(oldPath, boundary), newPath)
-        assert.equal(migrate(newPath, legacyFormat), oldPath)
-        assert.equal(migrate(oldPath, legacyFormat), oldPath)
+        assert.equal(migrate(newPath, boundary - 1), oldPath)
+        assert.equal(migrate(oldPath, boundary - 1), oldPath)
         assert.equal(migrate(newPath, boundary), newPath)
       }
     }
   })
   test(`${label}: unavailable types are omitted and unrelated paths stay unchanged`, () => {
     assert.equal(migrate('data/example/dimension/test.json', 4), undefined)
-    assert.equal(migrate('data/example/worldgen/configured_structure_feature/test.json', 9), undefined)
-    assert.equal(migrate('data/example/worldgen/structure/test.json', 9), undefined)
     assert.equal(migrate('data/example/item_modifier/', 6), undefined)
     assert.equal(migrate('data/example/functions/run.mcfunction', 3), undefined)
     for (const format of [3, 9, 45]) {
@@ -64,4 +62,16 @@ test('migration does not emit strict classification diagnostics', () => {
   assert.deepEqual(warnings, [])
   assert.equal(resolver.getFileTypeFromRel('data/example/functions/run.mcfunction', 45), undefined)
   assert.deepEqual(warnings, [{ type: 'function', format: 45 }])
+})
+
+test('Minecraft 1.18.2 retains configured structure features through pack format 9', () => {
+  const resolver = createFileTypeResolver()
+  for (const format of [8, 9]) {
+    assert.equal(resolver.getFilePath('worldgen/structure', format), 'worldgen/configured_structure_feature')
+    assert.equal(resolver.getFileTypeFromRel('data/example/worldgen/configured_structure_feature/test.json', format), 'worldgen/structure')
+    assert.equal(resolver.getFileTypeFromRel('data/example/worldgen/structure/test.json', format), undefined)
+  }
+  assert.equal(resolver.getFilePath('worldgen/structure', 10), 'worldgen/structure')
+  assert.equal(resolver.getFileTypeFromRel('data/example/worldgen/structure/test.json', 10), 'worldgen/structure')
+  assert.equal(resolver.getFileTypeFromRel('data/example/worldgen/configured_structure_feature/test.json', 10), undefined)
 })
