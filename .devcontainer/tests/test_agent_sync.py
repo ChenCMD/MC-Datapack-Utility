@@ -122,6 +122,7 @@ class AgentSyncTests(unittest.TestCase):
         host = "/Users/Some Developer"
         env = {"CONFIG_PATH": host + "/.claude/skills/config.json",
                "HOME": host, "OTHER": host + "-other/private",
+               "BACKSLASH": host + r"\file",
                "PATH": host + "/bin:/usr/bin", "AUTH_TOKEN": host + "/opaque"}
         actual = json.loads(module.translate_paths(json.dumps({"env": env}).encode(), host, self.home))["env"]
         self.assertEqual(actual, {**env, "CONFIG_PATH": str(self.home / ".claude/skills/config.json"), "HOME": str(self.home)})

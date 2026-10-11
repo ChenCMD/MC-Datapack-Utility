@@ -150,7 +150,9 @@ def translate_paths(data, host_home, home, *, toml=False):
         if not isinstance(value, dict):
             return value
         windows = PureWindowsPath(host_home).is_absolute()
-        prefixes = {host_home.rstrip("/\\"), host_home.replace("\\", "/").rstrip("/")}
+        prefixes = ({host_home.rstrip("/\\"), host_home.replace("\\", "/").rstrip("/")}
+                    if windows else {host_home.rstrip("/")})
+        boundary = r"(?=$|[/\\])" if windows else r"(?=$|/)"
         flags = re.IGNORECASE if windows else 0
         def entry(key, item):
             # Environment values may be credentials or opaque strings. Only
@@ -161,7 +163,7 @@ def translate_paths(data, host_home, home, *, toml=False):
                     or ":" in (item[2:] if windows else item)):
                 return item
             for prefix in prefixes:
-                match = re.match(re.escape(prefix) + r"(?=$|[/\\])", item, flags)
+                match = re.match(re.escape(prefix) + boundary, item, flags)
                 # Spaces in the known home are unambiguous. Beyond it, a
                 # filename with spaces cannot be distinguished from arguments
                 # or a whitespace-separated list, so preserve the whole value.
