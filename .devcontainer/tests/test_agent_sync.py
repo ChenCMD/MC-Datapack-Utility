@@ -127,11 +127,15 @@ class AgentSyncTests(unittest.TestCase):
         actual = json.loads(module.translate_paths(json.dumps({"env": env}).encode(), host, self.home))["env"]
         self.assertEqual(actual, {**env, "CONFIG_PATH": str(self.home / ".claude/skills/config.json"), "HOME": str(self.home)})
 
-    def test_environment_values_with_whitespace_after_home_are_preserved(self):
-        for host, separator in [("/Users/Some Developer", "/"), (r"C:\Users\Some Developer", "\\")]:
+    def test_ambiguous_environment_values_are_preserved(self):
+        for host, separator in [("/Users/Some Developer", "/"), (r"C:\Users\Some Developer", "\\"),
+                                ("/Users/dev", "/"), (r"C:\Users\dev", "\\")]:
             with self.subTest(host=host):
                 env = {"COMMAND": host + separator + "tool --flag",
                        "FILES": host + separator + "a " + host + separator + "b",
+                       "COMMA_LIST": host + separator + "a," + host + separator + "b",
+                       "PIPE_COMMAND": host + separator + "tool|other",
+                       "QUOTED": host + separator + '"config"',
                        "CONFIG_PATH": host + separator + "My Config.json",
                        "TABBED": host + separator + "tool\t--flag"}
                 actual = json.loads(module.translate_paths(json.dumps({"env": env}).encode(), host, self.home))

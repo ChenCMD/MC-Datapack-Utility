@@ -164,11 +164,15 @@ def translate_paths(data, host_home, home, *, toml=False):
                 return item
             for prefix in prefixes:
                 match = re.match(re.escape(prefix) + boundary, item, flags)
-                # Spaces in the known home are unambiguous. Beyond it, a
-                # filename with spaces cannot be distinguished from arguments
-                # or a whitespace-separated list, so preserve the whole value.
-                if match and not re.search(r"\s", item[match.end():]):
-                    return translate_value(item, host_home, home)
+                if match:
+                    # The home is known; the suffix is opaque. Conservatively
+                    # accept ordinary path characters only, preserving list
+                    # delimiters, shell syntax, and ambiguous filenames.
+                    suffix = item[match.end():]
+                    if windows:
+                        suffix = suffix.replace("\\", "/")
+                    if re.fullmatch(r"[\w./@+\-]*", suffix):
+                        return str(home) + suffix
             return item
         return {key: entry(key, item) for key, item in value.items()}
 
