@@ -13,7 +13,7 @@ const { formulaAnalyzer } = createFormulaAnalyzer(ports)
 const { rpnToScoreOperation } = createScoreConverter(ports)
 const fixtures = JSON.parse(await readFile(new URL('../tests/fixtures/score-operation.json', import.meta.url)))
 for (const fixture of fixtures) {
-  test(`isolated core preserves baseline: ${fixture.name}`, async () => {
+  test(`isolated core matches documented fixtures: ${fixture.name}`, async () => {
     const config = { ...defaults, ...fixture.config }
     const funcs = []
     const formula = formulaAnalyzer(fixture.expression.split(' '), opTable, funcs, config.valueScale)
@@ -28,11 +28,11 @@ test('objective prompts are deduplicated per conversion and configured answers a
   const config = { ...defaults, isAlwaysSpecifyObject: true }
   const result = await converter.rpnToScoreOperation(formula, config, [], opTable)
   assert.deepEqual(prompts, ['formula-to-score-operation.specifying-object:b', 'formula-to-score-operation.specifying-object:a'])
-  // Repeated b historically uses the default objective after the first prompt.
+  // Variables retain their answers; generated temporaries belong to the configured objective.
   assert.deepEqual(result.resFormulas, [
     'scoreboard players operation $MCDUtil_Temp_1 _ = b other',
-    'scoreboard players operation $MCDUtil_Temp_1 other += b _',
-    'scoreboard players operation a other = $MCDUtil_Temp_1 other'
+    'scoreboard players operation $MCDUtil_Temp_1 _ += b other',
+    'scoreboard players operation a other = $MCDUtil_Temp_1 _'
   ])
   await converter.rpnToScoreOperation(formula, config, [], opTable)
   assert.equal(prompts.length, 4, 'a new conversion must prompt again')

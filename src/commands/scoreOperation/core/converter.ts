@@ -38,12 +38,12 @@ export function createScoreConverter(ports: ScoreOperationPorts) {
   const { locale, warn } = ports
   const { formulaToQueue } = createFormulaQueue(ports)
 
-  const rpnToScoreOperation = async (formula: Formula | string, config: ScoreOperationConfig, funcs: IfFormula[], opTable: OperateTable, _enteredValues?: Set<string>): Promise<{ resValues: Set<string>, resFormulas: string[] } | undefined> => {
+  const rpnToScoreOperation = async (formula: Formula | string, config: ScoreOperationConfig, funcs: IfFormula[], opTable: OperateTable, _enteredObjectives?: Map<string, string>): Promise<{ resValues: Set<string>, resFormulas: string[] } | undefined> => {
     const { prefix, objective, temp } = config
 
-    const enteredValues = _enteredValues ?? new Set<string>()
+    const enteredObjectives = _enteredObjectives ?? new Map<string, string>()
     const rpnQueue = new Deque<QueueElement>()
-    const res = await formulaToQueue(formula, rpnQueue, config, enteredValues)
+    const res = await formulaToQueue(formula, rpnQueue, config, enteredObjectives)
     if (!res) return undefined
 
     const calcStack: QueueElement[] = []
@@ -56,34 +56,32 @@ export function createScoreConverter(ports: ScoreOperationPorts) {
       let j = 0
       // if文の条件からexecute式の引数に変換
       for (const e of funcs[i].condition) {
-        const source = await rpnToScoreOperation({ front: e.front, op: opTable['='], back: `${prefix}if_${i + 1}_${j++}` }, config, [], opTable, enteredValues)
-        if (source) {
-          source.resValues.forEach(v => resValues.add(v))
-          resFormulas.push(...source.resFormulas)
-        }
+        const leftScore = `${prefix}if_${i + 1}_${j++}`
+        const rightScore = `${prefix}if_${i + 1}_${j++}`
+        const source = await rpnToScoreOperation({ front: e.front, op: opTable['='], back: leftScore }, config, [], opTable, enteredObjectives)
+        if (!source) return undefined
+        source.resValues.forEach(v => resValues.add(v))
+        resFormulas.push(...source.resFormulas)
 
-        const destination = await rpnToScoreOperation({ front: e.back, op: opTable['='], back: `${prefix}if_${i + 1}_${j++}` }, config, [], opTable, enteredValues)
-        if (destination) {
-          destination.resValues.forEach(v => resValues.add(v))
-          resFormulas.push(...destination.resFormulas)
-        }
+        const destination = await rpnToScoreOperation({ front: e.back, op: opTable['='], back: rightScore }, config, [], opTable, enteredObjectives)
+        if (!destination) return undefined
+        destination.resValues.forEach(v => resValues.add(v))
+        resFormulas.push(...destination.resFormulas)
 
-        cases.true.push(`${(e.default) ? 'if' : 'unless'} score ${prefix}if_${i + 1}_${j - 1} ${objective} ${e.op.replaceTo} ${prefix}if_${i + 1}_${j} ${objective}`)
-        cases.false.push(`${(!e.default) ? 'if' : 'unless'} score ${prefix}if_${i + 1}_${j - 1} ${objective} ${e.op.replaceTo} ${prefix}if_${i + 1}_${j} ${objective}`)
+        cases.true.push(`${(e.default) ? 'if' : 'unless'} score ${leftScore} ${objective} ${e.op.replaceTo} ${rightScore} ${objective}`)
+        cases.false.push(`${(!e.default) ? 'if' : 'unless'} score ${leftScore} ${objective} ${e.op.replaceTo} ${rightScore} ${objective}`)
       }
 
       // if文のthen/else節から、scoreboard operationに変換する
-      const THEN = await rpnToScoreOperation({ front: funcs[i].then, op: opTable['='], back: `${prefix}if_${i + 1}` }, config, [], opTable, enteredValues)
-      if (THEN) {
-        THEN.resValues.forEach(v => resValues.add(v))
-        THEN.resFormulas.forEach(v => resFormulas.push(`execute ${cases.true.join(' ')} run ${v}`))
-      }
+      const THEN = await rpnToScoreOperation({ front: funcs[i].then, op: opTable['='], back: `${prefix}if_${i + 1}` }, config, [], opTable, enteredObjectives)
+      if (!THEN) return undefined
+      THEN.resValues.forEach(v => resValues.add(v))
+      THEN.resFormulas.forEach(v => resFormulas.push(`execute ${cases.true.join(' ')} run ${v}`))
 
-      const ELSE = await rpnToScoreOperation({ front: funcs[i].else, op: opTable['='], back: `${prefix}if_${i + 1}` }, config, [], opTable, enteredValues)
-      if (ELSE) {
-        ELSE.resValues.forEach(v => resValues.add(v))
-        ELSE.resFormulas.forEach(v => resFormulas.push(`execute ${cases.false.join(' ')} run ${v}`))
-      }
+      const ELSE = await rpnToScoreOperation({ front: funcs[i].else, op: opTable['='], back: `${prefix}if_${i + 1}` }, config, [], opTable, enteredObjectives)
+      if (!ELSE) return undefined
+      ELSE.resValues.forEach(v => resValues.add(v))
+      ELSE.resFormulas.forEach(v => resFormulas.push(`execute ${cases.false.join(' ')} run ${v}`))
       resFormulas.push('')
     }
 
@@ -95,7 +93,7 @@ export function createScoreConverter(ports: ScoreOperationPorts) {
         case 'num':
           const put = elem.value.startsWith('0x') ? parseInt(elem.value, 16) : parseFloat(elem.value)
           calcStack.push({ value: `${prefix}${put}`, objective: `${objective}`, type: 'num' })
-          resValues.add(`scoreboard players set ${prefix}${elem.value} ${objective} ${put}`)
+          resValues.add(`scoreboard players set ${prefix}${put} ${objective} ${put}`)
           break
         case 'str':
           calcStack.push(elem)
@@ -112,6 +110,7 @@ export function createScoreConverter(ports: ScoreOperationPorts) {
           if (arg2.value.match(prefix + /\d/) || !arg2.value.startsWith(`${prefix}${temp}`)) {
             resFormulas.push(`scoreboard players operation ${prefix}${temp}${++tempCount} ${objective} = ${arg2.value} ${arg2.objective}`)
             arg2.value = `${prefix}${temp}${tempCount}`
+            arg2.objective = objective
           }
 
           if (elem.value.endsWith('=')) {
@@ -131,7 +130,7 @@ export function createScoreConverter(ports: ScoreOperationPorts) {
     // 式を空白文字かカンマでセパレートして配列化＆これらデリミタを式から消す副作用
     const rpnQueue = new Deque<QueueElement>()
     for (const elem of rpnExp.split(/\s+|,/)) {
-      const res = await formulaToQueue(elem, rpnQueue, config, new Set<string>())
+      const res = await formulaToQueue(elem, rpnQueue, config, new Map<string, string>())
       if (!res) return undefined
     }
     // 演算開始
