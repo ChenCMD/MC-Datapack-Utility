@@ -16,6 +16,7 @@ test('macOS paths and Compose interpolation characters are handled', () => {
   const result = hostOverrides('/Users/A Developer$test', 'darwin').services.devcontainer;
   assert.equal(result.volumes[0].source, '/Users/A Developer$$test/.codex');
   assert.equal(result.environment.MCDU_HOST_HOME, '/Users/A Developer$$test');
+  assert.equal(result.environment.MCDU_HOST_PLATFORM, 'darwin');
 });
 
 test('host without agents initializes without creating instruction or credential stubs', () => {

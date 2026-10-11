@@ -81,6 +81,109 @@ class AgentSyncTests(unittest.TestCase):
         translated = module.translate_paths(windows, "C:\\Users\\developer", self.home)
         self.assertNotIn(b"C:", translated)
 
+    def test_windows_mcp_environment_paths_point_to_imported_files(self):
+        host = r"C:\Users\Some Developer"
+        config_path = host + r"\.claude\skills\config.json"
+        settings = {"mcpServers": {"local": {
+            "command": "node", "args": [host + r"\.claude\skills\server.js"],
+            "env": {"CONFIG_PATH": config_path}}}}
+        self.write(self.source, ".claude/.mcp.json", json.dumps(settings))
+        self.write(self.source, ".claude/skills/config.json", '{"ready": true}')
+        self.write(self.source, ".claude/skills/server.js", "// fixture")
+        module.sync(self.source, self.home, host)
+        imported = json.loads((self.home / ".claude/.mcp.json").read_text())
+        server = imported["mcpServers"]["local"]
+        self.assertEqual(server["args"], [str(self.home / ".claude/skills/server.js")])
+        self.assertEqual(server["env"]["CONFIG_PATH"], str(self.home / ".claude/skills/config.json"))
+        self.assertEqual(json.loads(Path(server["env"]["CONFIG_PATH"]).read_text()), {"ready": True})
+        server["env"]["CONFIG_PATH"] = "container-owned"
+        (self.home / ".claude/.mcp.json").write_text(json.dumps(imported))
+        module.sync(self.source, self.home, host)
+        self.assertEqual(json.loads((self.home / ".claude/.mcp.json").read_text())["mcpServers"]["local"]["env"]["CONFIG_PATH"], "container-owned")
+
+    def test_environment_translation_preserves_secrets_headers_and_non_paths(self):
+        host = r"C:\Users\Some Developer"
+        absolute = host + r"\.claude\skills\config.json"
+        env = {"CONFIG_PATH": absolute, "DATA_DIR": "c:/users/some developer/.claude/skills",
+               "API_KEY": absolute, "ACCESS_TOKEN": absolute, "PASSWORD": absolute,
+               "AUTH": absolute, "KEY": absolute, "BEARER": absolute,
+               "MESSAGE": "Read " + absolute, "OTHER": host + r"-other\data",
+               "PATH": absolute + r";C:\Windows", "COUNT": 2, "EMPTY": ""}
+        headers = {"Authorization": absolute, "X-Data": absolute}
+        source = {"mcpServers": {"local": {"env": env, "headers": headers}}}
+        actual = json.loads(module.translate_paths(json.dumps(source).encode(), host, self.home))
+        expected = dict(env)
+        expected["CONFIG_PATH"] = str(self.home / ".claude/skills/config.json")
+        expected["DATA_DIR"] = str(self.home / ".claude/skills")
+        self.assertEqual(actual["mcpServers"]["local"]["env"], expected)
+        self.assertEqual(actual["mcpServers"]["local"]["headers"], headers)
+
+    def test_windows_environment_paths_use_source_filename_casing(self):
+        host = r"C:\Users\dev"
+        settings = {"env": {"CONFIG_PATH": host + r"\.CLAUDE\Skills\Config.json"}}
+        self.write(self.source, ".claude/.mcp.json", json.dumps(settings))
+        self.write(self.source, ".claude/skills/config.json", '{"ready": true}')
+        module.sync(self.source, self.home, host)
+        imported = json.loads((self.home / ".claude/.mcp.json").read_text())
+        self.assertEqual(imported["env"]["CONFIG_PATH"], str(self.home / ".claude/skills/config.json"))
+        self.assertEqual(json.loads(Path(imported["env"]["CONFIG_PATH"]).read_text()), {"ready": True})
+
+    def test_source_casing_preserves_unresolved_ambiguous_and_linked_paths(self):
+        self.write(self.source, ".claude/skills/config.json", "fixture")
+        self.assertEqual(module.source_casing("/.CLAUDE/./Skills/", self.source), "/.claude/./skills/")
+        missing = "/.CLAUDE/Skills/missing.json"
+        self.assertEqual(module.source_casing(missing, self.source), missing)
+        self.write(self.source, ".claude/skills/CONFIG.JSON", "ambiguous")
+        ambiguous = "/.CLAUDE/Skills/Config.json"
+        self.assertEqual(module.source_casing(ambiguous, self.source), ambiguous)
+        (self.source / ".claude/link").symlink_to(self.source / ".claude/skills", target_is_directory=True)
+        linked = "/.CLAUDE/Link/config.json"
+        self.assertEqual(module.source_casing(linked, self.source), linked)
+
+    def test_macos_environment_paths_use_source_filename_casing(self):
+        host = "/Users/dev"
+        settings = {"env": {"CONFIG_PATH": host + "/.CLAUDE/Skills/Config.json"}}
+        self.write(self.source, ".claude/.mcp.json", json.dumps(settings))
+        self.write(self.source, ".claude/skills/config.json", '{"ready": true}')
+        module.sync(self.source, self.home, host, host_platform="darwin")
+        imported = json.loads((self.home / ".claude/.mcp.json").read_text())
+        self.assertEqual(imported["env"]["CONFIG_PATH"], str(self.home / ".claude/skills/config.json"))
+        self.assertEqual(json.loads(Path(imported["env"]["CONFIG_PATH"]).read_text()), {"ready": True})
+
+    def test_linux_environment_paths_preserve_filename_casing(self):
+        host = "/home/dev"
+        self.write(self.source, ".claude/skills/config.json", "fixture")
+        source = {"env": {"CONFIG_PATH": host + "/.CLAUDE/Skills/Config.json"}}
+        actual = json.loads(module.translate_paths(json.dumps(source).encode(), host, self.home,
+                                                 source_home=self.source, host_platform="linux"))
+        self.assertEqual(actual["env"]["CONFIG_PATH"], str(self.home / ".CLAUDE/Skills/Config.json"))
+
+    def test_posix_environment_paths_translate_with_component_boundaries(self):
+        host = "/Users/Some Developer"
+        env = {"CONFIG_PATH": host + "/.claude/skills/config.json",
+               "HOME": host, "OTHER": host + "-other/private",
+               "BACKSLASH": host + r"\file",
+               "PATH": host + "/bin:/usr/bin", "AUTH_TOKEN": host + "/opaque"}
+        actual = json.loads(module.translate_paths(json.dumps({"env": env}).encode(), host, self.home))["env"]
+        self.assertEqual(actual, {**env, "CONFIG_PATH": str(self.home / ".claude/skills/config.json"), "HOME": str(self.home)})
+
+    def test_ambiguous_environment_values_are_preserved(self):
+        for host, separator in [("/Users/Some Developer", "/"), (r"C:\Users\Some Developer", "\\"),
+                                ("/Users/dev", "/"), (r"C:\Users\dev", "\\")]:
+            with self.subTest(host=host):
+                env = {"COMMAND": host + separator + "tool --flag",
+                       "FILES": host + separator + "a " + host + separator + "b",
+                       "COMMA_LIST": host + separator + "a," + host + separator + "b",
+                       "PIPE_COMMAND": host + separator + "tool|other",
+                       "QUOTED": host + separator + '"config"',
+                       "PARENT_ESCAPE": host + separator + ".." + separator + "shared/config",
+                       "NESTED_ESCAPE": host + separator + "a/../../shared/config",
+                       "PARENT_INSIDE": host + separator + "a/../config",
+                       "CONFIG_PATH": host + separator + "My Config.json",
+                       "TABBED": host + separator + "tool\t--flag"}
+                actual = json.loads(module.translate_paths(json.dumps({"env": env}).encode(), host, self.home))
+                self.assertEqual(actual["env"], env)
+
     def test_legacy_volume_is_not_reseeded(self):
         self.write(self.home, ".devcontainer/seeded-codex", "")
         self.write(self.home, ".codex/auth.json", "existing token")

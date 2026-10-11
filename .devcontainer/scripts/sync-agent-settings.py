@@ -136,13 +136,71 @@ def translate_value(value, host_home, home):
     return value
 
 
-def translate_paths(data, host_home, home, *, toml=False):
+def source_casing(suffix, source_home):
+    """Recover filename spelling without following source symlinks."""
+    if source_home is None:
+        return suffix
+    cursor = source_home
+    names = []
+    for component in suffix.split("/"):
+        if component in {"", "."}:
+            names.append(component)
+            continue
+        try:
+            matches = [child for child in cursor.iterdir()
+                       if child.name.casefold() == component.casefold()]
+        except OSError:
+            return suffix
+        if len(matches) != 1 or matches[0].is_symlink():
+            return suffix
+        cursor = matches[0]
+        names.append(cursor.name)
+    return "/".join(names)
+
+
+def translate_paths(data, host_home, home, *, toml=False, source_home=None, host_platform=""):
     try:
         text = data.decode("utf-8")
     except UnicodeDecodeError:
         return data
     if not host_home or "\x00" in text:
         return data
+    def secret_key(key):
+        return re.search(r"token|secret|password|credential|api.?key|authorization", key, re.I)
+
+    def environment(value):
+        if not isinstance(value, dict):
+            return value
+        windows = PureWindowsPath(host_home).is_absolute()
+        recover_casing = windows or host_platform == "darwin"
+        prefixes = ({host_home.rstrip("/\\"), host_home.replace("\\", "/").rstrip("/")}
+                    if windows else {host_home.rstrip("/")})
+        boundary = r"(?=$|[/\\])" if windows else r"(?=$|/)"
+        flags = re.IGNORECASE if recover_casing else 0
+        def entry(key, item):
+            # Environment values may be credentials or opaque strings. Only
+            # translate a single complete home path, never prose or path lists.
+            if (not isinstance(item, str) or secret_key(key)
+                    or re.search(r"(?:^|_)(?:auth|key|bearer)(?:_|$)", key, re.I)
+                    or any(separator in item for separator in ("\n", "\r", ";"))
+                    or ":" in (item[2:] if windows else item)):
+                return item
+            for prefix in prefixes:
+                match = re.match(re.escape(prefix) + boundary, item, flags)
+                if match:
+                    # The home is known; the suffix is opaque. Conservatively
+                    # accept ordinary path characters only, preserving list
+                    # delimiters, shell syntax, and ambiguous filenames.
+                    suffix = item[match.end():]
+                    if windows:
+                        suffix = suffix.replace("\\", "/")
+                    if re.fullmatch(r"[\w./@+\-]*", suffix) and ".." not in suffix.split("/"):
+                        if recover_casing:
+                            suffix = source_casing(suffix, source_home)
+                        return str(home) + suffix
+            return item
+        return {key: entry(key, item) for key, item in value.items()}
+
     def walk(value):
         if isinstance(value, str):
             return translate_value(value, host_home, home)
@@ -150,8 +208,8 @@ def translate_paths(data, host_home, home, *, toml=False):
             return [walk(item) for item in value]
         if isinstance(value, dict):
             return {translate_value(key, host_home, home):
-                    (item if re.search(r"token|secret|password|credential|api.?key|authorization", key, re.I)
-                     or key.lower() in {"env", "headers"} else walk(item))
+                    (item if secret_key(key) or key.lower() == "headers"
+                     else environment(item) if key.lower() == "env" else walk(item))
                     for key, item in value.items()}
         return value
     try:
@@ -199,13 +257,14 @@ def atomic_write(destination, data, mode=0o600, before_replace=None):
         Path(name).unlink(missing_ok=True)
 
 
-def copy_file(source, destination, host_home, home, private=False, data=None, before_replace=None):
+def copy_file(source, destination, host_home, home, private=False, data=None, before_replace=None, source_home=None, host_platform=""):
     safe_destination(home, destination.relative_to(home))
     destination.parent.mkdir(parents=True, exist_ok=True)
     if data is None:
         data = source.read_bytes()
         if not private:
-            data = translate_paths(data, host_home, home, toml=destination.suffix == ".toml")
+            data = translate_paths(data, host_home, home, toml=destination.suffix == ".toml",
+                                   source_home=source_home, host_platform=host_platform)
     mode = 0o600 if private else stat.S_IMODE(source.stat().st_mode) | stat.S_IWUSR
     atomic_write(destination, data, mode, before_replace)
 
@@ -340,7 +399,7 @@ def prepare_destination(home, relative, owned, journal):
     return destination
 
 
-def sync(source_home, home, host_home=""):
+def sync(source_home, home, host_home="", *, host_platform=""):
     source_home, home = Path(source_home).absolute(), Path(home).resolve()
     home.mkdir(parents=True, exist_ok=True)
     control = safe_destination(home, Path(".devcontainer"))
@@ -383,7 +442,8 @@ def sync(source_home, home, host_home=""):
                 continue
             if not destination.exists():
                 copy_file(resolved, destination, host_home, home,
-                          private=relative.name in {"auth.json", ".credentials.json"})
+                          private=relative.name in {"auth.json", ".credentials.json"},
+                          source_home=source_home, host_platform=host_platform)
                 if relative.name == ".claude.json":
                     destination.chmod(0o600)
         atomic_write(marker, b"")
@@ -435,7 +495,8 @@ def sync(source_home, home, host_home=""):
             except ValueError:
                 journal.forget(name, owned)
             continue
-        data = translate_paths(source.read_bytes(), host_home, home, toml=relative.suffix == ".toml")
+        data = translate_paths(source.read_bytes(), host_home, home, toml=relative.suffix == ".toml",
+                               source_home=source_home, host_platform=host_platform)
         expected_mode = stat.S_IMODE(source.stat().st_mode) | stat.S_IWUSR
         if (destination.is_file() and name in owned and destination.read_bytes() == data
                 and stat.S_IMODE(destination.stat().st_mode) == expected_mode):
@@ -470,5 +531,6 @@ if __name__ == "__main__":
     parser.add_argument("--source-home", default="/mnt/host-settings")
     parser.add_argument("--container-home", default=str(Path.home()))
     parser.add_argument("--host-home", default=os.environ.get("MCDU_HOST_HOME", ""))
+    parser.add_argument("--host-platform", default=os.environ.get("MCDU_HOST_PLATFORM", ""))
     args = parser.parse_args()
-    sync(args.source_home, args.container_home, args.host_home)
+    sync(args.source_home, args.container_home, args.host_home, host_platform=args.host_platform)
