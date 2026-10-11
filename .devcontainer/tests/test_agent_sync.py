@@ -126,6 +126,16 @@ class AgentSyncTests(unittest.TestCase):
         actual = json.loads(module.translate_paths(json.dumps({"env": env}).encode(), host, self.home))["env"]
         self.assertEqual(actual, {**env, "CONFIG_PATH": str(self.home / ".claude/skills/config.json"), "HOME": str(self.home)})
 
+    def test_environment_values_with_whitespace_after_home_are_preserved(self):
+        for host, separator in [("/Users/Some Developer", "/"), (r"C:\Users\Some Developer", "\\")]:
+            with self.subTest(host=host):
+                env = {"COMMAND": host + separator + "tool --flag",
+                       "FILES": host + separator + "a " + host + separator + "b",
+                       "CONFIG_PATH": host + separator + "My Config.json",
+                       "TABBED": host + separator + "tool\t--flag"}
+                actual = json.loads(module.translate_paths(json.dumps({"env": env}).encode(), host, self.home))
+                self.assertEqual(actual["env"], env)
+
     def test_legacy_volume_is_not_reseeded(self):
         self.write(self.home, ".devcontainer/seeded-codex", "")
         self.write(self.home, ".codex/auth.json", "existing token")

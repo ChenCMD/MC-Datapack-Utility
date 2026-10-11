@@ -160,9 +160,13 @@ def translate_paths(data, host_home, home, *, toml=False):
                     or any(separator in item for separator in ("\n", "\r", ";"))
                     or ":" in (item[2:] if windows else item)):
                 return item
-            if any(re.match(re.escape(prefix) + r"(?=$|[/\\])", item, flags)
-                   for prefix in prefixes):
-                return translate_value(item, host_home, home)
+            for prefix in prefixes:
+                match = re.match(re.escape(prefix) + r"(?=$|[/\\])", item, flags)
+                # Spaces in the known home are unambiguous. Beyond it, a
+                # filename with spaces cannot be distinguished from arguments
+                # or a whitespace-separated list, so preserve the whole value.
+                if match and not re.search(r"\s", item[match.end():]):
+                    return translate_value(item, host_home, home)
             return item
         return {key: entry(key, item) for key, item in value.items()}
 
