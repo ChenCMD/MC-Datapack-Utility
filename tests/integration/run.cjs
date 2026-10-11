@@ -26,22 +26,24 @@ exports.run = async function run() {
   }
   console.log('PASS extension activation and five command registrations')
 
-  const document = await vscode.workspace.openTextDocument({ language: 'mcfunction', content: 'a = 1' })
-  const editor = await vscode.window.showTextDocument(document)
-  editor.selection = new vscode.Selection(0, 0, 0, 5)
-  await vscode.commands.executeCommand('mcdutil.commands.scoreOperation')
-  const output = await eventually(() => document.getText(), text => text !== 'a = 1')
-  const fixture = fixtures.find(item => item.name === 'assignment')
-  const english = require('../../src/locales/en.json')
-  assert.equal(output.replace(/\r\n/g, '\n'), [
-    '# a = 1',
-    `# ${english['formula-to-score-operation.complete-text']}`,
-    'scoreboard objectives add _ dummy',
-    ...fixture.expected.constants,
-    '',
-    ...fixture.expected.commands
-  ].join('\n'))
-  console.log('PASS score command replaces the real editor selection')
+  for (const name of ['assignment', 'hex literal', 'conditional']) {
+    const fixture = fixtures.find(item => item.name === name);
+    const document = await vscode.workspace.openTextDocument({ language: 'mcfunction', content: fixture.expression });
+    const editor = await vscode.window.showTextDocument(document);
+    editor.selection = new vscode.Selection(document.positionAt(0), document.positionAt(fixture.expression.length));
+    await vscode.commands.executeCommand('mcdutil.commands.scoreOperation');
+    const output = await eventually(() => document.getText(), text => text !== fixture.expression);
+    const english = require('../../src/locales/en.json');
+    assert.equal(output.replace(/\r\n/g, '\n'), [
+      `# ${fixture.expression}`,
+      `# ${english['formula-to-score-operation.complete-text']}`,
+      'scoreboard objectives add _ dummy',
+      ...fixture.expected.constants,
+      '',
+      ...fixture.expected.commands
+    ].join('\n'));
+    console.log(`PASS score command replaces the real editor selection: ${name}`);
+  }
 
   const uri = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, 'data/example/functions/sample.mcfunction')
   const originalClipboard = await vscode.env.clipboard.readText()
