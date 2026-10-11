@@ -45,3 +45,9 @@ test('parser reports errors through the supplied translator', () => {
   const parser = createFormulaAnalyzer({ ...ports, locale: key => `translated:${key}` })
   assert.throws(() => parser.formulaAnalyzer([], opTable, [], 1), { message: 'translated:formula-to-score-operation.illegal-formula' })
 })
+for (const expression of ['a = ( 2 ) ) + 3', 'a = if( b > 1 , 2 , 3 ) ) + 1']) {
+  test(`unmatched closing parentheses are rejected: ${expression}`, () => {
+    assert.throws(() => formulaAnalyzer(expression.split(' '), opTable, [], 1),
+      /formula-to-score-operation.illegal-formula/)
+  })
+}

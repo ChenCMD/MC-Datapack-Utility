@@ -23,6 +23,32 @@ for (const literal of ['0x10', '016', '16.0']) {
     assert.equal(executeScores(result).get('a _'), 16)
   })
 }
+
+for (const [expression, expected] of [
+  ['a = - 2 + 3', 1], ['a = - 2 * 3 + 4', -2],
+  ['a = 2 * - 3 + 4', -2], ['a = - ( 2 + 3 ) + 7', 2],
+  ['a = - 2 + ( 3 * 4 )', 10], ['a = - - 2 + 3', 5],
+  ['a = + 2 + 3', 5], ['a = 2 * - 3', -6], ['a = - 2 * - 3', 6],
+  ['a = 2 * ( - 3 + 4 )', 2], ['a = - 2 * ( 3 + 4 )', -14], ['a = - 2 - 3 - 4', -9], ['a = 2 * - 3 + 4 + 5', 3],
+  ['a = 2 - - 3 + 4', 9], ['a = 2 - - 3 - 4', 1],
+  ['a = ( ( 2 + 3 ) ) * 4', 20], ['a = ( 2 + 3 ) * ( 4 + 5 )', 45]
+]) {
+  test(`unary signs bind to their operand: ${expression}`, async () => {
+    assert.equal(executeScores(await convert(expression)).get('a _'), expected)
+  })
+}
+test('unary signs bind to a function result before following arithmetic', async () => {
+  const result = await convert('a = - if( b > 1 , 2 , 3 ) * 2 + 7')
+  for (const b of [0, 2]) assert.equal(executeScores(result, [['b', '_', b]]).get('a _'), b > 1 ? 3 : 1)
+})
+
+for (const [expression, expected] of [['a = 6 / 2', 3], ['a = 7 % 4', 30]]) {
+  test(`scaled operands keep primary binding: ${expression}`, async () => {
+    const result = await convert(expression, { valueScale: 10 })
+    const resultKey = result.resFormulas.at(-1).split(' ').slice(-2).join(' ')
+    assert.equal(executeScores(result, [['a', '_', 0]]).get(resultKey), expected)
+  })
+}
 test('equivalent literal spellings share one initialized constant', async () => {
   const result = await convert('a = 0x10 + 16')
   assert.equal(result.resValues.size, 1)

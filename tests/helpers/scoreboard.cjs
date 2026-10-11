@@ -25,14 +25,17 @@ exports.executeScores = function executeScores(result, initial = []) {
       scores.set(match[1], Number(match[2]));
       return;
     }
-    match = /^scoreboard players operation (\S+ \S+) (=|\+=|-=|\*=) (\S+ \S+)$/.exec(command);
+    match = /^scoreboard players operation (\S+ \S+) (=|\+=|-=|\*=|\/=|%=) (\S+ \S+)$/.exec(command);
     assert.ok(match, `Unsupported command: ${command}`);
     const [, target, operation, source] = match;
     const right = read(source);
     if (operation === '=') scores.set(target, right);
     else {
       const left = read(target);
-      scores.set(target, operation === '+=' ? left + right : operation === '-=' ? left - right : left * right);
+      if (operation === '/=' || operation === '%=') {
+        assert.ok(left >= 0 && right > 0, 'Division/remainder tests support nonnegative dividends and positive divisors only');
+        scores.set(target, operation === '/=' ? Math.floor(left / right) : left % right);
+      } else scores.set(target, operation === '+=' ? left + right : operation === '-=' ? left - right : left * right);
     }
   };
   for (const command of [...result.resValues, ...result.resFormulas]) run(command);
