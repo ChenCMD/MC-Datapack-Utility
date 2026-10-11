@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import { migrateFilePath, ReposGetContentResponseData } from '../../../types'
+import type { ReposGetContentResponseData } from '../../../types/OctokitWrapper'
+import { createFileTypeResolver } from '../../../core/datapack/fileTypes'
 import { GenerateFileData, GetGitHubDataFunc, QuickPickFiles } from '../types/QuickPickFiles'
+
+const { migrateFilePath } = createFileTypeResolver(() => undefined)
 
 export const packMcMetaData: (packFormat: number) => GenerateFileData = pack_format => ({
   type: 'file',

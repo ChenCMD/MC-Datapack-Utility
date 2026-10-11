@@ -1,0 +1,574 @@
+[
+  {
+    "format": 7,
+    "groups": {
+      "#load & #tick": [
+        {
+          "label": "#load.json & %namespace%:load.mcfunction",
+          "paths": [
+            "data/minecraft/tags/functions/load.json",
+            "data/%namespace%/functions/load.mcfunction"
+          ]
+        },
+        {
+          "label": "#tick.json & %namespace%:tick.mcfunction",
+          "paths": [
+            "data/minecraft/tags/functions/tick.json",
+            "data/%namespace%/functions/tick.mcfunction"
+          ]
+        }
+      ],
+      "Vanilla data": [
+        {
+          "label": "All Vanilla tags/block",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/blocks/"
+          ]
+        },
+        {
+          "label": "All Vanilla tags/entity_type",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/entity_types/"
+          ]
+        },
+        {
+          "label": "All Vanilla tags/fluid",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/fluids/"
+          ]
+        },
+        {
+          "label": "All Vanilla tags/item",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/items/"
+          ]
+        }
+      ],
+      "Folders": [
+        {
+          "label": "data/%namespace%/advancements/",
+          "paths": [
+            "data/%namespace%/advancements/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/dimension/",
+          "paths": [
+            "data/%namespace%/dimension/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/dimension_type/",
+          "paths": [
+            "data/%namespace%/dimension_type/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/functions/",
+          "paths": [
+            "data/%namespace%/functions/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/item_modifiers/",
+          "paths": [
+            "data/%namespace%/item_modifiers/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/loot_tables/",
+          "paths": [
+            "data/%namespace%/loot_tables/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/predicates/",
+          "paths": [
+            "data/%namespace%/predicates/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/recipes/",
+          "paths": [
+            "data/%namespace%/recipes/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/structures/",
+          "paths": [
+            "data/%namespace%/structures/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/blocks/",
+          "paths": [
+            "data/%namespace%/tags/blocks/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/entity_types/",
+          "paths": [
+            "data/%namespace%/tags/entity_types/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/fluids/",
+          "paths": [
+            "data/%namespace%/tags/fluids/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/functions/",
+          "paths": [
+            "data/%namespace%/tags/functions/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/game_events/",
+          "paths": [
+            "data/%namespace%/tags/game_events/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/items/",
+          "paths": [
+            "data/%namespace%/tags/items/"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "format": 9,
+    "groups": {
+      "#load & #tick": [
+        {
+          "label": "#load.json & %namespace%:load.mcfunction",
+          "paths": [
+            "data/minecraft/tags/functions/load.json",
+            "data/%namespace%/functions/load.mcfunction"
+          ]
+        },
+        {
+          "label": "#tick.json & %namespace%:tick.mcfunction",
+          "paths": [
+            "data/minecraft/tags/functions/tick.json",
+            "data/%namespace%/functions/tick.mcfunction"
+          ]
+        }
+      ],
+      "Vanilla data": [
+        {
+          "label": "All Vanilla tags/block",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/blocks/"
+          ]
+        },
+        {
+          "label": "All Vanilla tags/entity_type",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/entity_types/"
+          ]
+        },
+        {
+          "label": "All Vanilla tags/fluid",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/fluids/"
+          ]
+        },
+        {
+          "label": "All Vanilla tags/item",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/items/"
+          ]
+        }
+      ],
+      "Folders": [
+        {
+          "label": "data/%namespace%/advancements/",
+          "paths": [
+            "data/%namespace%/advancements/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/dimension/",
+          "paths": [
+            "data/%namespace%/dimension/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/dimension_type/",
+          "paths": [
+            "data/%namespace%/dimension_type/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/functions/",
+          "paths": [
+            "data/%namespace%/functions/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/item_modifiers/",
+          "paths": [
+            "data/%namespace%/item_modifiers/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/loot_tables/",
+          "paths": [
+            "data/%namespace%/loot_tables/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/predicates/",
+          "paths": [
+            "data/%namespace%/predicates/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/recipes/",
+          "paths": [
+            "data/%namespace%/recipes/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/structures/",
+          "paths": [
+            "data/%namespace%/structures/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/blocks/",
+          "paths": [
+            "data/%namespace%/tags/blocks/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/entity_types/",
+          "paths": [
+            "data/%namespace%/tags/entity_types/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/fluids/",
+          "paths": [
+            "data/%namespace%/tags/fluids/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/functions/",
+          "paths": [
+            "data/%namespace%/tags/functions/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/game_events/",
+          "paths": [
+            "data/%namespace%/tags/game_events/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/items/",
+          "paths": [
+            "data/%namespace%/tags/items/"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "format": 10,
+    "groups": {
+      "#load & #tick": [
+        {
+          "label": "#load.json & %namespace%:load.mcfunction",
+          "paths": [
+            "data/minecraft/tags/functions/load.json",
+            "data/%namespace%/functions/load.mcfunction"
+          ]
+        },
+        {
+          "label": "#tick.json & %namespace%:tick.mcfunction",
+          "paths": [
+            "data/minecraft/tags/functions/tick.json",
+            "data/%namespace%/functions/tick.mcfunction"
+          ]
+        }
+      ],
+      "Vanilla data": [
+        {
+          "label": "All Vanilla tags/block",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/blocks/"
+          ]
+        },
+        {
+          "label": "All Vanilla tags/entity_type",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/entity_types/"
+          ]
+        },
+        {
+          "label": "All Vanilla tags/fluid",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/fluids/"
+          ]
+        },
+        {
+          "label": "All Vanilla tags/item",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/items/"
+          ]
+        }
+      ],
+      "Folders": [
+        {
+          "label": "data/%namespace%/advancements/",
+          "paths": [
+            "data/%namespace%/advancements/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/dimension/",
+          "paths": [
+            "data/%namespace%/dimension/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/dimension_type/",
+          "paths": [
+            "data/%namespace%/dimension_type/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/functions/",
+          "paths": [
+            "data/%namespace%/functions/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/item_modifiers/",
+          "paths": [
+            "data/%namespace%/item_modifiers/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/loot_tables/",
+          "paths": [
+            "data/%namespace%/loot_tables/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/predicates/",
+          "paths": [
+            "data/%namespace%/predicates/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/recipes/",
+          "paths": [
+            "data/%namespace%/recipes/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/structures/",
+          "paths": [
+            "data/%namespace%/structures/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/blocks/",
+          "paths": [
+            "data/%namespace%/tags/blocks/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/entity_types/",
+          "paths": [
+            "data/%namespace%/tags/entity_types/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/fluids/",
+          "paths": [
+            "data/%namespace%/tags/fluids/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/functions/",
+          "paths": [
+            "data/%namespace%/tags/functions/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/game_events/",
+          "paths": [
+            "data/%namespace%/tags/game_events/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/items/",
+          "paths": [
+            "data/%namespace%/tags/items/"
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "format": 48,
+    "groups": {
+      "#load & #tick": [
+        {
+          "label": "#load.json & %namespace%:load.mcfunction",
+          "paths": [
+            "data/minecraft/tags/function/load.json",
+            "data/%namespace%/function/load.mcfunction"
+          ]
+        },
+        {
+          "label": "#tick.json & %namespace%:tick.mcfunction",
+          "paths": [
+            "data/minecraft/tags/function/tick.json",
+            "data/%namespace%/function/tick.mcfunction"
+          ]
+        }
+      ],
+      "Vanilla data": [
+        {
+          "label": "All Vanilla tags/block",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/block/"
+          ]
+        },
+        {
+          "label": "All Vanilla tags/entity_type",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/entity_type/"
+          ]
+        },
+        {
+          "label": "All Vanilla tags/fluid",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/fluid/"
+          ]
+        },
+        {
+          "label": "All Vanilla tags/item",
+          "paths": [],
+          "downloads": [
+            "data/minecraft/tags/item/"
+          ]
+        }
+      ],
+      "Folders": [
+        {
+          "label": "data/%namespace%/advancement/",
+          "paths": [
+            "data/%namespace%/advancement/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/dimension/",
+          "paths": [
+            "data/%namespace%/dimension/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/dimension_type/",
+          "paths": [
+            "data/%namespace%/dimension_type/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/function/",
+          "paths": [
+            "data/%namespace%/function/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/item_modifier/",
+          "paths": [
+            "data/%namespace%/item_modifier/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/loot_table/",
+          "paths": [
+            "data/%namespace%/loot_table/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/predicate/",
+          "paths": [
+            "data/%namespace%/predicate/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/recipe/",
+          "paths": [
+            "data/%namespace%/recipe/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/structure/",
+          "paths": [
+            "data/%namespace%/structure/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/block/",
+          "paths": [
+            "data/%namespace%/tags/block/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/entity_type/",
+          "paths": [
+            "data/%namespace%/tags/entity_type/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/fluid/",
+          "paths": [
+            "data/%namespace%/tags/fluid/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/function/",
+          "paths": [
+            "data/%namespace%/tags/function/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/game_event/",
+          "paths": [
+            "data/%namespace%/tags/game_event/"
+          ]
+        },
+        {
+          "label": "data/%namespace%/tags/item/",
+          "paths": [
+            "data/%namespace%/tags/item/"
+          ]
+        }
+      ]
+    }
+  }
+]

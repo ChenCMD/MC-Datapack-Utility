@@ -212,6 +212,55 @@ exports.run = async function run() {
   } finally { denied.dispose(); deniedEvents.dispose() }
   console.log('PASS write denial from a real VS Code filesystem provider is reported')
 
+  const wizardRoot = vscode.Uri.joinPath(packRoot, 'wizard-created')
+  const wizardFile = vscode.Uri.joinPath(wizardRoot, 'data/example/function/load.mcfunction')
+  const wizardEffects = { errors: [], completed: 0 }
+  const wizardItems = [{ label: 'Test', generates: [{ type: 'file', rel: 'data/%namespace%/function/load.mcfunction', content: ['# %fileResourcePath%', 'say %namespace%'] }] }]
+  const wizardConfig = { env: { dataVersion: 'unused', dateFormat: 'unused' }, createDatapackTemplate: { defaultLoadAndTick: false, defaultVanillaData: false, defaultFolder: false, customTemplate: [] } }
+  const wizardGenerator = {
+    isGeneratePackMcMeta: true,
+    listenGenerateDir: async () => packRoot,
+    listenDatapackNameAndRoot: async () => ({ name: 'wizard-created', root: wizardRoot }),
+    listenPackFormat: async () => 48,
+    listenDatapackDescription: async () => 'Wizard fixture',
+    noticeGenerated: async () => { wizardEffects.completed++ }
+  }
+  const wizardPorts = {
+    selectGenerator: async () => wizardGenerator,
+    getFsPath: value => value.fsPath, getPath: value => value.path,
+    joinPath: vscode.Uri.joinPath, locale: key => key,
+    getDate: () => '2026-10-12', getIndent: () => 2,
+    getResourcePath: (value, root, format) => fileSupport.resourcePathFromRelative(path.posix.relative(root.path, value.path), format),
+    listenInput: async () => 'example', listenPickItem: async () => wizardItems,
+    stringValidator: () => undefined,
+    defaultTemplates: () => { throw new Error('Defaults are disabled') },
+    createProgressBar: async (_title, task) => task(() => {}),
+    getVanillaData: async () => { throw new Error('No network template selected') },
+    createDirectory: async value => { await vscode.workspace.fs.createDirectory(value) },
+    pathAccessible: fileSupport.pathAccessible,
+    createFile: (value, content) => fileSupport.createFile(value, Buffer.from(content)),
+    readFile: fileSupport.readFile, writeFile: fileSupport.writeFile,
+    appendElemFromKey: () => { throw new Error('No JSON append selected') },
+    showError: value => wizardEffects.errors.push(value), log: () => {}
+  }
+  await fileSupport.createDatapackCommand(wizardPorts)(wizardConfig, 'create')
+  assert.equal(await fileSupport.readFile(wizardFile), '# example:load\r\nsay example')
+  assert.deepEqual(JSON.parse(await fileSupport.readFile(vscode.Uri.joinPath(wizardRoot, 'pack.mcmeta'))), { pack: { pack_format: 48, description: 'Wizard fixture' } })
+  assert.equal(wizardEffects.completed, 1)
+  assert.deepEqual(wizardEffects.errors, [])
+  await fileSupport.writeFile(wizardFile, 'keep existing')
+  await fileSupport.createDatapackCommand(wizardPorts)(wizardConfig, 'create')
+  assert.equal(await fileSupport.readFile(wizardFile), 'keep existing')
+  const cancelledRoot = vscode.Uri.joinPath(packRoot, 'wizard-cancelled')
+  await fileSupport.createDatapackCommand({ ...wizardPorts,
+    selectGenerator: async () => ({ ...wizardGenerator, listenDatapackNameAndRoot: async () => ({ name: 'cancelled', root: cancelledRoot }) }),
+    listenPickItem: async () => { throw new fileSupport.UserCancelledError() }
+  })(wizardConfig, 'create')
+  assert.equal(await fileSupport.pathAccessible(cancelledRoot), false)
+  assert.deepEqual(wizardEffects.errors, [])
+  assert.equal(wizardEffects.completed, 2)
+  console.log('PASS datapack wizard real storage, existing-file protection and cancellation')
+
   const originalClipboard = await vscode.env.clipboard.readText()
   try {
     await vscode.env.clipboard.writeText('integration sentinel')
