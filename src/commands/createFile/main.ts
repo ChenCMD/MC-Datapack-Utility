@@ -3,98 +3,24 @@ import { pathAccessible, createFile as create } from '../../utils/file'
 import { getDatapackRoot, getDate, getNamespace, getPackFormat, getResourcePath, isDatapackRoot } from '../../utils/common'
 import { getTextEditor, listenInput, showError } from '../../utils/vscodeWrapper'
 import { locale } from '../../locales'
-import { getFileTemplate } from './utils'
-import { TextEncoder } from 'util'
 import { getFileType } from '../../types/FileTypes'
-import { resolveVars, Variables } from '../../types/Variables'
 import { codeConsole } from '../../extension'
-import { GenerateError, NotOpenTextDocumentError, UserCancelledError } from '../../types/Error'
 import { createMessageItemHasIds } from '../../types/MessageItemHasId'
 import { createDatapack } from '../createDatapackTemplate/main'
-import { Config } from '../../types'
 import { UriUtils } from '../../utils/uri'
+import type { Config } from '../../types/Config'
+import { createFileCommand } from './core/command'
 
-export const createFile = async (uri: Uri, config: Config): Promise<void> => {
-  try {
-    // Datapack内か確認
-    const datapackRoot = await getDatapackRoot(uri)
-    if (!datapackRoot) {
-      const res = await showError(locale('create-file.not-datapack'), false, createMessageItemHasIds('yes', 'no'), ['no'])
-      if (res === 'yes') return await createDatapack(config, 'create')
-      return
-    }
-
-    // pack_format の取得
-    const packFormat = await getPackFormat(datapackRoot)
-
-    // ファイルの種類を取得
-    const fileType = getFileType(uri, datapackRoot, packFormat)
-    if (!fileType) {
-      // 取得できない時の処理
-      if (await isDatapackRoot(datapackRoot)) {
-        const res = await showError(locale('create-file.unknown-filetype.listen-add', UriUtils.basename(datapackRoot)),
-          false, createMessageItemHasIds('yes', 'no'), ['no'])
-        if (res === 'yes') return await createDatapack(config, 'add')
-      }
-      throw new GenerateError(locale('create-file.unknown-filetype'))
-    }
-    // ストラクチャはサポートしない
-    if (fileType === 'structure') throw new GenerateError(locale('create-file.structure'))
-    // 拡張子確定
-    const fileExtname = fileType === 'function' ? 'mcfunction' : 'json'
-
-    // ファイル名入力
-    const fileName = await listenInput(locale('create-file.file-name', fileType), async v => {
-      const invalidChar = v.match(/[^a-z0-9./_-]/g)
-      if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '))
-      if (await pathAccessible(UriUtils.joinPath(uri, `${v}.${fileExtname}`))) return locale('error.already-exists', `${v}.${fileExtname}`)
-      return undefined
-    })
-
-    // リソースパスの生成とファイルテンプレートの取得
-    const filePath = UriUtils.joinPath(uri, `${fileName}.${fileExtname}`)
-
-    const vars: Variables = {
-      datapackName: UriUtils.basename(datapackRoot),
-      namespace: getNamespace(filePath, datapackRoot),
-
-      fileResourcePath: getResourcePath(filePath, datapackRoot, packFormat, fileType),
-      fileName,
-      fileType,
-      fileExtname,
-
-      date: getDate(config.env.dateFormat),
-      cursor: ''
-    }
-
-    try {
-      const openFilePath = getTextEditor().document.uri
-      const nowOpenFileType = getFileType(UriUtils.dirname(openFilePath), datapackRoot, packFormat)
-      vars.nowOpenFileType = nowOpenFileType ?? ''
-      vars.nowOpenFileResourcePath = getResourcePath(openFilePath, datapackRoot, packFormat, nowOpenFileType) ?? ''
-      vars.nowOpenFileName = openFilePath.path.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? ''
-      vars.nowOpenFileExtname = openFilePath.path.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? ''
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
-      if (!(error instanceof NotOpenTextDocumentError)) throw error
-    }
-
-    const fileTemplate = getFileTemplate(config.createFile.fileTemplate, fileType)
-    let selection: Range | undefined
-    fileTemplate.forEach((v, i) => {
-      const res = v.search(/%cursor%/i)
-      if (res !== -1) selection = new Range(i, res, i, res)
-    })
-
-    // 生成
-    await create(filePath, new TextEncoder().encode(resolveVars(fileTemplate.join('\r\n'), vars)))
-    // ファイルを開く
-    await window.showTextDocument(filePath, { selection })
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    if (error instanceof UserCancelledError) return
-    if (error instanceof Error) showError(error.message)
-    else showError(error.toString())
-    codeConsole.appendLine(error.stack ?? error.toString())
+// Resolve adapters at invocation time, preserving live bindings across activation cycles.
+export const createFile = (uri: Uri, config: Config): Promise<void> => createFileCommand<Uri>({
+  getDatapackRoot, getDate, getNamespace, getPackFormat, getResourcePath, isDatapackRoot,
+  getFileType, getTextEditor, listenInput, pathAccessible, create, createDatapack, locale,
+  joinPath: UriUtils.joinPath, basename: UriUtils.basename, dirname: UriUtils.dirname,
+  confirmDatapack: message => showError(message, false, createMessageItemHasIds('yes', 'no'), ['no']),
+  showError: message => { showError(message) },
+  log: message => codeConsole.appendLine(message),
+  openFile: async (uri, selection) => {
+    const range = selection && new Range(selection.line, selection.character, selection.line, selection.character)
+    await window.showTextDocument(uri, { selection: range })
   }
-}
+})(uri, config)

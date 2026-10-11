@@ -1,0 +1,99 @@
+import type { Config } from '../../../types/Config'
+import { resolveVars, Variables } from '../../../core/templates/variables'
+import { GenerateError, NotOpenTextDocumentError, UserCancelledError } from '../../../types/Error'
+import { getFileTemplate } from '../utils'
+import { TextEncoder } from 'util'
+import type { CreateFilePorts, CursorPosition } from './ports'
+
+export function createFileCommand<U extends { path: string }>(ports: CreateFilePorts<U>) {
+  const { getDatapackRoot, getPackFormat, getFileType, isDatapackRoot, getDate,
+    getNamespace, getResourcePath, joinPath, basename, dirname, pathAccessible,
+    getTextEditor, listenInput, confirmDatapack, createDatapack, create,
+    openFile, locale, showError, log } = ports
+
+  const createFile = async (uri: U, config: Config): Promise<void> => {
+    try {
+      // Datapack内か確認
+      const datapackRoot = await getDatapackRoot(uri)
+      if (!datapackRoot) {
+        const res = await confirmDatapack(locale('create-file.not-datapack'))
+        if (res === 'yes') return await createDatapack(config, 'create')
+        return
+      }
+
+      // pack_format の取得
+      const packFormat = await getPackFormat(datapackRoot)
+
+      // ファイルの種類を取得
+      const fileType = getFileType(uri, datapackRoot, packFormat)
+      if (!fileType) {
+        // 取得できない時の処理
+        if (await isDatapackRoot(datapackRoot)) {
+          const res = await confirmDatapack(locale('create-file.unknown-filetype.listen-add', basename(datapackRoot)))
+          if (res === 'yes') return await createDatapack(config, 'add')
+        }
+        throw new GenerateError(locale('create-file.unknown-filetype'))
+      }
+      // ストラクチャはサポートしない
+      if (fileType === 'structure') throw new GenerateError(locale('create-file.structure'))
+      // 拡張子確定
+      const fileExtname = fileType === 'function' ? 'mcfunction' : 'json'
+
+      // ファイル名入力
+      const fileName = await listenInput(locale('create-file.file-name', fileType), async v => {
+        const invalidChar = v.match(/[^a-z0-9./_-]/g)
+        if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '))
+        if (await pathAccessible(joinPath(uri, `${v}.${fileExtname}`))) return locale('error.already-exists', `${v}.${fileExtname}`)
+        return undefined
+      })
+
+      // リソースパスの生成とファイルテンプレートの取得
+      const filePath = joinPath(uri, `${fileName}.${fileExtname}`)
+
+      const vars: Variables = {
+        datapackName: basename(datapackRoot),
+        namespace: getNamespace(filePath, datapackRoot),
+
+        fileResourcePath: getResourcePath(filePath, datapackRoot, packFormat, fileType),
+        fileName,
+        fileType,
+        fileExtname,
+
+        date: getDate(config.env.dateFormat),
+        cursor: ''
+      }
+
+      try {
+        const openFilePath = getTextEditor().document.uri
+        const nowOpenFileType = getFileType(dirname(openFilePath), datapackRoot, packFormat)
+        vars.nowOpenFileType = nowOpenFileType ?? ''
+        vars.nowOpenFileResourcePath = getResourcePath(openFilePath, datapackRoot, packFormat, nowOpenFileType) ?? ''
+        vars.nowOpenFileName = openFilePath.path.match(/([^/\\]*(?=\.(?!.*\.))|(?<=^|(?:\/|\\))[^./\\]*$)/)?.shift() ?? ''
+        vars.nowOpenFileExtname = openFilePath.path.match(/(?<=\.)[^./\\]*?$/)?.shift() ?? ''
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (error: any) {
+        if (!(error instanceof NotOpenTextDocumentError)) throw error
+      }
+
+      const fileTemplate = getFileTemplate(config.createFile.fileTemplate, fileType)
+      let selection: CursorPosition | undefined
+      fileTemplate.forEach((v, i) => {
+        const res = v.search(/%cursor%/i)
+        if (res !== -1) selection = { line: i, character: res }
+      })
+
+      // 生成
+      await create(filePath, new TextEncoder().encode(resolveVars(fileTemplate.join('\r\n'), vars)))
+      // ファイルを開く
+      await openFile(filePath, selection)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error instanceof UserCancelledError) return
+      if (error instanceof Error) showError(error.message)
+      else showError(error.toString())
+      log(error.stack ?? error.toString())
+    }
+  }
+
+  return createFile
+}

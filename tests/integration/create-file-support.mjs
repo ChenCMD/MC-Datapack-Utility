@@ -1,0 +1,5 @@
+export { createFileCommand } from '../../src/commands/createFile/core/command.ts'
+export { createFile, pathAccessible } from '../../src/utils/file.ts'
+export { createFileTypeResolver } from '../../src/core/datapack/fileTypes.ts'
+export { resourcePathFromRelative, namespaceFromRelative } from '../../src/core/datapack/resourcePaths.ts'
+export { UserCancelledError, NotOpenTextDocumentError } from '../../src/types/Error.ts'

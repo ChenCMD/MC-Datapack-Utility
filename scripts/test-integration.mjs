@@ -2,11 +2,17 @@ import { mkdtemp, cp, rm } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { build } from 'esbuild'
 import { runTests } from '@vscode/test-electron'
 
 const root = fileURLToPath(new URL('../', import.meta.url))
 const temporary = await mkdtemp(join(tmpdir(), 'mcdu-integration-'))
 try {
+  await build({
+    absWorkingDir: root, entryPoints: ['tests/integration/create-file-support.mjs'],
+    outfile: 'out/integration/create-file.cjs', bundle: true, platform: 'node',
+    format: 'cjs', target: 'node16', external: ['vscode']
+  })
   const workspace = join(temporary, 'datapack')
   await cp(join(root, 'tests/fixtures/datapack'), workspace, { recursive: true })
   await runTests({
