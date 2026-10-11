@@ -26,7 +26,7 @@ exports.run = async function run() {
   }
   console.log('PASS extension activation and five command registrations')
 
-  for (const name of ['assignment', 'hex literal', 'conditional']) {
+  for (const name of ['assignment', 'hex literal', 'conditional', 'unary minus']) {
     const fixture = fixtures.find(item => item.name === name);
     const document = await vscode.workspace.openTextDocument({ language: 'mcfunction', content: fixture.expression });
     const editor = await vscode.window.showTextDocument(document);

@@ -16,51 +16,31 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
 
     // firstがopTableに登録されていなければ、ただの文字列であると考える
     if (!func) {
-      const front = (scale === 1) ? first : { front: first, op: opTable['*'], back: scale.toString() }
-      // 数値と文字の値
-      if (!exp[0])
-        return front
-
-      const toBeOp = exp.shift()!
-      const op = opTable[toBeOp]
-      if (!op) throw new GenerateError(locale('error.not-exist', locale('operator'), toBeOp))
-
-      const back = formulaAnalyzer(exp, opTable, funcs, scale)
-
-      // 最後に = の処理を行うので、v = f を f = v の形にする。
-      if (op.identifier.endsWith('='))
-        return { front: back, op, back: front }
-
-      if (typeof back === 'string' || !(back.op.order < op.order ||
-        (back.op.order === op.order && op.assocLow === 'R')))
-        return { front, op, back }
-
-      return { front: { front, op, back: back.front }, op: back.op, back: back.back }
+      const front = (scale === 1) ? first : { front: first, op: { ...opTable['*'], order: opTable['('].order }, back: scale.toString() }
+      return assemble(front, exp, opTable, funcs, scale)
     }
 
     // 関数と一部の演算子のみが、1節目に許される
     switch (func.identifier) {
       // 1文字目が単項演算子かのチェック
       case '+':
-        return formulaAnalyzer(['0', '+', ...exp], opTable, funcs, scale)
       case '-':
-        return formulaAnalyzer(['0', '-', ...exp], opTable, funcs, scale)
+        let operandStart = 0
+        while (exp[operandStart] === '+' || exp[operandStart] === '-') operandStart++
+        if (!exp[operandStart])
+          throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
+        const operandEnd = exp[operandStart].endsWith('(') ? closingIndex(exp, operandStart) + 1 : operandStart + 1
+        const operand = formulaAnalyzer(exp.splice(0, operandEnd), opTable, funcs, scale)
+        const signed = func.identifier === '+' ? operand : { front: '0', op: { ...opTable['-'], order: opTable['('].order }, back: operand }
+        return assemble(signed, exp, opTable, funcs, scale)
       // 括弧の時は深くする
       case '(':
-        const lastClose = exp.lastIndexOf(')')
-        if (lastClose === -1)
-          // ')'がなければエラー
-          throw new ParsingError(locale('too-much', '\'(\''))
+        const lastClose = closingIndex(['(', ...exp]) - 1
         const sub = exp.slice(0, lastClose)
         exp = exp.slice(lastClose + 1)
-
-        if (!exp[0]) return formulaAnalyzer(sub, opTable, funcs, scale)
-
-        const toBeOp = exp.shift()!
-        const op = opTable[toBeOp]
-        if (!op) throw new GenerateError(locale('error.not-exist', locale('operator'), toBeOp))
-
-        return { front: formulaAnalyzer(sub, opTable, funcs, scale), op: op, back: formulaAnalyzer(exp, opTable, funcs, scale) }
+        const inner = formulaAnalyzer(sub, opTable, funcs, scale)
+        const grouped = typeof inner === 'string' ? inner : { ...inner, op: { ...inner.op, order: opTable['('].order } }
+        return assemble(grouped, exp, opTable, funcs, scale)
       case ')':
         // '('がなければエラー
         throw new ParsingError(locale('too-much', '\')\''))
@@ -69,8 +49,9 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
           throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
     }
 
-    const nested = exp.slice(0, exp.lastIndexOf(')'))
-    exp = exp.slice(exp.lastIndexOf(')') + 1)
+    const close = closingIndex([first, ...exp]) - 1
+    const nested = exp.slice(0, close)
+    exp = exp.slice(close + 1)
 
     const subArr: string[][] = []
     const separation = { new: 0, old: 0 }
@@ -105,14 +86,37 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
     })
     const _exp = ['(', ...nameElem, ')']
 
-    if (!exp[0])
-      return formulaAnalyzer(_exp, opTable, funcs, scale)
+    return assemble(formulaAnalyzer(_exp, opTable, funcs, scale), exp, opTable, funcs, scale)
+  }
 
+  function closingIndex(tokens: string[], start = 0): number {
+    let depth = 0
+    for (let index = start; index < tokens.length; index++) {
+      if (tokens[index].endsWith('(')) depth++
+      else if (tokens[index] === ')') depth--
+      if (depth === 0) return index
+    }
+    throw new ParsingError(locale('too-much', '\'(\''))
+  }
+
+  function assemble(front: Formula | string, exp: string[], opTable: OperateTable, funcs: IfFormula[], scale: number): Formula | string {
+    if (!exp[0]) return front
     const toBeOp = exp.shift()!
     const op = opTable[toBeOp]
     if (!op) throw new GenerateError(locale('error.not-exist', locale('operator'), toBeOp))
+    if (op.type === 'state' || op.arity !== 2)
+      throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
+    const back = formulaAnalyzer(exp, opTable, funcs, scale)
+    // Assignment is emitted after the right-hand expression.
+    if (op.identifier.endsWith('=')) return { front: back, op, back: front }
+    return combine(front, op, back)
 
-    return { front: formulaAnalyzer(_exp, opTable, funcs, scale), op, back: formulaAnalyzer(exp, opTable, funcs, scale) }
+    function combine(left: Formula | string, operator: Formula['op'], right: Formula | string): Formula {
+      if (typeof right === 'string' || !(right.op.order < operator.order ||
+        (right.op.order === operator.order && operator.assocLow === 'L')))
+        return { front: left, op: operator, back: right }
+      return { ...right, front: combine(left, operator, right.front) }
+    }
   }
 
   const formulaToString = (formula: Formula | string): string => {
