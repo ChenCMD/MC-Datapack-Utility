@@ -59,10 +59,19 @@ for (const expression of ['( a + b ) = 2', '- a = 2', '2 = 3', 'a + b = 2']) {
 }
 for (const scale of [1, 10]) {
   for (const expression of ['+ a = 2', '+ ( a ) = 2', '( + a ) = 2', '( ( + + a ) ) = 2',
-    'if( b > 1 , 2 , 3 ) = 5', '( if( b > 1 , 2 , 3 ) ) = 5', 'a toString 2', '( a ) constructor 2']) {
+    'if( b > 1 , 2 , 3 ) = 5', '( if( b > 1 , 2 , 3 ) ) = 5']) {
     test(`invalid operators and signed targets report localized errors at scale ${scale}: ${expression}`, () => {
       assert.throws(() => formulaAnalyzer(expression.split(' '), opTable, [], scale),
         /formula-to-score-operation.illegal-formula/)
+    })
+  }
+}
+
+for (const scale of [1, 10]) {
+  for (const expression of ['a toString 2', '( a ) constructor 2']) {
+    test(`unregistered prototype-name operator reports a missing operator at scale ${scale}: ${expression}`, () => {
+      assert.throws(() => formulaAnalyzer(expression.split(' '), opTable, [], scale),
+        /error.not-exist:operator:/)
     })
   }
 }

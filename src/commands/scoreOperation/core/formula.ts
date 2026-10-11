@@ -1,5 +1,5 @@
 import { Formula, IfFormula } from '../types/Formula'
-import { OperateTable } from '../types/OperateTable'
+import { OperateElement, OperateTable } from '../types/OperateTable'
 import { GenerateError, ParsingError } from '../../../types/Error'
 import { ConditionExp, conditionExpTable } from '../types/ConditionExpTable'
 import type { ScoreOperationPorts } from './ports'
@@ -8,16 +8,20 @@ import { isNumber } from '../../../utils/typeGuards'
 export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
   const { locale } = ports
 
+  function getOperator(table: OperateTable, token: string): OperateElement | undefined {
+    return Object.prototype.hasOwnProperty.call(table, token) ? table[token] : undefined
+  }
+
   function formulaAnalyzer(exp: string[], opTable: OperateTable, funcs: IfFormula[], scale: number): Formula | string {
     const first = exp.shift()
     if (!first)
       throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
 
-    const func = opTable[first]
+    const func = getOperator(opTable, first)
 
     // firstがopTableに登録されていなければ、ただの文字列であると考える
     if (!func) {
-      const isDestination = opTable[exp[0]]?.identifier?.endsWith('=')
+      const isDestination = getOperator(opTable, exp[0])?.identifier?.endsWith('=')
       const front = (scale === 1 || isDestination) ? first : { front: first, op: { ...opTable['*'], order: opTable['('].order }, back: scale.toString() }
       return assemble(front, exp, opTable, funcs, scale)
     }
@@ -33,7 +37,7 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
           throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
         const operandEnd = exp[operandStart].endsWith('(') ? closingIndex(exp, operandStart) + 1 : operandStart + 1
         const operand = formulaAnalyzer(exp.splice(0, operandEnd), opTable, funcs, scale)
-        if (opTable[exp[0]]?.identifier?.endsWith('='))
+        if (getOperator(opTable, exp[0])?.identifier?.endsWith('='))
           throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
         const signed = func.identifier === '+' ? operand : { front: '0', op: { ...opTable['-'], order: opTable['('].order }, back: operand }
         return assemble(signed, exp, opTable, funcs, scale)
@@ -42,7 +46,7 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
         const lastClose = closingIndex(['(', ...exp]) - 1
         const sub = exp.slice(0, lastClose)
         exp = exp.slice(lastClose + 1)
-        const isGroupedDestination = opTable[exp[0]]?.identifier?.endsWith('=')
+        const isGroupedDestination = getOperator(opTable, exp[0])?.identifier?.endsWith('=')
         if (isGroupedDestination && sub.some(token => token === '+' || token === '-' || (token !== '(' && token.endsWith('('))))
           throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
         const innerScale = isGroupedDestination ? 1 : scale
@@ -60,7 +64,7 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
     const close = closingIndex([first, ...exp]) - 1
     const nested = exp.slice(0, close)
     exp = exp.slice(close + 1)
-    if (opTable[exp[0]]?.identifier?.endsWith('='))
+    if (getOperator(opTable, exp[0])?.identifier?.endsWith('='))
       throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
 
     const subArr: string[][] = []
@@ -111,7 +115,7 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
   function assemble(front: Formula | string, exp: string[], opTable: OperateTable, funcs: IfFormula[], scale: number): Formula | string {
     if (!exp[0]) return front
     const toBeOp = exp.shift()!
-    const op = opTable[toBeOp]
+    const op = getOperator(opTable, toBeOp)
     if (!op) throw new GenerateError(locale('error.not-exist', locale('operator'), toBeOp))
     if (op.type === 'state' || op.arity !== 2)
       throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
@@ -151,7 +155,7 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
     }
     let splitter = 0
     for (let i = 0; i < exp.length; i++) {
-      if (conditionExpTable[exp[i]])
+      if (Object.prototype.hasOwnProperty.call(conditionExpTable, exp[i]))
         splitter = i
     }
     return [{ front: formulaAnalyzer(exp.slice(0, splitter), opTable, funcs, scale), op: conditionExpTable[exp[splitter]], back: formulaAnalyzer(exp.slice(splitter + 1), opTable, funcs, scale), default: (exp[1] === '!=') ? !isTrue : isTrue }]
