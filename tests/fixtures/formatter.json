@@ -59,8 +59,7 @@
       "root": true,
       "resourcePath": "example:sample"
     },
-    "expected": "#> example:sample\n\nsay hi\n",
-    "secondPass": "\n#> example:sample\n\nsay hi\n"
+    "expected": "#> example:sample\n\nsay hi\n"
   },
   {
     "name": "existing header",
@@ -70,14 +69,83 @@
       "root": true,
       "resourcePath": "example:sample"
     },
-    "expected": "\n#> example:sample\n  say hi\n",
-    "secondPass": "#> example:sample\n\n\n#> example:sample\n  say hi\n"
+    "expected": "#> example:sample\n  say hi\n"
   },
   {
     "name": "header outside datapack",
     "input": "say hi\n",
     "header": true,
-    "expected": "\nsay hi\n",
-    "secondPass": "\n\nsay hi\n"
+    "expected": "say hi\n"
+  },
+  {
+    "name": "leading blanks before existing header",
+    "input": "\n\n#> example:sample\nsay hi\n",
+    "header": true,
+    "uri": {
+      "root": true,
+      "resourcePath": "example:sample"
+    },
+    "expected": "\n\n#> example:sample\n  say hi\n"
+  },
+  {
+    "name": "indented header with trailing spaces",
+    "input": "\t#> example:sample  \nsay hi\n",
+    "header": true,
+    "uri": {
+      "root": true,
+      "resourcePath": "example:sample"
+    },
+    "expected": "#> example:sample  \n  say hi\n"
+  },
+  {
+    "name": "existing header separator",
+    "input": "#> example:sample\n\nsay hi\n",
+    "header": true,
+    "uri": {
+      "root": true,
+      "resourcePath": "example:sample"
+    },
+    "expected": "#> example:sample\n\nsay hi\n"
+  },
+  {
+    "name": "insert header before existing blank",
+    "input": "\nsay hi\n",
+    "header": true,
+    "uri": {
+      "root": true,
+      "resourcePath": "example:sample"
+    },
+    "expected": "#> example:sample\n\nsay hi\n"
+  },
+  {
+    "name": "CRLF header insertion",
+    "input": "say hi\r\n",
+    "eol": "\r\n",
+    "header": true,
+    "uri": {
+      "root": true,
+      "resourcePath": "example:sample"
+    },
+    "expected": "#> example:sample\r\n\r\nsay hi\r\n"
+  },
+  {
+    "name": "empty datapack function header",
+    "input": "",
+    "header": true,
+    "uri": {
+      "root": true,
+      "resourcePath": "example:sample"
+    },
+    "expected": "#> example:sample\n"
+  },
+  {
+    "name": "resource marker in function body",
+    "input": "# title\nsay hi\n#> example:sample\nsay end\n",
+    "header": true,
+    "uri": {
+      "root": true,
+      "resourcePath": "example:sample"
+    },
+    "expected": "#> example:sample\n\n# title\n  say hi\n#> example:sample\n  say end\n"
   }
 ]

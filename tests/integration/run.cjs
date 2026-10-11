@@ -60,7 +60,7 @@ exports.run = async function run() {
         builder.setEndOfLine(fixture.eol === '\r\n' ? vscode.EndOfLine.CRLF : vscode.EndOfLine.LF)
       })
       const options = { insertSpaces: fixture.spaces !== false, tabSize: fixture.tabSize || 2 }
-      for (const expected of [fixture.expected, fixture.secondPass ?? fixture.expected]) {
+      for (const expected of [fixture.expected, fixture.expected, fixture.expected]) {
         const edits = await vscode.commands.executeCommand('vscode.executeFormatDocumentProvider', document.uri, options) ?? []
         assert.ok(Array.isArray(edits), 'formatting provider returned edits')
         if (edits.length > 0) {
@@ -70,7 +70,7 @@ exports.run = async function run() {
         }
         assert.equal(document.getText(), expected, fixture.name)
       }
-      console.log(`PASS formatter edits and second pass: ${fixture.name}`)
+      console.log(`PASS formatter edits and repeated formatting: ${fixture.name}`)
     }
   } finally {
     await formattingConfig.update('doInsertIMPDocument', false, vscode.ConfigurationTarget.Workspace)

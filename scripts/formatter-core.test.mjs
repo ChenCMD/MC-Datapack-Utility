@@ -18,9 +18,10 @@ function format(fixture, input = fixture.input) {
   return applyEdits(doc, edits)
 }
 for (const fixture of fixtures) {
-  test(`isolated formatter matches baseline: ${fixture.name}`, () => {
+  test(`isolated formatter matches documented output: ${fixture.name}`, () => {
     assert.equal(format(fixture), fixture.expected)
-    assert.equal(format(fixture, fixture.expected), fixture.secondPass ?? fixture.expected)
+    assert.equal(format(fixture, fixture.expected), fixture.expected)
+    assert.equal(format(fixture, format(fixture, fixture.expected)), fixture.expected)
   })
 }
 test('formatter core keeps its inputs and state independent between calls', () => {
