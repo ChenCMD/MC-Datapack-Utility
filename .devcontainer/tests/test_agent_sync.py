@@ -136,6 +136,9 @@ class AgentSyncTests(unittest.TestCase):
                        "COMMA_LIST": host + separator + "a," + host + separator + "b",
                        "PIPE_COMMAND": host + separator + "tool|other",
                        "QUOTED": host + separator + '"config"',
+                       "PARENT_ESCAPE": host + separator + ".." + separator + "shared/config",
+                       "NESTED_ESCAPE": host + separator + "a/../../shared/config",
+                       "PARENT_INSIDE": host + separator + "a/../config",
                        "CONFIG_PATH": host + separator + "My Config.json",
                        "TABBED": host + separator + "tool\t--flag"}
                 actual = json.loads(module.translate_paths(json.dumps({"env": env}).encode(), host, self.home))

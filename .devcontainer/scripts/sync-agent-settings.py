@@ -171,7 +171,7 @@ def translate_paths(data, host_home, home, *, toml=False):
                     suffix = item[match.end():]
                     if windows:
                         suffix = suffix.replace("\\", "/")
-                    if re.fullmatch(r"[\w./@+\-]*", suffix):
+                    if re.fullmatch(r"[\w./@+\-]*", suffix) and ".." not in suffix.split("/"):
                         return str(home) + suffix
             return item
         return {key: entry(key, item) for key, item in value.items()}
