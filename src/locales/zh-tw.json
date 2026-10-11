@@ -32,6 +32,7 @@
   "day-name.wednesday": "Wednesday",
   "error.already-exists": "此%0%已存在。",
   "error.download-timeout": "下載請求已逾時。",
+  "error.invalid-file-name": "請輸入各路徑區段皆非空的相對檔案名稱；不能使用「.」或「..」。",
   "error.unexpected-character": "%0%不可使用。",
   "formula-to-score-operation.complete-text": "只要您願意，您可以同時更改SCORE HOLDER的名稱和SCORE OBJECT的名稱。",
   "formula-to-score-operation.formula": "公式",

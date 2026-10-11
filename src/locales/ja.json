@@ -53,6 +53,7 @@
   "error.download-timeout": "ダウンロードの要求がタイムアウトしました。",
   "error.expected-got": "%0%が必要ですが%1%が確認されました",
   "error.input-blank": "%0%を空欄にすることはできません。",
+  "error.invalid-file-name": "空でない名前を相対パスで入力してください。「.」「..」や空のパス区切りは使えません。",
   "error.invalid-number": "有効な数値を入力してください。",
   "error.not-exist": "次の%0%は存在しません: %1%",
   "error.not-expression": "数式の解析に失敗しました。",

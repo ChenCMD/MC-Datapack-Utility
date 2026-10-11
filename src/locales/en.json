@@ -53,6 +53,7 @@
   "error.download-timeout": "The download request has timed out.",
   "error.expected-got": "Expected %0% but got %1%",
   "error.input-blank": "The %0% cannot be blank.",
+  "error.invalid-file-name": "Enter a relative file name with non-empty path segments; \".\" and \"..\" are not allowed.",
   "error.invalid-number": "Please enter a valid number.",
   "error.not-exist": "The following %0% does not exist: %1%.",
   "error.not-expression": "Failed to parse the formula.",

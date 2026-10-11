@@ -106,6 +106,28 @@ test('invalid names do not reach storage', async () => {
     assert.match(state.validation,/unexpected-character/);assert.deepEqual(state.writes,[])
   })
 })
+
+test('empty, absolute, and dot-segment names do not reach storage', async () => {
+  for (const name of ['', '.', '..', '../escape', 'nested/../../escape', './sample',
+    '/absolute', 'nested/', 'nested//sample', 'nested/./sample', 'nested/../sample']) {
+    await withPack({ name }, async directory => {
+      await createFile(uri(directory), config)
+      assert.match(state.validation, /error.invalid-file-name/, name)
+      assert.deepEqual(state.writes, [], name)
+      assert.deepEqual(state.opened, [], name)
+    })
+  }
+})
+test('nested resource names with dots, underscores, and hyphens are supported', async () => {
+  await withPack({ name: 'nested/a.b-c_d' }, async directory => {
+    await mkdir(join(directory, 'nested'))
+    await createFile(uri(directory), config)
+    assert.equal(state.validation, undefined)
+    assert.equal(await readFile(join(directory, 'nested/a.b-c_d.mcfunction'), 'utf8'),
+      '# example:a.b-c_d 2026-10-11\r\nsay nested/a.b-c_d\r\n')
+    assert.equal(state.opened.length, 1)
+  })
+})
 test('write failure is reported and the file is not opened', async () => {
   await withPack({failWrite:true},async directory=>{
     await createFile(uri(directory),config)
