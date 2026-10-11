@@ -140,6 +140,24 @@ class AgentSyncTests(unittest.TestCase):
         linked = "/.CLAUDE/Link/config.json"
         self.assertEqual(module.source_casing(linked, self.source), linked)
 
+    def test_macos_environment_paths_use_source_filename_casing(self):
+        host = "/Users/dev"
+        settings = {"env": {"CONFIG_PATH": host + "/.CLAUDE/Skills/Config.json"}}
+        self.write(self.source, ".claude/.mcp.json", json.dumps(settings))
+        self.write(self.source, ".claude/skills/config.json", '{"ready": true}')
+        module.sync(self.source, self.home, host, host_platform="darwin")
+        imported = json.loads((self.home / ".claude/.mcp.json").read_text())
+        self.assertEqual(imported["env"]["CONFIG_PATH"], str(self.home / ".claude/skills/config.json"))
+        self.assertEqual(json.loads(Path(imported["env"]["CONFIG_PATH"]).read_text()), {"ready": True})
+
+    def test_linux_environment_paths_preserve_filename_casing(self):
+        host = "/home/dev"
+        self.write(self.source, ".claude/skills/config.json", "fixture")
+        source = {"env": {"CONFIG_PATH": host + "/.CLAUDE/Skills/Config.json"}}
+        actual = json.loads(module.translate_paths(json.dumps(source).encode(), host, self.home,
+                                                 source_home=self.source, host_platform="linux"))
+        self.assertEqual(actual["env"]["CONFIG_PATH"], str(self.home / ".CLAUDE/Skills/Config.json"))
+
     def test_posix_environment_paths_translate_with_component_boundaries(self):
         host = "/Users/Some Developer"
         env = {"CONFIG_PATH": host + "/.claude/skills/config.json",

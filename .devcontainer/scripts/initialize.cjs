@@ -57,7 +57,7 @@ function hostOverrides(home, platform = process.platform, identifier = 'test', d
     home: { name: `mcdu-home-${identifier}` },
     'node-modules': { name: `mcdu-node-modules-${identifier}` }
   }, services: { devcontainer: {
-    environment: { MCDU_HOST_HOME: escape(home) }, volumes
+    environment: { MCDU_HOST_HOME: escape(home), MCDU_HOST_PLATFORM: platform }, volumes
   } } };
 }
 

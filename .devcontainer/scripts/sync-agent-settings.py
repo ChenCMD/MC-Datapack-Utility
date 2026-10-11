@@ -137,7 +137,7 @@ def translate_value(value, host_home, home):
 
 
 def source_casing(suffix, source_home):
-    """Recover Windows filename spelling without following source symlinks."""
+    """Recover filename spelling without following source symlinks."""
     if source_home is None:
         return suffix
     cursor = source_home
@@ -158,7 +158,7 @@ def source_casing(suffix, source_home):
     return "/".join(names)
 
 
-def translate_paths(data, host_home, home, *, toml=False, source_home=None):
+def translate_paths(data, host_home, home, *, toml=False, source_home=None, host_platform=""):
     try:
         text = data.decode("utf-8")
     except UnicodeDecodeError:
@@ -172,10 +172,11 @@ def translate_paths(data, host_home, home, *, toml=False, source_home=None):
         if not isinstance(value, dict):
             return value
         windows = PureWindowsPath(host_home).is_absolute()
+        recover_casing = windows or host_platform == "darwin"
         prefixes = ({host_home.rstrip("/\\"), host_home.replace("\\", "/").rstrip("/")}
                     if windows else {host_home.rstrip("/")})
         boundary = r"(?=$|[/\\])" if windows else r"(?=$|/)"
-        flags = re.IGNORECASE if windows else 0
+        flags = re.IGNORECASE if recover_casing else 0
         def entry(key, item):
             # Environment values may be credentials or opaque strings. Only
             # translate a single complete home path, never prose or path lists.
@@ -194,7 +195,7 @@ def translate_paths(data, host_home, home, *, toml=False, source_home=None):
                     if windows:
                         suffix = suffix.replace("\\", "/")
                     if re.fullmatch(r"[\w./@+\-]*", suffix) and ".." not in suffix.split("/"):
-                        if windows:
+                        if recover_casing:
                             suffix = source_casing(suffix, source_home)
                         return str(home) + suffix
             return item
@@ -256,13 +257,14 @@ def atomic_write(destination, data, mode=0o600, before_replace=None):
         Path(name).unlink(missing_ok=True)
 
 
-def copy_file(source, destination, host_home, home, private=False, data=None, before_replace=None, source_home=None):
+def copy_file(source, destination, host_home, home, private=False, data=None, before_replace=None, source_home=None, host_platform=""):
     safe_destination(home, destination.relative_to(home))
     destination.parent.mkdir(parents=True, exist_ok=True)
     if data is None:
         data = source.read_bytes()
         if not private:
-            data = translate_paths(data, host_home, home, toml=destination.suffix == ".toml", source_home=source_home)
+            data = translate_paths(data, host_home, home, toml=destination.suffix == ".toml",
+                                   source_home=source_home, host_platform=host_platform)
     mode = 0o600 if private else stat.S_IMODE(source.stat().st_mode) | stat.S_IWUSR
     atomic_write(destination, data, mode, before_replace)
 
@@ -397,7 +399,7 @@ def prepare_destination(home, relative, owned, journal):
     return destination
 
 
-def sync(source_home, home, host_home=""):
+def sync(source_home, home, host_home="", *, host_platform=""):
     source_home, home = Path(source_home).absolute(), Path(home).resolve()
     home.mkdir(parents=True, exist_ok=True)
     control = safe_destination(home, Path(".devcontainer"))
@@ -440,7 +442,8 @@ def sync(source_home, home, host_home=""):
                 continue
             if not destination.exists():
                 copy_file(resolved, destination, host_home, home,
-                          private=relative.name in {"auth.json", ".credentials.json"}, source_home=source_home)
+                          private=relative.name in {"auth.json", ".credentials.json"},
+                          source_home=source_home, host_platform=host_platform)
                 if relative.name == ".claude.json":
                     destination.chmod(0o600)
         atomic_write(marker, b"")
@@ -492,7 +495,8 @@ def sync(source_home, home, host_home=""):
             except ValueError:
                 journal.forget(name, owned)
             continue
-        data = translate_paths(source.read_bytes(), host_home, home, toml=relative.suffix == ".toml", source_home=source_home)
+        data = translate_paths(source.read_bytes(), host_home, home, toml=relative.suffix == ".toml",
+                               source_home=source_home, host_platform=host_platform)
         expected_mode = stat.S_IMODE(source.stat().st_mode) | stat.S_IWUSR
         if (destination.is_file() and name in owned and destination.read_bytes() == data
                 and stat.S_IMODE(destination.stat().st_mode) == expected_mode):
@@ -527,5 +531,6 @@ if __name__ == "__main__":
     parser.add_argument("--source-home", default="/mnt/host-settings")
     parser.add_argument("--container-home", default=str(Path.home()))
     parser.add_argument("--host-home", default=os.environ.get("MCDU_HOST_HOME", ""))
+    parser.add_argument("--host-platform", default=os.environ.get("MCDU_HOST_PLATFORM", ""))
     args = parser.parse_args()
-    sync(args.source_home, args.container_home, args.host_home)
+    sync(args.source_home, args.container_home, args.host_home, host_platform=args.host_platform)
