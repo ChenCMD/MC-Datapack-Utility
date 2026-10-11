@@ -42,7 +42,10 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
         const lastClose = closingIndex(['(', ...exp]) - 1
         const sub = exp.slice(0, lastClose)
         exp = exp.slice(lastClose + 1)
-        const innerScale = opTable[exp[0]]?.identifier?.endsWith('=') ? 1 : scale
+        const isGroupedDestination = opTable[exp[0]]?.identifier?.endsWith('=')
+        if (isGroupedDestination && sub.some(token => token === '+' || token === '-' || (token !== '(' && token.endsWith('('))))
+          throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
+        const innerScale = isGroupedDestination ? 1 : scale
         const inner = formulaAnalyzer(sub, opTable, funcs, innerScale)
         const grouped = typeof inner === 'string' ? inner : { ...inner, op: { ...inner.op, order: opTable['('].order } }
         return assemble(grouped, exp, opTable, funcs, scale)
@@ -57,6 +60,8 @@ export function createFormulaAnalyzer(ports: ScoreOperationPorts) {
     const close = closingIndex([first, ...exp]) - 1
     const nested = exp.slice(0, close)
     exp = exp.slice(close + 1)
+    if (opTable[exp[0]]?.identifier?.endsWith('='))
+      throw new GenerateError(locale('formula-to-score-operation.illegal-formula'))
 
     const subArr: string[][] = []
     const separation = { new: 0, old: 0 }
