@@ -28,9 +28,10 @@ export async function format(fixture, text = fixture.input) {
 }
 const fixtures = JSON.parse(await readFile(new URL('../tests/fixtures/formatter.json', import.meta.url)))
 for (const fixture of fixtures) {
-  test(`formatter baseline: ${fixture.name}`, async () => {
+  test(`formatter output: ${fixture.name}`, async () => {
     const output = await format(fixture)
     assert.equal(output, fixture.expected)
-    assert.equal(await format(fixture, output), fixture.secondPass ?? fixture.expected)
+    assert.equal(await format(fixture, output), fixture.expected)
+    assert.equal(await format(fixture, await format(fixture, output)), fixture.expected)
   })
 }

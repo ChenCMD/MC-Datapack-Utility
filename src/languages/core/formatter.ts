@@ -17,11 +17,14 @@ export interface FormatterOptions {
 export function formatMcfunction(lines: readonly string[], options: FormatterOptions): FormatterEdit[] {
   const { indent, eol, insertHeader, resourcePath } = options
   const edits: FormatterEdit[] = []
-  if (insertHeader) {
-    if (resourcePath !== undefined && lines[0] !== `#> ${resourcePath}`)
-      edits.push({ kind: 'insert', line: 0, newText: `#> ${resourcePath}${eol}` })
-    // Preserve the existing unconditional blank line, including repeated formatting.
-    edits.push({ kind: 'insert', line: 0, newText: eol })
+  if (insertHeader && resourcePath !== undefined) {
+    const header = `#> ${resourcePath}`
+    const firstContent = lines.find(line => readLine(line) !== '')
+    if (firstContent === undefined || readLine(firstContent).replace(/[ \t]+$/, '') !== header) {
+      // An existing leading blank already separates the header from the body.
+      const separator = readLine(lines[0] ?? '') === '' ? '' : eol
+      edits.push({ kind: 'insert', line: 0, newText: `${header}${eol}${separator}` })
+    }
   }
   return [...edits, ...formatIndentation(lines, indent, eol)]
 }
@@ -41,7 +44,7 @@ function formatIndentation(lines: readonly string[], indent: string, eol: string
   for (let lineCount = 0; lineCount < lines.length; lineCount++) {
     // Match StringReader's space skipping and readLine behavior, including a
     // standalone carriage return within a VS Code document line.
-    const line = lines[lineCount].replace(/^[ \t]*/, '').split('\r')[0]
+    const line = readLine(lines[lineCount])
     // 改行
     if (line === '') {
       if (depth.size() > 0)
@@ -97,4 +100,8 @@ function formatIndentation(lines: readonly string[], indent: string, eol: string
   if (lastLineType === 'blankLine') editQueue.pop()
 
   return editQueue
+}
+
+function readLine(line: string): string {
+  return line.replace(/^[ \t]*/, '').split('\r')[0]
 }
