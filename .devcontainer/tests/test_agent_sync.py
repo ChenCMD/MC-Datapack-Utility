@@ -81,6 +81,51 @@ class AgentSyncTests(unittest.TestCase):
         translated = module.translate_paths(windows, "C:\\Users\\developer", self.home)
         self.assertNotIn(b"C:", translated)
 
+    def test_windows_mcp_environment_paths_point_to_imported_files(self):
+        host = r"C:\Users\Some Developer"
+        config_path = host + r"\.claude\skills\config.json"
+        settings = {"mcpServers": {"local": {
+            "command": "node", "args": [host + r"\.claude\skills\server.js"],
+            "env": {"CONFIG_PATH": config_path}}}}
+        self.write(self.source, ".claude/.mcp.json", json.dumps(settings))
+        self.write(self.source, ".claude/skills/config.json", '{"ready": true}')
+        self.write(self.source, ".claude/skills/server.js", "// fixture")
+        module.sync(self.source, self.home, host)
+        imported = json.loads((self.home / ".claude/.mcp.json").read_text())
+        server = imported["mcpServers"]["local"]
+        self.assertEqual(server["args"], [str(self.home / ".claude/skills/server.js")])
+        self.assertEqual(server["env"]["CONFIG_PATH"], str(self.home / ".claude/skills/config.json"))
+        self.assertEqual(json.loads(Path(server["env"]["CONFIG_PATH"]).read_text()), {"ready": True})
+        server["env"]["CONFIG_PATH"] = "container-owned"
+        (self.home / ".claude/.mcp.json").write_text(json.dumps(imported))
+        module.sync(self.source, self.home, host)
+        self.assertEqual(json.loads((self.home / ".claude/.mcp.json").read_text())["mcpServers"]["local"]["env"]["CONFIG_PATH"], "container-owned")
+
+    def test_environment_translation_preserves_secrets_headers_and_non_paths(self):
+        host = r"C:\Users\Some Developer"
+        absolute = host + r"\.claude\skills\config.json"
+        env = {"CONFIG_PATH": absolute, "DATA_DIR": "c:/users/some developer/.claude/skills",
+               "API_KEY": absolute, "ACCESS_TOKEN": absolute, "PASSWORD": absolute,
+               "AUTH": absolute, "KEY": absolute, "BEARER": absolute,
+               "MESSAGE": "Read " + absolute, "OTHER": host + r"-other\data",
+               "PATH": absolute + r";C:\Windows", "COUNT": 2, "EMPTY": ""}
+        headers = {"Authorization": absolute, "X-Data": absolute}
+        source = {"mcpServers": {"local": {"env": env, "headers": headers}}}
+        actual = json.loads(module.translate_paths(json.dumps(source).encode(), host, self.home))
+        expected = dict(env)
+        expected["CONFIG_PATH"] = str(self.home / ".claude/skills/config.json")
+        expected["DATA_DIR"] = str(self.home / ".claude/skills")
+        self.assertEqual(actual["mcpServers"]["local"]["env"], expected)
+        self.assertEqual(actual["mcpServers"]["local"]["headers"], headers)
+
+    def test_posix_environment_paths_translate_with_component_boundaries(self):
+        host = "/Users/Some Developer"
+        env = {"CONFIG_PATH": host + "/.claude/skills/config.json",
+               "HOME": host, "OTHER": host + "-other/private",
+               "PATH": host + "/bin:/usr/bin", "AUTH_TOKEN": host + "/opaque"}
+        actual = json.loads(module.translate_paths(json.dumps({"env": env}).encode(), host, self.home))["env"]
+        self.assertEqual(actual, {**env, "CONFIG_PATH": str(self.home / ".claude/skills/config.json"), "HOME": str(self.home)})
+
     def test_legacy_volume_is_not_reseeded(self):
         self.write(self.home, ".devcontainer/seeded-codex", "")
         self.write(self.home, ".codex/auth.json", "existing token")

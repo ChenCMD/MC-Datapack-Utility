@@ -143,6 +143,29 @@ def translate_paths(data, host_home, home, *, toml=False):
         return data
     if not host_home or "\x00" in text:
         return data
+    def secret_key(key):
+        return re.search(r"token|secret|password|credential|api.?key|authorization", key, re.I)
+
+    def environment(value):
+        if not isinstance(value, dict):
+            return value
+        windows = PureWindowsPath(host_home).is_absolute()
+        prefixes = {host_home.rstrip("/\\"), host_home.replace("\\", "/").rstrip("/")}
+        flags = re.IGNORECASE if windows else 0
+        def entry(key, item):
+            # Environment values may be credentials or opaque strings. Only
+            # translate a single complete home path, never prose or path lists.
+            if (not isinstance(item, str) or secret_key(key)
+                    or re.search(r"(?:^|_)(?:auth|key|bearer)(?:_|$)", key, re.I)
+                    or any(separator in item for separator in ("\n", "\r", ";"))
+                    or ":" in (item[2:] if windows else item)):
+                return item
+            if any(re.match(re.escape(prefix) + r"(?=$|[/\\])", item, flags)
+                   for prefix in prefixes):
+                return translate_value(item, host_home, home)
+            return item
+        return {key: entry(key, item) for key, item in value.items()}
+
     def walk(value):
         if isinstance(value, str):
             return translate_value(value, host_home, home)
@@ -150,8 +173,8 @@ def translate_paths(data, host_home, home, *, toml=False):
             return [walk(item) for item in value]
         if isinstance(value, dict):
             return {translate_value(key, host_home, home):
-                    (item if re.search(r"token|secret|password|credential|api.?key|authorization", key, re.I)
-                     or key.lower() in {"env", "headers"} else walk(item))
+                    (item if secret_key(key) or key.lower() == "headers"
+                     else environment(item) if key.lower() == "env" else walk(item))
                     for key, item in value.items()}
         return value
     try:
