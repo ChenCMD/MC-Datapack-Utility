@@ -22,8 +22,19 @@ test('nested JSON values expand in place without replacing keys or scalars', () 
 test('root scalar and null values are unchanged', () => {
   for (const value of [3, true, null]) assert.equal(resolveVars(value, vars), value)
 })
-test('a null nested inside a JSON object reproduces the existing error', () => {
-  assert.throws(() => resolveVars({ value: null }, vars), TypeError)
+test('nested null values survive expansion in objects and arrays', () => {
+  const input = { value: null, name: '%name%', nested: { value: null },
+    array: [null, '%namespace%', { value: null, name: '%name%' }, [null, '%name%']] }
+  assert.equal(resolveVars(input, vars), input)
+  assert.deepEqual(input, { value: null, name: 'sample', nested: { value: null },
+    array: [null, 'example', { value: null, name: 'sample' }, [null, 'sample']] })
+})
+test('root arrays preserve null while expanding nested JSON objects', () => {
+  const input = [null, { value: null, name: '%name%' }]
+  const result = resolveVars(input, vars)
+  assert.notEqual(result, input)
+  assert.equal(result[1], input[1])
+  assert.deepEqual(result, [null, { value: null, name: 'sample' }])
 })
 test('inherited variable names are not substituted', () => {
   assert.equal(resolveVars('%name% %inherited%', Object.assign(Object.create({ inherited: 'hidden' }), { name: 'sample' })), 'sample %inherited%')
