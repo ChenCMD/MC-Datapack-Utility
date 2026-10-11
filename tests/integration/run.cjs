@@ -46,6 +46,36 @@ exports.run = async function run() {
   }
 
   const uri = vscode.Uri.joinPath(vscode.workspace.workspaceFolders[0].uri, 'data/example/functions/sample.mcfunction')
+  const formattingFixtures = require('../fixtures/formatter.json')
+  const formattingConfig = vscode.workspace.getConfiguration('mcdutil.mcfFormatter')
+  try {
+    for (const fixture of formattingFixtures) {
+      await formattingConfig.update('doInsertIMPDocument', Boolean(fixture.header), vscode.ConfigurationTarget.Workspace)
+      const document = fixture.uri?.root
+        ? await vscode.workspace.openTextDocument(uri)
+        : await vscode.workspace.openTextDocument({ language: 'mcfunction', content: fixture.input })
+      const editor = await vscode.window.showTextDocument(document)
+      await editor.edit(builder => {
+        builder.replace(new vscode.Range(document.positionAt(0), document.positionAt(document.getText().length)), fixture.input)
+        builder.setEndOfLine(fixture.eol === '\r\n' ? vscode.EndOfLine.CRLF : vscode.EndOfLine.LF)
+      })
+      const options = { insertSpaces: fixture.spaces !== false, tabSize: fixture.tabSize || 2 }
+      for (const expected of [fixture.expected, fixture.secondPass ?? fixture.expected]) {
+        const edits = await vscode.commands.executeCommand('vscode.executeFormatDocumentProvider', document.uri, options) ?? []
+        assert.ok(Array.isArray(edits), 'formatting provider returned edits')
+        if (edits.length > 0) {
+          const edit = new vscode.WorkspaceEdit()
+          edit.set(document.uri, edits)
+          assert.ok(await vscode.workspace.applyEdit(edit), 'formatter edits can be applied')
+        }
+        assert.equal(document.getText(), expected, fixture.name)
+      }
+      console.log(`PASS formatter edits and second pass: ${fixture.name}`)
+    }
+  } finally {
+    await formattingConfig.update('doInsertIMPDocument', false, vscode.ConfigurationTarget.Workspace)
+  }
+
   const originalClipboard = await vscode.env.clipboard.readText()
   try {
     await vscode.env.clipboard.writeText('integration sentinel')

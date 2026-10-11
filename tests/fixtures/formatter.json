@@ -1,0 +1,83 @@
+[
+  {
+    "name": "empty",
+    "input": "",
+    "expected": ""
+  },
+  {
+    "name": "command without final newline",
+    "input": "  say hello",
+    "expected": "say hello\n"
+  },
+  {
+    "name": "whitespace and trailing blank lines",
+    "input": "\t say hello  \n \t\n\n",
+    "expected": "say hello  \n\n\n"
+  },
+  {
+    "name": "comment hierarchy",
+    "input": "# title\nsay one\n## section\nsay two\n\nsay three\n",
+    "expected": "# title\n  say one\n  ## section\n    say two\n\n  say three\n"
+  },
+  {
+    "name": "repeated comment depth",
+    "input": "# one\n# two\nsay hello\n",
+    "expected": "# one\n# two\n  say hello\n"
+  },
+  {
+    "name": "special declarations",
+    "input": "# title\n#define foo\nsay one\n#declare bar\nsay two\n",
+    "expected": "# title\n  #define foo\n    say one\n  #declare bar\n    say two\n"
+  },
+  {
+    "name": "resource marker resets depth",
+    "input": "# outer\n## inner\n#> example:sample\nsay hi\n",
+    "expected": "# outer\n  ## inner\n#> example:sample\n  say hi\n"
+  },
+  {
+    "name": "unknown comment syntax",
+    "input": "# title\n#custom hello\nsay hi\n",
+    "expected": "# title\n#custom hello\n  say hi\n"
+  },
+  {
+    "name": "tabs",
+    "input": "# one\n## two\nsay hi\n",
+    "spaces": false,
+    "expected": "# one\n\t## two\n\t\tsay hi\n"
+  },
+  {
+    "name": "CRLF",
+    "input": "# one\r\nsay hi\r\n",
+    "eol": "\r\n",
+    "expected": "# one\r\n  say hi\r\n"
+  },
+  {
+    "name": "header insertion",
+    "input": "say hi\n",
+    "header": true,
+    "uri": {
+      "root": true,
+      "resourcePath": "example:sample"
+    },
+    "expected": "#> example:sample\n\nsay hi\n",
+    "secondPass": "\n#> example:sample\n\nsay hi\n"
+  },
+  {
+    "name": "existing header",
+    "input": "#> example:sample\nsay hi\n",
+    "header": true,
+    "uri": {
+      "root": true,
+      "resourcePath": "example:sample"
+    },
+    "expected": "\n#> example:sample\n  say hi\n",
+    "secondPass": "#> example:sample\n\n\n#> example:sample\n  say hi\n"
+  },
+  {
+    "name": "header outside datapack",
+    "input": "say hi\n",
+    "header": true,
+    "expected": "\nsay hi\n",
+    "secondPass": "\n\nsay hi\n"
+  }
+]
