@@ -6,7 +6,7 @@ import { isStringArray } from '../../../utils/typeGuards'
 import { ObjectSet } from '../../../utils/ObjectSet'
 import { dataFolder, packMcMetaData } from '../utils/data'
 import type { CustomQuestion, GenerateFileData, QuickPickFiles } from '../types/QuickPickFiles'
-import type { DatapackPorts } from './ports'
+import type { DatapackPorts, GenerationResult } from './ports'
 import rfdc from 'rfdc'
 
 export const createDatapackCommand = <U>(ports: DatapackPorts<U>) => {
@@ -40,9 +40,15 @@ export const createDatapackCommand = <U>(ports: DatapackPorts<U>) => {
       // 生成用のデータに加工する
       const items = await toGenerateData(createItems, generatorChildNode.isGeneratePackMcMeta, dataVersion, packFormat)
       // 生成
-      await generate(items, root, packFormat, { ...vars, ...customVars })
-      // 完了の通知
-      await generatorChildNode.noticeGenerated(root)
+      const result = await generate(items, root, packFormat, { ...vars, ...customVars })
+      if (result.failed === 0) {
+        await generatorChildNode.noticeGenerated(root)
+      } else {
+        // A successful implicit data directory does not mean any requested file succeeded.
+        const successful = result.files > 0 ? result.successfulFiles : result.successfulFolders
+        if (successful > 0) ports.showWarning(ports.locale('create-datapack-template.generation-partial', result.failed))
+        else ports.showError(ports.locale('create-datapack-template.generation-failed', result.failed))
+      }
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
@@ -115,7 +121,8 @@ export const createDatapackCommand = <U>(ports: DatapackPorts<U>) => {
     return ans
   }
 
-  const generate = async (items: GenerateFileData[], root: U, packFormat: number, vars: Variables): Promise<void> => {
+  const generate = async (items: GenerateFileData[], root: U, packFormat: number, vars: Variables): Promise<GenerationResult> => {
+    const result: GenerationResult = { files: items.filter(item => item.type === 'file').length, successfulFiles: 0, successfulFolders: 0, failed: 0 }
     await ports.createProgressBar(ports.locale('create-datapack-template.progress.title'), async report => {
       const message = ports.locale('create-datapack-template.progress.creating')
       report({ message })
@@ -123,8 +130,11 @@ export const createDatapackCommand = <U>(ports: DatapackPorts<U>) => {
       for (const item of items) {
         try {
           await singleGenerate(item, root, packFormat, vars)
+          if (item.type === 'file') result.successfulFiles++
+          else result.successfulFolders++
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
+          result.failed++
           if (error instanceof Error) ports.showError(error.message)
           else ports.showError(error.toString())
           ports.log(error.stack ?? error.toString())
@@ -133,6 +143,7 @@ export const createDatapackCommand = <U>(ports: DatapackPorts<U>) => {
         }
       }
     })
+    return result
   }
 
   const singleGenerate = async (item: GenerateFileData, root: U, packFormat: number, vars: Variables): Promise<void> => {
