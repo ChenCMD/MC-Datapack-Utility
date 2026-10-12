@@ -81,7 +81,8 @@ export const createDatapackCommand = <U>(ports: DatapackPorts<U>) => {
       if (config.defaultVanillaData) items.push(...defaultItems['Vanilla data'])
       if (config.defaultFolder) items.push(...defaultItems['Folders'])
     }
-    items.push(...config.customTemplate)
+    // Variable expansion mutates labels and JSON; each run owns its template copies.
+    items.push(...rfdc()(config.customTemplate))
     items.forEach(v => v.label = resolveVars(v.label, vars))
     return await ports.listenPickItem(ports.locale('create-datapack-template.quickpick-placeholder'), items, true)
   }

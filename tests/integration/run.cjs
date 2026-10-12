@@ -261,6 +261,22 @@ exports.run = async function run() {
   assert.equal(wizardEffects.completed, 2)
   console.log('PASS datapack wizard real storage, existing-file protection and cancellation')
 
+  const reusableTemplate = { label: '%namespace% template', generates: [{ type: 'file', rel: '%namespace%.json', content: { namespace: '%namespace%', nested: [null, { date: '%date%' }] } }] }
+  const reusableConfig = { ...wizardConfig, createDatapackTemplate: { ...wizardConfig.createDatapackTemplate, customTemplate: [reusableTemplate] } }
+  const originalTemplate = JSON.stringify(reusableTemplate)
+  const reusableRoot = vscode.Uri.joinPath(packRoot, 'wizard-reused-config')
+  for (const [namespace, date] of [['first', '2026-10-12'], ['second', '2026-10-13']]) {
+    await fileSupport.createDatapackCommand({ ...wizardPorts,
+      selectGenerator: async () => ({ ...wizardGenerator, isGeneratePackMcMeta: false, listenDatapackNameAndRoot: async () => ({ name: 'reused', root: reusableRoot }) }),
+      listenInput: async () => namespace, getDate: () => date,
+      listenPickItem: async (_placeholder, items) => { assert.equal(items[0].label, namespace + ' template'); return items }
+    })(reusableConfig, 'create')
+    assert.deepEqual(JSON.parse(await fileSupport.readFile(vscode.Uri.joinPath(reusableRoot, namespace + '.json'))), { namespace, nested: [null, { date }] })
+    assert.equal(JSON.stringify(reusableTemplate), originalTemplate)
+  }
+  assert.deepEqual(wizardEffects.errors, [])
+  console.log('PASS datapack wizard preserves reusable settings across real JSON writes')
+
   const originalClipboard = await vscode.env.clipboard.readText()
   try {
     await vscode.env.clipboard.writeText('integration sentinel')
