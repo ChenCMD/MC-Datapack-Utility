@@ -1,6 +1,8 @@
 {
   "copy-resource-path.not-datapack": "無法取得資源路徑，因為其不在資料包中。",
   "copy-resource-path.unknown-filetype": "無法取得此檔案的資源路徑。",
+  "create-datapack-template.generation-partial": "部分模板項目無法處理（失敗：%0%項）。已儲存或保留的內容仍然存在。請查看錯誤通知。",
+  "create-datapack-template.generation-failed": "模板生成失敗（失敗：%0%項）。原有內容和已建立的資料夾可能仍然存在。請查看錯誤通知。",
   "create-datapack-template.complete": "資料包模板生成完畢。",
   "create-datapack-template.duplicate-datapack": "資料包名字重複了。\n您希望向您的資料包「%0%」中加入模板嗎？",
   "create-datapack-template.inside-datapack": "所選的資料夾在資料包「%0%」內。\n您希望在此建立資料包嗎？",

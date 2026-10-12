@@ -56,6 +56,7 @@ async function harness({ mode = 'create', items = [], existing = {}, cancel, dow
       if (!Array.isArray(object[key])) return [false, 'error.could-not-append-elem']
       object[key][first ? 'unshift' : 'push'](value); return [true]
     },
+    showWarning: value => events.push(['warning', value]),
     showError: value => events.push(['error', value]),
     log: value => events.push(['log', value]),
     async createDirectory(value) { events.push(['directory', value.path]) },
@@ -68,7 +69,7 @@ async function harness({ mode = 'create', items = [], existing = {}, cancel, dow
     defaultTemplates: () => ({ '#load & #tick': [], 'Vanilla data': [], Folders: [] })
   }
   globalThis.__wizardPorts = ports
-  const names = ['appendElemFromKey', 'createFile', 'createProgressBar', 'getDate', 'getIndent', 'getResourcePath', 'getVanillaData', 'isStringArray', 'listenInput', 'listenPickItem', 'ObjectSet', 'pathAccessible', 'readFile', 'showError', 'stringValidator', 'writeFile']
+  const names = ['appendElemFromKey', 'createFile', 'createProgressBar', 'getDate', 'getIndent', 'getResourcePath', 'getVanillaData', 'isStringArray', 'listenInput', 'listenPickItem', 'ObjectSet', 'pathAccessible', 'readFile', 'showError', 'showWarning', 'stringValidator', 'writeFile']
   const stubs = {
     '../../../types/Error': 'const p = globalThis.__wizardPorts; export const { GenerateError, UserCancelledError } = p',
     '../../utils': 'const p = globalThis.__wizardPorts; ' + names.map(name => `export const ${name} = p.${name}`).join(';'),
@@ -154,13 +155,14 @@ scenario('wizard downloads selected external files and deduplicates custom quest
   ])
 })
 
-scenario('wizard keeps partial files and announces completion after a file fails', async () => {
+scenario('wizard keeps partial files and warns without completion after a file fails', async () => {
   const items = [template([{ type: 'file', rel: 'bad.txt', content: [] }, { type: 'file', rel: 'good.txt', content: ['ok'] }])]
   const { files, events } = await run({ items, failPath: '/packs/demo/bad.txt' })
   assert.ok(!files.has('/packs/demo/bad.txt'))
   assert.equal(files.get('/packs/demo/good.txt'), 'ok')
   assert.deepEqual(events.filter(e => e[0] === 'error'), [['error', 'denied']])
-  assert.deepEqual(events.at(-1), ['complete', '/packs/demo'])
+  assert.deepEqual(events.at(-1), ['warning', 'create-datapack-template.generation-partial:1'])
+  assert.ok(!events.some(e => e[0] === 'complete'))
 })
 
 }

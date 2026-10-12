@@ -9,6 +9,8 @@
   "copy-resource-path.not-datapack": "datapack内では無いためリソースパスを取得できません。",
   "copy-resource-path.unknown-filetype": "このファイルのリソースパスを取得できません。",
   "create-datapack-template.add": "データパックにテンプレートを追加する",
+  "create-datapack-template.generation-partial": "一部のテンプレート項目を処理できませんでした（失敗: %0%件）。保存または保持できた内容は残っています。通知されたエラーを確認してください。",
+  "create-datapack-template.generation-failed": "テンプレートの生成に失敗しました（失敗: %0%件）。既存の内容や作成されたフォルダーが残っている場合があります。通知されたエラーを確認してください。",
   "create-datapack-template.complete": "データパックテンプレートの生成が完了しました。",
   "create-datapack-template.complete-create": "データパックテンプレートの生成が完了しました。\n生成したデータパックを開きますか？",
   "create-datapack-template.create": "データパックをテンプレートから作成する",
