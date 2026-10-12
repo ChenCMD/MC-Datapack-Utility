@@ -8,6 +8,7 @@ import { dataFolder, packMcMetaData } from '../utils/data'
 import type { CustomQuestion, GenerateFileData, QuickPickFiles } from '../types/QuickPickFiles'
 import type { DatapackPorts, GenerationResult } from './ports'
 import { cloneTemplate } from './templates'
+import { isTemplatePath } from './paths'
 import rfdc from 'rfdc'
 
 export const createDatapackCommand = <U>(ports: DatapackPorts<U>) => {
@@ -149,7 +150,9 @@ export const createDatapackCommand = <U>(ports: DatapackPorts<U>) => {
   }
 
   const singleGenerate = async (item: GenerateFileData, root: U, packFormat: number, vars: Variables): Promise<void> => {
-    const fileUri = ports.joinPath(root, resolveVars(item.rel, vars))
+    const relative = resolveVars(item.rel, vars)
+    if (!isTemplatePath(relative, item.type)) throw new GenerateError(ports.locale('create-datapack-template.invalid-path', relative))
+    const fileUri = ports.joinPath(root, relative)
 
     if (item.type === 'folder') {
       await ports.createDirectory(fileUri)

@@ -1,4 +1,5 @@
 {
+  "create-datapack-template.invalid-path": "模板路徑「%0%」無效。請使用以 / 分隔的相對路徑。不允許空路徑段、以空格或點結尾的路徑段、反斜線、冒號或控制字元。",
   "copy-resource-path.not-datapack": "無法取得資源路徑，因為其不在資料包中。",
   "copy-resource-path.unknown-filetype": "無法取得此檔案的資源路徑。",
   "create-datapack-template.generation-partial": "部分模板項目無法處理（失敗：%0%項）。已儲存或保留的內容仍然存在。請查看錯誤通知。",
