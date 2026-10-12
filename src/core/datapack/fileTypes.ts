@@ -72,6 +72,7 @@ const versions = {
   '1.18.2-pre1': 9,
   '1.18.2': 9,
   '22w11a': 10,
+  '23w04a': 11,
   '1.19.4-pre1': 12,
   '24w18a': 42,
   '24w19a': 43,
@@ -90,8 +91,10 @@ const fileTypeMetaDataMap = {
   predicate: { extension: 'json', versionMappings: [{ version: versions['24w21a'], name: 'predicate' }, { version: { from: versions['19w38a'], to: versions['24w20a'] }, name: 'predicates' }] },
   recipe: { extension: 'json', versionMappings: [{ version: versions['24w21a'], name: 'recipe' }, { version: { from: versions['17w48a'], to: versions['24w20a'] }, name: 'recipes' }] },
   structure: { extension: 'nbt', versionMappings: [{ version: versions['24w21a'], name: 'structure' }, { version: { from: versions['17w43a'], to: versions['24w20a'] }, name: 'structures' }] },
+  trim_pattern: { extension: 'json', versionMappings: [{ version: versions['23w04a'], name: 'trim_pattern' }] },
   // tag/common
   'tag/block': { extension: 'json', versionMappings: [{ version: versions['24w19a'], name: 'tags/block' }, { version: { from: versions['17w49a'], to: versions['24w18a'] }, name: 'tags/blocks', }] },
+  'tag/damage_type': { extension: 'json', versionMappings: [{ version: versions['1.19.4-pre1'], name: 'tags/damage_type' }] },
   'tag/entity_type': { extension: 'json', versionMappings: [{ version: versions['24w19a'], name: 'tags/entity_type' }, { version: { from: versions['18w43a'], to: versions['24w18a'] }, name: 'tags/entity_types', }] },
   'tag/fluid': { extension: 'json', versionMappings: [{ version: versions['24w19a'], name: 'tags/fluid' }, { version: { from: versions['18w19a'], to: versions['24w18a'] }, name: 'tags/fluids', }] },
   'tag/function': { extension: 'json', versionMappings: [{ version: versions['24w21a'], name: 'tags/function' }, { version: { from: versions['17w49b'], to: versions['24w20a'] }, name: 'tags/functions', }] },

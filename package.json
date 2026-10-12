@@ -462,6 +462,22 @@
 					"type": "object",
 					"additionalProperties": false,
 					"properties": {
+						"tag/damage_type": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
+						"trim_pattern": {
+							"type": "array",
+							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",
+							"items": {
+								"type": "string",
+								"markdownDescription": "%mcdutil.config.createFile.fileTemplate%"
+							}
+						},
 						"advancement": {
 							"type": "array",
 							"markdownDescription": "%mcdutil.config.createFile.fileTemplate%",

@@ -5,6 +5,7 @@ import { getFileTemplate } from '../utils'
 import { TextEncoder } from 'util'
 import type { CreateFilePorts } from './ports'
 import { renderFileTemplate } from './template'
+import { isRelativeResourceName } from './names'
 
 export function createFileCommand<U extends { path: string }>(ports: CreateFilePorts<U>) {
   const { getDatapackRoot, getPackFormat, getFileType, isDatapackRoot, getDate,
@@ -44,7 +45,7 @@ export function createFileCommand<U extends { path: string }>(ports: CreateFileP
       const fileName = await listenInput(locale('create-file.file-name', fileType), async v => {
         const invalidChar = v.match(/[^a-z0-9./_-]/g)
         if (invalidChar) return locale('error.unexpected-character', invalidChar.join(', '))
-        if (v.split('/').some(part => part === '' || part === '.' || part === '..'))
+        if (!isRelativeResourceName(v))
           return locale('error.invalid-file-name')
         if (await pathAccessible(joinPath(uri, `${v}.${fileExtname}`))) return locale('error.already-exists', `${v}.${fileExtname}`)
         return undefined
