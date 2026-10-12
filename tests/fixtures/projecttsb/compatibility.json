@@ -1,0 +1,4014 @@
+{
+  "license": "CC0-1.0; fixture paths and MC Datapack Utility settings from the pinned repositories",
+  "projects": [
+    {
+      "repo": "ProjectTSB/TheSkyBlessing",
+      "commit": "7ecb161fc41bc1fa52a73da0597fc5f17cfe6f0e",
+      "packFormat": 26,
+      "audit": {
+        "files": 2119,
+        "resourceFiles": 2116,
+        "unnamedFunctions": 241,
+        "unnamedJSON": 16,
+        "rejectedPaths": [],
+        "rejectedNames": [],
+        "unknownTypes": []
+      },
+      "cases": [
+        {
+          "path": "NaturalMergeSort/data/natural_merge_sort/functions/_index.d.mcfunction",
+          "relative": "data/natural_merge_sort/functions/_index.d.mcfunction",
+          "type": "function",
+          "input": "_index.d",
+          "resource": "natural_merge_sort:_index.d",
+          "packFormat": 26
+        },
+        {
+          "path": "NaturalMergeSort/data/natural_merge_sort/functions/ascend.mcfunction",
+          "relative": "data/natural_merge_sort/functions/ascend.mcfunction",
+          "type": "function",
+          "input": "ascend",
+          "resource": "natural_merge_sort:ascend",
+          "packFormat": 26
+        },
+        {
+          "path": "NaturalMergeSort/data/natural_merge_sort/functions/ascend/.mcfunction",
+          "relative": "data/natural_merge_sort/functions/ascend/.mcfunction",
+          "type": "function",
+          "input": "ascend/",
+          "resource": "natural_merge_sort:ascend/",
+          "packFormat": 26
+        },
+        {
+          "path": "NaturalMergeSort/data/natural_merge_sort/functions/sys/ascend/take1.mcfunction",
+          "relative": "data/natural_merge_sort/functions/sys/ascend/take1.mcfunction",
+          "type": "function",
+          "input": "sys/ascend/take1",
+          "resource": "natural_merge_sort:sys/ascend/take1",
+          "packFormat": 26
+        },
+        {
+          "path": "NaturalMergeSort/data/natural_merge_sort/tags/functions/ascend.json",
+          "relative": "data/natural_merge_sort/tags/functions/ascend.json",
+          "type": "tag/function",
+          "input": "ascend",
+          "resource": "natural_merge_sort:ascend",
+          "packFormat": 26
+        },
+        {
+          "path": "NaturalMergeSort/data/natural_merge_sort_for_compound/functions/_index.d.mcfunction",
+          "relative": "data/natural_merge_sort_for_compound/functions/_index.d.mcfunction",
+          "type": "function",
+          "input": "_index.d",
+          "resource": "natural_merge_sort_for_compound:_index.d",
+          "packFormat": 26
+        },
+        {
+          "path": "NaturalMergeSort/data/natural_merge_sort_for_compound/functions/ascend.mcfunction",
+          "relative": "data/natural_merge_sort_for_compound/functions/ascend.mcfunction",
+          "type": "function",
+          "input": "ascend",
+          "resource": "natural_merge_sort_for_compound:ascend",
+          "packFormat": 26
+        },
+        {
+          "path": "NaturalMergeSort/data/natural_merge_sort_for_compound/functions/sys/ascend/take1.mcfunction",
+          "relative": "data/natural_merge_sort_for_compound/functions/sys/ascend/take1.mcfunction",
+          "type": "function",
+          "input": "sys/ascend/take1",
+          "resource": "natural_merge_sort_for_compound:sys/ascend/take1",
+          "packFormat": 26
+        },
+        {
+          "path": "OhMyDat/data/minecraft/tags/functions/load.json",
+          "relative": "data/minecraft/tags/functions/load.json",
+          "type": "tag/function",
+          "input": "load",
+          "resource": "minecraft:load",
+          "packFormat": 26
+        },
+        {
+          "path": "OhMyDat/data/oh_its_dat/functions/please.mcfunction",
+          "relative": "data/oh_its_dat/functions/please.mcfunction",
+          "type": "function",
+          "input": "please",
+          "resource": "oh_its_dat:please",
+          "packFormat": 26
+        },
+        {
+          "path": "OhMyDat/data/oh_my_dat/functions/please.mcfunction",
+          "relative": "data/oh_my_dat/functions/please.mcfunction",
+          "type": "function",
+          "input": "please",
+          "resource": "oh_my_dat:please",
+          "packFormat": 26
+        },
+        {
+          "path": "PlayerMotion/data/player_motion/functions/api/launch_looking.mcfunction",
+          "relative": "data/player_motion/functions/api/launch_looking.mcfunction",
+          "type": "function",
+          "input": "api/launch_looking",
+          "resource": "player_motion:api/launch_looking",
+          "packFormat": 26
+        },
+        {
+          "path": "ScoreToHealth/data/score_to_health/advancements/player_tick.json",
+          "relative": "data/score_to_health/advancements/player_tick.json",
+          "type": "advancement",
+          "input": "player_tick",
+          "resource": "score_to_health:player_tick",
+          "packFormat": 26
+        },
+        {
+          "path": "ScoreToHealth/data/score_to_health/functions/anti_glitch/modify.mcfunction",
+          "relative": "data/score_to_health/functions/anti_glitch/modify.mcfunction",
+          "type": "function",
+          "input": "anti_glitch/modify",
+          "resource": "score_to_health:anti_glitch/modify",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/api/functions/_index.d.mcfunction",
+          "relative": "data/api/functions/_index.d.mcfunction",
+          "type": "function",
+          "input": "_index.d",
+          "resource": "api:_index.d",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/api/functions/artifact/box/from_id.mcfunction",
+          "relative": "data/api/functions/artifact/box/from_id.mcfunction",
+          "type": "function",
+          "input": "artifact/box/from_id",
+          "resource": "api:artifact/box/from_id",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/api/functions/artifact/core/from_rarity/.mcfunction",
+          "relative": "data/api/functions/artifact/core/from_rarity/.mcfunction",
+          "type": "function",
+          "input": "artifact/core/from_rarity/",
+          "resource": "api:artifact/core/from_rarity/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/api/functions/damage/core/health_subtract/non-player/.mcfunction",
+          "relative": "data/api/functions/damage/core/health_subtract/non-player/.mcfunction",
+          "type": "function",
+          "input": "damage/core/health_subtract/non-player/",
+          "resource": "api:damage/core/health_subtract/non-player/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/api/predicates/area/is_breakable.json",
+          "relative": "data/api/predicates/area/is_breakable.json",
+          "type": "predicate",
+          "input": "area/is_breakable",
+          "resource": "api:area/is_breakable",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/api/predicates/global_vars/difficulty/1_normal.json",
+          "relative": "data/api/predicates/global_vars/difficulty/1_normal.json",
+          "type": "predicate",
+          "input": "global_vars/difficulty/1_normal",
+          "resource": "api:global_vars/difficulty/1_normal",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset/functions/_index.d.mcfunction",
+          "relative": "data/asset/functions/_index.d.mcfunction",
+          "type": "function",
+          "input": "_index.d",
+          "resource": "asset:_index.d",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset/functions/artifact/common/check_condition/auto.mcfunction",
+          "relative": "data/asset/functions/artifact/common/check_condition/auto.mcfunction",
+          "type": "function",
+          "input": "artifact/common/check_condition/auto",
+          "resource": "asset:artifact/common/check_condition/auto",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset/functions/artifact/example/equip/1.trigger.mcfunction",
+          "relative": "data/asset/functions/artifact/example/equip/1.trigger.mcfunction",
+          "type": "function",
+          "input": "artifact/example/equip/1.trigger",
+          "resource": "asset:artifact/example/equip/1.trigger",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset/functions/container/2147483647/register.mcfunction",
+          "relative": "data/asset/functions/container/2147483647/register.mcfunction",
+          "type": "function",
+          "input": "container/2147483647/register",
+          "resource": "asset:container/2147483647/register",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset/functions/effect/ex.3/given/.mcfunction",
+          "relative": "data/asset/functions/effect/ex.3/given/.mcfunction",
+          "type": "function",
+          "input": "effect/ex.3/given/",
+          "resource": "asset:effect/ex.3/given/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset/functions/effect/ex/end/.mcfunction",
+          "relative": "data/asset/functions/effect/ex/end/.mcfunction",
+          "type": "function",
+          "input": "effect/ex/end/",
+          "resource": "asset:effect/ex/end/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset/functions/object/example.mixin/init/.mcfunction",
+          "relative": "data/asset/functions/object/example.mixin/init/.mcfunction",
+          "type": "function",
+          "input": "object/example.mixin/init/",
+          "resource": "asset:object/example.mixin/init/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset/tags/functions/artifact/attack.json",
+          "relative": "data/asset/tags/functions/artifact/attack.json",
+          "type": "tag/function",
+          "input": "artifact/attack",
+          "resource": "asset:artifact/attack",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset/tags/functions/artifact/click.carrot_on_a_stick.json",
+          "relative": "data/asset/tags/functions/artifact/click.carrot_on_a_stick.json",
+          "type": "tag/function",
+          "input": "artifact/click.carrot_on_a_stick",
+          "resource": "asset:artifact/click.carrot_on_a_stick",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset/tags/functions/artifact/damage/from_entity/.json",
+          "relative": "data/asset/tags/functions/artifact/damage/from_entity/.json",
+          "type": "tag/function",
+          "input": "artifact/damage/from_entity/",
+          "resource": "asset:artifact/damage/from_entity/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset/tags/functions/artifact/sneak/10s.json",
+          "relative": "data/asset/tags/functions/artifact/sneak/10s.json",
+          "type": "tag/function",
+          "input": "artifact/sneak/10s",
+          "resource": "asset:artifact/sneak/10s",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset/tags/functions/artifact/using_item/0.5s.json",
+          "relative": "data/asset/tags/functions/artifact/using_item/0.5s.json",
+          "type": "tag/function",
+          "input": "artifact/using_item/0.5s",
+          "resource": "asset:artifact/using_item/0.5s",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset_manager/functions/_index.d.mcfunction",
+          "relative": "data/asset_manager/functions/_index.d.mcfunction",
+          "type": "function",
+          "input": "_index.d",
+          "resource": "asset_manager:_index.d",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset_manager/functions/artifact/check/.mcfunction",
+          "relative": "data/asset_manager/functions/artifact/check/.mcfunction",
+          "type": "function",
+          "input": "artifact/check/",
+          "resource": "asset_manager:artifact/check/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset_manager/functions/artifact/check/check_believe.mcfunction",
+          "relative": "data/asset_manager/functions/artifact/check/check_believe.mcfunction",
+          "type": "function",
+          "input": "artifact/check/check_believe",
+          "resource": "asset_manager:artifact/check/check_believe",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset_manager/functions/artifact/data/current/equips/init.mcfunction",
+          "relative": "data/asset_manager/functions/artifact/data/current/equips/init.mcfunction",
+          "type": "function",
+          "input": "artifact/data/current/equips/init",
+          "resource": "asset_manager:artifact/data/current/equips/init",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset_manager/functions/artifact/data/current/update/.mcfunction",
+          "relative": "data/asset_manager/functions/artifact/data/current/update/.mcfunction",
+          "type": "function",
+          "input": "artifact/data/current/update/",
+          "resource": "asset_manager:artifact/data/current/update/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset_manager/functions/artifact/data/current/update/when_modified/non-hotbar.mcfunction",
+          "relative": "data/asset_manager/functions/artifact/data/current/update/when_modified/non-hotbar.mcfunction",
+          "type": "function",
+          "input": "artifact/data/current/update/when_modified/non-hotbar",
+          "resource": "asset_manager:artifact/data/current/update/when_modified/non-hotbar",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset_manager/functions/effect/events/re-given/.mcfunction",
+          "relative": "data/asset_manager/functions/effect/events/re-given/.mcfunction",
+          "type": "function",
+          "input": "effect/events/re-given/",
+          "resource": "asset_manager:effect/events/re-given/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset_manager/functions/island/tick/4_interval.mcfunction",
+          "relative": "data/asset_manager/functions/island/tick/4_interval.mcfunction",
+          "type": "function",
+          "input": "island/tick/4_interval",
+          "resource": "asset_manager:island/tick/4_interval",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset_manager/functions/teleporter/tick/vfx/star/blink/1.m.mcfunction",
+          "relative": "data/asset_manager/functions/teleporter/tick/vfx/star/blink/1.m.mcfunction",
+          "type": "function",
+          "input": "teleporter/tick/vfx/star/blink/1.m",
+          "resource": "asset_manager:teleporter/tick/vfx/star/blink/1.m",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset_manager/loot_tables/artifact/generate_lore/attack_info.json",
+          "relative": "data/asset_manager/loot_tables/artifact/generate_lore/attack_info.json",
+          "type": "loot_table",
+          "input": "artifact/generate_lore/attack_info",
+          "resource": "asset_manager:artifact/generate_lore/attack_info",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset_manager/loot_tables/artifact/get_name/.json",
+          "relative": "data/asset_manager/loot_tables/artifact/get_name/.json",
+          "type": "loot_table",
+          "input": "artifact/get_name/",
+          "resource": "asset_manager:artifact/get_name/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/asset_manager/predicates/has_consumable_item/mainhand.json",
+          "relative": "data/asset_manager/predicates/has_consumable_item/mainhand.json",
+          "type": "predicate",
+          "input": "has_consumable_item/mainhand",
+          "resource": "asset_manager:has_consumable_item/mainhand",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/common/loot_tables/currency/.json",
+          "relative": "data/common/loot_tables/currency/.json",
+          "type": "loot_table",
+          "input": "currency/",
+          "resource": "common:currency/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/common/loot_tables/currency/high.json",
+          "relative": "data/common/loot_tables/currency/high.json",
+          "type": "loot_table",
+          "input": "currency/high",
+          "resource": "common:currency/high",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/common/loot_tables/island_rewards/artifact_seed/lv-1.json",
+          "relative": "data/common/loot_tables/island_rewards/artifact_seed/lv-1.json",
+          "type": "loot_table",
+          "input": "island_rewards/artifact_seed/lv-1",
+          "resource": "common:island_rewards/artifact_seed/lv-1",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/core/advancements/handler/attack.json",
+          "relative": "data/core/advancements/handler/attack.json",
+          "type": "advancement",
+          "input": "handler/attack",
+          "resource": "core:handler/attack",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/core/functions/_index.d.mcfunction",
+          "relative": "data/core/functions/_index.d.mcfunction",
+          "type": "function",
+          "input": "_index.d",
+          "resource": "core:_index.d",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/core/functions/check_datapack_deficient.mcfunction",
+          "relative": "data/core/functions/check_datapack_deficient.mcfunction",
+          "type": "function",
+          "input": "check_datapack_deficient",
+          "resource": "core:check_datapack_deficient",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/core/functions/migration/.mcfunction",
+          "relative": "data/core/functions/migration/.mcfunction",
+          "type": "function",
+          "input": "migration/",
+          "resource": "core:migration/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/core/functions/migration/v1.0.1/.mcfunction",
+          "relative": "data/core/functions/migration/v1.0.1/.mcfunction",
+          "type": "function",
+          "input": "migration/v1.0.1/",
+          "resource": "core:migration/v1.0.1/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/core/functions/migration/v1.0.2/migrate_end_nexus_loader_register.mcfunction",
+          "relative": "data/core/functions/migration/v1.0.2/migrate_end_nexus_loader_register.mcfunction",
+          "type": "function",
+          "input": "migration/v1.0.2/migrate_end_nexus_loader_register",
+          "resource": "core:migration/v1.0.2/migrate_end_nexus_loader_register",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/core/functions/tick/4_interval.mcfunction",
+          "relative": "data/core/functions/tick/4_interval.mcfunction",
+          "type": "function",
+          "input": "tick/4_interval",
+          "resource": "core:tick/4_interval",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/debug/functions/artifact/core/update_all/.mcfunction",
+          "relative": "data/debug/functions/artifact/core/update_all/.mcfunction",
+          "type": "function",
+          "input": "artifact/core/update_all/",
+          "resource": "debug:artifact/core/update_all/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/debug/functions/artifact/core/update_all/foreach.mcfunction",
+          "relative": "data/debug/functions/artifact/core/update_all/foreach.mcfunction",
+          "type": "function",
+          "input": "artifact/core/update_all/foreach",
+          "resource": "debug:artifact/core/update_all/foreach",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/debug/functions/artifact/give.m.mcfunction",
+          "relative": "data/debug/functions/artifact/give.m.mcfunction",
+          "type": "function",
+          "input": "artifact/give.m",
+          "resource": "debug:artifact/give.m",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/debug/loot_tables/catalog_container/artifact_give.json",
+          "relative": "data/debug/loot_tables/catalog_container/artifact_give.json",
+          "type": "loot_table",
+          "input": "catalog_container/artifact_give",
+          "resource": "debug:catalog_container/artifact_give",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/functions/_index.d.mcfunction",
+          "relative": "data/lib/functions/_index.d.mcfunction",
+          "type": "function",
+          "input": "_index.d",
+          "resource": "lib:_index.d",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/functions/array/compare.mcfunction",
+          "relative": "data/lib/functions/array/compare.mcfunction",
+          "type": "function",
+          "input": "array/compare",
+          "resource": "lib:array/compare",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/functions/array/core/distinct/.mcfunction",
+          "relative": "data/lib/functions/array/core/distinct/.mcfunction",
+          "type": "function",
+          "input": "array/core/distinct/",
+          "resource": "lib:array/core/distinct/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/functions/message/god/flora/believe1.mcfunction",
+          "relative": "data/lib/functions/message/god/flora/believe1.mcfunction",
+          "type": "function",
+          "input": "message/god/flora/believe1",
+          "resource": "lib:message/god/flora/believe1",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/functions/message/god/wi-ki/believe1.mcfunction",
+          "relative": "data/lib/functions/message/god/wi-ki/believe1.mcfunction",
+          "type": "function",
+          "input": "message/god/wi-ki/believe1",
+          "resource": "lib:message/god/wi-ki/believe1",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/item_modifiers/break_item.json",
+          "relative": "data/lib/item_modifiers/break_item.json",
+          "type": "item_modifier",
+          "input": "break_item",
+          "resource": "lib:break_item",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/loot_tables/artifact_seed.json",
+          "relative": "data/lib/loot_tables/artifact_seed.json",
+          "type": "loot_table",
+          "input": "artifact_seed",
+          "resource": "lib:artifact_seed",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/predicates/dimension/is_end.json",
+          "relative": "data/lib/predicates/dimension/is_end.json",
+          "type": "predicate",
+          "input": "dimension/is_end",
+          "resource": "lib:dimension/is_end",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/predicates/in_lava/.json",
+          "relative": "data/lib/predicates/in_lava/.json",
+          "type": "predicate",
+          "input": "in_lava/",
+          "resource": "lib:in_lava/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/predicates/light_level/0.json",
+          "relative": "data/lib/predicates/light_level/0.json",
+          "type": "predicate",
+          "input": "light_level/0",
+          "resource": "lib:light_level/0",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/tags/blocks/air.json",
+          "relative": "data/lib/tags/blocks/air.json",
+          "type": "tag/block",
+          "input": "air",
+          "resource": "lib:air",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/tags/blocks/no_collision/.json",
+          "relative": "data/lib/tags/blocks/no_collision/.json",
+          "type": "tag/block",
+          "input": "no_collision/",
+          "resource": "lib:no_collision/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/tags/entity_types/display.json",
+          "relative": "data/lib/tags/entity_types/display.json",
+          "type": "tag/entity_type",
+          "input": "display",
+          "resource": "lib:display",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/tags/items/all.json",
+          "relative": "data/lib/tags/items/all.json",
+          "type": "tag/item",
+          "input": "all",
+          "resource": "lib:all",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/tags/items/has_durability/.json",
+          "relative": "data/lib/tags/items/has_durability/.json",
+          "type": "tag/item",
+          "input": "has_durability/",
+          "resource": "lib:has_durability/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/lib/tags/items/pickaxes/level-1-mineable.json",
+          "relative": "data/lib/tags/items/pickaxes/level-1-mineable.json",
+          "type": "tag/item",
+          "input": "pickaxes/level-1-mineable",
+          "resource": "lib:pickaxes/level-1-mineable",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/metric/functions/_index.d.mcfunction",
+          "relative": "data/metric/functions/_index.d.mcfunction",
+          "type": "function",
+          "input": "_index.d",
+          "resource": "metric:_index.d",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/metric/functions/angel/damage/.mcfunction",
+          "relative": "data/metric/functions/angel/damage/.mcfunction",
+          "type": "function",
+          "input": "angel/damage/",
+          "resource": "metric:angel/damage/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/metric/functions/island.mcfunction",
+          "relative": "data/metric/functions/island.mcfunction",
+          "type": "function",
+          "input": "island",
+          "resource": "metric:island",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/minecraft/functions/test2.mcfunction",
+          "relative": "data/minecraft/functions/test2.mcfunction",
+          "type": "function",
+          "input": "test2",
+          "resource": "minecraft:test2",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/minecraft/functions/tests/absorption_api/test.mcfunction",
+          "relative": "data/minecraft/functions/tests/absorption_api/test.mcfunction",
+          "type": "function",
+          "input": "tests/absorption_api/test",
+          "resource": "minecraft:tests/absorption_api/test",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/minecraft/item_modifiers/identity.json",
+          "relative": "data/minecraft/item_modifiers/identity.json",
+          "type": "item_modifier",
+          "input": "identity",
+          "resource": "minecraft:identity",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/minecraft/loot_tables/blocks/chorus_flower.json",
+          "relative": "data/minecraft/loot_tables/blocks/chorus_flower.json",
+          "type": "loot_table",
+          "input": "blocks/chorus_flower",
+          "resource": "minecraft:blocks/chorus_flower",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/minecraft/recipes/enchanting_table.json",
+          "relative": "data/minecraft/recipes/enchanting_table.json",
+          "type": "recipe",
+          "input": "enchanting_table",
+          "resource": "minecraft:enchanting_table",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/minecraft/tags/blocks/enderman_holdable.json",
+          "relative": "data/minecraft/tags/blocks/enderman_holdable.json",
+          "type": "tag/block",
+          "input": "enderman_holdable",
+          "resource": "minecraft:enderman_holdable",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/minecraft/tags/damage_type/bypasses_cooldown.json",
+          "relative": "data/minecraft/tags/damage_type/bypasses_cooldown.json",
+          "type": "tag/damage_type",
+          "input": "bypasses_cooldown",
+          "resource": "minecraft:bypasses_cooldown",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/minecraft/tags/items/non_flammable_wood.json",
+          "relative": "data/minecraft/tags/items/non_flammable_wood.json",
+          "type": "tag/item",
+          "input": "non_flammable_wood",
+          "resource": "minecraft:non_flammable_wood",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/mob_manager/advancements/entity_finder/check_entity_hurt_player.json",
+          "relative": "data/mob_manager/advancements/entity_finder/check_entity_hurt_player.json",
+          "type": "advancement",
+          "input": "entity_finder/check_entity_hurt_player",
+          "resource": "mob_manager:entity_finder/check_entity_hurt_player",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/mob_manager/functions/_index.d.mcfunction",
+          "relative": "data/mob_manager/functions/_index.d.mcfunction",
+          "type": "function",
+          "input": "_index.d",
+          "resource": "mob_manager:_index.d",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/mob_manager/functions/entity_finder/entity_hurt_player/fetch_entity.mcfunction",
+          "relative": "data/mob_manager/functions/entity_finder/entity_hurt_player/fetch_entity.mcfunction",
+          "type": "function",
+          "input": "entity_finder/entity_hurt_player/fetch_entity",
+          "resource": "mob_manager:entity_finder/entity_hurt_player/fetch_entity",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/mob_manager/functions/entity_finder/entity_hurt_player/filters/.mcfunction",
+          "relative": "data/mob_manager/functions/entity_finder/entity_hurt_player/filters/.mcfunction",
+          "type": "function",
+          "input": "entity_finder/entity_hurt_player/filters/",
+          "resource": "mob_manager:entity_finder/entity_hurt_player/filters/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/mob_manager/functions/entity_finder/entity_hurt_player/filters/0.mcfunction",
+          "relative": "data/mob_manager/functions/entity_finder/entity_hurt_player/filters/0.mcfunction",
+          "type": "function",
+          "input": "entity_finder/entity_hurt_player/filters/0",
+          "resource": "mob_manager:entity_finder/entity_hurt_player/filters/0",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/player_manager/functions/absorption/.mcfunction",
+          "relative": "data/player_manager/functions/absorption/.mcfunction",
+          "type": "function",
+          "input": "absorption/",
+          "resource": "player_manager:absorption/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/player_manager/functions/absorption/_index.d.mcfunction",
+          "relative": "data/player_manager/functions/absorption/_index.d.mcfunction",
+          "type": "function",
+          "input": "absorption/_index.d",
+          "resource": "player_manager:absorption/_index.d",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/player_manager/functions/adjust_hunger/death.mcfunction",
+          "relative": "data/player_manager/functions/adjust_hunger/death.mcfunction",
+          "type": "function",
+          "input": "adjust_hunger/death",
+          "resource": "player_manager:adjust_hunger/death",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/player_manager/functions/god/change_believe/change_process/believe1.mcfunction",
+          "relative": "data/player_manager/functions/god/change_believe/change_process/believe1.mcfunction",
+          "type": "function",
+          "input": "god/change_believe/change_process/believe1",
+          "resource": "player_manager:god/change_believe/change_process/believe1",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/player_manager/functions/god/wi-ki/passive/.mcfunction",
+          "relative": "data/player_manager/functions/god/wi-ki/passive/.mcfunction",
+          "type": "function",
+          "input": "god/wi-ki/passive/",
+          "resource": "player_manager:god/wi-ki/passive/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/player_manager/loot_tables/lost_item/give_all/name_to_textcomponent.json",
+          "relative": "data/player_manager/loot_tables/lost_item/give_all/name_to_textcomponent.json",
+          "type": "loot_table",
+          "input": "lost_item/give_all/name_to_textcomponent",
+          "resource": "player_manager:lost_item/give_all/name_to_textcomponent",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/player_manager/predicates/fall_damage/is_affected_slow_falling.json",
+          "relative": "data/player_manager/predicates/fall_damage/is_affected_slow_falling.json",
+          "type": "predicate",
+          "input": "fall_damage/is_affected_slow_falling",
+          "resource": "player_manager:fall_damage/is_affected_slow_falling",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/player_manager/predicates/is_believe/wi-ki.json",
+          "relative": "data/player_manager/predicates/is_believe/wi-ki.json",
+          "type": "predicate",
+          "input": "is_believe/wi-ki",
+          "resource": "player_manager:is_believe/wi-ki",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/rom/functions/_index.d.mcfunction",
+          "relative": "data/rom/functions/_index.d.mcfunction",
+          "type": "function",
+          "input": "_index.d",
+          "resource": "rom:_index.d",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/rom/functions/init.mcfunction",
+          "relative": "data/rom/functions/init.mcfunction",
+          "type": "function",
+          "input": "init",
+          "resource": "rom:init",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/settings/functions/_index.d.mcfunction",
+          "relative": "data/settings/functions/_index.d.mcfunction",
+          "type": "function",
+          "input": "_index.d",
+          "resource": "settings:_index.d",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/settings/functions/change_difficulty/change.mcfunction",
+          "relative": "data/settings/functions/change_difficulty/change.mcfunction",
+          "type": "function",
+          "input": "change_difficulty/change",
+          "resource": "settings:change_difficulty/change",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/world_manager/functions/area/.mcfunction",
+          "relative": "data/world_manager/functions/area/.mcfunction",
+          "type": "function",
+          "input": "area/",
+          "resource": "world_manager:area/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/world_manager/functions/area/00-01.tutorial-mission.mcfunction",
+          "relative": "data/world_manager/functions/area/00-01.tutorial-mission.mcfunction",
+          "type": "function",
+          "input": "area/00-01.tutorial-mission",
+          "resource": "world_manager:area/00-01.tutorial-mission",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/world_manager/functions/area/00.tutorial/.mcfunction",
+          "relative": "data/world_manager/functions/area/00.tutorial/.mcfunction",
+          "type": "function",
+          "input": "area/00.tutorial/",
+          "resource": "world_manager:area/00.tutorial/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/world_manager/functions/area/_index.d.mcfunction",
+          "relative": "data/world_manager/functions/area/_index.d.mcfunction",
+          "type": "function",
+          "input": "area/_index.d",
+          "resource": "world_manager:area/_index.d",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/world_manager/functions/force_difficulty.mcfunction",
+          "relative": "data/world_manager/functions/force_difficulty.mcfunction",
+          "type": "function",
+          "input": "force_difficulty",
+          "resource": "world_manager:force_difficulty",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/world_manager/functions/nexus_loader/load/tree/0.mcfunction",
+          "relative": "data/world_manager/functions/nexus_loader/load/tree/0.mcfunction",
+          "type": "function",
+          "input": "nexus_loader/load/tree/0",
+          "resource": "world_manager:nexus_loader/load/tree/0",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/world_manager/loot_tables/fishing/.json",
+          "relative": "data/world_manager/loot_tables/fishing/.json",
+          "type": "loot_table",
+          "input": "fishing/",
+          "resource": "world_manager:fishing/",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/world_manager/loot_tables/fishing/shard.json",
+          "relative": "data/world_manager/loot_tables/fishing/shard.json",
+          "type": "loot_table",
+          "input": "fishing/shard",
+          "resource": "world_manager:fishing/shard",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/world_manager/predicates/area/00-01.tutorial-mission.json",
+          "relative": "data/world_manager/predicates/area/00-01.tutorial-mission.json",
+          "type": "predicate",
+          "input": "area/00-01.tutorial-mission",
+          "resource": "world_manager:area/00-01.tutorial-mission",
+          "packFormat": 26
+        },
+        {
+          "path": "TheSkyBlessing/data/world_manager/predicates/gimmick/darkness/in_darkness.json",
+          "relative": "data/world_manager/predicates/gimmick/darkness/in_darkness.json",
+          "type": "predicate",
+          "input": "gimmick/darkness/in_darkness",
+          "resource": "world_manager:gimmick/darkness/in_darkness",
+          "packFormat": 26
+        },
+        {
+          "path": "tests/effect-runtime/pack/data/effect_test/functions/action.m.mcfunction",
+          "relative": "data/effect_test/functions/action.m.mcfunction",
+          "type": "function",
+          "input": "action.m",
+          "resource": "effect_test:action.m",
+          "packFormat": 26
+        },
+        {
+          "path": "tests/effect-runtime/pack/data/effect_test/functions/actions/clear_one.mcfunction",
+          "relative": "data/effect_test/functions/actions/clear_one.mcfunction",
+          "type": "function",
+          "input": "actions/clear_one",
+          "resource": "effect_test:actions/clear_one",
+          "packFormat": 26
+        },
+        {
+          "path": "tests/effect-runtime/pack/data/effect_test/functions/benchmark/template/1.mcfunction",
+          "relative": "data/effect_test/functions/benchmark/template/1.mcfunction",
+          "type": "function",
+          "input": "benchmark/template/1",
+          "resource": "effect_test:benchmark/template/1",
+          "packFormat": 26
+        }
+      ],
+      "settings": {
+        "mcdutil.createFile.fileTemplate": {
+          "function": [
+            "#> %fileResourcePath%",
+            "#",
+            "# %cursor%",
+            "#",
+            "# @within %nowOpenFileType% %nowOpenFileResourcePath%"
+          ],
+          "advancement": [
+            "{",
+            "    \"criteria\": {",
+            "        \"trigger\": {",
+            "            \"trigger\": \"%cursor%\"",
+            "        }",
+            "    }",
+            "}"
+          ],
+          "predicate": [
+            "{",
+            "    \"condition\": \"%cursor%\"",
+            "}"
+          ],
+          "tag/block": [
+            "{",
+            "    \"values\": [",
+            "        %cursor%",
+            "    ]",
+            "}"
+          ],
+          "tag/entity_type": [
+            "{",
+            "    \"values\": [",
+            "        %cursor%",
+            "    ]",
+            "}"
+          ],
+          "tag/fluid": [
+            "{",
+            "    \"values\": [",
+            "        %cursor%",
+            "    ]",
+            "}"
+          ],
+          "tag/function": [
+            "{",
+            "    \"values\": [",
+            "        %cursor%",
+            "    ]",
+            "}"
+          ],
+          "tag/item": [
+            "{",
+            "    \"values\": [",
+            "        %cursor%",
+            "    ]",
+            "}"
+          ]
+        },
+        "mcdutil.createDatapackTemplate.defaultFolder": false,
+        "mcdutil.createDatapackTemplate.defaultLoadAndTick": false,
+        "mcdutil.createDatapackTemplate.defaultVanillaData": false
+      },
+      "packs": [
+        {
+          "root": "NaturalMergeSort",
+          "packFormat": 26
+        },
+        {
+          "root": "OhMyDat",
+          "packFormat": 26
+        },
+        {
+          "root": "PlayerMotion",
+          "packFormat": 26
+        },
+        {
+          "root": "ScoreToHealth",
+          "packFormat": 26
+        },
+        {
+          "root": "TheSkyBlessing",
+          "packFormat": 26
+        },
+        {
+          "root": "tests/effect-runtime/pack",
+          "packFormat": 26
+        }
+      ]
+    },
+    {
+      "repo": "ProjectTSB/Asset",
+      "commit": "f97883b94a16bf97a84934b17c6f76c0810d260b",
+      "packFormat": 26,
+      "audit": {
+        "files": 16927,
+        "resourceFiles": 16925,
+        "unnamedFunctions": 3022,
+        "unnamedJSON": 5,
+        "rejectedPaths": [],
+        "rejectedNames": [],
+        "unknownTypes": []
+      },
+      "cases": [
+        {
+          "path": "Asset/data/asset/functions/artifact/0001.book_of_all-seeing/give/1.trigger.mcfunction",
+          "relative": "data/asset/functions/artifact/0001.book_of_all-seeing/give/1.trigger.mcfunction",
+          "type": "function",
+          "input": "artifact/0001.book_of_all-seeing/give/1.trigger",
+          "resource": "asset:artifact/0001.book_of_all-seeing/give/1.trigger",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/asset/functions/artifact/0001.book_of_all-seeing/trigger/common/construct_effect_messages/.mcfunction",
+          "relative": "data/asset/functions/artifact/0001.book_of_all-seeing/trigger/common/construct_effect_messages/.mcfunction",
+          "type": "function",
+          "input": "artifact/0001.book_of_all-seeing/trigger/common/construct_effect_messages/",
+          "resource": "asset:artifact/0001.book_of_all-seeing/trigger/common/construct_effect_messages/",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/asset/functions/mob/alias/10000/register.mcfunction",
+          "relative": "data/asset/functions/mob/alias/10000/register.mcfunction",
+          "type": "function",
+          "input": "mob/alias/10000/register",
+          "resource": "asset:mob/alias/10000/register",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/asset/functions/nexus_loader/register.mcfunction",
+          "relative": "data/asset/functions/nexus_loader/register.mcfunction",
+          "type": "function",
+          "input": "nexus_loader/register",
+          "resource": "asset:nexus_loader/register",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/asset/loot_tables/mob/death/0060.self_destructor.json",
+          "relative": "data/asset/loot_tables/mob/death/0060.self_destructor.json",
+          "type": "loot_table",
+          "input": "mob/death/0060.self_destructor",
+          "resource": "asset:mob/death/0060.self_destructor",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/asset/predicates/artifact/0253.holy_barrier/is_angry.json",
+          "relative": "data/asset/predicates/artifact/0253.holy_barrier/is_angry.json",
+          "type": "predicate",
+          "input": "artifact/0253.holy_barrier/is_angry",
+          "resource": "asset:artifact/0253.holy_barrier/is_angry",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/asset/tags/blocks/artifact/0088.fertility_hoe/grow_target.json",
+          "relative": "data/asset/tags/blocks/artifact/0088.fertility_hoe/grow_target.json",
+          "type": "tag/block",
+          "input": "artifact/0088.fertility_hoe/grow_target",
+          "resource": "asset:artifact/0088.fertility_hoe/grow_target",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/asset/tags/functions/artifact/attack.json",
+          "relative": "data/asset/tags/functions/artifact/attack.json",
+          "type": "tag/function",
+          "input": "artifact/attack",
+          "resource": "asset:artifact/attack",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/asset/tags/functions/artifact/click.carrot_on_a_stick.json",
+          "relative": "data/asset/tags/functions/artifact/click.carrot_on_a_stick.json",
+          "type": "tag/function",
+          "input": "artifact/click.carrot_on_a_stick",
+          "resource": "asset:artifact/click.carrot_on_a_stick",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/asset/tags/functions/artifact/damage/from_entity/.json",
+          "relative": "data/asset/tags/functions/artifact/damage/from_entity/.json",
+          "type": "tag/function",
+          "input": "artifact/damage/from_entity/",
+          "resource": "asset:artifact/damage/from_entity/",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/asset/tags/functions/artifact/sneak/10s.json",
+          "relative": "data/asset/tags/functions/artifact/sneak/10s.json",
+          "type": "tag/function",
+          "input": "artifact/sneak/10s",
+          "resource": "asset:artifact/sneak/10s",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/asset/tags/functions/artifact/using_item/0.5s.json",
+          "relative": "data/asset/tags/functions/artifact/using_item/0.5s.json",
+          "type": "tag/function",
+          "input": "artifact/using_item/0.5s",
+          "resource": "asset:artifact/using_item/0.5s",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/asset/tags/items/artifact/0958.whetstone_of_the_gods/weapons.json",
+          "relative": "data/asset/tags/items/artifact/0958.whetstone_of_the_gods/weapons.json",
+          "type": "tag/item",
+          "input": "artifact/0958.whetstone_of_the_gods/weapons",
+          "resource": "asset:artifact/0958.whetstone_of_the_gods/weapons",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/minecraft/functions/declares.d.mcfunction",
+          "relative": "data/minecraft/functions/declares.d.mcfunction",
+          "type": "function",
+          "input": "declares.d",
+          "resource": "minecraft:declares.d",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/minecraft/tags/items/trim_templates.json",
+          "relative": "data/minecraft/tags/items/trim_templates.json",
+          "type": "tag/item",
+          "input": "trim_templates",
+          "resource": "minecraft:trim_templates",
+          "packFormat": 26
+        },
+        {
+          "path": "Asset/data/tsb_armor/trim_pattern/1118.json",
+          "relative": "data/tsb_armor/trim_pattern/1118.json",
+          "type": "trim_pattern",
+          "input": "1118",
+          "resource": "tsb_armor:1118",
+          "packFormat": 26
+        }
+      ],
+      "settings": {
+        "mcdutil.createFile.fileTemplate": {
+          "function": [
+            "#> %fileResourcePath%",
+            "#",
+            "# %cursor%",
+            "#",
+            "# @within %nowOpenFileType% %nowOpenFileResourcePath%"
+          ],
+          "advancement": [
+            "{",
+            "    \"criteria\": {",
+            "        \"trigger\": {",
+            "            \"trigger\": \"%cursor%\"",
+            "        }",
+            "    }",
+            "}"
+          ],
+          "predicate": [
+            "{",
+            "    \"condition\": \"%cursor%\"",
+            "}"
+          ],
+          "tag/block": [
+            "{",
+            "    \"values\": [",
+            "        %cursor%",
+            "    ]",
+            "}"
+          ],
+          "tag/entity_type": [
+            "{",
+            "    \"values\": [",
+            "        %cursor%",
+            "    ]",
+            "}"
+          ],
+          "tag/fluid": [
+            "{",
+            "    \"values\": [",
+            "        %cursor%",
+            "    ]",
+            "}"
+          ],
+          "tag/function": [
+            "{",
+            "    \"values\": [",
+            "        %cursor%",
+            "    ]",
+            "}"
+          ],
+          "tag/item": [
+            "{",
+            "    \"values\": [",
+            "        %cursor%",
+            "    ]",
+            "}"
+          ]
+        },
+        "mcdutil.createDatapackTemplate.customTemplate": [
+          {
+            "label": "神器/テンプレート",
+            "picked": true,
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/give.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/give/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/give/1.trigger"
+                }
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/give/1.trigger.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/give/1.trigger",
+                  "#",
+                  "# 神器の取得処理の呼び出し時に実行されるfunction",
+                  "#",
+                  "# @within tag/function asset:artifact/give",
+                  "",
+                  "execute if data storage asset:context {id:%ItemID%} run function asset:artifact/%namespace%/give/2.give"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/give/2.give.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/give/2.give",
+                  "#",
+                  "# 神器の作成部 ここでID等を定義する",
+                  "#",
+                  "# @user",
+                  "# @within function asset:artifact/%namespace%/give/1.trigger",
+                  "",
+                  "# 神器の説明や消費MPなどをここで設定する。",
+                  "# 最後にasset:artifact/common/giveを実行することで入手可能。",
+                  "",
+                  "# 神器のID (int) スプレッドシートの値を入れる",
+                  "    data modify storage asset:artifact ID set value %ItemID%",
+                  "# 神器のベースアイテム",
+                  "    data modify storage asset:artifact Item set value ",
+                  "# 神器の名前 (TextComponentString)",
+                  "    data modify storage asset:artifact Name set value ",
+                  "# 神器の説明文 (TextComponentString[])",
+                  "    data modify storage asset:artifact Lore set value []",
+                  "# 消費アイテム ({Item: TextComponent, Count: int, Extra?: TextComponent}) (オプション)",
+                  "    # data modify storage asset:artifact ConsumeItem.Item set value '{\"translate\":\"item.minecraft.stick\"}'",
+                  "    # data modify storage asset:artifact ConsumeItem.Count set value 1",
+                  "    # data modify storage asset:artifact ConsumeItem.Extra set value ",
+                  "# 使用回数 (int) (オプション)",
+                  "    # data modify storage asset:artifact RemainingCount set value ",
+                  "# 神器を発動できるスロット (string) Wikiを参照",
+                  "    data modify storage asset:artifact Slot set value \"%slot%\"",
+                  "# 神器のトリガー (string) Wikiを参照",
+                  "    data modify storage asset:artifact Trigger set value ",
+                  "# 神器の発動条件 (TextComponentString) (オプション)",
+                  "    # data modify storage asset:artifact Condition set value ",
+                  "# 攻撃に関する情報 -Damage量 (literal[]/literal) Wikiを参照 (オプション)",
+                  "    # data modify storage asset:artifact AttackInfo.Damage set value [0,0]",
+                  "# 攻撃に関する情報 -攻撃タイプ (string[]) Wikiを参照 (オプション)",
+                  "    # data modify storage asset:artifact AttackInfo.AttackType set value [Physical,Magic]",
+                  "# 攻撃に関する情報 -攻撃属性 (string[]) Wikiを参照 (オプション)",
+                  "    # data modify storage asset:artifact AttackInfo.ElementType set value [Fire,Water,Thunder,None]",
+                  "# 攻撃に関する情報 -防御無視 (boolean) Wikiを参照 (オプション)",
+                  "    # data modify storage asset:artifact AttackInfo.BypassResist set value ",
+                  "# 攻撃に関する情報 -範囲攻撃 (string) Wikiを参照 (オプション)",
+                  "    # data modify storage asset:artifact AttackInfo.IsRangeAttack set value ",
+                  "# 攻撃に関する情報 -攻撃範囲 (literal) Wikiを参照 (オプション)",
+                  "    # data modify storage asset:artifact AttackInfo.AttackRange set value ",
+                  "# MP消費量 (int) ",
+                  "    # data modify storage asset:artifact MPCost set value ",
+                  "# MP必要量 (int) (オプション)",
+                  "    # data modify storage asset:artifact MPRequire set value ",
+                  "# MP回復量 (int) ",
+                  "    # data modify storage asset:artifact MPHealWhenHit set value ",
+                  "# 神器のクールダウン (int) (オプション)",
+                  "    # data modify storage asset:artifact LocalCooldown set value ",
+                  "# 種別クールダウン ({Type: string, Duration: int}) (オプション)",
+                  "    # data modify storage asset:artifact TypeCooldown.Type set value ",
+                  "    # data modify storage asset:artifact TypeCooldown.Duration set value",
+                  "# グローバルクールダウン (int) (オプション)",
+                  "    # data modify storage asset:artifact SpecialCooldown set value ",
+                  "# クールダウンによる使用不可のメッセージを非表示にするか否か (boolean) (オプション)",
+                  "    # data modify storage asset:artifact DisableCooldownMessage set value ",
+                  "# MP不足による使用不可のメッセージを非表示にするか否か (boolean) (オプション)",
+                  "    # data modify storage asset:artifact DisableMPMessage set value ",
+                  "# 破壊時の音を鳴らさないかどうか (boolean) (オプション)",
+                  "    # data modify storage asset:artifact DisableBreakSound set value",
+                  "# 扱える神 (string[]) Wikiを参照",
+                  "    data modify storage asset:artifact CanUsedGod set value []",
+                  "# カスタムNBT (NBTCompound) 追加で指定したいNBT (オプション)",
+                  "    # data modify storage asset:artifact CustomNBT set value {}",
+                  "",
+                  "# 神器の入手用function",
+                  "    function asset:artifact/common/give"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/trigger/1.trigger.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/trigger/1.trigger",
+                  "#",
+                  "# 指定したイベントタイミングで実行されるfunction",
+                  "#",
+                  "# @within tag/function asset:artifact/**",
+                  "",
+                  "# storage asset:idの%slot%に装備している神器のIDが入っているので比較し、~/2.check_condition.mcfunctionを実行する",
+                  "    execute if data storage asset:context id{%slot%:%ItemID%} run function asset:artifact/%namespace%/trigger/2.check_condition"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/trigger/2.check_condition.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/trigger/2.check_condition",
+                  "#",
+                  "# 神器の発動条件をチェックします",
+                  "#",
+                  "# @within function asset:artifact/%namespace%/trigger/1.trigger",
+                  "",
+                  "# 神器の基本的な条件の確認を行うfunction、成功している場合CanUsedタグが付く",
+                  "    function asset:artifact/common/check_condition/%slot%",
+                  "# 他にアイテム等確認する場合はここに書く",
+                  "    ",
+                  "# CanUsedタグをチェックして3.main.mcfunctionを実行する",
+                  "    execute if entity @s[tag=CanUsed] run function asset:artifact/%namespace%/trigger/3.main"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/trigger/3.main.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/trigger/3.main",
+                  "#",
+                  "# 神器のメイン処理部",
+                  "#",
+                  "# @within function asset:artifact/%namespace%/trigger/2.check_condition",
+                  "",
+                  "# 基本的な使用時の処理(MP消費や使用回数の処理など)を行う",
+                  "    function asset:artifact/common/use/%slot%",
+                  "",
+                  "# ここから先は神器側の効果の処理を書く",
+                  "    say test: %namespace%"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "ItemID",
+                "question": "神器のID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              },
+              {
+                "name": "slot",
+                "question": "使用できるスロット",
+                "pattern": "(auto|mainhand|offhand|head|chest|legs|feet)",
+                "patternErrorMessage": "スロットのみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "神器/テンプレート(hotbar)",
+            "picked": true,
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/give.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/give/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/give/1.trigger"
+                }
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/give/1.trigger.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/give/1.trigger",
+                  "#",
+                  "# 神器の取得処理の呼び出し時に実行されるfunction",
+                  "#",
+                  "# @within tag/function asset:artifact/give",
+                  "",
+                  "execute if data storage asset:context {id:%ItemID%} run function asset:artifact/%namespace%/give/2.give"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/give/2.give.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/give/2.give",
+                  "#",
+                  "# 神器の作成部 ここでID等を定義する",
+                  "#",
+                  "# @user",
+                  "# @within function asset:artifact/%namespace%/give/1.trigger",
+                  "",
+                  "# 神器の説明や消費MPなどをここで設定する。",
+                  "# 最後にasset:artifact/common/giveを実行することで入手可能。",
+                  "",
+                  "# 神器のID (int) スプレッドシートの値を入れる",
+                  "    data modify storage asset:artifact ID set value %ItemID%",
+                  "# 神器のベースアイテム",
+                  "    data modify storage asset:artifact Item set value ",
+                  "# 神器の名前 (TextComponentString)",
+                  "    data modify storage asset:artifact Name set value ",
+                  "# 神器の説明文 (TextComponentString[])",
+                  "    data modify storage asset:artifact Lore set value []",
+                  "# 消費アイテム ({Item: TextComponent, Count: int, Extra?: TextComponent}) (オプション)",
+                  "    # data modify storage asset:artifact ConsumeItem.Item set value '{\"translate\":\"item.minecraft.stick\"}'",
+                  "    # data modify storage asset:artifact ConsumeItem.Count set value 1",
+                  "    # data modify storage asset:artifact ConsumeItem.Extra set value ",
+                  "# 使用回数 (int) (オプション)",
+                  "    # data modify storage asset:artifact RemainingCount set value ",
+                  "# 神器を発動できるスロット (string) Wikiを参照",
+                  "    data modify storage asset:artifact Slot set value \"hotbar\"",
+                  "# 神器のトリガー (string) Wikiを参照",
+                  "    data modify storage asset:artifact Trigger set value ",
+                  "# 効果が重複可能か否か (boolean) (オプション)",
+                  "    # data modify storage asset:artifact EnableDuplication set value ",
+                  "# 神器の発動条件 (TextComponentString) (オプション)",
+                  "    # data modify storage asset:artifact Condition set value ",
+                  "# 攻撃に関する情報 -Damage量 (literal[]/literal) Wikiを参照 (オプション)",
+                  "    # data modify storage asset:artifact AttackInfo.Damage set value [0,0]",
+                  "# 攻撃に関する情報 -攻撃タイプ (string[]) Wikiを参照 (オプション)",
+                  "    # data modify storage asset:artifact AttackInfo.AttackType set value [Physical,Magic]",
+                  "# 攻撃に関する情報 -攻撃属性 (string[]) Wikiを参照 (オプション)",
+                  "    # data modify storage asset:artifact AttackInfo.ElementType set value [Fire,Water,Thunder,None]",
+                  "# 攻撃に関する情報 -防御無視 (boolean) Wikiを参照 (オプション)",
+                  "    # data modify storage asset:artifact AttackInfo.BypassResist set value ",
+                  "# 攻撃に関する情報 -範囲攻撃 (string) Wikiを参照 (オプション)",
+                  "    # data modify storage asset:artifact AttackInfo.IsRangeAttack set value ",
+                  "# 攻撃に関する情報 -攻撃範囲 (literal) Wikiを参照 (オプション)",
+                  "    # data modify storage asset:artifact AttackInfo.AttackRange set value ",
+                  "# MP消費量 (int) ",
+                  "    data modify storage asset:artifact MPCost set value ",
+                  "# MP必要量 (int) (オプション)",
+                  "    # data modify storage asset:artifact MPRequire set value ",
+                  "# MP回復量 (int) ",
+                  "    # data modify storage asset:artifact MPHealWhenHit set value ",
+                  "# 神器のクールダウン (int) (オプション)",
+                  "    # data modify storage asset:artifact LocalCooldown set value ",
+                  "# 種別クールダウン ({Type: string, Duration: int}) (オプション)",
+                  "    # data modify storage asset:artifact TypeCooldown.Type set value ",
+                  "    # data modify storage asset:artifact TypeCooldown.Duration set value",
+                  "# 第二種別クールダウン ({Type: string, Duration: int}) (オプション)",
+                  "    # data modify storage asset:artifact SecondaryTypeCooldown.Type set value ",
+                  "    # data modify storage asset:artifact SecondaryTypeCooldown.Duration set value",
+                  "# グローバルクールダウン (int) (オプション)",
+                  "    # data modify storage asset:artifact SpecialCooldown set value ",
+                  "# クールダウンによる使用不可のメッセージを非表示にするか否か (boolean) (オプション)",
+                  "    # data modify storage asset:artifact DisableCooldownMessage set value ",
+                  "# MP不足による使用不可のメッセージを非表示にするか否か (boolean) (オプション)",
+                  "    # data modify storage asset:artifact DisableMPMessage set value ",
+                  "# 破壊時の音を鳴らさないかどうか (boolean) (オプション)",
+                  "    # data modify storage asset:artifact DisableBreakSound set value",
+                  "# 扱える神 (string[]) Wikiを参照",
+                  "    data modify storage asset:artifact CanUsedGod set value []",
+                  "# カスタムNBT (NBTCompound) 追加で指定したいNBT (オプション)",
+                  "    # data modify storage asset:artifact CustomNBT set value {}",
+                  "",
+                  "# 神器の入手用function",
+                  "    function asset:artifact/common/give"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/trigger/1.trigger.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/trigger/1.trigger",
+                  "#",
+                  "# 指定したイベントタイミングで実行されるfunction",
+                  "#",
+                  "# @within tag/function asset:artifact/**",
+                  "",
+                  "# storage asset:idの%slot%に装備している神器のIDが入っているので比較し、~/2.check_condition.mcfunctionを実行する",
+                  "    execute if data storage asset:context id{hotbar:[%ItemID%]} run function asset:artifact/%namespace%/trigger/2.check_condition"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/trigger/2.check_condition.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/trigger/2.check_condition",
+                  "#",
+                  "# 神器の発動条件をチェックします",
+                  "#",
+                  "# @within function asset:artifact/%namespace%/trigger/1.trigger",
+                  "",
+                  "# ID指定する",
+                  "    data modify storage asset:artifact TargetID set value %ItemID%",
+                  "# 神器の基本的な条件の確認を行うfunction、成功している場合CanUsedタグが付く",
+                  "    function asset:artifact/common/check_condition/hotbar",
+                  "# 他にアイテム等確認する場合はここに書く",
+                  "",
+                  "# CanUsedタグをチェックして3.main.mcfunctionを実行する",
+                  "    execute if entity @s[tag=CanUsed] run function asset:artifact/%namespace%/trigger/3.main"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/trigger/3.main.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/trigger/3.main",
+                  "#",
+                  "# 神器のメイン処理部",
+                  "#",
+                  "# @within function asset:artifact/%namespace%/trigger/2.check_condition",
+                  "",
+                  "# 基本的な使用時の処理(MP消費や使用回数の処理など)を行う",
+                  "    function asset:artifact/common/use/hotbar",
+                  "",
+                  "# ここから先は神器側の効果の処理を書く",
+                  "    say test: %namespace%"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "ItemID",
+                "question": "神器のID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "神器/テンプレート: 加工結果への登録",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/register.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/register",
+                  "#",
+                  "# 神器プールへの登録処理",
+                  "#",
+                  "# @within tag/function asset:artifact/register",
+                  "",
+                  "data modify storage asset:artifact RarityRegistry[%Rarity%] append value [%ItemID%]"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/register.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/register"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/register"
+                }
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "ItemID",
+                "question": "神器のID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              },
+              {
+                "name": "Rarity",
+                "question": "レアリティ",
+                "pattern": "1|2|3|4",
+                "patternErrorMessage": "1-4のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "神器/テンプレート: 初期化処理",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/trigger/0.load.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/trigger/0.load",
+                  "#",
+                  "# 神器に利用するスコアボード等の初期化処理",
+                  "#",
+                  "# @within tag/function asset:artifact/load",
+                  "",
+                  "#> 定義類はここに",
+                  "# @within function asset:artifact/%namespace%/trigger/**",
+                  "    scoreboard objectives add "
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/load.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/0.load"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/0.load"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/テンプレート: _index.d ",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/trigger/_index.d.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/trigger/_index.d",
+                  "# @private",
+                  "",
+                  "#> tag",
+                  "# @within function asset:artifact/%namespace%/trigger/**",
+                  "    #declare"
+                ]
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 人参棒クリック",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/click.carrot_on_a_stick.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 攻撃",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/attack.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 攻撃 - 近接",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/attack/melee.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 攻撃 - 遠距離",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/attack/projectile.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 被ダメージ",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/damage.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 被ダメージ - 爆発",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/damage/explode.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 被ダメージ - 炎上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/damage/fire.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 被ダメージ - 敵による攻撃",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/damage/from_entity/.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 被ダメージ - 防御",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/damage/from_entity/blocked.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 被ダメージ - 近接",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/damage/from_entity/melee.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 被ダメージ - 遠距離",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/damage/from_entity/projectile.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: キル",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/killed.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: キル - 近接",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/killed/melee.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: キル - 遠距離",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/killed/projectile.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 飲食",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/use_item.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク - 1秒",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/1s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク - 2秒",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/2s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク - 3秒",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/3s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク - 4秒",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/4s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク - 5秒",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/5s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク - 10秒",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/10s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク - 0秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/keep/.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク - 1秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/keep/1s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク - 2秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/keep/2s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク - 3秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/keep/3s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク - 4秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/keep/4s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク - 5秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/keep/5s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: スニーク - 10秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/sneak/keep/10s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 0.5秒",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/0.5s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 1秒",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/1s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 2秒",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/2s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 3秒",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/3s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 4秒",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/4s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 5秒",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/5s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 10秒",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/10s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 0秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/keep/.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 0.5秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/keep/0.5s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 1秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/keep/1s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 2秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/keep/2s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 3秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/keep/3s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 4秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/keep/4s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 5秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/keep/5s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: アイテム使用中 - 10秒以上",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/using_item/keep/10s.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 弓発射",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/shot.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: tick",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/tick.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 回復",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/heal.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              }
+            ]
+          },
+          {
+            "label": "神器/トリガー: 装備着脱",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/trigger/dis_equip/.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/trigger/dis_equip/",
+                  "#",
+                  "# 装備を外した時に外した部位にのみのidが入った状態でトリガーされる",
+                  "#",
+                  "# @within tag/function asset:artifact/dis_equip",
+                  "",
+                  "execute if data storage asset:context id{%slot%:%ItemID%} run function asset:artifact/%namespace%/trigger/dis_equip/main"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/trigger/dis_equip/main.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/trigger/dis_equip/main",
+                  "#",
+                  "# 装備を外した時のメイン処理",
+                  "#",
+                  "# @within function asset:artifact/%namespace%/trigger/dis_equip/",
+                  "",
+                  ""
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/equip.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/1.trigger"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/1.trigger"
+                }
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/artifact/dis_equip.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/dis_equip/"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/dis_equip/"
+                }
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "ItemID",
+                "question": "神器のID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              },
+              {
+                "name": "slot",
+                "question": "使用できるスロット",
+                "pattern": "(auto|mainhand|offhand|head|chest|legs|feet)",
+                "patternErrorMessage": "スロットのみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "神器/特殊トリガー: 再Join",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/artifact/%namespace%/trigger/rejoin_process.mcfunction",
+                "content": [
+                  "#> asset:artifact/%namespace%/trigger/rejoin_process",
+                  "#",
+                  "# 使い方は必ずwikiを見ること",
+                  "#",
+                  "# @within tag/function asset:rejoin"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/rejoin.json",
+                "content": {
+                  "values": [
+                    "asset:artifact/%namespace%/trigger/rejoin_process"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:artifact/%namespace%/trigger/rejoin_process"
+                }
+              }
+            ]
+          },
+          {
+            "label": "Mob/登録処理",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/register.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/register",
+                  "#",
+                  "# Mobのデータを指定",
+                  "#",
+                  "# @within function asset:mob/alias/%id%/register",
+                  "",
+                  "# 他のモブに継承されることを許可するか (boolean) (オプション)",
+                  "    # data modify storage asset:mob ExtendsSafe set value ",
+                  "# 継承されることを前提とした、抽象的なモブであるかどうか(boolean)",
+                  "    data modify storage asset:mob IsAbstract set value false",
+                  "# ID (int)",
+                  "    data modify storage asset:mob ID set value %id%",
+                  "# Type (string) Wikiを参照",
+                  "    data modify storage asset:mob Type set value \"\"",
+                  "# 干渉可能か否か (boolean)",
+                  "    data modify storage asset:mob Interferable set value ",
+                  "# 名前 (TextComponentString) (オプション)",
+                  "    # data modify storage asset:mob Name set value ",
+                  "# Mobの説明文 (TextComponentString[]) (オプション)",
+                  "    # data modify storage asset:mob Lore set value ",
+                  "# 武器",
+                  "    # メインハンド (Compound(Item)) (オプション)",
+                  "        # data modify storage asset:mob Weapon.Mainhand set value ",
+                  "    # オフハンド (Compound(Item)) (オプション)",
+                  "        # data modify storage asset:mob Weapon.Offhand set value ",
+                  "# 武器ドロップ率 ([float, float]) (オプション)",
+                  "    # data modify storage asset:mob WeaponDropChances set value ",
+                  "# 防具",
+                  "    # 頭 (Compound(Item)) (オプション)",
+                  "        # data modify storage asset:mob Armor.Head set value ",
+                  "    # 胴 (Compound(Item)) (オプション)",
+                  "        # data modify storage asset:mob Armor.Chest set value ",
+                  "    # 脚 (Compound(Item)) (オプション)",
+                  "        # data modify storage asset:mob Armor.Legs set value ",
+                  "    # 足 (Compound(Item)) (オプション)",
+                  "        # data modify storage asset:mob Armor.Feet set value ",
+                  "# 防具ドロップ率 ([float, float]) (オプション)",
+                  "    # data modify storage asset:mob ArmorDropChances set value ",
+                  "# 体力 (double) (オプション)",
+                  "    # data modify storage asset:mob Health set value ",
+                  "# 攻撃力 (double) (オプション)",
+                  "    # data modify storage asset:mob AttackDamage set value ",
+                  "# 防御力 (double) (オプション) // 被ダメージがある程度大きい場合1ptにつき0.8%カット、小さい場合1ptにつき約4%カット 20pt以上は頭打ち",
+                  "    # data modify storage asset:mob Defense set value ",
+                  "# 特殊防御力 (double) (オプション) // 4pointにつきダメージを大きく減らす",
+                  "    # data modify storage asset:mob SpecialDefense set value ",
+                  "# 移動速度 (double) (オプション)",
+                  "    # data modify storage asset:mob Speed set value ",
+                  "# 索敵範囲 (double) (オプション)",
+                  "    # data modify storage asset:mob FollowRange set value ",
+                  "# ノックバック耐性 (double) (オプション)",
+                  "    # data modify storage asset:mob KnockBackResist set value ",
+                  "# 属性倍率 // 1.0fで100% 最低でも25%は軽減されずに入る",
+                  "    # 物理倍率 (float) (オプション)",
+                  "        # data modify storage asset:mob Resist.Physical set value ",
+                  "    # 魔法倍率 (float) (オプション)",
+                  "        # data modify storage asset:mob Resist.Magic set value ",
+                  "    # 火倍率 (float) (オプション)",
+                  "        # data modify storage asset:mob Resist.Fire set value ",
+                  "    # 水倍率 (float) (オプション)",
+                  "        # data modify storage asset:mob Resist.Water set value ",
+                  "    # 雷倍率 (float) (オプション)",
+                  "        # data modify storage asset:mob Resist.Thunder set value ",
+                  "# フィールド",
+                  "    # data modify storage asset:mob Field.myValue set value "
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/alias/%id%/register.mcfunction",
+                "content": [
+                  "#> asset:mob/alias/%id%/register",
+                  "#",
+                  "# Mobのデータ指定処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:mob/triggers/summon/register.m",
+                  "",
+                  "# 元の登録処理を呼び出す",
+                  "   function asset:mob/%namespace%/register"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/summon/debug.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/summon/debug",
+                  "#",
+                  "# 動作チェック用の召喚処理 使い終わったら消してもいいかも",
+                  "#",
+                  "# @user",
+                  "# @private",
+                  "",
+                  "# 召喚",
+                  "    data modify storage api: Argument.ID set value %id%",
+                  "    function api:mob/summon"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "MobのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Mob/召喚処理",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/summon/.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/summon/",
+                  "#",
+                  "# Object召喚処理の呼び出し時に実行されるfunction",
+                  "#",
+                  "# @within asset:mob/alias/%id%/summon",
+                  "",
+                  "# 元となるEntityを召喚する",
+                  "    summon %entity% ~ ~ ~ {Tags:[\"MobInit\"]}",
+                  ""
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/alias/%id%/summon.mcfunction",
+                "content": [
+                  "#> asset:mob/alias/%id%/summon",
+                  "#",
+                  "# Mob召喚処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:mob/triggers/summon/summon.m",
+                  "",
+                  "# 本来の処理を呼び出す",
+                  "    function asset:mob/%namespace%/summon/"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "MobのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              },
+              {
+                "name": "entity",
+                "question": "元となるentity",
+                "pattern": "area_effect_cloud|armor_stand|arrow|axolotl|bat|bee|blaze|boat|cat|cave_spider|chest_minecart|chicken|cod|command_block_minecart|cow|creeper|dolphin|donkey|dragon_fireball|drowned|egg|elder_guardian|end_crystal|ender_dragon|ender_pearl|enderman|endermite|evoker|evoker_fangs|experience_bottle|experience_orb|eye_of_ender|falling_block|fireball|firework_rocket|fox|furnace_minecart|ghast|giant|glow_item_frame|glow_squid|goat|guardian|hoglin|hopper_minecart|horse|husk|illusioner|iron_golem|item|item_frame|leash_knot|lightning_bolt|llama|llama_spit|magma_cube|marker|minecart|mooshroom|mule|ocelot|painting|panda|parrot|phantom|pig|piglin|piglin_brute|pillager|polar_bear|potion|pufferfish|rabbit|ravager|salmon|sheep|shulker|shulker_bullet|silverfish|skeleton|skeleton_horse|slime|small_fireball|snow_golem|snowball|spawner_minecart|spectral_arrow|spider|squid|stray|strider|tnt|tnt_minecart|trader_llama|trident|tropical_fish|turtle|vex|villager|vindicator|wandering_trader|witch|wither|wither_skeleton|wither_skull|wolf|zoglin|zombie|zombie_horse|zombie_villager|zombified_piglin",
+                "patternErrorMessage": "Entityの名前のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Mob/テンプレート: 初期化処理",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/load.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/load",
+                  "#",
+                  "# Mobに利用するスコアボード等の初期化処理",
+                  "#",
+                  "# @within tag/function asset:mob/load",
+                  "",
+                  "#> 定義類はここに",
+                  "# @within function asset:mob/%namespace%/**",
+                  "    scoreboard objectives add "
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/mob/load.json",
+                "content": {
+                  "values": [
+                    "asset:mob/%namespace%/load"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:mob/%namespace%/load"
+                }
+              }
+            ]
+          },
+          {
+            "label": "Mob/テンプレート: 暗所湧き登録処理",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/enroll_pool.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/enroll_pool",
+                  "#",
+                  "# 暗所に湧くMobの登録処理",
+                  "#",
+                  "# @within tag/function asset:mob/enroll_pool",
+                  "",
+                  "data modify storage asset:mob SpawnPool[%level%] append value %id%"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/mob/enroll_pool.json",
+                "content": {
+                  "values": [
+                    "asset:mob/%namespace%/enroll_pool"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:mob/%namespace%/enroll_pool"
+                }
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "MobのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              },
+              {
+                "name": "level",
+                "question": "Mobの強さ",
+                "pattern": "[1-4]",
+                "patternErrorMessage": "1 ~ 4の整数のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Mob/メソッド",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/%method_name%/.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/%method_name%/",
+                  "#",
+                  "# 継承先などから実行される処理",
+                  "#",
+                  "# @within asset:mob/alias/%id%/%method_name%",
+                  ""
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/alias/%id%/%method_name%.mcfunction",
+                "content": [
+                  "#> asset:mob/alias/%id%/%method_name%",
+                  "#",
+                  "# メソッド処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:mob/triggers/call_method/run_method.m",
+                  "",
+                  "# 本来の処理を呼び出す",
+                  "    function asset:mob/%namespace%/%method_name%/"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "method_name",
+                "question": "メソッドの名前",
+                "pattern": "[a-z0-9./_-]*",
+                "patternErrorMessage": "使用できない文字が入っているようです"
+              },
+              {
+                "name": "id",
+                "question": "MobのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Mob/テンプレート: _index.d ",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/_index.d.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/_index.d",
+                  "# @private",
+                  "",
+                  "#> tag",
+                  "# @within function asset:mob/%namespace%/**",
+                  "    #declare"
+                ]
+              }
+            ]
+          },
+          {
+            "label": "Mob/トリガー: 攻撃",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/attack/.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/attack/",
+                  "#",
+                  "# Mobの攻撃時の処理",
+                  "#",
+                  "# @within function asset:mob/alias/%id%/attack",
+                  "",
+                  "# バニラの攻撃じゃなかったら return",
+                  "execute unless data storage asset:context Attack{IsVanilla:true} run return fail"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/alias/%id%/attack.mcfunction",
+                "content": [
+                  "#> asset:mob/alias/%id%/attack",
+                  "#",
+                  "# Mobの攻撃時の処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:mob/triggers/attack/attack.m",
+                  "",
+                  "# 本来の処理を呼び出す",
+                  "    function asset:mob/%namespace%/attack/"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "MobのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Mob/トリガー: 被ダメージ",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/hurt/.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/hurt/",
+                  "#",
+                  "# Mobのダメージ時の処理",
+                  "#",
+                  "# @within function asset:mob/alias/%id%/hurt",
+                  ""
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/alias/%id%/hurt.mcfunction",
+                "content": [
+                  "#> asset:mob/alias/%id%/hurt",
+                  "#",
+                  "# Mobのダメージ時の処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:mob/triggers/hurt/hurt.m",
+                  "",
+                  "# 本来の処理を呼び出す",
+                  "    function asset:mob/%namespace%/hurt/"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "MobのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Mob/トリガー: 死亡",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/death/.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/death/",
+                  "#",
+                  "# Mobの死亡時の処理",
+                  "#",
+                  "# @within function asset:mob/alias/%id%/death",
+                  ""
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/alias/%id%/death.mcfunction",
+                "content": [
+                  "#> asset:mob/alias/%id%/death",
+                  "#",
+                  "# Mobの死亡時の処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:mob/triggers/death/death.m",
+                  "",
+                  "# 本来の処理を呼び出す",
+                  "    function asset:mob/%namespace%/death/"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "MobのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Mob/トリガー: tick",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/tick/.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/tick/",
+                  "#",
+                  "# Mobのtick時の処理",
+                  "#",
+                  "# @within asset:mob/alias/%id%/tick",
+                  ""
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/alias/%id%/tick.mcfunction",
+                "content": [
+                  "#> asset:mob/alias/%id%/tick",
+                  "#",
+                  "# Tick時処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:mob/triggers/tick/tick.m",
+                  "",
+                  "# 元のTick処理を呼び出す",
+                  "    function asset:mob/%namespace%/tick/"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "MobのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Mob/トリガー: init",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/init/.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/init/",
+                  "#",
+                  "# Mobのinit時の処理",
+                  "#",
+                  "# @within asset:mob/alias/%id%/init",
+                  ""
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/alias/%id%/init.mcfunction",
+                "content": [
+                  "#> asset:mob/alias/%id%/init",
+                  "#",
+                  "# Init処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:mob/triggers/init/init.m",
+                  "",
+                  "# 元のInit処理を呼び出す",
+                  "    function asset:mob/%namespace%/init/"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "MobのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Mob/特殊トリガー: 再Join",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/rejoin_process/.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/rejoin_process/",
+                  "#",
+                  "# 使い方は必ずwikiを見ること",
+                  "#",
+                  "# @within tag/function asset:rejoin"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/rejoin.json",
+                "content": {
+                  "values": [
+                    "asset:mob/%namespace%/rejoin_process"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:mob/%namespace%/rejoin_process"
+                }
+              }
+            ]
+          },
+          {
+            "label": "Mob/特殊トリガー: remove",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/%namespace%/remove/.mcfunction",
+                "content": [
+                  "#> asset:mob/%namespace%/remove/",
+                  "#",
+                  "# 天使が居なくなる際に実行される処理",
+                  "#",
+                  "# @within asset:mob/alias/%id%/remove",
+                  ""
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/mob/alias/%id%/remove.mcfunction",
+                "content": [
+                  "#> asset:mob/alias/%id%/remove",
+                  "#",
+                  "# Remove処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:mob/remove/remove.m",
+                  "",
+                  "# 元のInit処理を呼び出す",
+                  "    function asset:mob/%namespace%/remove/"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "MobのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Effect/テンプレート",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/register.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/register",
+                  "#",
+                  "# Effectのデータを指定",
+                  "#",
+                  "# @within function asset:effect/%namespace%/_/register",
+                  "",
+                  "# ExtendsSafe (boolean) (default = false)",
+                  "    # data modify storage asset:effect ExtendsSafe set value true",
+                  "# ID (int)",
+                  "    data modify storage asset:effect ID set value %id%",
+                  "# 名前 (TextComponentString)",
+                  "    data modify storage asset:effect Name set value ",
+                  "# 説明文 (TextComponentString[])",
+                  "    data modify storage asset:effect Description set value []",
+                  "# 効果時間 (int) (default = API || error)",
+                  "    data modify storage asset:effect Duration set value ",
+                  "# スタック (int) (default = API || 1)",
+                  "    # data modify storage asset:effect Stack set value ",
+                  "# 効果時間の操作方法 (default = API || \"replace\")",
+                  "    # data modify storage asset:effect DurationOperation set value ",
+                  "# スタックの操作方法 (default = API || \"replace\")",
+                  "    # data modify storage asset:effect StackOperation set value ",
+                  "# 最大効果時間 (int) (default = 2147483647)",
+                  "    # data modify storage asset:effect MaxDuration set value ",
+                  "# 最大スタック (int) (default = 2147483647)",
+                  "    # data modify storage asset:effect MaxStack set value ",
+                  "# 悪い効果か否か (boolean)",
+                  "    data modify storage asset:effect IsBadEffect set value ",
+                  "# 死亡時のエフェクトの処理 (default = \"remove\")",
+                  "    # data modify storage asset:effect ProcessOnDied set value ",
+                  "# 消すのに必要なレベル (int) (default = 1)",
+                  "    # data modify storage asset:effect RequireClearLv set value ",
+                  "# エフェクトをUIに表示するか (boolean) (default = true)",
+                  "    # data modify storage asset:effect Visible set value ",
+                  "# エフェクトのスタックををUIに表示するか (boolean) (default = true)",
+                  "    # data modify storage asset:effect StackVisible set value",
+                  "",
+                  "# フィールド",
+                  "    # data modify storage asset:effect Field set value {}"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/_/register.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/_/register",
+                  "#",
+                  "#",
+                  "#",
+                  "# @within tag/function asset:effect/register",
+                  "",
+                  "execute if data storage asset:context {id:%id%} run function asset:effect/%namespace%/register"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/effect/register.json",
+                "content": {
+                  "values": [
+                    "asset:effect/%namespace%/_/register"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:effect/%namespace%/_/register"
+                }
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "EffectのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Effect/テンプレート (継承)",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/register.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/register",
+                  "#",
+                  "# Effectのデータを指定",
+                  "#",
+                  "# @within function asset:effect/%namespace%/_/register",
+                  "",
+                  "# 継承 (int)",
+                  "    data modify storage asset:effect Extends append value ",
+                  "    function asset:effect/extends",
+                  "# ID (int)",
+                  "    data modify storage asset:effect ID set value %id%"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/_/register.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/_/register",
+                  "#",
+                  "#",
+                  "#",
+                  "# @within tag/function asset:effect/register",
+                  "",
+                  "execute if data storage asset:context {id:%id%} run function asset:effect/%namespace%/register"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/effect/register.json",
+                "content": {
+                  "values": [
+                    "asset:effect/%namespace%/_/register"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:effect/%namespace%/_/register"
+                }
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "EffectのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Effect/トリガー: 初期化処理",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/load.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/load",
+                  "#",
+                  "# Effectに利用するスコアボード等の初期化処理",
+                  "# ※ExtendsSafeを有効化した状態での使用は非推奨です",
+                  "#",
+                  "# @within tag/function asset:effect/load",
+                  "",
+                  "#> 定義類はここに",
+                  "# @within function asset:effect/%namespace%/**",
+                  "    scoreboard objectives add "
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/effect/load.json",
+                "content": {
+                  "values": [
+                    "asset:effect/%namespace%/load"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:effect/%namespace%/load"
+                }
+              }
+            ]
+          },
+          {
+            "label": "Effect/テンプレート: _index.d ",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/_index.d.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/_index.d",
+                  "# @private",
+                  "",
+                  "#> %namespace%",
+                  "# @within function asset:effect/%namespace%/**",
+                  "    #declare"
+                ]
+              }
+            ]
+          },
+          {
+            "label": "Effect/トリガー: 付与",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/_/given.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/_/given",
+                  "#",
+                  "# Effectが付与された時に実行されるfunction",
+                  "#",
+                  "# @within tag/function asset:effect/given",
+                  "",
+                  "execute if data storage asset:context {id:%id%} run function asset:effect/%namespace%/given/"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/given/.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/given/",
+                  "#",
+                  "# Effectが付与された時の処理",
+                  "#",
+                  "# @within function asset:effect/%namespace%/_/given"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/effect/given.json",
+                "content": {
+                  "values": [
+                    "asset:effect/%namespace%/_/given"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:effect/%namespace%/_/given"
+                }
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "EffectのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Effect/トリガー: 上書き",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/_/re-given.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/_/re-given",
+                  "#",
+                  "# Effectが上書きされた時に実行されるfunction",
+                  "#",
+                  "# @within tag/function asset:effect/re-given",
+                  "",
+                  "execute if data storage asset:context {id:%id%} run function asset:effect/%namespace%/re-given/"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/re-given/.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/re-given/",
+                  "#",
+                  "# Effectが上書きされた時の処理",
+                  "#",
+                  "# @within function asset:effect/%namespace%/_/re-given"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/effect/re-given.json",
+                "content": {
+                  "values": [
+                    "asset:effect/%namespace%/_/re-given"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:effect/%namespace%/_/re-given"
+                }
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "EffectのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Effect/トリガー: 終了",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/_/end.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/_/end",
+                  "#",
+                  "# Effectの効果の終了時に実行されるfunction",
+                  "#",
+                  "# @within tag/function asset:effect/end",
+                  "",
+                  "execute if data storage asset:context {id:%id%} run function asset:effect/%namespace%/end/"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/end/.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/end/",
+                  "#",
+                  "# Effectの効果が切れた時の処理",
+                  "#",
+                  "# @within function asset:effect/%namespace%/_/end"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/effect/end.json",
+                "content": {
+                  "values": [
+                    "asset:effect/%namespace%/_/end"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:effect/%namespace%/_/end"
+                }
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "EffectのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Effect/トリガー: 削除",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/_/remove.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/_/remove",
+                  "#",
+                  "# Effectが神器や牛乳によって削除された時に実行されるfunction",
+                  "#",
+                  "# @within tag/function asset:effect/remove",
+                  "",
+                  "execute if data storage asset:context {id:%id%} run function asset:effect/%namespace%/remove/"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/remove/.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/remove/",
+                  "#",
+                  "# Effectが削除された時の処理",
+                  "#",
+                  "# @within function asset:effect/%namespace%/_/remove"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/effect/remove.json",
+                "content": {
+                  "values": [
+                    "asset:effect/%namespace%/_/remove"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:effect/%namespace%/_/remove"
+                }
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "EffectのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Effect/トリガー: tick",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/_/tick.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/_/tick",
+                  "#",
+                  "# Effectが発動している間毎tick実行されるfunction",
+                  "#",
+                  "# @within tag/function asset:effect/tick",
+                  "",
+                  "execute if data storage asset:context {id:%id%} run function asset:effect/%namespace%/tick/"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/effect/%namespace%/tick/.mcfunction",
+                "content": [
+                  "#> asset:effect/%namespace%/tick/",
+                  "#",
+                  "# Effectのtick処理",
+                  "#",
+                  "# @within function asset:effect/%namespace%/_/tick"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/effect/tick.json",
+                "content": {
+                  "values": [
+                    "asset:effect/%namespace%/_/tick"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:effect/%namespace%/_/tick"
+                }
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "EffectのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Object/登録処理",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/object/%namespace%/register.mcfunction",
+                "content": [
+                  "#> asset:object/%namespace%/register",
+                  "#",
+                  "# Objectのデータを指定",
+                  "#",
+                  "# @within function asset:object/alias/%id%/register",
+                  "",
+                  "# 継承(オプション)",
+                  "    # data modify storage asset:object Extends append value ",
+                  "    # function asset:object/extends",
+                  "# 他のObjectに継承されることを許可するか (boolean) (オプション)",
+                  "    # data modify storage asset:object ExtendsSafe set value ",
+                  "# 継承されることを前提とした、抽象的なObjectであるかどうか(boolean)",
+                  "    data modify storage asset:object IsAbstract set value false",
+                  "# Tickするかどうか(boolean) (オプション)",
+                  "    # data modify storage asset:object IsTicking set value ",
+                  "",
+                  "# ID (int)",
+                  "    data modify storage asset:object ID set value %id%",
+                  "# フィールド(オプション)",
+                  "    # data modify storage asset:object Field.myValue set value "
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/object/alias/%id%/register.mcfunction",
+                "content": [
+                  "#> asset:object/alias/%id%/register",
+                  "#",
+                  "# Objectのデータ指定処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:object/summon/register.m",
+                  "",
+                  "# 元の登録処理を呼び出す",
+                  "    function asset:object/%namespace%/register"
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/object/%namespace%/summon/debug.mcfunction",
+                "content": [
+                  "#> asset:object/%namespace%/summon/debug",
+                  "#",
+                  "# 動作チェック用の召喚処理 使い終わったら消してもいいかも",
+                  "#",
+                  "# @user",
+                  "# @private",
+                  "",
+                  "# 召喚",
+                  "    data modify storage api: Argument.ID set value %id%",
+                  "    function api:object/summon"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "ObjectのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Object/召喚処理",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/object/%namespace%/summon/.mcfunction",
+                "content": [
+                  "#> asset:object/%namespace%/summon/",
+                  "#",
+                  "# Object召喚処理の呼び出し時に実行されるfunction",
+                  "#",
+                  "# @within asset:object/alias/%id%/summon",
+                  "",
+                  "# 元となるEntityを召喚する",
+                  "    summon %entity% ~ ~ ~ {Tags:[\"ObjectInit\"]}",
+                  ""
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/object/alias/%id%/summon.mcfunction",
+                "content": [
+                  "#> asset:object/alias/%id%/summon",
+                  "#",
+                  "# Object召喚処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:object/summon/summon.m",
+                  "",
+                  "# 元の召喚処理を呼び出す",
+                  "    function asset:object/%namespace%/summon/"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "ObjectのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              },
+              {
+                "name": "entity",
+                "question": "元となるentity",
+                "pattern": "allay|area_effect_cloud|armor_stand|arrow|axolotl|bat|bee|blaze|block_display|boat|breeze|camel|cat|cave_spider|chest_boat|chest_minecart|chicken|cod|command_block_minecart|cow|creeper|dolphin|donkey|dragon_fireball|drowned|egg|elder_guardian|end_crystal|ender_dragon|ender_pearl|enderman|endermite|evoker|evoker_fangs|experience_bottle|experience_orb|eye_of_ender|falling_block|fireball|firework_rocket|fishing_bobber|fox|frog|furnace_minecart|ghast|giant|glow_item_frame|glow_squid|goat|guardian|hoglin|hopper_minecart|horse|husk|illusioner|interaction|iron_golem|item|item_display|item_frame|leash_knot|lightning_bolt|llama|llama_spit|magma_cube|marker|minecart|mooshroom|mule|ocelot|painting|panda|parrot|phantom|pig|piglin|piglin_brute|pillager|polar_bear|potion|pufferfish|rabbit|ravager|salmon|sheep|shulker|shulker_bullet|silverfish|skeleton|skeleton_horse|slime|small_fireball|sniffer|snow_golem|snowball|spawner_minecart|spectral_arrow|spider|squid|stray|strider|tadpole|text_display|tnt|tnt_minecart|trader_llama|trident|tropical_fish|turtle|vex|villager|vindicator|wandering_trader|warden|wind_charge|witch|wither|wither_skeleton|wither_skull|wolf|zoglin|zombie|zombie_horse|zombie_villager|zombified_piglin",
+                "patternErrorMessage": "Entityの名前のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Object/トリガー: tick",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/object/%namespace%/tick/.mcfunction",
+                "content": [
+                  "#> asset:object/%namespace%/tick/",
+                  "#",
+                  "# Objectのtick時の処理",
+                  "#",
+                  "# @within asset:object/alias/%id%/tick",
+                  "",
+                  "# Tick加算",
+                  "    scoreboard players add @s General.Object.Tick 1",
+                  "",
+                  "# 消滅処理",
+                  "    kill @s[scores={General.Object.Tick=1000..}]",
+                  ""
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/object/alias/%id%/tick.mcfunction",
+                "content": [
+                  "#> asset:object/alias/%id%/tick",
+                  "#",
+                  "# Tick時処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:object/tick/tick.m",
+                  "",
+                  "# 元のTick処理を呼び出す",
+                  "    function asset:object/%namespace%/tick/"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "ObjectのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Object/トリガー: init",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/object/%namespace%/init/.mcfunction",
+                "content": [
+                  "#> asset:object/%namespace%/init/",
+                  "#",
+                  "# Objectのinit時の処理",
+                  "#",
+                  "# @within asset:object/alias/%id%/init",
+                  ""
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/object/alias/%id%/init.mcfunction",
+                "content": [
+                  "#> asset:object/alias/%id%/init",
+                  "#",
+                  "# Init処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:object/init/init.m",
+                  "",
+                  "# 元のInit処理を呼び出す",
+                  "    function asset:object/%namespace%/init/"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "id",
+                "question": "ObjectのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          },
+          {
+            "label": "Object/テンプレート: 初期化処理",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/object/%namespace%/load.mcfunction",
+                "content": [
+                  "#> asset:object/%namespace%/load",
+                  "#",
+                  "# Objectに利用するスコアボード等の初期化処理",
+                  "#",
+                  "# @within tag/function asset:object/load",
+                  "",
+                  "#> 定義類はここに",
+                  "# @within function asset:object/%namespace%/**",
+                  "    scoreboard objectives add "
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/tags/functions/object/load.json",
+                "content": {
+                  "values": [
+                    "asset:object/%namespace%/load"
+                  ]
+                },
+                "append": {
+                  "addFirst": true,
+                  "key": "values",
+                  "elem": "asset:object/%namespace%/load"
+                }
+              }
+            ]
+          },
+          {
+            "label": "Object/テンプレート: _index.d ",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/object/%namespace%/_index.d.mcfunction",
+                "content": [
+                  "#> asset:object/%namespace%/_index.d",
+                  "# @private",
+                  "",
+                  "#> tag",
+                  "# @within function asset:object/%namespace%/**",
+                  "    #declare"
+                ]
+              }
+            ]
+          },
+          {
+            "label": "Object/メソッド",
+            "generates": [
+              {
+                "type": "file",
+                "rel": "data/asset/functions/object/%namespace%/%method_name%/.mcfunction",
+                "content": [
+                  "#> asset:object/%namespace%/%method_name%/",
+                  "#",
+                  "# 継承先などから実行される処理",
+                  "#",
+                  "# @within asset:object/alias/%id%/%method_name%",
+                  ""
+                ]
+              },
+              {
+                "type": "file",
+                "rel": "data/asset/functions/object/alias/%id%/%method_name%.mcfunction",
+                "content": [
+                  "#> asset:object/alias/%id%/%method_name%",
+                  "#",
+                  "# メソッド処理のエイリアス",
+                  "#",
+                  "# @within asset_manager:object/call_method/run_method.m",
+                  "",
+                  "# 元のメソッド処理を呼び出す",
+                  "    function asset:object/%namespace%/%method_name%/"
+                ]
+              }
+            ],
+            "customQuestion": [
+              {
+                "name": "method_name",
+                "question": "メソッドの名前",
+                "pattern": "[a-z0-9./_-]*",
+                "patternErrorMessage": "使用できない文字が入っているようです"
+              },
+              {
+                "name": "id",
+                "question": "ObjectのID",
+                "pattern": "[1-9][0-9]*",
+                "patternErrorMessage": "数値のみが許されるよ"
+              }
+            ]
+          }
+        ],
+        "mcdutil.createDatapackTemplate.defaultFolder": false,
+        "mcdutil.createDatapackTemplate.defaultLoadAndTick": false,
+        "mcdutil.createDatapackTemplate.defaultVanillaData": false
+      },
+      "packs": [
+        {
+          "root": "Asset",
+          "packFormat": 26
+        }
+      ]
+    }
+  ]
+}

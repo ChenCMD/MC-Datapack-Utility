@@ -122,7 +122,7 @@ exports.run = async function run() {
     const effects = { opened: 0, errors: [], logs: [], validation: undefined }
     const { getFileTypeFromRel } = fileSupport.createFileTypeResolver()
     const command = fileSupport.createFileCommand({
-      getDatapackRoot: async () => packRoot, getPackFormat: async () => 7,
+      getDatapackRoot: async () => options.root || packRoot, getPackFormat: async () => options.packFormat ?? 7,
       isDatapackRoot: async () => true, getDate: () => '2026-10-11',
       getFileType: (uri, root, format) => getFileTypeFromRel(path.posix.relative(root.path, uri.path) + '/', format),
       getNamespace: (uri, root) => fileSupport.namespaceFromRelative(path.posix.relative(root.path, uri.path)),
@@ -180,7 +180,7 @@ exports.run = async function run() {
   assert.deepEqual(cancelled.errors, [])
   assert.equal(await fileSupport.pathAccessible(vscode.Uri.joinPath(functionFolder, 'cancelled.mcfunction')), false)
   console.log('PASS real file creation, cursor placement, duplicate protection, and cancellation')
-  for (const name of ['', '../escape', '/absolute', 'nested//sample', 'nested/../sample']) {
+  for (const name of ['/', '../escape', '/absolute', 'nested//sample', 'nested/../sample', 'nested//']) {
     const invalid = await createResource(functionFolder, name)
     assert.match(invalid.validation, /error.invalid-file-name/)
     assert.equal(invalid.opened, 0)
@@ -191,6 +191,45 @@ exports.run = async function run() {
   assert.equal(nested.opened, 1)
   assert.deepEqual(nested.errors, [])
   assert.equal(vscode.window.activeTextEditor.document.getText(), '# example:nested/a.b-c_d 2026-10-11\r\nsay nested/a.b-c_d\r\n')
+
+  const projectFixture = require('../fixtures/projecttsb/compatibility.json')
+  const projectRoot = vscode.Uri.joinPath(packRoot, 'projecttsb-compatibility')
+  await vscode.workspace.fs.createDirectory(projectRoot)
+  await vscode.workspace.fs.writeFile(vscode.Uri.joinPath(projectRoot, 'pack.mcmeta'), Buffer.from('{"pack":{"pack_format":26,"description":"Compatibility fixture"}}'))
+  const tsbConfig = { ...fileConfig, createFile: { fileTemplate: projectFixture.projects[0].settings['mcdutil.createFile.fileTemplate'] } }
+  const unnamedClipboard = await vscode.env.clipboard.readText()
+  try {
+    for (const [folderPath, name, expected, extension] of [
+      ['data/api/functions', 'damage/', 'api:damage/', 'mcfunction'],
+      ['data/asset/functions/object/example/tick', '', 'asset:object/example/tick/', 'mcfunction'],
+      ['data/asset/tags/functions/artifact/sneak', '', 'asset:artifact/sneak/', 'json'],
+      ['data/minecraft/tags/damage_type', 'bypasses_cooldown', 'minecraft:bypasses_cooldown', 'json'],
+      ['data/tsb_armor/trim_pattern', '1118', 'tsb_armor:1118', 'json']
+    ]) {
+      const folder = vscode.Uri.joinPath(projectRoot, folderPath)
+      const destination = vscode.Uri.joinPath(folder, name + '.' + extension)
+      await vscode.workspace.fs.createDirectory(folder)
+      if (name !== 'damage/') await vscode.workspace.fs.createDirectory(destination.with({ path: path.posix.dirname(destination.path) }))
+      const options = { root: projectRoot, packFormat: 26, config: tsbConfig }
+      const created = await createResource(folder, name, options)
+      assert.equal(created.validation, undefined)
+      assert.equal(created.opened, 1)
+      assert.deepEqual(created.errors, [])
+      const content = await vscode.workspace.fs.readFile(destination)
+      if (extension === 'mcfunction') {
+        assert.ok(Buffer.from(content).toString('utf8').startsWith('#> ' + expected + '\r\n'))
+        assert.equal(vscode.window.activeTextEditor.selection.start.line, 2)
+        assert.equal(vscode.window.activeTextEditor.selection.start.character, 2)
+      }
+      const existing = await createResource(folder, name, options)
+      assert.match(existing.validation, /error.already-exists/)
+      assert.equal(existing.opened, 0)
+      assert.deepEqual(await vscode.workspace.fs.readFile(destination), content)
+      await vscode.commands.executeCommand('mcdutil.commands.copyResourcePath', destination)
+      await eventually(() => vscode.env.clipboard.readText(), text => text === expected)
+    }
+  } finally { await vscode.env.clipboard.writeText(unnamedClipboard) }
+  console.log('PASS ProjectTSB unnamed resources, custom headers, cursor, duplicate protection and clipboard IDs')
 
   const deniedEvents = new vscode.EventEmitter()
   const denied = vscode.workspace.registerFileSystemProvider('mcdu-denied', {

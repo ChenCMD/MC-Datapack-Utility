@@ -116,9 +116,9 @@ test('invalid names do not reach storage', async () => {
   })
 })
 
-test('empty, absolute, and dot-segment names do not reach storage', async () => {
-  for (const name of ['', '.', '..', '../escape', 'nested/../../escape', './sample',
-    '/absolute', 'nested/', 'nested//sample', 'nested/./sample', 'nested/../sample']) {
+test('absolute, intermediate-empty, and dot-segment names do not reach storage', async () => {
+  for (const name of ['.', '..', '../escape', 'nested/../../escape', './sample',
+    '/absolute', '/', '//', 'nested//', 'nested//sample', 'nested/./sample', 'nested/../sample', '../', './', 'nested/../']) {
     await withPack({ name }, async directory => {
       await createFile(uri(directory), config)
       assert.match(state.validation, /error.invalid-file-name/, name)
@@ -194,4 +194,30 @@ test('the command core loads without VS Code or extension initialization', async
     locale: key => key, showError: message => assert.fail(message), log: message => assert.fail(message)
   })
   assert.equal(await command({path:'/outside'},config),undefined)
+})
+
+for (const name of ['', 'nested/', 'nested/deep/']) {
+  test(`unnamed function input ${JSON.stringify(name)} creates an extension-only file`, async () => {
+    await withPack({ name }, async directory => {
+      const destination = join(directory, `${name}.mcfunction`)
+      await mkdir(join(destination, '..'), { recursive: true })
+      const settings = { ...config, createFile: { fileTemplate: { function: ['say %fileName%'] } } }
+      await createFile(uri(directory), settings)
+      assert.equal(state.validation, undefined)
+      assert.equal(await readFile(destination, 'utf8'), `say ${name}`)
+      assert.equal(state.opened[0].path, destination)
+      await createFile(uri(directory), settings)
+      assert.match(state.validation, /error.already-exists/)
+      assert.equal(await readFile(destination, 'utf8'), `say ${name}`)
+      assert.equal(state.opened.length, 1)
+    })
+  })
+}
+test('unnamed JSON resources also retain extension-only creation', async () => {
+  await withPack({ name: '', type: 'tag/function' }, async directory => {
+    await createFile(uri(directory), { ...config, createFile: { fileTemplate: { 'tag/function': ['{"values":[]}'] } } })
+    assert.equal(state.validation, undefined)
+    assert.deepEqual(JSON.parse(await readFile(join(directory, '.json'), 'utf8')), { values: [] })
+    assert.equal(state.opened.length, 1)
+  })
 })

@@ -16,6 +16,7 @@ Read `docs/development.md` before changing behavior. It maps features, verificat
 - `src/languages/McfunctionFormatter.ts`: VS Code formatting adapter and resource-path lookup.
 - `src/languages/core/formatter.ts`: host-independent line formatting and edit planning.
 - `tests/fixtures/`: checked-in examples and expected baseline behavior.
+- `tests/fixtures/projecttsb/`: pinned TheSkyBlessing/Asset naming and template compatibility. Preserve extension-only resource files and nested resource names used in the wizard namespace field.
 
 ## Making changes
 
