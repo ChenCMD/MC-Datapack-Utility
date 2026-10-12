@@ -214,7 +214,7 @@ exports.run = async function run() {
 
   const wizardRoot = vscode.Uri.joinPath(packRoot, 'wizard-created')
   const wizardFile = vscode.Uri.joinPath(wizardRoot, 'data/example/function/load.mcfunction')
-  const wizardEffects = { errors: [], completed: 0 }
+  const wizardEffects = { errors: [], warnings: [], completed: 0 }
   const wizardItems = [{ label: 'Test', generates: [{ type: 'file', rel: 'data/%namespace%/function/load.mcfunction', content: ['# %fileResourcePath%', 'say %namespace%'] }] }]
   const wizardConfig = { env: { dataVersion: 'unused', dateFormat: 'unused' }, createDatapackTemplate: { defaultLoadAndTick: false, defaultVanillaData: false, defaultFolder: false, customTemplate: [] } }
   const wizardGenerator = {
@@ -241,7 +241,7 @@ exports.run = async function run() {
     createFile: (value, content) => fileSupport.createFile(value, Buffer.from(content)),
     readFile: fileSupport.readFile, writeFile: fileSupport.writeFile,
     appendElemFromKey: () => { throw new Error('No JSON append selected') },
-    showError: value => wizardEffects.errors.push(value), log: () => {}
+    showError: value => wizardEffects.errors.push(value), showWarning: value => wizardEffects.warnings.push(value), log: () => {}
   }
   await fileSupport.createDatapackCommand(wizardPorts)(wizardConfig, 'create')
   assert.equal(await fileSupport.readFile(wizardFile), '# example:load\r\nsay example')
@@ -276,6 +276,49 @@ exports.run = async function run() {
   }
   assert.deepEqual(wizardEffects.errors, [])
   console.log('PASS datapack wizard preserves reusable settings across real JSON writes')
+
+  const wizardDeniedEvents = new vscode.EventEmitter()
+  const wizardDenied = vscode.workspace.registerFileSystemProvider('mcdu-wizard-denied', {
+    onDidChangeFile: wizardDeniedEvents.event,
+    watch: () => new vscode.Disposable(() => {}),
+    stat: value => { throw vscode.FileSystemError.FileNotFound(value) },
+    readDirectory: value => { throw vscode.FileSystemError.FileNotFound(value) },
+    readFile: value => { throw vscode.FileSystemError.FileNotFound(value) },
+    createDirectory: value => { throw vscode.FileSystemError.NoPermissions(value) },
+    writeFile: value => { throw vscode.FileSystemError.NoPermissions(value) },
+    rename: value => { throw vscode.FileSystemError.NoPermissions(value) },
+    delete: value => { throw vscode.FileSystemError.NoPermissions(value) }
+  }, { isReadonly: true, isCaseSensitive: true })
+  try {
+    const failedEffects = { errors: [], warnings: [], completed: 0 }
+    const failedRoot = wizardRoot.with({ scheme: 'mcdu-wizard-denied' })
+    const failedPorts = { ...wizardPorts,
+      selectGenerator: async () => ({ ...wizardGenerator, listenDatapackNameAndRoot: async () => ({ name: 'failed', root: failedRoot }), noticeGenerated: async () => { failedEffects.completed++ } }),
+      showError: value => failedEffects.errors.push(value), showWarning: value => failedEffects.warnings.push(value)
+    }
+    await fileSupport.createDatapackCommand(failedPorts)(wizardConfig, 'create')
+    assert.equal(failedEffects.completed, 0)
+    assert.deepEqual(failedEffects.warnings, [])
+    assert.equal(failedEffects.errors.at(-1), 'create-datapack-template.generation-failed')
+    assert.equal(failedEffects.errors.length, 4) // File, data directory, metadata, summary.
+
+    const partialRoot = vscode.Uri.joinPath(packRoot, 'wizard-partial')
+    const partialEffects = { errors: [], warnings: [], completed: 0 }
+    await fileSupport.createDatapackCommand({ ...wizardPorts,
+      selectGenerator: async () => ({ ...wizardGenerator, isGeneratePackMcMeta: false, listenDatapackNameAndRoot: async () => ({ name: 'partial', root: partialRoot }), noticeGenerated: async () => { partialEffects.completed++ } }),
+      listenPickItem: async () => [{ label: 'Mixed', generates: [
+        { type: 'file', rel: 'bad.txt', content: ['denied'] },
+        { type: 'file', rel: 'good.txt', content: ['saved'] }
+      ] }],
+      joinPath: (root, rel) => vscode.Uri.joinPath(rel === 'bad.txt' ? root.with({ scheme: 'mcdu-wizard-denied' }) : root, rel),
+      showError: value => partialEffects.errors.push(value), showWarning: value => partialEffects.warnings.push(value)
+    })(wizardConfig, 'add')
+    assert.equal(await fileSupport.readFile(vscode.Uri.joinPath(partialRoot, 'good.txt')), 'saved')
+    assert.equal(partialEffects.completed, 0)
+    assert.equal(partialEffects.errors.length, 1)
+    assert.deepEqual(partialEffects.warnings, ['create-datapack-template.generation-partial'])
+  } finally { wizardDenied.dispose(); wizardDeniedEvents.dispose() }
+  console.log('PASS wizard filesystem failures suppress completion and retain successful files')
 
   const originalClipboard = await vscode.env.clipboard.readText()
   try {

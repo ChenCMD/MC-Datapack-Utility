@@ -11,6 +11,13 @@ export interface DatapackGenerator<U> {
   noticeGenerated(directory: U): Promise<void>
 }
 
+export interface GenerationResult {
+  files: number
+  successfulFiles: number
+  successfulFolders: number
+  failed: number
+}
+
 type ProgressReport = (value: { increment?: number; message?: string }) => void
 
 export interface DatapackPorts<U> {
@@ -34,6 +41,7 @@ export interface DatapackPorts<U> {
   readFile(uri: U): Promise<string>
   writeFile(uri: U, content: string): Promise<void>
   appendElemFromKey(object: JsonObject, key: string, value: JsonValue, first: boolean): [true] | [false, string]
+  showWarning(message: string): void
   showError(message: string): void
   log(message: string): void
 }

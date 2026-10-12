@@ -9,6 +9,8 @@
   "copy-resource-path.not-datapack": "The resource path cannot be obtained because it is not in the datapack.",
   "copy-resource-path.unknown-filetype": "Unable to get the resource path for this file.",
   "create-datapack-template.add": "Add template to datapack",
+  "create-datapack-template.generation-partial": "Some template items could not be processed (%0% failed). Successfully saved or preserved contents remain. Check the reported errors.",
+  "create-datapack-template.generation-failed": "Template generation failed (%0% items failed). Existing contents and created folders may remain. Check the reported errors.",
   "create-datapack-template.complete": "Datapack template generation is complete.",
   "create-datapack-template.complete-create": "Datapack template generation is complete.\nOpen generated data pack?",
   "create-datapack-template.create": "Create a datapack from a template",

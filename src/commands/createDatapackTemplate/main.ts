@@ -1,4 +1,4 @@
-import { appendElemFromKey, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, listenInput, listenPickItem, pathAccessible, readFile, showError, stringValidator, writeFile } from '../../utils'
+import { appendElemFromKey, createFile, createProgressBar, getDate, getIndent, getResourcePath, getVanillaData, listenInput, listenPickItem, pathAccessible, readFile, showError, showWarning, stringValidator, writeFile } from '../../utils'
 import { Config, makeExtendQuickPickItem } from '../../types'
 import { locale } from '../../locales'
 import { pickItems } from './utils/data'
@@ -31,6 +31,7 @@ export const createDatapack = async (config: Config, generateType?: 'add' | 'cre
     pathAccessible,
     createFile: (uri, content) => createFile(uri, new TextEncoder().encode(content)),
     readFile, writeFile, appendElemFromKey, showError,
+    showWarning: message => { void showWarning(message) },
     log: message => codeConsole.appendLine(message)
   })
   await command(config, generateType)

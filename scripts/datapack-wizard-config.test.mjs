@@ -106,3 +106,22 @@ test('template copies preserve download callbacks and repeated custom questions'
   assert.ok(h.downloads.every(v => v.rel === source.rel))
   assert.equal(config.createDatapackTemplate.customTemplate[0].func[0].rel, source.rel)
 })
+
+for (const append of [false, true]) test(`wizard preserves own __proto__ JSON keys in ${append ? 'append values' : 'file content'}`, async () => {
+  const value = JSON.parse('{"__proto__":{"namespace":"%namespace%"},"constructor":"%datapackName%","normal":"%answer%","nested":[null,{"__proto__":"%date%","constructor":{"answer":"%answer%"}}]}')
+  const item = template()
+  item.generates = append
+    ? [{ type: 'file', rel: 'append.json', content: {}, append: { key: 'values', elem: value } }]
+    : [{ type: 'file', rel: '%namespace%.json', content: value }]
+  const config = configuration([item]), original = structuredClone(config), h = harness()
+  for (const run of runs) {
+    await h.run(config, run)
+    const json = JSON.parse(h.files.get(`${run.root}/${append ? 'append' : run.namespace}.json`))
+    const actual = append ? json.values[0] : json
+    const expected = JSON.parse(`{"__proto__":{"namespace":"${run.namespace}"},"constructor":"${run.name}","normal":"${run.answer}","nested":[null,{"__proto__":"${run.date}","constructor":{"answer":"${run.answer}"}}]}`)
+    assert.deepEqual(actual, expected)
+    assert.ok(Object.prototype.hasOwnProperty.call(actual, '__proto__'))
+    assert.ok(Object.prototype.hasOwnProperty.call(actual.nested[1], '__proto__'))
+    assert.deepEqual(config, original)
+  }
+})
