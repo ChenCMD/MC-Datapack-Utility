@@ -1,4 +1,5 @@
 {
+  "create-datapack-template.invalid-path": "Invalid template path \"%0%\". Use a relative path with / separators. Empty components, components ending in a space or dot, backslashes, colons and control characters are not allowed.",
   "boolean": "a boolean",
   "conjunction.and_2": " and ",
   "conjunction.and_3+_1": ", ",
