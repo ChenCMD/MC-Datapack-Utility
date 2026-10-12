@@ -40,7 +40,7 @@ async function harness({ mode = 'create', items = [], existing = {}, cancel, dow
     async listenPickItem(_placeholder, _items, multiple) {
       if (!multiple && generationType) throw new Error('Explicit generation type must skip selection')
       if ((cancel === 'templates' && multiple) || (cancel === 'generator' && !multiple)) throw new UserCancelledError()
-      return multiple ? items : { extend: class { constructor() { return node } } }
+      return multiple ? _items : { extend: class { constructor() { return node } } }
     },
     async createProgressBar(_title, task) { return task(value => events.push(['progress', value])) },
     async getVanillaData(_version, _information, func, rel, report) {
@@ -109,7 +109,7 @@ scenario('wizard creates resolved paths, CRLF text, indented metadata and folder
     ['directory', '/packs/demo/data/'],
     ['create', '/packs/demo/pack.mcmeta']
   ])
-  assert.equal(items[0].label, 'example template') // Existing custom configuration mutation.
+  assert.equal(items[0].label, '%namespace% template') // Caller configuration remains reusable.
 })
 
 scenario('wizard preserves existing files, appends text/JSON and omits metadata in add mode', async () => {
