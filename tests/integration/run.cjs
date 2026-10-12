@@ -209,12 +209,15 @@ exports.run = async function run() {
       const folder = vscode.Uri.joinPath(projectRoot, folderPath)
       const destination = vscode.Uri.joinPath(folder, name + '.' + extension)
       await vscode.workspace.fs.createDirectory(folder)
-      if (name !== 'damage/') await vscode.workspace.fs.createDirectory(destination.with({ path: path.posix.dirname(destination.path) }))
+      const destinationParent = destination.with({ path: path.posix.dirname(destination.path) })
+      if (name === 'damage/') assert.equal(await fileSupport.pathAccessible(destinationParent), false)
+      else await vscode.workspace.fs.createDirectory(destinationParent)
       const options = { root: projectRoot, packFormat: 26, config: tsbConfig }
       const created = await createResource(folder, name, options)
       assert.equal(created.validation, undefined)
       assert.equal(created.opened, 1)
       assert.deepEqual(created.errors, [])
+      if (name === 'damage/') assert.equal(await fileSupport.pathAccessible(destinationParent), true)
       const content = await vscode.workspace.fs.readFile(destination)
       if (extension === 'mcfunction') {
         assert.ok(Buffer.from(content).toString('utf8').startsWith('#> ' + expected + '\r\n'))
