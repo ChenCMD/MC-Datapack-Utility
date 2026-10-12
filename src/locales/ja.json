@@ -1,4 +1,5 @@
 {
+  "create-datapack-template.invalid-path": "テンプレートのパス「%0%」は無効です。/ 区切りの相対パスを指定してください。空の成分、末尾が空白やドットの成分、バックスラッシュ、コロン、制御文字は使用できません。",
   "boolean": "boolean型",
   "conjunction.and_2": " と ",
   "conjunction.and_3+_1": "と ",

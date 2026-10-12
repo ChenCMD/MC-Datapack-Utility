@@ -261,6 +261,33 @@ exports.run = async function run() {
   assert.equal(wizardEffects.completed, 2)
   console.log('PASS datapack wizard real storage, existing-file protection and cancellation')
 
+  const protectedOutside = vscode.Uri.joinPath(packRoot, 'wizard-outside-sentinel.txt')
+  const escapedCreate = vscode.Uri.joinPath(packRoot, 'wizard-outside-created.txt')
+  const escapedFolder = vscode.Uri.joinPath(packRoot, 'wizard-outside-folder')
+  const protectedRoot = vscode.Uri.joinPath(packRoot, 'wizard-path-validation')
+  await fileSupport.writeFile(protectedOutside, 'outside sentinel')
+  const pathErrors = [], pathWarnings = []
+  let pathCompleted = 0
+  await fileSupport.createDatapackCommand({ ...wizardPorts,
+    selectGenerator: async () => ({ ...wizardGenerator, isGeneratePackMcMeta: false, listenDatapackNameAndRoot: async () => ({ name: 'paths', root: protectedRoot }), noticeGenerated: async () => { pathCompleted++ } }),
+    listenInput: async () => '../wizard-outside-created.txt',
+    listenPickItem: async () => [{ label: 'Paths', generates: [
+      { type: 'file', rel: '%namespace%', content: ['must not escape'] },
+      { type: 'file', rel: '../wizard-outside-sentinel.txt', content: [], append: { key: '', elem: 'changed' } },
+      { type: 'folder', rel: '../wizard-outside-folder/' },
+      { type: 'file', rel: 'inside.txt', content: ['saved inside'] }
+    ] }],
+    showError: value => pathErrors.push(value), showWarning: value => pathWarnings.push(value)
+  })(wizardConfig, 'create')
+  assert.equal(await fileSupport.readFile(protectedOutside), 'outside sentinel')
+  assert.equal(await fileSupport.pathAccessible(escapedCreate), false)
+  assert.equal(await fileSupport.pathAccessible(escapedFolder), false)
+  assert.equal(await fileSupport.readFile(vscode.Uri.joinPath(protectedRoot, 'inside.txt')), 'saved inside')
+  assert.deepEqual(pathErrors, Array(3).fill('create-datapack-template.invalid-path'))
+  assert.deepEqual(pathWarnings, ['create-datapack-template.generation-partial'])
+  assert.equal(pathCompleted, 0)
+  console.log('PASS wizard template paths preserve outside files and allow valid remaining files')
+
   const reusableTemplate = { label: '%namespace% template', generates: [{ type: 'file', rel: '%namespace%.json', content: { namespace: '%namespace%', nested: [null, { date: '%date%' }] } }] }
   const reusableConfig = { ...wizardConfig, createDatapackTemplate: { ...wizardConfig.createDatapackTemplate, customTemplate: [reusableTemplate] } }
   const originalTemplate = JSON.stringify(reusableTemplate)

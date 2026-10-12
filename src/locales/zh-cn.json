@@ -1,4 +1,5 @@
 {
+  "create-datapack-template.invalid-path": "模板路径“%0%”无效。请使用以 / 分隔的相对路径。不允许空路径段、以空格或点结尾的路径段、反斜杠、冒号或控制字符。",
   "boolean": "一个布尔值",
   "conjunction.and_2": " 与 ",
   "conjunction.and_3+_1": "， ",
