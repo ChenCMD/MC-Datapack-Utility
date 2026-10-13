@@ -28,7 +28,10 @@ export class CreateTemplateGenNode extends AbstractNode {
   async listenDatapackNameAndRoot(directory: Uri): Promise<{ name: string; root: Uri }> {
     const name = await listenInput(
       locale('datapack-name'),
-      v => stringValidator(v, { invalidCharRegex: /[\\/:*?"<>|]/g, emptyMessage: locale('error.input-blank', locale('datapack-name')) })
+      v => {
+        if (v === '.' || v === '..') return locale('error.unexpected-character', v)
+        return stringValidator(v, { invalidCharRegex: /[\\/:*?"<>|]/g, emptyMessage: locale('error.input-blank', locale('datapack-name')) })
+      }
     )
     const root = UriUtils.joinPath(directory, name)
 
