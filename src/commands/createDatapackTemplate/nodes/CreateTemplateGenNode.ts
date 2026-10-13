@@ -3,6 +3,7 @@ import { createMessageItemHasIds } from '../../../types/MessageItemHasId'
 import { getDatapackRoot, isDatapackRoot } from '../../../utils/common'
 import { listenDir, listenInput, showInfo, showWarning, stringValidator } from '../../../utils/vscodeWrapper'
 import { AbstractNode } from '../types/AbstractNode'
+import { isValidPackFormat } from '../core/packFormat'
 import { commands, Uri } from 'vscode'
 import { UriUtils } from '../../../utils/uri'
 
@@ -45,11 +46,10 @@ export class CreateTemplateGenNode extends AbstractNode {
 
   async listenPackFormat(): Promise<number> {
     const rawPf = await listenInput(locale('pack-format'), v => {
-      const num = parseInt(v, 10)
-      if (isNaN(num) || num < 1) return locale('error.invalid-number')
+      if (!/^\+?[0-9]+$/.test(v.trim()) || !isValidPackFormat(Number(v))) return locale('error.invalid-number')
       return undefined
     })
-    return parseInt(rawPf)
+    return Number(rawPf)
   }
 
   async listenDatapackDescription(): Promise<string> {
