@@ -121,13 +121,20 @@ test('Create rename checks the new name under the original parent', async () => 
   assert.deepEqual(h.events.filter(event => event[0] === 'is-root').map(event => event[1]), ['/packs/demo', '/packs/other'])
 })
 
-test('Create name validator rejects empty and filesystem delimiters, preserving current dot-name acceptance', async () => {
+test('Create name validator rejects dot traversal, empty names and filesystem delimiters', async () => {
   const h = await harness({ inputs: ['My pack'] })
   await h.create.listenDatapackNameAndRoot(uri('/packs'))
   const validate = h.inputOptions[0].validateInput
   assert.equal(validate(''), 'error.input-blank:datapack-name')
   for (const character of '\\/:*?"<>|') assert.equal(validate(`a${character}b`), `error.unexpected-character:${character}`)
-  for (const name of ['My pack', '.', '..', 'CON']) assert.equal(validate(name), undefined)
+  for (const name of ['.', '..']) assert.equal(validate(name), `error.unexpected-character:${name}`)
+  for (const name of ['My pack', '日本語 パック', '.hidden', 'v1.', 'a..b', '...', 'CON']) assert.equal(validate(name), undefined)
+})
+
+for (const name of ['My pack', '日本語 パック', '.hidden', 'a..b']) test(`Create accepted name ${JSON.stringify(name)} returns a child URI under the selected directory`, async () => {
+  const h = await harness({ inputs: [name] })
+  assert.deepEqual(await h.create.listenDatapackNameAndRoot(uri('/packs')), { name, root: uri(`/packs/${name}`) })
+  assert.deepEqual(h.events.filter(event => event[0] === 'is-root').map(event => event[1]), [`/packs/${name}`])
 })
 
 for (const [input, expected] of [['48', 48], ['2abc', 2], ['1.5', 1], [' 9 ', 9], ['+7', 7]]) test(`Create pack format preserves parseInt behavior for ${JSON.stringify(input)}`, async () => {
