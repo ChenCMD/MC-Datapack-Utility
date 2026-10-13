@@ -130,11 +130,15 @@ test('Create name validator rejects empty and filesystem delimiters, preserving 
   for (const name of ['My pack', '.', '..', 'CON']) assert.equal(validate(name), undefined)
 })
 
-for (const [input, expected] of [['48', 48], ['2abc', 2], ['1.5', 1], [' 9 ', 9], ['+7', 7]]) test(`Create pack format preserves parseInt behavior for ${JSON.stringify(input)}`, async () => {
+for (const [input, expected] of [['48', 48], ['26', 26], ['1', 1], [' 9 ', 9], ['0007', 7], ['+7', 7], [' +0026 ', 26], ['9007199254740991', Number.MAX_SAFE_INTEGER]]) test(`Create pack format accepts positive decimal integer ${JSON.stringify(input)}`, async () => {
   const h = await harness({ inputs: [input] })
   assert.equal(await h.create.listenPackFormat(), expected)
-  const validate = h.inputOptions[0].validateInput
-  for (const invalid of ['', 'abc', '0', '-1', '0x10']) assert.equal(validate(invalid), 'error.invalid-number')
+})
+
+for (const invalid of ['', 'abc', '0', '-1', '0x10', '2abc', '1.5', '1.0', '++7', '1e2', '1 2', 'Infinity', 'NaN', '9007199254740992', '9'.repeat(400)]) test(`Create pack format rejects invalid input ${JSON.stringify(invalid)}`, async () => {
+  const h = await harness({ inputs: [undefined] })
+  await assert.rejects(h.create.listenPackFormat(), cancelled)
+  assert.equal(h.inputOptions[0].validateInput(invalid), 'error.invalid-number')
 })
 
 for (const method of ['listenDatapackNameAndRoot', 'listenPackFormat', 'listenDatapackDescription']) test(`Create ${method} cancellation propagates`, async () => {
@@ -170,10 +174,20 @@ test('Add rejects a directory without metadata', async () => {
   await assert.rejects(h.add.listenGenerateDir(), error => error instanceof errors.GenerateError && error.message === 'create-datapack-template.not-datapack')
 })
 
-for (const value of [48, 0, -1, 1.5]) test(`Add pack format preserves numeric value ${value}`, async () => {
+for (const value of [48, 26, 1, Number.MAX_SAFE_INTEGER]) test(`Add pack format accepts positive safe integer ${value}`, async () => {
   const h = await harness({ metadata: JSON.stringify({ pack: { pack_format: value } }) })
   assert.equal(await h.add.listenPackFormat(h.root), value)
   assert.deepEqual(h.events, [['read', '/packs/demo/pack.mcmeta']])
+})
+
+for (const raw of ['48.0', '4.8e1']) test(`Add pack format accepts integer-valued JSON number ${raw}`, async () => {
+  const h = await harness({ metadata: `{"pack":{"pack_format":${raw}}}` })
+  assert.equal(await h.add.listenPackFormat(h.root), 48)
+})
+
+for (const raw of ['0', '-1', '1.5', '9007199254740992', '1e400', '-1e400']) test(`Add pack format rejects invalid numeric value ${raw}`, async () => {
+  const h = await harness({ metadata: `{"pack":{"pack_format":${raw}}}` })
+  await assert.rejects(h.add.listenPackFormat(h.root), noPackFormat)
 })
 
 for (const metadata of ['{', 'null', '{}', '{"pack":null}', '{"pack":{"description":"demo"}}', '{"pack":{"pack_format":"48"}}', '{"pack":{"pack_format":[48,0]}}', '{"pack":{"max_format":48}}']) test(`Add pack format maps invalid/missing metadata ${metadata} to localized error`, async () => {

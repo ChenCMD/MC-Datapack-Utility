@@ -4,6 +4,7 @@ import { isDatapackRoot } from '../../../utils/common'
 import { readFile } from '../../../utils/file'
 import { listenDir, showInfo } from '../../../utils/vscodeWrapper'
 import { AbstractNode } from '../types/AbstractNode'
+import { isValidPackFormat } from '../core/packFormat'
 import { Uri } from 'vscode'
 import { UriUtils } from '../../../utils/uri'
 
@@ -29,7 +30,7 @@ export class AddTemplateGenNode extends AbstractNode {
   async listenPackFormat(directory: Uri): Promise<number> {
     try {
       const pf = JSON.parse(await readFile(UriUtils.joinPath(directory, 'pack.mcmeta'))).pack?.pack_format
-      if (typeof pf !== 'number')
+      if (!isValidPackFormat(pf))
         throw new GenerateError(locale('create-datapack-template.no-pack-format'))
       return pf
     } catch {
